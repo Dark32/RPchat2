@@ -1,0 +1,7 @@
+name: MCNW chat
+author: ufatos
+main: ru.ufatos.chat.main
+version: 0.1
+commands:
+   updnames:
+      usage: /<command>
