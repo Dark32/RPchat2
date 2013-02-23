@@ -1,5 +1,5 @@
 name: ChatRP
-main:  ru.ufatos.chat.main
+main:  ru.dark32.chat.main
 version: 1.0.1
 commands:
    scroll:
