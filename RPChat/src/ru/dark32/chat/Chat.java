@@ -166,6 +166,7 @@ public class Chat implements Listener {
 		}
 		if (chatMessage.startsWith("?") && chatMessage.length() == 1) {
 			player.sendMessage(ChatColor.YELLOW + "RPchat. Сделано ufatos'ом, доделано dark32'ом ");
+                        player.sendMessage(ChatColor.YELLOW + "Версия 0.75");
 			player.sendMessage(ChatColor.YELLOW + "$ или ; для глобального чата");
 			player.sendMessage(ChatColor.YELLOW + "> или . для мирового чата");
 			player.sendMessage(ChatColor.YELLOW + "! для крика");
