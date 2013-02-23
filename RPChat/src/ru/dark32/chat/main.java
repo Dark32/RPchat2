@@ -31,25 +31,25 @@ public class main extends JavaPlugin {
 		} else {
 			getLogger().warning("Permissions plugins not found!");
 		}
-		// И опять спасибо DmitriyMX за распаковку конфига. Туторы на его сайте DmitriyMX.ru
+            //спасибо DmitriyMX за распаковку конфига. Туторы на его сайте DmitriyMX.ru 
 		File fileConf = new File(getDataFolder(), "config.yml");
-		if (!fileConf.exists()) {
-			InputStream resourceAsStream = main.class.getResourceAsStream("/ru/ufatos/chat/config.yml");
-			getDataFolder().mkdirs();
-			try {
-				FileOutputStream fos = new FileOutputStream(fileConf);
-				byte[] buff = new byte[65536];
-				int n;
-				while ((n = resourceAsStream.read(buff)) > 0) {
-					fos.write(buff, 0, n);
-					fos.flush();
-				}
-				fos.close();
-				buff = null;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			getLogger().info("Сonfig loaded");
+		if(!fileConf.exists()){
+		    InputStream resourceAsStream = main.class.getResourceAsStream("/ru/dark32/chat/config.yml");
+		    getDataFolder().mkdirs();
+		    try {
+		        FileOutputStream fos = new FileOutputStream(fileConf);
+		        byte[] buff = new byte[65536];
+		        int n;
+		        while((n = resourceAsStream.read(buff)) > 0){
+		            fos.write(buff, 0, n);
+		            fos.flush();
+		        }
+		        fos.close();
+		        buff = null;
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		    getLogger().info("Сonfig loaded");
 		}
 		FileConfiguration config = this.getConfig();
 		getServer().getPluginManager().registerEvents(new Chat(config), this);
