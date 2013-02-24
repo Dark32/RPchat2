@@ -203,6 +203,7 @@ public class Chat implements Listener {
             player.sendMessage(ChatColor.YELLOW + "! для крика");
             player.sendMessage(ChatColor.YELLOW + "# или № для крика");
             player.sendMessage(ChatColor.YELLOW + "2<имя> сообщени или @<имя> сообщени для личного чата");
+            player.sendMessage(ChatColor.YELLOW + "*<действие> для вероятного действия или *<двухзначное целое число> для выброса случайного числа");
             event.setCancelled(true);
         }
         switch (ranged) {
