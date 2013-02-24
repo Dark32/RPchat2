@@ -3,6 +3,10 @@ Range:
    whispering: 20
    shout: 500
 disableDeathMessage: true
+randrolldef: 6
+minroll: 5
+defchanse: 50
+Prefix: false
 Id:
    worldId: 260
    worldSubId: 0
@@ -10,15 +14,18 @@ Id:
    globalSubId: 0
 #------------------------------------------
 #Range:
-#   main: 500 - локальный чат
-#   whispering: 15 - шёпот
-#   shout: 1000 - крик
-#disableDeathMessage: true - скрыть ли сообщения о смерти
+#   main: 500 - Р»РѕРєР°Р»СЊРЅС‹Р№ С‡Р°С‚
+#   whispering: 15 - С€С‘РїРѕС‚
+#   shout: 1000 - РєСЂРёРє
+#disableDeathMessage: true - СЃРєСЂС‹С‚СЊ Р»Рё СЃРѕРѕР±С‰РµРЅРёСЏ Рѕ СЃРјРµСЂС‚Рё
+# randrolldef:6 - Р§РёСЃР»Рѕ РіСЂР°РЅРµР№ РєСѓР±РёРєР°
+#Prefix: false РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Р»Рё РїСЂРµС„РёРєСЃС‹ РІСЃСЋРґСѓ РІ С‡Р°С‚Рµ
+#defchanse: 50 С€Р°РЅСЃ СѓРґР°С‡Рё
 #Id:
-#   worldId: 260 - в мир
-#   worldSubId: 0 - в мир
-#   globalId: 264 - в глобал
-#   globalSubId: 0 - в глобал
+#   worldId: 260 - РІ РјРёСЂ
+#   worldSubId: 0 - РІ РјРёСЂ
+#   globalId: 264 - РІ РіР»РѕР±Р°Р»
+#   globalSubId: 0 - РІ РіР»РѕР±Р°Р»
 #
 # Permission
 #	mcnw.global

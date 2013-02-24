@@ -34,7 +34,10 @@ public class Chat implements Listener {
     private int worldId;// Id вещи для вещания мирово
     private int worldSubId;// метадата вещи для вещания мирово
     private boolean DeathMessage;// скрыть ли сообщения о смерти
-    private int randrolldef = 100;
+    private int randrolldef;//Бросок по умолчанию = 100;
+    private boolean Displayname;//выводить ли префиксы всюду
+    private int defchanse ; // шанс
+    private int minroll;
     protected static Pattern chatColorPattern = Pattern.compile("(?i)&([0-9A-F])");// Цвет
     protected static Pattern chatMagicPattern = Pattern.compile("(?i)&([K])");// магия
     protected static Pattern chatBoldPattern = Pattern.compile("(?i)&([L])");//жирный
@@ -46,7 +49,7 @@ public class Chat implements Listener {
     protected static Pattern _space = Pattern.compile("^\\s+");// пробел?
     protected static Pattern _number = Pattern.compile("^\\*(\\d+)$");// число?
     private Random rand = new Random();
-    private String luck = ChatColor.RED + "(удачно)" + ChatColor.LIGHT_PURPLE;
+    private String luck = ChatColor.GREEN + "(удачно)" + ChatColor.LIGHT_PURPLE;
     private String unluck = ChatColor.RED + "(не удачно)" + ChatColor.LIGHT_PURPLE;
 
     public Chat(FileConfiguration config) {
@@ -58,6 +61,11 @@ public class Chat implements Listener {
         this.worldId = config.getInt("Id.worldId", this.worldId);//вещь для вещания в мировой чат
         this.worldSubId = config.getInt("Id.worldSubId", this.worldSubId);// методата
         this.DeathMessage = config.getBoolean("disableDeathMessage", this.DeathMessage);// флаг смерти
+        this.randrolldef = config.getInt("randrolldef", this.randrolldef);// бросок кубика
+        this.Displayname = config.getBoolean("Prefix", this.Displayname);// префиксы
+        this.defchanse = config.getInt("defchanse", this.defchanse);// шанс
+        this.minroll = config.getInt("minroll", this.minroll);// минимальный бросок
+        
     }
 
     @EventHandler
@@ -146,23 +154,23 @@ public class Chat implements Listener {
                 if (Bukkit.getServer().getPlayer(m.group(1)) != null) {
                     Player recipient = Bukkit.getServer().getPlayer(m.group(1));
                     if (!recipient.equals(player)) {
-                        recipient.sendMessage(ChatColor.GRAY + "@" + player.getDisplayName() + ": "
+                        recipient.sendMessage(ChatColor.GRAY + "@" + name(player) + ": "
                                 + ChatColor.DARK_PURPLE + m.group(2));
                     }
-                    player.sendMessage(ChatColor.GRAY + "@" + player.getDisplayName() + "->"
-                            + recipient.getDisplayName() + ": " + ChatColor.DARK_PURPLE + m.group(2));
+                    player.sendMessage(ChatColor.GRAY + "@" + name(player) + "->"
+                            + name(recipient) + ": " + ChatColor.DARK_PURPLE + m.group(2));
                     if (!main.hasPermission(player, "mcnw.nospy")) {
                         getPMRecipientsSpy(player, recipient, m.group(2));
                     }
 
                     Bukkit.getConsoleSender().sendMessage(
-                            ChatColor.GRAY + "spy@" + player.getDisplayName() + "->" + recipient.getDisplayName()
+                            ChatColor.GRAY + "spy@" + name(player) + "->" + name(recipient)
                             + ": " + m.group(2));
                 } else {
                     player.sendMessage("Игрока " + m.group(1) + " нет в сети");
                 }
             } else {
-                player.sendMessage(ChatColor.YELLOW + "Нужно писать так @<имя> сообщение");
+                player.sendMessage(ChatColor.YELLOW + "Нужно писать так @|2<имя> сообщение");
             }
             event.setCancelled(true);
         }
@@ -171,24 +179,25 @@ public class Chat implements Listener {
         if (chatMessage.startsWith("*") && chatMessage.length() > 1) {
             ranged = 1;
             range = RangeMain;
-            if (chatMessage.length() > 3) {
+            Matcher m = _number.matcher(chatMessage);
+            int i;
+            if (m.find()) {
+                i = Integer.parseInt(m.group(1));
+                i = i > minroll ? i : randrolldef;
+                int j = rand.nextInt(i) + 1;
+                message = ChatColor.LIGHT_PURPLE + "*" + name(player) + ChatColor.LIGHT_PURPLE + " выбрасывает " + j + " из " + i + "*";
+
+            } else {
                 chatMessage = ChatColor.LIGHT_PURPLE + (chatMessage.substring(1));
                 int chance = rand.nextInt(100);
-                message = ChatColor.LIGHT_PURPLE + "*%1$s %2$s " + ((chance > 50) ? luck : unluck) + " *";
-            } else {
-                Matcher m = _number.matcher(chatMessage);
-                int i;//= Integer.parseInt(m.group(1));
-                if (m.find()) {
-                    i = Integer.parseInt(m.group(1));
-                } else {
-                    i = randrolldef;
-                }
-                int j = rand.nextInt(i) + 1;
-                message = ChatColor.LIGHT_PURPLE + "*1$s выбрасывает " + i + " из " + j + "*";
+                message = ChatColor.LIGHT_PURPLE +"* "+ name(player)+" "+ chatMessage + ((chance > defchanse) ? luck : unluck) + " *";
+
+
             }
+            //  }
 
         }
-        
+
         if (ranged > 0 && chatMessage.length() > 1) {
             if (range != RangeMain) {
                 Matcher space = _space.matcher(chatMessage.substring(1));
@@ -197,13 +206,13 @@ public class Chat implements Listener {
         }
         if (chatMessage.startsWith("?") && chatMessage.length() == 1) {
             player.sendMessage(ChatColor.YELLOW + "RPchat. Сделано ufatos'ом, доделано dark32'ом ");
-            player.sendMessage(ChatColor.YELLOW + "Версия 0.75");
+            player.sendMessage(ChatColor.YELLOW + "Версия 0.76");
             player.sendMessage(ChatColor.YELLOW + "$ или ; для глобального чата");
             player.sendMessage(ChatColor.YELLOW + "> или . для мирового чата");
             player.sendMessage(ChatColor.YELLOW + "! для крика");
-            player.sendMessage(ChatColor.YELLOW + "# или № для крика");
-            player.sendMessage(ChatColor.YELLOW + "2<имя> сообщени или @<имя> сообщени для личного чата");
-            player.sendMessage(ChatColor.YELLOW + "*<действие> для вероятного действия или *<двухзначное целое число> для выброса случайного числа");
+            player.sendMessage(ChatColor.YELLOW + "# или № для шепота");
+            player.sendMessage(ChatColor.YELLOW + "2|@<имя> сообщени для личного чата");
+            player.sendMessage(ChatColor.YELLOW + "*<действие> для вероятного действия или *<целое число больше "+minroll+"> для выброса случайного числа");
             event.setCancelled(true);
         }
         switch (ranged) {
@@ -229,7 +238,13 @@ public class Chat implements Listener {
         event.setMessage(chatMessage);
     }
 
+    //вывод имени
+    private String name(Player p) {
+        return Displayname ? p.getDisplayName() : p.getName();
+
+    }
     // теряем вещь
+
     private void loseitem(Player player) {
         ItemStack inHand = player.getItemInHand();
         int AmoutHand = inHand.getAmount() - 1;
@@ -287,8 +302,8 @@ public class Chat implements Listener {
     protected void getPMRecipientsSpy(Player sender, Player target, String msg) {
         for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
             if (main.hasPermission(recipient, "mcnw.pmspy") && !recipient.equals(target)) {
-                recipient.sendMessage(ChatColor.GRAY + "spy@" + sender.getDisplayName() + "->"
-                        + target.getDisplayName() + ": " + msg);
+                recipient.sendMessage(ChatColor.GRAY + "spy@" + name(sender) + "->"
+                        + name(target) + ": " + msg);
             }
         }
     }
