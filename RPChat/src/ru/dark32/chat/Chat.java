@@ -171,7 +171,7 @@ public class Chat implements Listener {
         if (chatMessage.startsWith("*") && chatMessage.length() > 1) {
             ranged = 1;
             range = RangeMain;
-            if (chatMessage.length() > 2) {
+            if (chatMessage.length() > 3) {
                 chatMessage = ChatColor.LIGHT_PURPLE + (chatMessage.substring(1));
                 int chance = rand.nextInt(100);
                 message = ChatColor.LIGHT_PURPLE + "*%1$s %2$s " + ((chance > 50) ? luck : unluck) + " *";
