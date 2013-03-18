@@ -2,7 +2,7 @@ name: ChatRP
 main:  ru.dark32.chat.main
 version: 1.0.1
 commands:
-   scroll:
+   rpchat:
       description: This is a demo command.
       usage: /<command> [player]
       permission: <plugin name>.basic

@@ -56,7 +56,7 @@ public class main extends JavaPlugin {
 	}
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (cmd.getName().equalsIgnoreCase("updnames")) {
+		if (cmd.getName().equalsIgnoreCase("rpchat")) {
 			for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 				Chat.updateDisplayName(player);
 			}

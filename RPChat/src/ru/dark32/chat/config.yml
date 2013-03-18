@@ -2,7 +2,6 @@ Range:
    main: 250
    whispering: 20
    shout: 500
-disableDeathMessage: true
 randrolldef: 6
 minroll: 5
 defchanse: 50
@@ -17,7 +16,6 @@ Id:
 #   main: 500 - локальный чат
 #   whispering: 15 - шёпот
 #   shout: 1000 - крик
-#disableDeathMessage: true - скрыть ли сообщения о смерти
 # randrolldef:6 - Число граней кубика
 #Prefix: false использовать ли префиксы всюду в чате
 #defchanse: 50 шанс удачи
