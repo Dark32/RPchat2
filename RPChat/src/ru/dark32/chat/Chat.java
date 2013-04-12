@@ -1,5 +1,6 @@
 package ru.dark32.chat;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -91,18 +92,31 @@ public class Chat implements Listener {
          */
         ItemStack inHand = player.getItemInHand();//dtom d herf[
         double range = RangeMain;// локальный чат, радиус по умолчанию
+        boolean isLocal = (chatMessage.startsWith("-")) && chatMessage.length() > 1;
+        boolean isGlobal = !isLocal && (chatMessage.startsWith("$") || chatMessage.startsWith(";")) && chatMessage.length() > 1;
+        boolean isWorld = !isLocal && (chatMessage.startsWith(">") || chatMessage.startsWith(".")) && chatMessage.length() > 1;
+        boolean isShout = !isLocal && chatMessage.startsWith("!") && chatMessage.length() > 1;
+        boolean isWhisper = !isLocal && (chatMessage.startsWith("#") || chatMessage.startsWith("№")) && chatMessage.length() > 1;
+        boolean isPm = (chatMessage.startsWith("@") || chatMessage.startsWith("2")) && chatMessage.length() > 1;
+        boolean isAny = isGlobal || isWorld || isShout || isWhisper;
+        boolean isGlobalMode = !isLocal && main.getChatMode(player) == main.ChatMode.GLOBAL;
+        boolean isWorldMode = !isLocal && !isGlobal && main.getChatMode(player) == main.ChatMode.WORLD;
+        boolean isShoutMode = !isLocal && !isGlobal && !isWorld && main.getChatMode(player) == main.ChatMode.SHOUT;
+        boolean isWhisperMode = !isLocal && !isGlobal && !isWorld && !isShout && main.getChatMode(player) == main.ChatMode.WHISPER;
+        boolean isLocalMode = main.getChatMode(player) == main.ChatMode.LOCAL;
+
         // Глобальный
-        if ((chatMessage.startsWith("$") || chatMessage.startsWith(";")) && chatMessage.length() > 1) {
+        if (isGlobal || isGlobalMode) {
 
             if (main.hasPermission(player, "mcnw.global")) {
-                message = "%1$s всем: " + ChatColor.YELLOW + "%2$s";
+                message = "%1$s всем: " + ChatColor.GOLD + "%2$s";
                 range = RangeWhispering;
                 if (main.hasPermission(player, "mcnw.global.no_item")) {
                     ranged = 3; // флаг глобально, межмирового чата
                 } else if (inHand != null && inHand.getTypeId() == globalId && inHand.getDurability() == globalSubId) {
                     ranged = 3; // флаг глобально, межмирового чата
                     loseitem(player);
-                    // message = "%1$s всем: " + ChatColor.YELLOW + "%2$s";
+                    // message = "%1$s всем: " + ChatColor.GOLD + "%2$s";
                 } else {
                     player.sendMessage(ChatColor.GRAY + "У вас нет нужного предмета");
                     event.setCancelled(true);
@@ -113,7 +127,8 @@ public class Chat implements Listener {
             }
         }
         // Мировой
-        if ((chatMessage.startsWith(">") || chatMessage.startsWith(".")) && chatMessage.length() > 1) {
+
+        if (isWorld || isWorldMode) {
             if (main.hasPermission(player, "mcnw.world")) {
                 message = "%1$s в мир: " + ChatColor.GOLD + "%2$s";
                 range = RangeWhispering;
@@ -132,20 +147,20 @@ public class Chat implements Listener {
             }
         }
         // Крик
-        if (chatMessage.startsWith("!") && chatMessage.length() > 1) {
+        if (isShout || isShoutMode) {
             ranged = 1; // флаг дистанции
             range = RangeShout;// 1000;
             message = "%1$s кричит: " + ChatColor.RED + "%2$s";
 
         }
         // Шепот
-        if ((chatMessage.startsWith("#") || chatMessage.startsWith("№")) && chatMessage.length() > 1) {
+        if (isWhisper || isWhisperMode) {
             ranged = 1;// флаг дистанции
             range = RangeWhispering;// 10;
-            message = ChatColor.GRAY + "%1$s шепчет: %2$s";
+            message = ChatColor.GRAY + "%1$s" + ChatColor.GRAY + " шепчет: %2$s";
         }
         // Личка
-        if ((chatMessage.startsWith("@") || chatMessage.startsWith("2")) && chatMessage.length() > 1) {
+        if (isPm) {
 
             Matcher m = nick.matcher(chatMessage);
             if (m.find()) {
@@ -166,12 +181,10 @@ public class Chat implements Listener {
                             ChatColor.GRAY + "spy@" + name(player) + "->" + name(recipient)
                             + ": " + m.group(2));
                 } else {
-                    player.sendMessage("Игрока " + m.group(1) + " нет в сети");           
+                    player.sendMessage("Игрока " + m.group(1) + " нет в сети");
                 }
-                 event.setCancelled(true);
-            }// else {
-             //   player.sendMessage(ChatColor.YELLOW + "Нужно писать так @|2<имя> сообщение");
-            //}
+                event.setCancelled(true);
+            }
         }
 
         // Действие с вероятностью
@@ -197,23 +210,75 @@ public class Chat implements Listener {
 
         }
 
-        if (ranged > 0 && chatMessage.length() > 1) {
+        if (ranged > 0 && chatMessage.length() > 1 && (isAny)) {
             if (range != RangeMain) {
                 Matcher space = _space.matcher(chatMessage.substring(1));
                 chatMessage = space.replaceFirst("");
             }
         }
+        if (isLocal) {
+            Matcher space = _space.matcher(chatMessage.substring(1));
+            chatMessage = space.replaceFirst("");
+
+        }
         if (chatMessage.startsWith("?") && chatMessage.length() == 1) {
-            player.sendMessage(ChatColor.YELLOW + "RPchat");
-            player.sendMessage(ChatColor.YELLOW + "Автор: ufatos, dark32");
-            player.sendMessage(ChatColor.YELLOW + "Версия 0.76");
-            player.sendMessage(ChatColor.YELLOW + "http://rubukkit.org/threads/chat-rpchat-roleplay-чат-v0-6-1-4-6.19626/");
-            player.sendMessage(ChatColor.YELLOW + "$ или ; для глобального чата");
-            player.sendMessage(ChatColor.YELLOW + "> или . для мирового чата");
-            player.sendMessage(ChatColor.YELLOW + "! для крика");
-            player.sendMessage(ChatColor.YELLOW + "# или № для шепота");
-            player.sendMessage(ChatColor.YELLOW + "2|@<имя> сообщени для личного чата");
-            player.sendMessage(ChatColor.YELLOW + "*<действие> для вероятного действия или *<целое число больше " + minroll + "> для выброса случайного числа");
+            player.sendMessage(ChatColor.AQUA + "=============================================");
+            player.sendMessage(ChatColor.GOLD + "RPchat v 0.78");
+            player.sendMessage(ChatColor.GOLD + "Авторы: ufatos, dark32");
+            player.sendMessage(ChatColor.GOLD + "http://bit.ly/12Q8z4q");
+            player.sendMessage(ChatColor.GOLD + "?/. для справки режимов чата");
+            player.sendMessage(ChatColor.GOLD + "?/? для справки по переключению режимов чата");
+            player.sendMessage(ChatColor.AQUA + "=============================================");
+            event.setCancelled(true);
+        }
+        if (chatMessage.startsWith("?/.") && chatMessage.length() == 3) {
+            player.sendMessage(ChatColor.AQUA + "=============================================");
+            player.sendMessage(ChatColor.GOLD + "$ или ; для глобального чата");
+            player.sendMessage(ChatColor.GOLD + "> или . для мирового чата");
+            player.sendMessage(ChatColor.GOLD + "! для крика");
+            player.sendMessage(ChatColor.GOLD + "# или № для шепота");
+            player.sendMessage(ChatColor.GOLD + "2|@<имя> сообщени для личного чата");
+            player.sendMessage(ChatColor.GOLD + "*<действие> для вероятного действия или *<целое число больше " + minroll + "> для выброса случайного числа");
+
+            player.sendMessage(ChatColor.AQUA + "=============================================");
+            event.setCancelled(true);
+        }
+        if (chatMessage.startsWith("?/?") && chatMessage.length() == 3) {
+            // setChatMode(player, ChatMode.GLOBAL);
+            player.sendMessage(ChatColor.AQUA + "=============================================");
+            player.sendMessage(ChatColor.GOLD + "?/g - для выбора глобального режима");
+            player.sendMessage(ChatColor.GOLD + "?/w - для выбора мирового мирового");
+            player.sendMessage(ChatColor.GOLD + "?/s - для выбора режима крика");
+            player.sendMessage(ChatColor.GOLD + "?/v - для выбора режима шепота");
+            player.sendMessage(ChatColor.GOLD + "?/l - для выбора локального режима");
+            player.sendMessage(ChatColor.GOLD + "?/? - для вызоа этой справки");
+            player.sendMessage(ChatColor.AQUA + "=============================================");
+            event.setCancelled(true);
+        }
+        // режимы чата
+        if (chatMessage.startsWith("?/g") && chatMessage.length() == 3) {
+            main.setChatMode(player, main.ChatMode.GLOBAL);
+            player.sendMessage(ChatColor.GOLD + "Режим изменён на глобальный");
+            event.setCancelled(true);
+        }
+        if (chatMessage.startsWith("?/w") && chatMessage.length() == 3) {
+            main.setChatMode(player, main.ChatMode.WORLD);
+            player.sendMessage(ChatColor.GOLD + "Режим изменён на мировой");
+            event.setCancelled(true);
+        }
+        if (chatMessage.startsWith("?/s") && chatMessage.length() == 3) {
+            main.setChatMode(player, main.ChatMode.SHOUT);
+            player.sendMessage(ChatColor.GOLD + "Режим изменён на крик");
+            event.setCancelled(true);
+        }
+        if (chatMessage.startsWith("?/v") && chatMessage.length() == 3) {
+            main.setChatMode(player, main.ChatMode.WHISPER);
+            player.sendMessage(ChatColor.GOLD + "Режим изменён на шёпот");
+            event.setCancelled(true);
+        }
+        if (chatMessage.startsWith("?/l") && chatMessage.length() == 3) {
+            main.setChatMode(player, main.ChatMode.LOCAL);
+            player.sendMessage(ChatColor.GOLD + "Режим изменён на локальный");
             event.setCancelled(true);
         }
         switch (ranged) {
@@ -322,6 +387,6 @@ public class Chat implements Listener {
         if (user == null) {
             return;
         }
-        player.setDisplayName(Chat.translateColorCodes(user.getPrefix() + player.getName()));
+        player.setDisplayName(Chat.translateColorCodes(user.getPrefix() + player.getName() + user.getSuffix()));
     }
 }
