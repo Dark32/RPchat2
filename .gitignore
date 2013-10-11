@@ -1,0 +1,14 @@
+## Common ##
+lib/
+target/
+
+## Eclipse ##
+.settings/
+bin/
+.classpath
+.project
+
+## IDEA ##
+.idea/
+out/
+*.iml
