@@ -6,11 +6,15 @@ randrolldef: 6
 minroll: 5
 defchanse: 50
 Prefix: false
+experemental: false
 Id:
    worldId: 260
+   worldMa: APPLE
    worldSubId: 0
    globalId: 264
+   GlobalMa: DIAMOND
    globalSubId: 0
+
 #------------------------------------------
 #Range:
 #   main: 500 - локальный чат
@@ -33,4 +37,5 @@ Id:
 #	mcnw.nospy
 #	mcnw.spy
 #	mcnw.pmspy
+#http://jd.bukkit.org/rb/doxygen/d6/d0e/enumorg_1_1bukkit_1_1Material.html#pub-attribs
 #------------------------------------------
