@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="RPChat" default="build" basedir="..">
-    <property name="src"     location="RPChat/src/"/>
-    <property name="lib"     location="lib/"/>
-    <property name="target"  location="target/"/>
+    <property name="src"     location="RPChat2/src/"/>
+    <property name="lib"     location="RPChat2/lib/"/>
+    <property name="target"  location="RPChat2/target/"/>
     <property name="classes" location="${target}/classes/"/>
 
     <target name="clear">
@@ -32,7 +32,8 @@
             debug="true"
             debuglevel="vars,lines,source"
             optimize="true"
-            includeantruntime="false">
+            includeantruntime="false"
+        	encoding="UTF-8">
     	    <compilerarg value="-Xlint:deprecation" />
     	    <compilerarg value="-Xlint:unchecked" />
     	</javac>

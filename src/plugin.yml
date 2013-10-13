@@ -1,0 +1,9 @@
+name: ChatRP
+main:  ru.dark32.chat.Main
+version: 1.0.5
+commands:
+   rpchat:
+      description: This is a demo command.
+      usage: /<command> [player]
+      permission: <plugin name>.basic
+      permission-message: You don't have <permission>

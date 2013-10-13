@@ -37,5 +37,9 @@ Id:
 #	mcnw.nospy
 #	mcnw.spy
 #	mcnw.pmspy
+#	mcnw.mute.help
+#	mcnw.mute.mute
+#	mcnw.mute.unmute
+#	
 #http://jd.bukkit.org/rb/doxygen/d6/d0e/enumorg_1_1bukkit_1_1Material.html#pub-attribs
 #------------------------------------------
