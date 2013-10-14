@@ -8,13 +8,38 @@ defchanse: 50
 Prefix: false
 experemental: false
 Id:
-   worldId: 260
+   #@Deprecated
+   worldId: 260 
    worldMa: APPLE
    worldSubId: 0
+   #@Deprecated
    globalId: 264
    GlobalMa: DIAMOND
    globalSubId: 0
-
+String:
+# не все заменители работают всюду
+# %p - имя игрока
+# %pf | %sf - зкуаашч/Suffix
+# %msg - сообщение
+# %r - Кому ЛС
+   roll: "&5* %p %msg $1 *"
+   luck: "&a (удачно) &d"
+   unluck: "&a (неудачно) &d"
+   rnd: "&d* %p %d* выбрасывает $1 из $2 *";
+   rnd: ChatColor.LIGHT_PURPLE + "*" + name(player) + ChatColor.LIGHT_PURPLE
+						+ " выбрасывает " + j + " из " + i + "*";
+   nei: "&7У вас нет нужного предмета"
+   noPerm: "&7У вас нет прав писать в $1"
+   globalChat: "глобальный чат"
+   globalChatFormat: "%pf%p%sf всем:&e %msg "
+   worldChat: "мировой чат"
+   worldChatFormat: "%pf%p%sf в мир:&6 %msg "
+   shoutChatFormat: "%pf%p%sf кричит:&c %msg"
+   localChatFormat: "%pf%p%sf: &f %msg"
+   whisperingChatFormat: "&7%p&7 шепчет: %msg"
+   pmChatFormat: "&7@%p:&5 %msg"
+   pmChatFormat2: "&7@%p->%r:&5 %msg"
+   playeNotFound: "Игрока $1 нет в сети"
 #------------------------------------------
 #Range:
 #   main: 500 - локальный чат
@@ -43,3 +68,25 @@ Id:
 #	
 #http://jd.bukkit.org/rb/doxygen/d6/d0e/enumorg_1_1bukkit_1_1Material.html#pub-attribs
 #------------------------------------------
+#        BLACK			('0', 0x00),
+#        DARK_BLUE		('1', 0x1),
+#        DARK_GREEN		('2', 0x2),
+#        DARK_AQUA		('3', 0x3),
+#        DARK_RED		('4', 0x4),
+#        DARK_PURPLE	('5', 0x5),
+#        GOLD			('6', 0x6),
+#        GRAY			('7', 0x7),
+#        DARK_GRAY		('8', 0x8),
+#        BLUE			('9', 0x9),
+#        GREEN			('a', 0xA),
+#        AQUA			('b', 0xB),
+#        RED			('c', 0xC),
+#        LIGHT_PURPLE	('d', 0xD),
+#        YELLOW			('e', 0xE),
+#        WHITE			('f', 0xF),
+#        MAGIC			('k', 0x10, true),
+#        BOLD			('l', 0x11, true),
+#        STRIKETHROUGH	('m', 0x12, true),
+#        UNDERLINE		('n', 0x13, true),
+#        ITALIC			('o', 0x14, true),
+#        RESET			('r', 0x15);

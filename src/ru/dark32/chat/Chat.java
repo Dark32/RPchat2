@@ -2,21 +2,23 @@ package ru.dark32.chat;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Random;
 
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.configuration.MemorySection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.configuration.file.FileConfiguration;
+
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
@@ -42,7 +44,7 @@ public class Chat implements Listener {
 	Material					globalMa;
 	// Материал вещи для вещания мирово
 	Material					worldMa;
-	boolean						experemental				= false;
+	boolean						experemental	= false;
 	/* <--experemental */
 	// Бросок по умолчанию = 100;
 	private int					randrolldef;
@@ -51,26 +53,13 @@ public class Chat implements Listener {
 	// шанс
 	private int					defchanse;
 	private int					minroll;
-	protected static Pattern	chatColorPattern			= Pattern.compile("(?i)&([0-9A-F])");			// Цвет
-	protected static Pattern	chatMagicPattern			= Pattern.compile("(?i)&([K])");				// магия
-	protected static Pattern	chatBoldPattern				= Pattern.compile("(?i)&([L])");				// жирный
-	protected static Pattern	chatStrikethroughPattern	= Pattern.compile("(?i)&([M])");				// зачёркнутый
-	protected static Pattern	chatUnderlinePattern		= Pattern.compile("(?i)&([N])");				// подчёркнутый
-	protected static Pattern	chatItalicPattern			= Pattern.compile("(?i)&([O])");				// косой
-	protected static Pattern	chatResetPattern			= Pattern.compile("(?i)&([R])");				// сброс
-	// извлекаем ник
-	protected static Pattern	nickForPM					= Pattern
-																	.compile("[@](\\D[\\d\\w_]+)\\s(.+)");
-	protected static Pattern	nickForMute					= Pattern
-																	.compile("%(\\D[\\d\\w_]+)\\s(.+)");
-	protected static Pattern	_space						= Pattern.compile("^\\s+");					// пробел?
-	protected static Pattern	_number						= Pattern.compile("^\\*(\\d+)$");				// число?
-	private Random				rand						= new Random();
-	private String				luck						= ChatColor.GREEN + "(удачно)"
-																	+ ChatColor.LIGHT_PURPLE;
-	private String				unluck						= ChatColor.RED + "(не удачно)"
-																	+ ChatColor.LIGHT_PURPLE;
-	private static Main			plugin;
+	protected static Pattern	nickForPM		= Pattern.compile("@(\\D[\\d\\w_]+)\\s(.+)");
+	protected static Pattern	nickForMute		= Pattern.compile("%(\\D[\\d\\w_]+)\\s(.+)");
+	// protected static Pattern _space = Pattern.compile("^\\s+"); // пробел?
+	protected static Pattern	_number			= Pattern.compile("^\\*(\\d)$");				// число?
+	private Random				rand			= new Random();
+
+	private Main				plugin;
 
 	public Chat(FileConfiguration config, Main pluging ){
 		// радиус обычного чата
@@ -100,18 +89,62 @@ public class Chat implements Listener {
 		this.defchanse = config.getInt("defchanse", this.defchanse);// шанс
 		// минимальный бросок
 		this.minroll = config.getInt("minroll", this.minroll);
+		STR.init(config);
 		this.plugin = pluging;
+	}
+
+	private static class STR {
+		private static String	luck;
+		private static String	unluck;
+		private static String	roll;
+		private static String	nei;
+		private static String	noPerm;
+		private static String	globalChat;
+		private static String	worldChat;
+		private static String	globalChatFormat;
+		private static String	worldChatFormat;
+		private static String	shoutChatFormat;
+		private static String	whisperingChatFormat;
+		private static String	localChatFormat;
+		private static String	pmChatFormat;
+		private static String	pmChatFormat2;
+		private static String	rnd;
+		private static String	playeNotFound;
+
+		private static void init(MemorySection config ) {
+			luck = Chat.tCC(config.getString("String.luck"));
+			unluck = Chat.tCC(config.getString("String.unluck"));
+			roll = Chat.tCC(config.getString("String.roll"));
+			rnd = Chat.tCC(config.getString("String.rnd"));
+			nei = Chat.tCC(config.getString("String.nei"));
+			noPerm = Chat.tCC(config.getString("String.noPerm"));
+			globalChat = Chat.tCC(config.getString("String.globalChat"));
+			worldChat = Chat.tCC(config.getString("String.worldChat"));
+			globalChatFormat = Chat.tCC(config.getString("String.globalChatFormat"));
+			worldChatFormat = Chat.tCC(config.getString("String.worldChatFormat"));
+			shoutChatFormat = Chat.tCC(config.getString("String.shoutChatFormat"));
+			whisperingChatFormat = Chat.tCC(config.getString("String.whisperingChatFormat"));
+			localChatFormat = Chat.tCC(config.getString("String.localChatFormat"));
+			pmChatFormat = Chat.tCC(config.getString("String.localChatFormat"));
+			pmChatFormat2 = Chat.tCC(config.getString("String.pmChatFormat2"));
+			playeNotFound = Chat.tCC(config.getString("String.playeNotFound"));
+		}
+
 	}
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event ) {
-		updateDisplayName(event.getPlayer());// обновляем префиксы
+		Util.setChatMode(event.getPlayer(), 0);
+		// updateDisplayName(event.getPlayer());// обновляем префиксы
 	}
 
 	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event ) {
 		Player player = event.getPlayer();// получаем игрока, вызвавшего событие
-		String message = "%1$s: %2$s";// формат сообщения
+		String message = STR.localChatFormat.replace("%sf", suffix(player))
+				.replace("%pf", preffix(player)).replace("%p", "%1$s").replace("%msg", "%2$s"); // "%1$s: %2$s";//
+																								// формат
+																								// сообщения
 		String chatMessage = event.getMessage();// сообщение
 		int ranged = 1; // Тип чата
 		/**
@@ -165,7 +198,9 @@ public class Chat implements Listener {
 		// Глобальный
 		if (isGlobal || isGlobalMode) {
 			if (Util.hasPermission(player, "mcnw.global")) {
-				message = "%1$s всем: " + ChatMode.GLOBAL.getColor() + "%2$s";
+				message = STR.globalChatFormat.replace("%sf", suffix(player))
+						.replace("%pf", preffix(player)).replace("%p", "%1$s")
+						.replace("%msg", "%2$s");
 				range = RangeWhispering;
 				if (Util.hasPermission(player, "mcnw.global.no_item")) {
 					ranged = 3; // флаг глобально, межмирового чата
@@ -173,19 +208,23 @@ public class Chat implements Listener {
 					ranged = 3; // флаг глобально, межмирового чата
 					loseitem(player);
 				} else {
-					player.sendMessage(ChatColor.GRAY + "У вас нет нужного предмета");
+					player.sendMessage(STR.nei);
 					event.setCancelled(true);
 				}
 			} else {
-				player.sendMessage(ChatColor.GRAY + "У вас нет прав писать в глобальный чат");
+				player.sendMessage(STR.noPerm.replace("$1", STR.globalChat));
 				event.setCancelled(true);
+
 			}
 		}
 
 		// Мировой
 		if (isWorld || isWorldMode) {
 			if (Util.hasPermission(player, "mcnw.world")) {
-				message = "%1$s в мир: " + ChatMode.WORLD.getColor() + "%2$s";
+				message = STR.worldChatFormat.replace("%sf", suffix(player))
+						.replace("%pf", preffix(player)).replace("%p", "%1$s")
+						.replace("%msg", "%2$s");
+
 				range = RangeWhispering;
 				if (Util.hasPermission(player, "mcnw.world.no_item")) {
 					ranged = 2;// флаг мирового чата
@@ -193,11 +232,11 @@ public class Chat implements Listener {
 					ranged = 2;// флаг мирового чата
 					loseitem(player);
 				} else {
-					player.sendMessage(ChatColor.GRAY + "У вас нет нужного предмета");
+					player.sendMessage(STR.nei);
 					event.setCancelled(true);
 				}
 			} else {
-				player.sendMessage(ChatColor.GRAY + "У вас нет прав писать в мир");
+				player.sendMessage(STR.noPerm.replace("$1", STR.worldChat));
 				event.setCancelled(true);
 			}
 		}
@@ -205,15 +244,17 @@ public class Chat implements Listener {
 		if (isShout || isShoutMode) {
 			ranged = 1; // флаг дистанции
 			range = RangeShout;// 1000;
-			message = "%1$s кричит: " + ChatMode.SHOUT.getColor() + "%2$s";
+			message = STR.shoutChatFormat.replace("%sf", suffix(player))
+					.replace("%pf", preffix(player)).replace("%p", "%1$s").replace("%msg", "%2$s");
 
 		}
 		// Шепот
 		if (isWhisper || isWhisperMode) {
 			ranged = 1;// флаг дистанции
 			range = RangeWhispering;// 10;
-			message = ChatMode.WHISPER.getColor() + "%1$s" + ChatMode.WHISPER.getColor()
-					+ " шепчет: %2$s";
+			message = STR.whisperingChatFormat.replace("%sf", suffix(player))
+					.replace("%pf", preffix(player)).replace("%p", "%1$s").replace("%msg", "%2$s");
+
 		}
 		// Личка
 		if (isPm) {
@@ -224,19 +265,21 @@ public class Chat implements Listener {
 				if (Bukkit.getServer().getPlayer(m.group(1)) != null) {
 					Player recipient = Bukkit.getServer().getPlayer(m.group(1));
 					if (!recipient.equals(player)) {
-						recipient.sendMessage(ChatColor.GRAY + "@" + name(player) + ": "
-								+ ChatMode.PM.getColor() + m.group(2));
+						recipient.sendMessage(STR.pmChatFormat.replace("%sf", suffix(player))
+								.replace("%pf", preffix(player)).replace("%p", player.getName())
+								.replace("%r", recipient.getName()).replace(" %msg", m.group(2)));
 					}
-					player.sendMessage(ChatColor.GRAY + "@" + name(player) + "->" + name(recipient)
-							+ ": " + ChatMode.PM.getColor() + m.group(2));
+					player.sendMessage(STR.pmChatFormat2.replace("%sf", suffix(player))
+							.replace("%pf", preffix(player)).replace("%p", player.getName())
+							.replace("%r", recipient.getName()).replace(" %msg", m.group(2)));
 					if (!Util.hasPermission(player, "mcnw.nospy")) {
 						getPMRecipientsSpy(player, recipient, m.group(2));
 					}
 					Bukkit.getConsoleSender().sendMessage(
-							ChatColor.GRAY + "spy@" + name(player) + "->" + name(recipient) + ": "
-									+ m.group(2));
+							Chat.tCC("&7spy@" + player.getName() + "->" + recipient.getName()
+									+ ": " + m.group(2)));
 				} else {
-					player.sendMessage("Игрока " + m.group(1) + " нет в сети");
+					player.sendMessage(STR.playeNotFound.replace("$1", m.group(2)));
 				}
 				event.setCancelled(true);
 			}
@@ -249,31 +292,31 @@ public class Chat implements Listener {
 			Matcher m = _number.matcher(chatMessage);
 			int i;
 			if (m.find()) {
-				i = Integer.parseInt(m.group(1));
+				String num = m.group(1);
+				i = num.length() < 5 ? Integer.parseInt(num) : 9999;
 				i = i > minroll ? i : randrolldef;
 				int j = rand.nextInt(i) + 1;
-				message = ChatColor.LIGHT_PURPLE + "*" + name(player) + ChatColor.LIGHT_PURPLE
-						+ " выбрасывает " + j + " из " + i + "*";
+				message = STR.rnd.replace("%sf", suffix(player)).replace("%pf", preffix(player))
+						.replace("%p", player.getName()).replace("$1", String.valueOf(j))
+						.replace("$2", String.valueOf(i));
 
 			} else {
-				chatMessage = ChatColor.LIGHT_PURPLE + (chatMessage.substring(1));
+				chatMessage = Chat.tCC("&5" + chatMessage.substring(1));
 				int chance = rand.nextInt(100);
-				message = ChatColor.LIGHT_PURPLE + "* " + name(player) + " " + chatMessage
-						+ ((chance > defchanse) ? luck : unluck) + " *";
+				message = Chat.tCC(
+						STR.roll.replace("%sf", suffix(player)).replace("%pf", preffix(player))
+								.replace("%p", player.getName()).replace("%msg", chatMessage))
+						.replace("$1", (chance > defchanse) ? STR.luck : STR.unluck);
 			}
 
 		}
 
-		if (ranged > 0 && chatMessage.length() > 1 && (isAny)) {
-			if (range != RangeMain) {
-				Matcher space = _space.matcher(chatMessage.substring(1));
-				chatMessage = space.replaceFirst("");
-			}
+		if (ranged > 0 && chatMessage.length() > 1 && (isAny) && (range != RangeMain)) {
+			chatMessage = chatMessage.substring(1).trim();
 		}
+
 		if (isLocal) {
-			Matcher space = _space.matcher(chatMessage.substring(1));
-			chatMessage = space.replaceFirst("");
-
+			chatMessage = chatMessage.substring(1).trim();
 		}
 		if (chatMessage.startsWith("?") && chatMessage.length() == 1) {
 			player.sendMessage(ChatColor.AQUA + "=============================================");
@@ -309,26 +352,30 @@ public class Chat implements Listener {
 			player.sendMessage(ChatColor.GOLD + "?/v - для выбора режима шепота");
 			player.sendMessage(ChatColor.GOLD + "?/l - для выбора локального режима");
 			player.sendMessage(ChatColor.GOLD + "?/? - для вызоа этой справки");
-			if (Util.hasPermission(player, "mcnw.mute.help"))
+			if (Util.hasPermission(player, "mcnw.mute.help")) {
 				player.sendMessage(ChatColor.GOLD + "?/m - для вызоа справки по молчанке");
+			}
 			player.sendMessage(ChatColor.AQUA + "=============================================");
 			event.setCancelled(true);
 		}
 		if (chatMessage.startsWith("?/m") && chatMessage.length() == 3) {
-			player.sendMessage(tCC("&b============================================="));
+			player.sendMessage(Chat.tCC("&b============================================="));
 			if (Util.hasPermission(player, "mcnw.mute.mute")) {
-				player.sendMessage(tCC("&b%nick [chanel=g|w|s|v|l|p|a] [time=sec] &6- для молчанки"));
-				player.sendMessage(tCC("&bg &6- Глобалный  &bw&6 - мировой"));
-				player.sendMessage(tCC("&bs &6- крик       &bv&6 - шёпот"));
-				player.sendMessage(tCC("&bl &6- локальный  &bp&6 - личные сообщения"));
-				player.sendMessage(tCC("&ba &6- все"));
+				player.sendMessage(Chat
+						.tCC("&b%nick [chanel=g|w|s|v|l|p|a] [time=sec] &6- для молчанки"));
+				player.sendMessage(Chat.tCC("&bg &6- Глобалный  &bw&6 - мировой"));
+				player.sendMessage(Chat.tCC("&bs &6- крик       &bv&6 - шёпот"));
+				player.sendMessage(Chat.tCC("&bl &6- локальный  &bp&6 - личные сообщения"));
+				player.sendMessage(Chat.tCC("&ba &6- все"));
 				if (Util.hasPermission(player, "mcnw.mute.unmute")) {
-					player.sendMessage(tCC("&6 время равное 0 - для принудительносго снятия молчанки"));
+					player.sendMessage(Chat
+							.tCC("&6 время равное 0 - для принудительносго снятия молчанки"));
 				}
 			}
-			if (Util.hasPermission(player, "mcnw.mute.help"))
-				player.sendMessage(tCC("&6?/m - для вызоа справки по молчанке"));
-			player.sendMessage(tCC("&b============================================="));
+			if (Util.hasPermission(player, "mcnw.mute.help")) {
+				player.sendMessage(Chat.tCC("&6?/m - для вызоа справки по молчанке"));
+			}
+			player.sendMessage(Chat.tCC("&b============================================="));
 			event.setCancelled(true);
 		}
 		// молчанка
@@ -392,10 +439,10 @@ public class Chat implements Listener {
 	}
 
 	// вывод имени
-	private String name(Player p ) {
-		return Displayname ? p.getDisplayName() : p.getName();
+	// private String name(Player p ) {
+	// return Displayname ? p.getDisplayName() : p.getName();
 
-	}
+	// }
 
 	// теряем вещь
 	private void loseitem(Player player ) {
@@ -448,40 +495,36 @@ public class Chat implements Listener {
 	protected void getPMRecipientsSpy(Player sender, Player target, String msg ) {
 		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			if (Util.hasPermission(recipient, "mcnw.pmspy") && !recipient.equals(target)) {
-				recipient.sendMessage(ChatColor.GRAY + "spy@" + name(sender) + "->" + name(target)
-						+ ": " + msg);
+				recipient.sendMessage(ChatColor.GRAY + "spy@" + sender.getName() + "->"
+						+ target.getName() + ": " + msg);
 			}
 		}
 	}
 
-	protected static String tCC(String string ) {
+	private static String tCC(String string ) {
 		return ChatColor.translateAlternateColorCodes('&', string);
-		/*
-		 * if (string == null) { return ""; } String newstring = string;
-		 * newstring =
-		 * chatColorPattern.matcher(newstring).replaceAll("\u00A7$1"); newstring
-		 * = chatMagicPattern.matcher(newstring).replaceAll("\u00A7$1");
-		 * newstring =
-		 * chatBoldPattern.matcher(newstring).replaceAll("\u00A7$1"); newstring
-		 * = chatStrikethroughPattern.matcher(newstring).replaceAll("\u00A7$1");
-		 * newstring =
-		 * chatUnderlinePattern.matcher(newstring).replaceAll("\u00A7$1");
-		 * newstring =
-		 * chatItalicPattern.matcher(newstring).replaceAll("\u00A7$1");
-		 * newstring =
-		 * chatResetPattern.matcher(newstring).replaceAll("\u00A7$1"); return
-		 * newstring;
-		 */
 	}
 
-	static void updateDisplayName(Player player ) {
+	private String preffix(Player p ) {
 		if (!Util.usePEX) {
-			return;
+			return "";
 		}
-		PermissionUser user = PermissionsEx.getPermissionManager().getUser(player);
+		PermissionUser user = PermissionsEx.getPermissionManager().getUser(p);
 		if (user == null) {
-			return;
+			return "";
 		}
-		player.setDisplayName(Chat.tCC(user.getPrefix() + player.getName() + user.getSuffix()));
+		return user.getPrefix();
 	}
+
+	private String suffix(Player p ) {
+		if (!Util.usePEX) {
+			return "";
+		}
+		PermissionUser user = PermissionsEx.getPermissionManager().getUser(p);
+		if (user == null) {
+			return "";
+		}
+		return user.getSuffix();
+	}
+
 }

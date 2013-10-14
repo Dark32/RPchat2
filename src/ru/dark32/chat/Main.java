@@ -9,7 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,6 +18,7 @@ public class Main extends JavaPlugin {
 	public PluginManager		pm;
 	private IMute				muteStorage;
 
+	@Override
 	public void onEnable() {
 		pm = Bukkit.getPluginManager();
 		if (pm.getPlugin("PermissionsEx") != null) {
@@ -56,11 +56,12 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Chat(config, this), this);
 	}
 
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args ) {
 		if (cmd.getName().equalsIgnoreCase("rpchat")) {
-			for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-				Chat.updateDisplayName(player);
-			}
+			// for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+			// Chat.updateDisplayName(player);
+			// }
 			return true;
 		}
 		return false;
