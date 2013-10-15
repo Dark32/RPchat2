@@ -129,22 +129,18 @@ public class Chat implements Listener {
 			pmChatFormat2 = Chat.tCC(config.getString("String.pmChatFormat2"));
 			playeNotFound = Chat.tCC(config.getString("String.playeNotFound"));
 		}
-
 	}
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event ) {
 		Util.setChatMode(event.getPlayer(), 0);
-		// updateDisplayName(event.getPlayer());// обновляем префиксы
 	}
 
 	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event ) {
 		Player player = event.getPlayer();// получаем игрока, вызвавшего событие
 		String message = STR.localChatFormat.replace("%sf", suffix(player))
-				.replace("%pf", preffix(player)).replace("%p", "%1$s").replace("%msg", "%2$s"); // "%1$s: %2$s";//
-																								// формат
-																								// сообщения
+				.replace("%pf", preffix(player)).replace("%p", "%1$s").replace("%msg", "%2$s");
 		String chatMessage = event.getMessage();// сообщение
 		int ranged = 1; // Тип чата
 		/**
@@ -176,14 +172,12 @@ public class Chat implements Listener {
 		boolean isPm = chatMessage.startsWith(ChatMode.PM.getStartChar())
 				&& chatMessage.length() > 1;
 		boolean isAny = isGlobal || isWorld || isShout || isWhisper;
-
 		boolean isGlobalMode = !isLocal && mode == ChatMode.GLOBAL.getModeId();
 		boolean isWorldMode = !isLocal && !isGlobal && mode == ChatMode.WORLD.getModeId();
 		boolean isShoutMode = !isLocal && !isGlobal && !isWorld
 				&& mode == ChatMode.SHOUT.getModeId();
 		boolean isWhisperMode = !isLocal && !isGlobal && !isWorld && !isShout
 				&& mode == ChatMode.WHISPER.getModeId();
-
 		boolean isLocalMode = mode == ChatMode.LOCAL.getModeId();
 		boolean isGlobalChatItemInHantd = inHand != null && inHand.getTypeId() == globalId
 				&& inHand.getDurability() == globalSubId;
@@ -214,7 +208,6 @@ public class Chat implements Listener {
 			} else {
 				player.sendMessage(STR.noPerm.replace("$1", STR.globalChat));
 				event.setCancelled(true);
-
 			}
 		}
 
@@ -319,43 +312,43 @@ public class Chat implements Listener {
 			chatMessage = chatMessage.substring(1).trim();
 		}
 		if (chatMessage.startsWith("?") && chatMessage.length() == 1) {
-			player.sendMessage(ChatColor.AQUA + "=============================================");
-			player.sendMessage(ChatColor.GOLD + "RPchat v 0.9");
-			player.sendMessage(ChatColor.GOLD + "Авторы: ufatos, dark32");
-			player.sendMessage(ChatColor.GOLD + "http://bit.ly/12Q8z4q");
-			player.sendMessage(ChatColor.GOLD + "?/. для справки режимов чата");
-			player.sendMessage(ChatColor.GOLD + "?/? для справки по переключению режимов чата");
-			player.sendMessage(ChatColor.AQUA + "=============================================");
+			player.sendMessage(Chat.tCC("&b============================================="));
+			player.sendMessage(Chat.tCC("&6" + Main.version));
+			player.sendMessage(Chat.tCC("&6 Авторы: ufatos, dark32"));
+			player.sendMessage(Chat.tCC("&6 CC-BY-NC-ND"));
+			player.sendMessage(Chat.tCC("&6 http://bit.ly/12Q8z4q"));
+			player.sendMessage(Chat.tCC("&6 ?/. для справки режимов чата"));
+			player.sendMessage(Chat.tCC("&6 ?/? для справки по переключению режимов чата"));
+			player.sendMessage(Chat.tCC("&b ============================================="));
 			event.setCancelled(true);
 		}
 		if (chatMessage.startsWith("?/.") && chatMessage.length() == 3) {
-			player.sendMessage(ChatColor.AQUA + "=============================================");
-			player.sendMessage(ChatColor.GOLD + ChatMode.GLOBAL.getStartChar()
-					+ " для глобального чата");
-			player.sendMessage(ChatColor.GOLD + ChatMode.WORLD.getStartChar()
-					+ " для мирового чата");
-			player.sendMessage(ChatColor.GOLD + ChatMode.SHOUT.getStartChar() + " для крика");
-			player.sendMessage(ChatColor.GOLD + ChatMode.WHISPER.getStartChar() + " для шепота");
-			player.sendMessage(ChatColor.GOLD + ChatMode.PM.getStartChar()
-					+ "<имя> сообщени для личного чата");
-			player.sendMessage(ChatColor.GOLD
-					+ "*<действие> для вероятного действия или *<целое число больше " + minroll
-					+ "> для выброса случайного числа");
-			player.sendMessage(ChatColor.AQUA + "=============================================");
+			player.sendMessage(Chat.tCC("&b============================================="));
+			player.sendMessage(Chat.tCC("&6" + ChatMode.GLOBAL.getStartChar()
+					+ " для глобального чата"));
+			player.sendMessage(Chat.tCC("&6" + ChatMode.WORLD.getStartChar() + " для мирового чата"));
+			player.sendMessage(Chat.tCC("&6" + ChatMode.SHOUT.getStartChar() + " для крика"));
+			player.sendMessage(Chat.tCC("&6" + ChatMode.WHISPER.getStartChar() + " для шепота"));
+			player.sendMessage(Chat.tCC("&6" + ChatMode.PM.getStartChar()
+					+ "<имя> сообщени для личного чата"));
+			player.sendMessage(Chat
+					.tCC("&6*<действие> для вероятного действия или *<целое число больше "
+							+ minroll + "> для выброса случайного числа"));
+			player.sendMessage(Chat.tCC("&b============================================="));
 			event.setCancelled(true);
 		}
 		if (chatMessage.startsWith("?/?") && chatMessage.length() == 3) {
-			player.sendMessage(ChatColor.AQUA + "=============================================");
-			player.sendMessage(ChatColor.GOLD + "?/g - для выбора глобального режима");
-			player.sendMessage(ChatColor.GOLD + "?/w - для выбора мирового мирового");
-			player.sendMessage(ChatColor.GOLD + "?/s - для выбора режима крика");
-			player.sendMessage(ChatColor.GOLD + "?/v - для выбора режима шепота");
-			player.sendMessage(ChatColor.GOLD + "?/l - для выбора локального режима");
-			player.sendMessage(ChatColor.GOLD + "?/? - для вызоа этой справки");
+			player.sendMessage(Chat.tCC("&b============================================="));
+			player.sendMessage(Chat.tCC("&6?/g - для выбора глобального режима"));
+			player.sendMessage(Chat.tCC("&6?/w - для выбора мирового мирового"));
+			player.sendMessage(Chat.tCC("&6?/s - для выбора режима крика"));
+			player.sendMessage(Chat.tCC("&6?/v - для выбора режима шепота"));
+			player.sendMessage(Chat.tCC("&6?/l - для выбора локального режима"));
+			player.sendMessage(Chat.tCC("&6?/? - для вызоа этой справки"));
 			if (Util.hasPermission(player, "mcnw.mute.help")) {
-				player.sendMessage(ChatColor.GOLD + "?/m - для вызоа справки по молчанке");
+				player.sendMessage(Chat.tCC("&6?/m - для вызоа справки по молчанке"));
 			}
-			player.sendMessage(ChatColor.AQUA + "=============================================");
+			player.sendMessage(Chat.tCC("&b============================================="));
 			event.setCancelled(true);
 		}
 		if (chatMessage.startsWith("?/m") && chatMessage.length() == 3) {
@@ -380,41 +373,36 @@ public class Chat implements Listener {
 		}
 		// молчанка
 		if (chatMessage.startsWith("%") && chatMessage.length() > 1) {
-			// player.sendMessage(ChatColor.GRAY + "@");
 			Matcher m = nickForMute.matcher(chatMessage);
 			if (m.find()) {
-				// player.sendMessage(ChatColor.GRAY + "@@");
-				// String recipient = m.group(1);
 				plugin.getBanStorage().mute(m.group(1), m.group(2), player);
-				// player.sendMessage(ChatColor.GRAY + "@" + recipient +
-				// "теперь молчит");
 				event.setCancelled(true);
 			}
 		}
 		// режимы чата
 		if (chatMessage.startsWith("?/g") && chatMessage.length() == 3) {
 			Util.setChatMode(player, ChatMode.GLOBAL.getModeId());
-			player.sendMessage(ChatColor.GOLD + "Режим изменён на глобальный");
+			player.sendMessage(Chat.tCC("&6Режим изменён на глобальный"));
 			event.setCancelled(true);
 		}
 		if (chatMessage.startsWith("?/w") && chatMessage.length() == 3) {
 			Util.setChatMode(player, ChatMode.WORLD.getModeId());
-			player.sendMessage(ChatColor.GOLD + "Режим изменён на мировой");
+			player.sendMessage(Chat.tCC("&6Режим изменён на мировой"));
 			event.setCancelled(true);
 		}
 		if (chatMessage.startsWith("?/s") && chatMessage.length() == 3) {
 			Util.setChatMode(player, ChatMode.SHOUT.getModeId());
-			player.sendMessage(ChatColor.GOLD + "Режим изменён на крик");
+			player.sendMessage(Chat.tCC("&6 Режим изменён на крик"));
 			event.setCancelled(true);
 		}
 		if (chatMessage.startsWith("?/v") && chatMessage.length() == 3) {
 			Util.setChatMode(player, ChatMode.WHISPER.getModeId());
-			player.sendMessage(ChatColor.GOLD + "Режим изменён на шёпот");
+			player.sendMessage(Chat.tCC("&6 Режим изменён на шёпот"));
 			event.setCancelled(true);
 		}
 		if (chatMessage.startsWith("?/l") && chatMessage.length() == 3) {
 			Util.setChatMode(player, ChatMode.LOCAL.getModeId());
-			player.sendMessage(ChatColor.GOLD + "Режим изменён на локальный");
+			player.sendMessage(Chat.tCC("&6 Режим изменён на локальный"));
 			event.setCancelled(true);
 		}
 		switch (ranged) {
@@ -437,12 +425,6 @@ public class Chat implements Listener {
 		event.setFormat(message);
 		event.setMessage(chatMessage);
 	}
-
-	// вывод имени
-	// private String name(Player p ) {
-	// return Displayname ? p.getDisplayName() : p.getName();
-
-	// }
 
 	// теряем вещь
 	private void loseitem(Player player ) {
@@ -495,8 +477,8 @@ public class Chat implements Listener {
 	protected void getPMRecipientsSpy(Player sender, Player target, String msg ) {
 		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			if (Util.hasPermission(recipient, "mcnw.pmspy") && !recipient.equals(target)) {
-				recipient.sendMessage(ChatColor.GRAY + "spy@" + sender.getName() + "->"
-						+ target.getName() + ": " + msg);
+				recipient.sendMessage(Chat.tCC("&7spy@" + sender.getName() + "->"
+						+ target.getName() + ": " + msg));
 			}
 		}
 	}
