@@ -56,7 +56,7 @@ public class Chat implements Listener {
 	protected static Pattern	nickForPM		= Pattern.compile("@(\\D[\\d\\w_]+)\\s(.+)");
 	protected static Pattern	nickForMute		= Pattern.compile("%(\\D[\\d\\w_]+)\\s(.+)");
 	// protected static Pattern _space = Pattern.compile("^\\s+"); // пробел?
-	protected static Pattern	_number			= Pattern.compile("^\\*(\\d)$");				// число?
+	protected static Pattern	_number			= Pattern.compile("^\\*(\\d+)$");				// число?
 	private Random				rand			= new Random();
 
 	private Main				plugin;
@@ -329,7 +329,7 @@ public class Chat implements Listener {
 
 		}
 
-		if (mode > 0 && chatMessage.length() > 1 && (isAny) && (range != RangeMain)) {
+		if (mode >= 0 && chatMessage.length() > 1 && (isAny) && (range != RangeMain)) {
 			chatMessage = chatMessage.substring(1).trim();
 		}
 
