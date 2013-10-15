@@ -42,4 +42,6 @@ public interface IMute {
 	public void saveMute();
 
 	public void mute(String group, String group2, Player player );
+
+	public long getTimeMute(String playerName, int chanel );
 }

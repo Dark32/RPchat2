@@ -27,19 +27,18 @@ public class Util {
 		modes = new HashMap<String, Integer>();
 	}
 
-	public static void setChatMode(Player player, int cm ) {
+	public static void setChatMode(String player, int cm ) {
 		if (modes.containsKey(player)) {
 			modes.remove(player);
 		}
-		modes.put(player.getName(), cm);
+		modes.put(player, cm);
 	}
 
-	public static int getChatMode(Player player ) {
+	public static int getChatMode(String player ) {
 		if (!modes.containsKey(player)) {
 			return ChatMode.LOCAL.getModeId();
 		} else {
-			return modes.get(player.getName());
+			return modes.get(player);
 		}
 	}
-
 }

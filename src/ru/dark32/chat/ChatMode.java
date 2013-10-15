@@ -1,13 +1,12 @@
 package ru.dark32.chat;
 
-
 public enum ChatMode {
 
 		GLOBAL(0, "$" ),
 		WORLD(1, ">" ),
 		SHOUT(2, "!" ),
-		WHISPER(3, "#" ),
-		LOCAL(4, "-" ),
+		LOCAL(3, "-" ),
+		WHISPER(4, "#" ),
 		PM(5, "@" );
 	private int		id;
 	private String	ch;

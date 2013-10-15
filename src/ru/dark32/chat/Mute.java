@@ -59,10 +59,11 @@ public class Mute implements IMute {
 	@Override
 	public void mute(String playerName, int[] seconds ) {
 		for (int i = 0; i < 6; i++) {
-			Calendar cal = Calendar.getInstance();
-			cal.add(Calendar.SECOND, seconds[i]);
-			yaml.set("mute." + playerName + i, SDF.format(cal.getTime()));
-
+			if (seconds[i] > 0) {
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.SECOND, seconds[i]);
+				yaml.set("mute." + playerName + i, SDF.format(cal.getTime()));
+			}
 		}
 		saveMute();
 	}
@@ -101,25 +102,27 @@ public class Mute implements IMute {
 				chanelMuteTime[5] = time;
 			}
 			mute(playerName, chanelMuteTime);
-			for (int i = 0; i < 6; i++) {
-				seder.sendMessage(ChatColor.GRAY + "%" + i + "  " + chanelMuteTime[i]);
-			}
+			// for (int i = 0; i < 6; i++) {
+			// seder.sendMessage(ChatColor.GRAY + "%" + i + "  " +
+			// chanelMuteTime[i]);
+			// }
 			seder.sendMessage(ChatColor.GRAY + "%" + playerName + " теперь молчит (" + chanel
 					+ ") из-за " + reason + " на срок " + time + " секунд");
 
 		} else {
 			m = _see.matcher(par2);
 			if (m.find()) {
+				seder.sendMessage(ChatColor.GRAY + "%===============================");
 				for (int i = 0; i < 6; i++) {
 					String dateStr = yaml.getString("mute." + playerName + i, "unmute");
 					if (dateStr != null) {
 						try {
 							Date date = SDF.parse(dateStr);
 							boolean muted = (date.getTime() > System.currentTimeMillis());
-							long time = date.getTime() - System.currentTimeMillis();
+							long time = (date.getTime() - System.currentTimeMillis()) / 1000;
 							seder.sendMessage(ChatColor.GRAY + "%" + playerName + " "
-									+ (_chanelName[i]) + (muted ? " молчит " : " молчал ")
-									+ (muted ? (" . Осталось " + time + " секунд") : ""));
+									+ (_chanelName[i]) + (muted ? " молчит" : " молчал")
+									+ (muted ? (". Осталось " + time + " секунд") : ""));
 						} catch (ParseException e) {}
 
 					}
@@ -159,4 +162,22 @@ public class Mute implements IMute {
 		}
 
 	}
+
+	@Override
+	public long getTimeMute(String playerName, int chanel ) {
+		int[] chs = new int[6];
+		chs[chanel] = -1;
+		String dateStr = yaml.getString("mute." + playerName + chanel, "unmute");
+		if (dateStr != null) {
+			try {
+				Date date = SDF.parse(dateStr);
+				return (date.getTime() - System.currentTimeMillis()) / 1000;
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		return -1;
+
+	}
+
 }

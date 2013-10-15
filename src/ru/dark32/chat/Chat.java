@@ -110,6 +110,7 @@ public class Chat implements Listener {
 		private static String	pmChatFormat2;
 		private static String	rnd;
 		private static String	playeNotFound;
+		private static String	mute;
 
 		private static void init(MemorySection config ) {
 			luck = Chat.tCC(config.getString("String.luck"));
@@ -128,12 +129,8 @@ public class Chat implements Listener {
 			pmChatFormat = Chat.tCC(config.getString("String.localChatFormat"));
 			pmChatFormat2 = Chat.tCC(config.getString("String.pmChatFormat2"));
 			playeNotFound = Chat.tCC(config.getString("String.playeNotFound"));
+			mute = Chat.tCC(config.getString("String.mute"));
 		}
-	}
-
-	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event ) {
-		Util.setChatMode(event.getPlayer(), 0);
 	}
 
 	@EventHandler
@@ -142,13 +139,15 @@ public class Chat implements Listener {
 		String message = STR.localChatFormat.replace("%sf", suffix(player))
 				.replace("%pf", preffix(player)).replace("%p", "%1$s").replace("%msg", "%2$s");
 		String chatMessage = event.getMessage();// сообщение
-		int ranged = 1; // Тип чата
 		/**
 		 * =========================<br>
-		 * 3 - глобальный<br>
-		 * 2 - мировой<br>
-		 * 1 - флаг дистанции<br>
-		 * <br>
+		 * -1 - Особый <br>
+		 * 0 - глобальный<br>
+		 * 1 - мировой<br>
+		 * 2 - крик<br>
+		 * 3 - локальный<br>
+		 * 4 - шёпот<br>
+		 * 5 - ЛС <br>
 		 * @ - ЛС<br>
 		 * $ - глобальный чат<br>
 		 * > - мировой чат<br>
@@ -158,7 +157,8 @@ public class Chat implements Listener {
 		 **/
 		ItemStack inHand = player.getItemInHand();// вещь в руках
 		double range = RangeMain;// локальный чат, радиус по умолчанию
-		int mode = Util.getChatMode(player); // уменьшаем число вызовов
+		// уменьшаем число вызовов
+		int mode = Util.getChatMode(player.getName());
 		boolean isLocal = chatMessage.startsWith(ChatMode.LOCAL.getStartChar())
 				&& chatMessage.length() > 1;
 		boolean isGlobal = !isLocal && chatMessage.startsWith(ChatMode.GLOBAL.getStartChar())
@@ -172,6 +172,7 @@ public class Chat implements Listener {
 		boolean isPm = chatMessage.startsWith(ChatMode.PM.getStartChar())
 				&& chatMessage.length() > 1;
 		boolean isAny = isGlobal || isWorld || isShout || isWhisper;
+
 		boolean isGlobalMode = !isLocal && mode == ChatMode.GLOBAL.getModeId();
 		boolean isWorldMode = !isLocal && !isGlobal && mode == ChatMode.WORLD.getModeId();
 		boolean isShoutMode = !isLocal && !isGlobal && !isWorld
@@ -189,30 +190,40 @@ public class Chat implements Listener {
 			isWorldChatItemInHantd = inHand != null && inHand.getType() == globalMa
 					&& inHand.getDurability() == worldSubId;
 		}
+
 		// Глобальный
 		if (isGlobal || isGlobalMode) {
+			if (ifMute(player, ChatMode.GLOBAL.getModeId())) {
+				event.setCancelled(true);
+				return;
+			}
 			if (Util.hasPermission(player, "mcnw.global")) {
 				message = STR.globalChatFormat.replace("%sf", suffix(player))
 						.replace("%pf", preffix(player)).replace("%p", "%1$s")
 						.replace("%msg", "%2$s");
 				range = RangeWhispering;
 				if (Util.hasPermission(player, "mcnw.global.no_item")) {
-					ranged = 3; // флаг глобально, межмирового чата
+					mode = ChatMode.GLOBAL.getModeId();
 				} else if (isGlobalChatItemInHantd) {
-					ranged = 3; // флаг глобально, межмирового чата
+					mode = ChatMode.GLOBAL.getModeId();
 					loseitem(player);
 				} else {
 					player.sendMessage(STR.nei);
 					event.setCancelled(true);
+					return;
 				}
 			} else {
 				player.sendMessage(STR.noPerm.replace("$1", STR.globalChat));
 				event.setCancelled(true);
+				return;
 			}
 		}
 
 		// Мировой
 		if (isWorld || isWorldMode) {
+			if (ifMute(player, ChatMode.WORLD.getModeId())) {
+				event.setCancelled(true);
+			}
 			if (Util.hasPermission(player, "mcnw.world")) {
 				message = STR.worldChatFormat.replace("%sf", suffix(player))
 						.replace("%pf", preffix(player)).replace("%p", "%1$s")
@@ -220,22 +231,28 @@ public class Chat implements Listener {
 
 				range = RangeWhispering;
 				if (Util.hasPermission(player, "mcnw.world.no_item")) {
-					ranged = 2;// флаг мирового чата
+					mode = ChatMode.WORLD.getModeId();
 				} else if (isWorldChatItemInHantd) {
-					ranged = 2;// флаг мирового чата
+					mode = ChatMode.WORLD.getModeId();
 					loseitem(player);
 				} else {
 					player.sendMessage(STR.nei);
 					event.setCancelled(true);
+					return;
 				}
 			} else {
 				player.sendMessage(STR.noPerm.replace("$1", STR.worldChat));
 				event.setCancelled(true);
+				return;
 			}
 		}
 		// Крик
 		if (isShout || isShoutMode) {
-			ranged = 1; // флаг дистанции
+			if (ifMute(player, ChatMode.SHOUT.getModeId())) {
+				event.setCancelled(true);
+				return;
+			}
+			mode = ChatMode.SHOUT.getModeId();
 			range = RangeShout;// 1000;
 			message = STR.shoutChatFormat.replace("%sf", suffix(player))
 					.replace("%pf", preffix(player)).replace("%p", "%1$s").replace("%msg", "%2$s");
@@ -243,7 +260,11 @@ public class Chat implements Listener {
 		}
 		// Шепот
 		if (isWhisper || isWhisperMode) {
-			ranged = 1;// флаг дистанции
+			if (ifMute(player, ChatMode.WHISPER.getModeId())) {
+				event.setCancelled(true);
+				return;
+			}
+			mode = ChatMode.WHISPER.getModeId();
 			range = RangeWhispering;// 10;
 			message = STR.whisperingChatFormat.replace("%sf", suffix(player))
 					.replace("%pf", preffix(player)).replace("%p", "%1$s").replace("%msg", "%2$s");
@@ -251,10 +272,13 @@ public class Chat implements Listener {
 		}
 		// Личка
 		if (isPm) {
-
+			if (ifMute(player, ChatMode.PM.getModeId())) {
+				event.setCancelled(true);
+				return;
+			}
 			Matcher m = nickForPM.matcher(chatMessage);
 			if (m.find()) {
-				ranged = -1;// флаг особого чата
+				mode = ChatMode.PM.getModeId();
 				if (Bukkit.getServer().getPlayer(m.group(1)) != null) {
 					Player recipient = Bukkit.getServer().getPlayer(m.group(1));
 					if (!recipient.equals(player)) {
@@ -275,12 +299,13 @@ public class Chat implements Listener {
 					player.sendMessage(STR.playeNotFound.replace("$1", m.group(2)));
 				}
 				event.setCancelled(true);
+				return;
 			}
 		}
 
 		// Действие с вероятностью
 		if (chatMessage.startsWith("*") && chatMessage.length() > 1) {
-			ranged = 1;
+			mode = -1;
 			range = RangeMain;
 			Matcher m = _number.matcher(chatMessage);
 			int i;
@@ -304,7 +329,7 @@ public class Chat implements Listener {
 
 		}
 
-		if (ranged > 0 && chatMessage.length() > 1 && (isAny) && (range != RangeMain)) {
+		if (mode > 0 && chatMessage.length() > 1 && (isAny) && (range != RangeMain)) {
 			chatMessage = chatMessage.substring(1).trim();
 		}
 
@@ -314,28 +339,35 @@ public class Chat implements Listener {
 		if (chatMessage.startsWith("?") && chatMessage.length() == 1) {
 			player.sendMessage(Chat.tCC("&b============================================="));
 			player.sendMessage(Chat.tCC("&6" + Main.version));
-			player.sendMessage(Chat.tCC("&6 Авторы: ufatos, dark32"));
-			player.sendMessage(Chat.tCC("&6 CC-BY-NC-ND"));
-			player.sendMessage(Chat.tCC("&6 http://bit.ly/12Q8z4q"));
-			player.sendMessage(Chat.tCC("&6 ?/. для справки режимов чата"));
-			player.sendMessage(Chat.tCC("&6 ?/? для справки по переключению режимов чата"));
-			player.sendMessage(Chat.tCC("&b ============================================="));
+			player.sendMessage(Chat.tCC("&6Autors: ufatos, dark32"));
+			player.sendMessage(Chat.tCC("&6License: CC-BY-NC-ND"));
+			player.sendMessage(Chat.tCC("&6Linck: http://bit.ly/12Q8z4q"));
+			player.sendMessage(Chat.tCC("&6?/. для справки режимов чата"));
+			player.sendMessage(Chat.tCC("&6?/? для справки по переключению режимов чата"));
+			player.sendMessage(Chat.tCC("&b============================================="));
 			event.setCancelled(true);
+			return;
 		}
 		if (chatMessage.startsWith("?/.") && chatMessage.length() == 3) {
 			player.sendMessage(Chat.tCC("&b============================================="));
+			player.sendMessage(Chat.tCC("&6Префик необходим для сообщения в другой канал"));
+			player.sendMessage(Chat.tCC("&6Для сообщения в теущий канал префикс не обязателен"));
 			player.sendMessage(Chat.tCC("&6" + ChatMode.GLOBAL.getStartChar()
 					+ " для глобального чата"));
 			player.sendMessage(Chat.tCC("&6" + ChatMode.WORLD.getStartChar() + " для мирового чата"));
 			player.sendMessage(Chat.tCC("&6" + ChatMode.SHOUT.getStartChar() + " для крика"));
+			player.sendMessage(Chat.tCC("&6" + ChatMode.LOCAL.getStartChar()
+					+ "для локального чата"));
 			player.sendMessage(Chat.tCC("&6" + ChatMode.WHISPER.getStartChar() + " для шепота"));
 			player.sendMessage(Chat.tCC("&6" + ChatMode.PM.getStartChar()
 					+ "<имя> сообщени для личного чата"));
+
 			player.sendMessage(Chat
 					.tCC("&6*<действие> для вероятного действия или *<целое число больше "
 							+ minroll + "> для выброса случайного числа"));
 			player.sendMessage(Chat.tCC("&b============================================="));
 			event.setCancelled(true);
+			return;
 		}
 		if (chatMessage.startsWith("?/?") && chatMessage.length() == 3) {
 			player.sendMessage(Chat.tCC("&b============================================="));
@@ -350,6 +382,7 @@ public class Chat implements Listener {
 			}
 			player.sendMessage(Chat.tCC("&b============================================="));
 			event.setCancelled(true);
+			return;
 		}
 		if (chatMessage.startsWith("?/m") && chatMessage.length() == 3) {
 			player.sendMessage(Chat.tCC("&b============================================="));
@@ -370,6 +403,7 @@ public class Chat implements Listener {
 			}
 			player.sendMessage(Chat.tCC("&b============================================="));
 			event.setCancelled(true);
+			return;
 		}
 		// молчанка
 		if (chatMessage.startsWith("%") && chatMessage.length() > 1) {
@@ -377,50 +411,56 @@ public class Chat implements Listener {
 			if (m.find()) {
 				plugin.getBanStorage().mute(m.group(1), m.group(2), player);
 				event.setCancelled(true);
+				return;
 			}
 		}
 		// режимы чата
 		if (chatMessage.startsWith("?/g") && chatMessage.length() == 3) {
-			Util.setChatMode(player, ChatMode.GLOBAL.getModeId());
+			Util.setChatMode(player.getName(), ChatMode.GLOBAL.getModeId());
 			player.sendMessage(Chat.tCC("&6Режим изменён на глобальный"));
 			event.setCancelled(true);
+			return;
 		}
 		if (chatMessage.startsWith("?/w") && chatMessage.length() == 3) {
-			Util.setChatMode(player, ChatMode.WORLD.getModeId());
+			Util.setChatMode(player.getName(), ChatMode.WORLD.getModeId());
 			player.sendMessage(Chat.tCC("&6Режим изменён на мировой"));
 			event.setCancelled(true);
+			return;
 		}
 		if (chatMessage.startsWith("?/s") && chatMessage.length() == 3) {
-			Util.setChatMode(player, ChatMode.SHOUT.getModeId());
+			Util.setChatMode(player.getName(), ChatMode.SHOUT.getModeId());
 			player.sendMessage(Chat.tCC("&6 Режим изменён на крик"));
 			event.setCancelled(true);
+			return;
 		}
 		if (chatMessage.startsWith("?/v") && chatMessage.length() == 3) {
-			Util.setChatMode(player, ChatMode.WHISPER.getModeId());
+			Util.setChatMode(player.getName(), ChatMode.WHISPER.getModeId());
 			player.sendMessage(Chat.tCC("&6 Режим изменён на шёпот"));
 			event.setCancelled(true);
+			return;
 		}
 		if (chatMessage.startsWith("?/l") && chatMessage.length() == 3) {
-			Util.setChatMode(player, ChatMode.LOCAL.getModeId());
+			Util.setChatMode(player.getName(), ChatMode.LOCAL.getModeId());
 			player.sendMessage(Chat.tCC("&6 Режим изменён на локальный"));
 			event.setCancelled(true);
+			return;
 		}
-		switch (ranged) {
-			case 0:
-				player.sendMessage("Тебя слышат все!!!");/* Не используется */
-			case 1: {// если стоит флаг дистанции
+		if (mode == ChatMode.SHOUT.getModeId() || mode == ChatMode.WHISPER.getModeId()) {
+			event.getRecipients().clear();
+			event.getRecipients().addAll(this.getLocalRecipients(player, range));
+
+		} else if (mode == ChatMode.LOCAL.getModeId()) {
+			if (ifMute(player, ChatMode.LOCAL.getModeId())) {
+				event.setCancelled(true);
+				return;
+			} else {
 				event.getRecipients().clear();
 				event.getRecipients().addAll(this.getLocalRecipients(player, range));
-				break;
 			}
-			case 2: {// если стоит флаг внутримирового чата
-				event.getRecipients().clear();
-				event.getRecipients().addAll(this.getWorldRecipients(player, message));
-				break;
-			}
-			case 3: {// если стоит флаг межмирового чата
-				break;
-			}
+
+		} else if (mode == ChatMode.WORLD.getModeId()) {
+			event.getRecipients().clear();
+			event.getRecipients().addAll(this.getWorldRecipients(player, message));
 		}
 		event.setFormat(message);
 		event.setMessage(chatMessage);
@@ -495,6 +535,7 @@ public class Chat implements Listener {
 		if (user == null) {
 			return "";
 		}
+
 		return user.getPrefix();
 	}
 
@@ -509,4 +550,13 @@ public class Chat implements Listener {
 		return user.getSuffix();
 	}
 
+	private Boolean ifMute(Player player, int i ) {
+		if (Main.getBanStorage().isMuted(player.getName(), i)) {
+			player.sendMessage(STR.mute.replace(
+					"$1",
+						"" + Main.getBanStorage().getTimeMute(player.getName(), i)));
+			return true;
+		}
+		return false;
+	}
 }

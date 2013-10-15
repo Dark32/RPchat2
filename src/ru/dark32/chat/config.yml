@@ -28,7 +28,7 @@ String:
    luck: "&a (удачно) &d"
    unluck: "&a (неудачно) &d"
    # $1 - сколько выпало, из $2 скольки
-   rnd: "&d* %p %d* выбрасывает $1 из $2 *";
+   rnd: "&d* %p %d* выбрасывает $1 из $2 *"
    nei: "&7У вас нет нужного предмета"
    # название чата: глобальный или локальный
    noPerm: "&7У вас нет прав писать в $1"
@@ -37,12 +37,13 @@ String:
    worldChat: "мировой чат"
    worldChatFormat: "%pf%p%sf в мир:&6 %msg "
    shoutChatFormat: "%pf%p%sf кричит:&c %msg"
-   localChatFormat: "%pf%p%sf: &f %msg"
+   localChatFormat: "%pf%p%sf:&f %msg"
    whisperingChatFormat: "&7%p&7 шепчет: %msg"
    pmChatFormat: "&7@%p:&5 %msg"
    pmChatFormat2: "&7@%p->%r:&5 %msg"
    #$1 имя игрока
-   playeNotFound: "Игрока $1 нет в сети"
+   playeNotFound: "&o&7Игрока $1 нет в сети"
+   mute: "&o&7Вам велено заткнутся в этом чате и молчать ещё $1 секунд."
 #------------------------------------------
 #Range:
 #   main: 500 - локальный чат
