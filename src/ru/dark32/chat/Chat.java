@@ -1,5 +1,6 @@
 package ru.dark32.chat;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -16,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -48,8 +50,8 @@ public class Chat implements Listener {
 	/* <--experemental */
 	// Бросок по умолчанию = 100;
 	private int					randrolldef;
-	// выводить ли префиксы всюду
-	private boolean				Displayname;
+	// режим поиска игрока по нику
+	private int					PMSearchNickMode;
 	// шанс
 	private int					defchanse;
 	private int					minroll;
@@ -85,10 +87,10 @@ public class Chat implements Listener {
 		this.worldSubId = config.getInt("Id.worldSubId", this.worldSubId);// методата
 		// бросок кубика
 		this.randrolldef = config.getInt("randrolldef", this.randrolldef);
-		this.Displayname = config.getBoolean("Prefix", this.Displayname);// префиксы
 		this.defchanse = config.getInt("defchanse", this.defchanse);// шанс
 		// минимальный бросок
 		this.minroll = config.getInt("minroll", this.minroll);
+		this.PMSearchNickMode = config.getInt("PMSearchNickMode", this.PMSearchNickMode);
 		STR.init(config);
 		this.plugin = pluging;
 	}
@@ -279,8 +281,18 @@ public class Chat implements Listener {
 			Matcher m = nickForPM.matcher(chatMessage);
 			if (m.find()) {
 				mode = ChatMode.PM.getModeId();
-				if (Bukkit.getServer().getPlayer(m.group(1)) != null) {
-					Player recipient = Bukkit.getServer().getPlayer(m.group(1));
+				String nick = m.group(1);
+				if (Bukkit.getServer().getPlayer(nick) != null) {
+					Player recipient = null;
+					if (PMSearchNickMode == 0) {
+						recipient = Bukkit.getServer().getPlayer(nick);
+					} else if (PMSearchNickMode == 1) {
+						player.sendMessage(tCC("&cРежим мягкого поиска игрока реалезован, но не проверен. Измените значение PMSearchNickMode"));
+						recipient = Util.getPlayerSoft(nick);
+						return;
+					} else if (PMSearchNickMode == -1) {
+						recipient = Bukkit.getServer().getPlayerExact(nick);
+					}
 					if (!recipient.equals(player)) {
 						recipient.sendMessage(STR.pmChatFormat.replace("%sf", suffix(player))
 								.replace("%pf", preffix(player)).replace("%p", player.getName())
@@ -558,5 +570,32 @@ public class Chat implements Listener {
 			return true;
 		}
 		return false;
+	}
+
+	@EventHandler
+	public void tabComplete(PlayerChatTabCompleteEvent e ) {
+		e.getTabCompletions().clear();
+		String chatMessage = e.getChatMessage();
+		List<String> result = new ArrayList<String>();
+		if (chatMessage.startsWith(ChatMode.PM.getStartChar())) {
+			String _nick = chatMessage.length() > 1 ? chatMessage.substring(1) : "";
+			List<String> _names = new ArrayList<String>();
+			String _name = "";
+			/**
+			 * for (Player player : Bukkit.getOnlinePlayers()) {
+			 * _names.add(player.getName()); } for (String player : _names) { if
+			 * ((nick.length() > 0 && player.startsWith(nick)) ||
+			 * nick.isEmpty()) { result.add("@" + player); } }
+			 **/
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				_name = player.getName();
+				if ((_nick.length() > 0 && _name.startsWith(_nick)) || _nick.isEmpty()) {
+					result.add(ChatMode.PM.getStartChar() + _name + " ");
+				}
+			}
+		} else {
+			return;
+		}
+		e.getTabCompletions().addAll(result);
 	}
 }

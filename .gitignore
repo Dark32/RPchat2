@@ -14,3 +14,5 @@ out/
 *.iml
 *.src
 /RPChat.xml
+/doc
+/DisplayLevel_1.0.jar

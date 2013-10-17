@@ -5,8 +5,9 @@ Range:
 randrolldef: 6
 minroll: 5
 defchanse: 50
-Prefix: false
 experemental: false
+# режим поиска грока по нику: -1 - строго, 0 - стандартно, 1 - мягко (не реализованно)
+PMSearchNickMode: 0
 Id:
    #@Deprecated
    worldId: 260 
