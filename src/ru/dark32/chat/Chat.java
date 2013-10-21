@@ -1,6 +1,7 @@
 package ru.dark32.chat;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -11,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -20,6 +22,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
@@ -51,7 +54,7 @@ public class Chat implements Listener {
 	private int						randrolldef;
 	private int						PMSearchNickMode;
 	private int						defchanse;
-	private int						minroll;
+	private static int				minroll;
 	protected final static Pattern	nickForMute		= Pattern.compile("%([\\d\\w_]+)\\s(.+)");
 	private Random					rand			= new Random();
 	private Main					plugin;
@@ -89,23 +92,35 @@ public class Chat implements Listener {
 	}
 
 	private static class STR {
-		private static String	luck;
-		private static String	unluck;
-		private static String	roll;
-		private static String	nei;
-		private static String	noPerm;
-		private static String	globalChat;
-		private static String	worldChat;
-		private static String	globalChatFormat;
-		private static String	worldChatFormat;
-		private static String	shoutChatFormat;
-		private static String	whisperingChatFormat;
-		private static String	localChatFormat;
-		private static String	pmChatFormat;
-		private static String	pmChatFormat2;
-		private static String	rnd;
-		private static String	playeNotFound;
-		private static String	mute;
+		private static String		luck;
+		private static String		unluck;
+		private static String		roll;
+		private static String		nei;
+		private static String		noPerm;
+		private static String		globalChat;
+		private static String		worldChat;
+		private static String		globalChatFormat;
+		private static String		worldChatFormat;
+		private static String		shoutChatFormat;
+		private static String		whisperingChatFormat;
+		private static String		localChatFormat;
+		private static String		pmChatFormat;
+		private static String		pmChatFormat2;
+		private static String		rnd;
+		private static String		playeNotFound;
+		private static String		mute;
+		private static List<String>	broadcastList;
+		private static String		broadcast;
+		private static String		noinputmsg;
+		private static String		trybroadcastspy;
+		private static String		broadcastspy;
+		private static List<String>	baseHelp;
+		private static String		changechanel;
+		private static String		shoutChat;
+		private static String		localChat;
+		private static String		whisperingChat;
+		private static List<String>	helpPrefix	= new ArrayList<String>();
+		private static List<String>	chanelswitch;
 
 		private static void init(MemorySection config ) {
 			luck = Chat.tCC(config.getString("String.luck"));
@@ -125,6 +140,29 @@ public class Chat implements Listener {
 			pmChatFormat2 = Chat.tCC(config.getString("String.pmChatFormat2"));
 			playeNotFound = Chat.tCC(config.getString("String.playeNotFound"));
 			mute = Chat.tCC(config.getString("String.mute"));
+			broadcast = Chat.tCC(config.getString("String.broadcast"));
+			noinputmsg = Chat.tCC(config.getString("String.noinputmsg"));
+			trybroadcastspy = Chat.tCC(config.getString("String.trybroadcastspy"));
+			broadcastspy = Chat.tCC(config.getString("String.broadcastspy"));
+			changechanel = Chat.tCC(config.getString("help.changechanel"));
+			shoutChat = Chat.tCC(config.getString("String.shoutChat"));
+			localChat = Chat.tCC(config.getString("String.localChat"));
+			whisperingChat = Chat.tCC(config.getString("String.whisperingChat"));
+
+			broadcastList = config.getStringList("String.broadcastList");
+			baseHelp = config.getStringList("help.baseHelp");
+			List<String> _helpPrefix = config.getStringList("help.prefix");
+			for (String s : _helpPrefix) {
+				helpPrefix.add(s.replace("$1", ChatMode.GLOBAL.getFirstLetter())
+						.replace("$2", ChatMode.WORLD.getFirstLetter())
+						.replace("$3", ChatMode.SHOUT.getFirstLetter())
+						.replace("$4", ChatMode.LOCAL.getFirstLetter())
+						.replace("$5", ChatMode.WHISPER.getFirstLetter())
+						.replace("$6", ChatMode.PM.getFirstLetter())
+						.replace("$7", String.valueOf(minroll)));
+			}
+			_helpPrefix.clear();
+			chanelswitch = config.getStringList("help.chanelswitch");
 		}
 	}
 
@@ -172,10 +210,11 @@ public class Chat implements Listener {
 			} else if (firstChar == ChatMode.CHANCE.getFirstChar()) {
 				mode = ChatMode.CHANCE.getModeId();
 				chatMessage = chatMessage.substring(1).trim();
-				// chatMessage = chatMessage.substring(1).trim();
+			} else if (firstChar == ChatMode.BROADCAST.getFirstChar()) {
+				mode = ChatMode.BROADCAST.getModeId();
+				chatMessage = chatMessage.substring(1).trim();
 			}
 		}
-		// player.sendMessage(ChatMode.values()[mode].getSignS());
 
 		if (mode == ChatMode.GLOBAL.getModeId()) {// Глобальный
 			if (ifMute(player, mode)) {
@@ -245,7 +284,7 @@ public class Chat implements Listener {
 			}
 			int _ind = chatMessage.indexOf(" ");
 			if (_ind == -1) {
-				player.sendMessage(Chat.tCC("&7Сообщение не введено"));
+				player.sendMessage(STR.noinputmsg);
 				event.setCancelled(true);
 				return;
 			}
@@ -275,8 +314,8 @@ public class Chat implements Listener {
 			Bukkit.getConsoleSender().sendMessage(pmCnsoleSpy);
 			event.setCancelled(true);
 			return;
-		} else if (mode == ChatMode.CHANCE.getModeId()) {// действия с
-															// вероятностью
+		} else if (mode == ChatMode.CHANCE.getModeId()) {
+			// действия с вероятностью
 			if (ifMute(player, mode)) {
 				event.setCancelled(true);
 				return;
@@ -298,6 +337,22 @@ public class Chat implements Listener {
 						: STR.unluck));
 			}
 
+		} else if (mode == ChatMode.BROADCAST.getModeId()) {// Броадкаст
+			if (ifMute(player, mode)) {
+				event.setCancelled(true);
+				return;
+			}
+			if (Util.hasPermission(player, "mcnw.broadcast")) {
+				message = "%2$s";
+				Bukkit.getConsoleSender().sendMessage(
+						STR.broadcastspy.replace("%p", player.getName()));
+			} else {
+				player.sendMessage(STR.noPerm.replace("$1", STR.broadcast));
+				Bukkit.getConsoleSender().sendMessage(
+						STR.trybroadcastspy.replace("%p", player.getName()));
+				event.setCancelled(true);
+				return;
+			}
 		}
 
 		if (firstChar == '?' && chatMessage.length() == 1) {
@@ -326,6 +381,8 @@ public class Chat implements Listener {
 		} else if (mode == ChatMode.WORLD.getModeId()) {
 			event.getRecipients().clear();
 			event.getRecipients().addAll(this.getWorldRecipients(player, message));
+		} else if (mode == ChatMode.BROADCAST.getModeId()) {
+			chatMessage = Chat.tCC(chatMessage);
 		}
 		message = message.replace("%sf", suffix(player)).replace("%pf", preffix(player))
 				.replace("%p", "%1$s").replace("%msg", "%2$s");
@@ -427,27 +484,6 @@ public class Chat implements Listener {
 		return false;
 	}
 
-	@EventHandler
-	public void tabComplete(PlayerChatTabCompleteEvent e ) {
-		e.getTabCompletions().clear();
-		String chatMessage = e.getChatMessage();
-		List<String> result = new ArrayList<String>();
-		if (chatMessage.startsWith(ChatMode.PM.getFirstLetter())) {
-			String _nick = chatMessage.length() > 1 ? chatMessage.substring(1) : "";
-			List<String> _names = new ArrayList<String>();
-			String _name = "";
-			for (Player player : Bukkit.getOnlinePlayers()) {
-				_name = player.getName();
-				if ((_nick.length() > 0 && _name.startsWith(_nick)) || _nick.isEmpty()) {
-					result.add(ChatMode.PM.getFirstLetter() + _name + " ");
-				}
-			}
-		} else {
-			return;
-		}
-		e.getTabCompletions().addAll(result);
-	}
-
 	public static void getHelp(CommandSender player ) {
 		List<String> msg = new ArrayList<String>();
 		msg.add("&b=============================================");
@@ -455,8 +491,7 @@ public class Chat implements Listener {
 		msg.add("&6Autors: ufatos, dark32");
 		msg.add("&6License: CC-BY-NC-ND");
 		msg.add("&6Linck: http://bit.ly/12Q8z4q");
-		msg.add("&6?/. для справки режимов чата");
-		msg.add("&6?/? для справки по переключению режимов чата");
+		msg.addAll(STR.baseHelp);
 		msg.add("&b=============================================");
 		for (String s : msg) {
 			player.sendMessage(Chat.tCC(s));
@@ -469,49 +504,35 @@ public class Chat implements Listener {
 		switch (thirdChar) {
 			case ('g'): {
 				Util.setChatMode(player.getName(), ChatMode.GLOBAL.getModeId());
-				msg.add("&6Режим изменён на глобальный");
+				msg.add(STR.changechanel.replace("$1", STR.globalChat));
 				break;
 			}
 			case ('w'): {
 				Util.setChatMode(player.getName(), ChatMode.WORLD.getModeId());
-				msg.add("&6Режим изменён на мировой");
+				msg.add(STR.changechanel.replace("$1", STR.worldChat));
 				break;
 			}
 			case ('s'): {
 				Util.setChatMode(player.getName(), ChatMode.SHOUT.getModeId());
-				msg.add("&6Режим изменён на крик");
+				msg.add(STR.changechanel.replace("$1", STR.shoutChat));
 				break;
 			}
 			case ('l'): {
 				Util.setChatMode(player.getName(), ChatMode.LOCAL.getModeId());
-				msg.add("&6Режим изменён на локальный");
+				msg.add(STR.changechanel.replace("$1", STR.localChat));
 				break;
 			}
 			case ('v'): {
 				Util.setChatMode(player.getName(), ChatMode.WHISPER.getModeId());
-				msg.add("&6Режим изменён на шёпот");
+				msg.add(STR.changechanel.replace("$1", STR.whisperingChat));
 				break;
 			}
 			case '.': {
-				msg.add("&6Префик необходим для сообщения в другой канал");
-				msg.add("&6Для сообщения в теущий канал префикс не обязателен");
-				msg.add("&6" + ChatMode.GLOBAL.getFirstLetter() + " для глобального чата");
-				msg.add("&6" + ChatMode.WORLD.getFirstLetter() + " для мирового чата");
-				msg.add("&6" + ChatMode.SHOUT.getFirstLetter() + " для крика");
-				msg.add("&6" + ChatMode.LOCAL.getFirstLetter() + "для локального чата");
-				msg.add("&6" + ChatMode.WHISPER.getFirstLetter() + " для шепота");
-				msg.add("&6" + ChatMode.PM.getFirstLetter() + "<имя> сообщени для личного чата");
-				msg.add("&6*<действие> для вероятного действия или *<целое число больше " + minroll
-						+ "> для выброса случайного числа");
+				msg.addAll(STR.helpPrefix);
 				break;
 			}
 			case '?': {
-				msg.add("&6?/g - для выбора глобального режима");
-				msg.add("&6?/w - для выбора мирового мирового");
-				msg.add("&6?/s - для выбора режима крика");
-				msg.add("&6?/v - для выбора режима шепота");
-				msg.add("&6?/l - для выбора локального режима");
-				msg.add("&6?/? - для вызоа этой справки");
+				msg.addAll(STR.chanelswitch);
 				if (Util.hasPermission(player, "mcnw.mute.help")) {
 					msg.add("&6?/m - для вызоа справки по молчанке");
 				}
@@ -524,11 +545,11 @@ public class Chat implements Listener {
 					msg.add("&bs &6- крик       &bv&6 - шёпот");
 					msg.add("&bl &6- локальный  &bp&6 - личные сообщения");
 					msg.add("&ba &6- все");
-					if (Util.hasPermission(player, "mcnw.mute.unmute")) {
-						msg.add("&6 время равное 0 - для принудительносго снятия молчанки");
-					}
 				}
 				msg.add("&b%nick s[ee] &6- для просмотра молчанки");
+				if (Util.hasPermission(player, "mcnw.mute.unmute")) {
+					msg.add("&6 время равное 0 - для принудительносго снятия молчанки");
+				}
 				if (Util.hasPermission(player, "mcnw.mute.help")) {
 					msg.add("&6?/m - для вызоа справки по молчанке");
 				}
@@ -555,6 +576,42 @@ public class Chat implements Listener {
 				return Util.getPlayerSoft(name);
 			default:
 				return Bukkit.getServer().getPlayer(name);
+		}
+	}
+
+	@EventHandler
+	public void tabComplete(PlayerChatTabCompleteEvent e ) {
+		e.getTabCompletions().clear();
+		String chatMessage = e.getChatMessage();
+		Collection<String> completions = e.getTabCompletions();
+		char firstChar = chatMessage.charAt(0);
+		if (firstChar == ChatMode.PM.getFirstChar()) {
+			String _nick = chatMessage.length() > 1 ? chatMessage.substring(1) : "";
+			String _name = "";
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				_name = player.getName();
+				if ((_nick.length() > 0 && _name.startsWith(_nick)) || _nick.isEmpty()) {
+					completions.add(ChatMode.PM.getFirstLetter() + _name);
+				}
+			}
+		} else if (firstChar == '%') {
+			String _nick = chatMessage.length() > 1 ? chatMessage.substring(1) : "";
+			String _name = "";
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				_name = player.getName();
+				if ((_nick.length() > 0 && _name.startsWith(_nick)) || _nick.isEmpty()) {
+					completions.add('%' + _name);
+				}
+			}
+		} else if (firstChar == ChatMode.BROADCAST.getFirstChar()) {
+			for (String s : STR.broadcastList) {
+				String broad = chatMessage.length() > 1 ? chatMessage.substring(1) : "";
+				if ((broad.length() > 0 && s.startsWith(broad)) || broad.isEmpty()) {
+					completions.add(ChatMode.BROADCAST.getFirstLetter() + s);
+				}
+			}
+		} else {
+			return;
 		}
 	}
 }

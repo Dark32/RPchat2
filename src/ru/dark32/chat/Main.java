@@ -9,7 +9,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
@@ -55,6 +57,7 @@ public class Main extends JavaPlugin {
 		Main.muteStorage = new Mute(new File(getDataFolder(), "storage.yml"));
 		Util.init(this);
 		getServer().getPluginManager().registerEvents(new Chat(config, this), this);
+
 	}
 
 	@Override
@@ -74,4 +77,5 @@ public class Main extends JavaPlugin {
 	public static IMute getBanStorage() {
 		return muteStorage;
 	}
+	
 }

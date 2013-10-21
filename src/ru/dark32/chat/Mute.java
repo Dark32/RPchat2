@@ -86,7 +86,7 @@ public class Mute implements IMute {
 			}
 			String reason = s.length >= 3 ? StringUtils.join(s, " ", 2, s.length - 1)
 					: "причина не указана";
-			int[] chanelMuteTime = new int[7];
+			int[] chanelMuteTime = new int[chaneles];
 			if (chanel == ChatMode.GLOBAL.getSign()) {
 				chanelMuteTime[0] = time;
 			} else if (chanel == ChatMode.WORLD.getSign()) {
@@ -137,10 +137,11 @@ public class Mute implements IMute {
 						}
 					}
 				} else {
-					seder.sendMessage(ChatColor.GRAY + "%Ошибка форматирования #2 ");
+					seder.sendMessage(ChatColor.GRAY + "%Ошибка форматирования #2 [see]");
+					seder.sendMessage(ChatColor.GRAY + "%Сигнатура или [see] введено не правильно: "+s[0]);
 				}
 			} else {
-				seder.sendMessage(ChatColor.GRAY + "%Ошибка форматирования #1 ");
+				seder.sendMessage(ChatColor.GRAY + "%Ошибка форматирования #1 [length]");
 			}
 		}
 	}

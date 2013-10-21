@@ -8,7 +8,8 @@ public enum ChatMode {
 		LOCAL(3, "-", 'l' ),
 		WHISPER(4, "#", 'v' ),
 		PM(5, "@", 'p' ),
-		CHANCE(6, "*", 'c' );
+		CHANCE(6, "*", 'c' ),
+		BROADCAST(7, "~", 'b' );
 	final private int		id;
 	final private String	ch;
 	final private char		sign;
