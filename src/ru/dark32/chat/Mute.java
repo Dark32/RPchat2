@@ -7,22 +7,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class Mute implements IMute {
-	protected static Pattern		_chanels	= Pattern
-														.compile("(g|w|s|v|l|p|a)\\s(\\d+)\\s(.*)");
-	protected static Pattern		_see		= Pattern.compile("(se{0,2})");
-	private final String[]			_chanelName	= new String[] { "g", "w", "s", "v", "l", "p", "a" };
 	private final SimpleDateFormat	SDF			= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private YamlConfiguration		yaml;
-
+	final private int				chaneles	= ChatMode.values().length;
 	private File					yamlFile;
 
 	public Mute(File file ){
@@ -34,11 +29,15 @@ public class Mute implements IMute {
 		}
 	}
 
+	private String getPlayerMuteString(String playerName, int chanel ) {
+		return playerName + ".mute." + ChatMode.values()[chanel].getSign();
+	}
+
 	@Override
 	public boolean isMuted(String playerName, int chanel ) {
-		int[] chs = new int[6];
+		int[] chs = new int[chaneles];
 		chs[chanel] = -1;
-		String dateStr = yaml.getString("mute." + playerName + chanel, "unmute");
+		String dateStr = yaml.getString(getPlayerMuteString(playerName, chanel));
 		if (dateStr != null) {
 			try {
 				Date date = SDF.parse(dateStr);
@@ -58,11 +57,11 @@ public class Mute implements IMute {
 
 	@Override
 	public void mute(String playerName, int[] seconds ) {
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < chaneles; i++) {
 			if (seconds[i] > 0) {
 				Calendar cal = Calendar.getInstance();
 				cal.add(Calendar.SECOND, seconds[i]);
-				yaml.set("mute." + playerName + i, SDF.format(cal.getTime()));
+				yaml.set(getPlayerMuteString(playerName, i), SDF.format(cal.getTime()));
 			}
 		}
 		saveMute();
@@ -70,65 +69,78 @@ public class Mute implements IMute {
 
 	@Override
 	public void mute(String playerName, String par2, Player seder ) {
-		Matcher m = _chanels.matcher(par2);
-		if (m.find()) {
-			String chanel = m.group(1);
+		String[] s = par2.split("\\s");
+		if (s.length >= 2) {
+			if (s[0].length() != 1) {
+				seder.sendMessage(ChatColor.GRAY
+						+ "%Сокращение канала не может быть длинее 1 символа: " + s[0]);
+				return;
+			}
+			char chanel = s[0].charAt(0);
 			int time = 0;
 			try {
-				time = Integer.parseInt(m.group(2));
+				time = Integer.parseInt(s[1]);
 			} catch (Exception e) {
-				time = 0;
+				seder.sendMessage(ChatColor.GRAY + "%Время должно быть числом: " + s[1]);
+				return;
 			}
-			String reason = m.group(3);
-			int[] chanelMuteTime = new int[6];
-			if (chanel.equalsIgnoreCase(_chanelName[0])) {
+			String reason = s.length >= 3 ? StringUtils.join(s, " ", 2, s.length - 1)
+					: "причина не указана";
+			int[] chanelMuteTime = new int[7];
+			if (chanel == ChatMode.GLOBAL.getSign()) {
 				chanelMuteTime[0] = time;
-			} else if (chanel.equalsIgnoreCase(_chanelName[1])) {
+			} else if (chanel == ChatMode.WORLD.getSign()) {
 				chanelMuteTime[1] = time;
-			} else if (chanel.equalsIgnoreCase(_chanelName[2])) {
+			} else if (chanel == ChatMode.SHOUT.getSign()) {
 				chanelMuteTime[2] = time;
-			} else if (chanel.equalsIgnoreCase(_chanelName[3])) {
+			} else if (chanel == ChatMode.LOCAL.getSign()) {
 				chanelMuteTime[3] = time;
-			} else if (chanel.equalsIgnoreCase(_chanelName[4])) {
+			} else if (chanel == ChatMode.WHISPER.getSign()) {
 				chanelMuteTime[4] = time;
-			} else if (chanel.equalsIgnoreCase(_chanelName[5])) {
+			} else if (chanel == ChatMode.PM.getSign()) {
 				chanelMuteTime[5] = time;
-			} else if (chanel.equalsIgnoreCase(_chanelName[6])) {
+			} else if (chanel == ChatMode.CHANCE.getSign()) {
+				chanelMuteTime[6] = time;
+			} else if (chanel == 'a') {
 				chanelMuteTime[0] = time;
 				chanelMuteTime[1] = time;
 				chanelMuteTime[2] = time;
 				chanelMuteTime[3] = time;
 				chanelMuteTime[4] = time;
 				chanelMuteTime[5] = time;
+				chanelMuteTime[6] = time;
+			} else {
+				seder.sendMessage(ChatColor.GRAY + "%Сигнатура канала указана не верно: " + s[0]);
 			}
 			mute(playerName, chanelMuteTime);
-			// for (int i = 0; i < 6; i++) {
-			// seder.sendMessage(ChatColor.GRAY + "%" + i + "  " +
-			// chanelMuteTime[i]);
-			// }
 			seder.sendMessage(ChatColor.GRAY + "%" + playerName + " теперь молчит (" + chanel
 					+ ") из-за " + reason + " на срок " + time + " секунд");
-
 		} else {
-			m = _see.matcher(par2);
-			if (m.find()) {
-				seder.sendMessage(ChatColor.GRAY + "%===============================");
-				for (int i = 0; i < 6; i++) {
-					String dateStr = yaml.getString("mute." + playerName + i, "unmute");
-					if (dateStr != null) {
-						try {
-							Date date = SDF.parse(dateStr);
-							boolean muted = (date.getTime() > System.currentTimeMillis());
-							long time = (date.getTime() - System.currentTimeMillis()) / 1000;
-							seder.sendMessage(ChatColor.GRAY + "%" + playerName + " "
-									+ (_chanelName[i]) + (muted ? " молчит" : " молчал")
-									+ (muted ? (". Осталось " + time + " секунд") : ""));
-						} catch (ParseException e) {}
+			if (s.length == 1) {
+				if (s[0].equals("s") || s[0].equals("se") || s[0].equals("see")) {
+					seder.sendMessage(ChatColor.GRAY + "%===============================");
+					for (int i = 0; i < chaneles; i++) {
+						String dateStr = yaml.getString(
+								getPlayerMuteString(playerName, i),
+									"unmute");
+						if (dateStr != null) {
+							try {
+								Date date = SDF.parse(dateStr);
+								boolean muted = (date.getTime() > System.currentTimeMillis());
+								long time = (date.getTime() - System.currentTimeMillis()) / 1000;
+								seder.sendMessage(ChatColor.GRAY + "%" + playerName + " "
+										+ (ChatMode.values()[i].getSign())
+										+ (muted ? " молчит" : " молчал")
+										+ (muted ? (". Осталось " + time + " секунд") : ""));
+							} catch (ParseException e) {}
 
+						}
 					}
+				} else {
+					seder.sendMessage(ChatColor.GRAY + "%Ошибка форматирования #2 ");
 				}
 			} else {
-				seder.sendMessage(ChatColor.GRAY + "%Ошибка форматирования ");
+				seder.sendMessage(ChatColor.GRAY + "%Ошибка форматирования #1 ");
 			}
 		}
 	}
@@ -140,7 +152,7 @@ public class Mute implements IMute {
 		if (cs != null) {
 			list = cs.getKeys(false);
 			for (String name : list) {
-				for (int i = 0; i < 6; i++) {
+				for (int i = 0; i < chaneles; i++) {
 					isMuted(name, i);
 				}
 			}
@@ -155,9 +167,9 @@ public class Mute implements IMute {
 
 	@Override
 	public void unmute(String playerName, int[] chanel ) {
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < chaneles; i++) {
 			if (chanel[i] == -1) {
-				yaml.set("mute." + playerName + i, null);
+				yaml.set(getPlayerMuteString(playerName, i), null);
 			}
 		}
 
@@ -167,7 +179,7 @@ public class Mute implements IMute {
 	public long getTimeMute(String playerName, int chanel ) {
 		int[] chs = new int[6];
 		chs[chanel] = -1;
-		String dateStr = yaml.getString("mute." + playerName + chanel, "unmute");
+		String dateStr = yaml.getString(getPlayerMuteString(playerName, chanel), "unmute");
 		if (dateStr != null) {
 			try {
 				Date date = SDF.parse(dateStr);

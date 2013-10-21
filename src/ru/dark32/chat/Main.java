@@ -16,8 +16,8 @@ public class Main extends JavaPlugin {
 
 	public static final Logger	_log	= Logger.getLogger("Minecraft");
 	public PluginManager		pm;
-	private static IMute				muteStorage;
-	public static final String version= "RPchat v 1.0";
+	private static IMute		muteStorage;
+	public static final String	version	= "RPchat v 1.0";
 
 	@Override
 	public void onEnable() {
@@ -52,7 +52,7 @@ public class Main extends JavaPlugin {
 			getLogger().info("Сonfig loaded");
 		}
 		FileConfiguration config = this.getConfig();
-		muteStorage = new Mute(new File(getDataFolder(), "storage.yml"));
+		Main.muteStorage = new Mute(new File(getDataFolder(), "storage.yml"));
 		Util.init(this);
 		getServer().getPluginManager().registerEvents(new Chat(config, this), this);
 	}
@@ -60,9 +60,7 @@ public class Main extends JavaPlugin {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args ) {
 		if (cmd.getName().equalsIgnoreCase("rpchat")) {
-			// for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-			// Chat.updateDisplayName(player);
-			// }
+			Chat.getHelp(sender);
 			return true;
 		}
 		return false;
