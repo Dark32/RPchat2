@@ -1,5 +1,6 @@
 package ru.dark32.chat;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public interface IMute {
@@ -41,7 +42,7 @@ public interface IMute {
 	 */
 	public void saveMute();
 
-	public void mute(String group, String group2, Player player );
+	public void mute(String group, String group2, CommandSender sender );
 
 	public long getTimeMute(String playerName, int chanel );
 }

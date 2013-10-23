@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -68,7 +69,7 @@ public class Mute implements IMute {
 	}
 
 	@Override
-	public void mute(String playerName, String par2, Player seder ) {
+	public void mute(String playerName, String par2, CommandSender seder ) {
 		String[] s = par2.split("\\s");
 		if (s.length >= 2) {
 			if (s[0].length() != 1) {
@@ -111,6 +112,7 @@ public class Mute implements IMute {
 				chanelMuteTime[6] = time;
 			} else {
 				seder.sendMessage(ChatColor.GRAY + "%Сигнатура канала указана не верно: " + s[0]);
+				return;
 			}
 			mute(playerName, chanelMuteTime);
 			seder.sendMessage(ChatColor.GRAY + "%" + playerName + " теперь молчит (" + chanel

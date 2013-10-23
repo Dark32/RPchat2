@@ -5,10 +5,13 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredListener;
@@ -16,10 +19,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
 
-	public static final Logger	_log	= Logger.getLogger("Minecraft");
-	public PluginManager		pm;
-	private static IMute		muteStorage;
-	public static final String	version	= "RPchat v 1.0";
+	public static final Logger		_log	= Logger.getLogger("Minecraft");
+	public PluginManager			pm;
+	private static IMute			muteStorage;
+	public static final String		version	= "RPchat v 1.0";
+	public static FileConfiguration	config;
 
 	@Override
 	public void onEnable() {
@@ -53,17 +57,34 @@ public class Main extends JavaPlugin {
 			}
 			getLogger().info("Сonfig loaded");
 		}
-		FileConfiguration config = this.getConfig();
+		config = this.getConfig();
 		Main.muteStorage = new Mute(new File(getDataFolder(), "storage.yml"));
 		Util.init(this);
-		getServer().getPluginManager().registerEvents(new Chat(config, this), this);
+		ValueStorage.init();
+		getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+		getServer().getPluginManager().registerEvents(new TabListener(), this);
+		getServer().getPluginManager().registerEvents(new JoinListener(), this);
 
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args ) {
 		if (cmd.getName().equalsIgnoreCase("rpchat")) {
-			Chat.getHelp(sender);
+			ChatListener.getHelp(sender);
+			return true;
+		}
+		if (cmd.getName().equalsIgnoreCase("mute")) {
+			String _msg = "see";
+			String target = sender.getName();
+			if (args.length >= 1) {
+				target = args[0];
+				if (args.length > 1) {
+					_msg = StringUtils.join(args, " ", 1, args.length);
+				}
+				sender.sendMessage(_msg);
+				sender.sendMessage(args[0]);
+			}
+			Main.getBanStorage().mute(target, _msg, sender);
 			return true;
 		}
 		return false;
@@ -77,5 +98,5 @@ public class Main extends JavaPlugin {
 	public static IMute getBanStorage() {
 		return muteStorage;
 	}
-	
+
 }

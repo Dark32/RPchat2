@@ -2,7 +2,7 @@ package ru.dark32.chat;
 
 public enum ChatMode {
 
-		GLOBAL(0, "$", 'g' ) {},
+		GLOBAL(0, "$", 'g' ),
 		WORLD(1, ">", 'w' ),
 		SHOUT(2, "!", 's' ),
 		LOCAL(3, "-", 'l' ),
