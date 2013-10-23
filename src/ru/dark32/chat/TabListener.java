@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 
-public class TabListener implements Listener{
+public class TabListener implements Listener {
 	@EventHandler
 	public void tabComplete(PlayerChatTabCompleteEvent e ) {
 		e.getTabCompletions().clear();

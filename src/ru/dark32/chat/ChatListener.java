@@ -1,28 +1,19 @@
 package ru.dark32.chat;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.MemorySection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
@@ -171,12 +162,16 @@ public class ChatListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-			String pmMSG1 = ValueStorage.pmChatFormat.replace("%sf", getSuffix(player.getName()))
-					.replace("%pf", getPreffix(player.getName())).replace("%p", player.getName())
-					.replace("%r", recipient.getName()).replace(" %msg", _msg);
-			String pmMSG2 = ValueStorage.pmChatFormat2.replace("%sf",getSuffix(player.getName()))
-					.replace("%pf", getPreffix(player.getName())).replace("%p", player.getName())
-					.replace("%r", recipient.getName()).replace(" %msg", _msg);
+			String pmMSG1 = ValueStorage.pmChatFormat
+					.replace("%sf", ChatListener.getSuffix(player.getName()))
+					.replace("%pf", ChatListener.getPreffix(player.getName()))
+					.replace("%p", player.getName()).replace("%r", recipient.getName())
+					.replace(" %msg", _msg);
+			String pmMSG2 = ValueStorage.pmChatFormat2
+					.replace("%sf", ChatListener.getSuffix(player.getName()))
+					.replace("%pf", ChatListener.getPreffix(player.getName()))
+					.replace("%p", player.getName()).replace("%r", recipient.getName())
+					.replace(" %msg", _msg);
 			String pmCnsoleSpy = ChatListener.tCC("&7spy@" + player.getName() + "->"
 					+ recipient.getName() + ": " + _msg);
 			if (!recipient.equals(player)) {
@@ -264,8 +259,9 @@ public class ChatListener implements Listener {
 		} else if (mode == ChatMode.BROADCAST.getModeId()) {
 			chatMessage = ChatListener.tCC(chatMessage);
 		}
-		message = message.replace("%sf", getSuffix(player.getName())).replace("%pf", getPreffix(player.getName()))
-				.replace("%p", "%1$s").replace("%msg", "%2$s");
+		message = message.replace("%sf", ChatListener.getSuffix(player.getName()))
+				.replace("%pf", ChatListener.getPreffix(player.getName())).replace("%p", "%1$s")
+				.replace("%msg", "%2$s");
 		event.setFormat(message);
 		event.setMessage(chatMessage);
 	}
@@ -342,7 +338,6 @@ public class ChatListener implements Listener {
 
 		return user.getPrefix();
 	}
-
 
 	public static String getSuffix(String name ) {
 		if (!Util.usePEX) {
@@ -426,11 +421,11 @@ public class ChatListener implements Listener {
 					msg.add("&bl &6- локальный  &bp&6 - личные сообщения");
 					msg.add("&ba &6- все");
 				}
-				msg.add("&b%nick s[ee] &6- для просмотра молчанки");
 				if (Util.hasPermission(player, "mcnw.mute.unmute")) {
 					msg.add("&6 время равное 0 - для принудительносго снятия молчанки");
 				}
 				if (Util.hasPermission(player, "mcnw.mute.help")) {
+					msg.add("&b%nick s[ee] &6- для просмотра молчанки");
 					msg.add("&6?/m - для вызоа справки по молчанке");
 				}
 				break;
