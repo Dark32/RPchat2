@@ -1,6 +1,7 @@
 package ru.dark32.chat;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -37,6 +38,11 @@ public class ValueStorage {
 	public static List<String>		helpPrefix		= new ArrayList<String>();
 	public static List<String>		chanelswitch;
 	public static List<String>		joinmsg;
+	public static List<String>		muteMute;
+	public static List<String>		muteHelp2;
+	public static String			muteHelp;
+	public static String			muteUnmute;
+	public static String			unknow;
 
 	public static double			rangeLocal;
 	public static double			RangeWhispering;
@@ -103,6 +109,9 @@ public class ValueStorage {
 		shoutChat = ChatListener.tCC(Main.config.getString("String.shoutChat"));
 		localChat = ChatListener.tCC(Main.config.getString("String.localChat"));
 		whisperingChat = ChatListener.tCC(Main.config.getString("String.whisperingChat"));
+		muteHelp = Main.config.getString("mute.help");
+		muteUnmute = Main.config.getString("mute.unmute");
+		unknow = Main.config.getString("mute.unknow");
 
 		broadcastList = Main.config.getStringList("String.broadcastList");
 		baseHelp = Main.config.getStringList("help.base");
@@ -119,5 +128,7 @@ public class ValueStorage {
 		_helpPrefix.clear();
 		chanelswitch = Main.config.getStringList("help.chanelswitch");
 		joinmsg = Main.config.getStringList("joinmsg");
+		muteMute = Main.config.getStringList("mue.mute");
+		muteHelp2 = Main.config.getStringList("mue.help2");
 	}
 }

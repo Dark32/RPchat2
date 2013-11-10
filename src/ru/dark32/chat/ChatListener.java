@@ -365,7 +365,7 @@ public class ChatListener implements Listener {
 		msg.add("&6" + Main.version);
 		msg.add("&6Autors: ufatos, dark32");
 		msg.add("&6License: CC-BY-NC-ND");
-		msg.add("&6Linck: http://bit.ly/12Q8z4q");
+		msg.add("&6Link: http://goo.gl/wRJecu");
 		msg.addAll(ValueStorage.baseHelp);
 		msg.add("&b=============================================");
 		for (String s : msg) {
@@ -409,29 +409,24 @@ public class ChatListener implements Listener {
 			case '?': {
 				msg.addAll(ValueStorage.chanelswitch);
 				if (Util.hasPermission(player, "mcnw.mute.help")) {
-					msg.add("&6?/m - для вызоа справки по молчанке");
+					msg.add(ValueStorage.muteHelp);
 				}
 				break;
 			}
 			case 'm': {
 				if (Util.hasPermission(player, "mcnw.mute.mute")) {
-					msg.add("&b%<nick> <chanel=g|w|s|v|l|p|a> <time=sec> <reason> &6- для молчанки");
-					msg.add("&bg &6- Глобалный  &bw&6 - мировой");
-					msg.add("&bs &6- крик       &bv&6 - шёпот");
-					msg.add("&bl &6- локальный  &bp&6 - личные сообщения");
-					msg.add("&ba &6- все");
+					msg.addAll(ValueStorage.muteMute);
 				}
 				if (Util.hasPermission(player, "mcnw.mute.unmute")) {
-					msg.add("&6 время равное 0 - для принудительносго снятия молчанки");
+					msg.add(ValueStorage.muteUnmute);
 				}
 				if (Util.hasPermission(player, "mcnw.mute.help")) {
-					msg.add("&b%nick s[ee] &6- для просмотра молчанки");
-					msg.add("&6?/m - для вызоа справки по молчанке");
+					msg.addAll(ValueStorage.muteHelp2);
 				}
 				break;
 			}
 			default: {
-				msg.add("&bНеизвестнй параметр " + thirdChar);
+				msg.add(ValueStorage.unknow  + thirdChar);
 				break;
 			}
 		}

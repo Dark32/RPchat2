@@ -15,7 +15,7 @@ public class Main extends JavaPlugin {
 	public static final Logger		_log	= Logger.getLogger("Minecraft");
 	public PluginManager			pm;
 	private static IMute			muteStorage;
-	public static final String		version	= "RPchat v 1.3b";
+	public static final String		version	= "RPchat v 1.3c";
 	public static FileConfiguration	config;
 
 	@Override

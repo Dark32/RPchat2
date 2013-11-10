@@ -24,7 +24,7 @@ public interface IMute {
 	 * 
 	 */
 
-	public void mute(String playerName, int[] seconds );
+	public void mute(String playerName, int[] seconds,String reason );
 
 	/**
 	 * Разрешить игроку писать в чат

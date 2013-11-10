@@ -58,12 +58,13 @@ public class Mute implements IMute {
 	}
 
 	@Override
-	public void mute(String playerName, int[] seconds ) {
+	public void mute(String playerName, int[] seconds, String reason ) {
 		for (int i = 0; i < chaneles; i++) {
 			if (seconds[i] > 0) {
 				Calendar cal = Calendar.getInstance();
 				cal.add(Calendar.SECOND, seconds[i]);
 				yaml.set(getPlayerMuteString(playerName, i), SDF.format(cal.getTime()));
+				yaml.set(getPlayerMuteString(playerName, i) + "-reason", reason);
 			}
 		}
 		saveMute();
@@ -72,9 +73,10 @@ public class Mute implements IMute {
 	@Override
 	public void mute(String playerName, String par2, CommandSender sender ) {
 		boolean isPlayer = (sender instanceof Player);
-		boolean hasMute = Util.hasPermission((Player) sender, "mcnw.mute.mute");
-		boolean hasUnMute = Util.hasPermission((Player) sender, "mcnw.mute.unmute");
-		boolean hasSeeMute = Util.hasPermission((Player) sender, "mcnw.mute.see");
+		boolean hasMute = isPlayer ? Util.hasPermission((Player) sender, "mcnw.mute.mute") : true;
+		boolean hasUnMute = isPlayer ? Util.hasPermission((Player) sender, "mcnw.mute.unmute")
+				: true;
+		boolean hasSeeMute = isPlayer ? Util.hasPermission((Player) sender, "mcnw.mute.see") : true;
 		String[] s = par2.split("\\s");
 		if (s.length >= 2) {
 			if (isPlayer && !hasMute) {
@@ -99,7 +101,7 @@ public class Mute implements IMute {
 				sender.sendMessage(ChatColor.GRAY + "%У вас нет прав на снятие молчанки");
 				return;
 			}
-			String reason = s.length >= 3 ? StringUtils.join(s, " ", 2, s.length - 1)
+			String reason = s.length >= 3 ? StringUtils.join(s, " ", 2, s.length)
 					: "причина не указана";
 			int[] chanelMuteTime = new int[chaneles];
 			if (chanel == ChatMode.GLOBAL.getSign()) {
@@ -131,9 +133,10 @@ public class Mute implements IMute {
 				sender.sendMessage(ChatColor.GRAY + "%Сигнатура канала указана не верно: " + s[0]);
 				return;
 			}
-			mute(playerName, chanelMuteTime);
+			mute(playerName, chanelMuteTime, reason);
 			sender.sendMessage(ChatColor.GRAY + "%" + playerName + " теперь молчит (" + chanel
-					+ ") из-за " + reason + " на срок " + time + " секунд");
+					+ ") из-за " + ChatColor.UNDERLINE + reason + ChatColor.RESET + ChatColor.GRAY
+					+ " на срок " + time + " секунд");
 		} else {
 			if (s.length == 1) {
 				if (s[0].equals("s") || s[0].equals("se") || s[0].equals("see")) {
@@ -143,17 +146,23 @@ public class Mute implements IMute {
 					}
 					sender.sendMessage(ChatColor.GRAY + "%===============================");
 					for (int i = 0; i < chaneles; i++) {
-						String dateStr = yaml.getString(getPlayerMuteString(playerName, i),
-								"unmute");
+						String dateStr = yaml.getString(getPlayerMuteString(playerName, i));
+						String reason = yaml.getString(getPlayerMuteString(playerName, i)
+								+ "-reason");
+
 						if (dateStr != null) {
 							try {
 								Date date = SDF.parse(dateStr);
 								boolean muted = (date.getTime() > System.currentTimeMillis());
 								long time = (date.getTime() - System.currentTimeMillis()) / 1000;
-								sender.sendMessage(ChatColor.GRAY + "%" + playerName + " "
+								sender.sendMessage(ChatColor.GRAY
+										+ "%"
+										+ playerName
+										+ " "
 										+ (ChatMode.values()[i].getSign())
 										+ (muted ? " молчит" : " молчал")
-										+ (muted ? (". Осталось " + time + " секунд") : ""));
+										+ (muted ? (". Осталось " + time + " секунд. Причина: "
+												+ ChatColor.UNDERLINE + reason) : ""));
 							}
 							catch (ParseException e) {
 								e.printStackTrace();
@@ -209,7 +218,7 @@ public class Mute implements IMute {
 	public long getTimeMute(String playerName, int chanel ) {
 		int[] chs = new int[6];
 		chs[chanel] = -1;
-		String dateStr = yaml.getString(getPlayerMuteString(playerName, chanel), "unmute");
+		String dateStr = yaml.getString(getPlayerMuteString(playerName, chanel));
 		if (dateStr != null) {
 			try {
 				Date date = SDF.parse(dateStr);
