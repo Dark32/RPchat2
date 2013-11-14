@@ -6,10 +6,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class RPChatCommandExecutor implements CommandExecutor {
-	private Main	plugin;
+	//private Main	plugin;
 
 	public RPChatCommandExecutor(Main plugin ){
-		this.plugin = plugin;
+		//this.plugin = plugin;
 	}
 
 	@Override

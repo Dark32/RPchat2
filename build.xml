@@ -11,7 +11,7 @@
 
     <target name="download-libs" description="Загрузка необходимых библиотек">
         <mkdir dir="${lib}"/>
-        <get dest="${lib}/bukkit.jar" src="http://repo.bukkit.org/content/repositories/public/org/bukkit/bukkit/1.6.2-R1.0/bukkit-1.6.2-R1.0.jar"/>
+        <get dest="${lib}/bukkit.jar" src="http://repo.bukkit.org/content/repositories/public/org/bukkit/bukkit/1.6.4-R1.0/bukkit-1.6.4-R1.0.jar"/>
         <get dest="${lib}/PermissionsEx.jar" src="http://dev.bukkit.org/media/files/742/103/PermissionsEx.jar"/>
     </target>
 
