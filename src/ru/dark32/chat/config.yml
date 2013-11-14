@@ -1,22 +1,11 @@
-Range:
-   main: 250
-   whispering: 20
-   shout: 500
-randrolldef: 6
-minroll: 5
-defchanse: 50
+roll:
+   def: 6
+   min: 5
+   defchanse: 50
 experemental: false
 # режим поиска грока по нику: -1 - строго, 0 - стандартно, 1 - мягко (не реализованно)
 PMSearchNickMode: 0
-Id:
-   #@Deprecated
-   worldId: 260 
-   worldMa: APPLE
-   worldSubId: 0
-   #@Deprecated
-   globalId: 264
-   GlobalMa: DIAMOND
-   globalSubId: 0
+
 String:
 # не все заменители работают всюду
 # %p - имя игрока
@@ -33,16 +22,6 @@ String:
    nei: "&7У вас нет нужного предмета"
    # название чата: глобальный или локальный
    noPerm: "&7У вас нет прав писать в $1"
-   globalChat: "глобальный чат"
-   globalChatFormat: "%pf%p%sf всем:&e %msg "
-   worldChat: "мировой чат"
-   worldChatFormat: "%pf%p%sf в мир:&6 %msg "
-   shoutChatFormat: "%pf%p%sf кричит:&c %msg"
-   shoutChat: "крик"
-   localChatFormat: "%pf%p%sf:&f %msg"
-   localChat: "локальный чат"
-   whisperingChatFormat: "&7%p&7 шепчет: %msg"
-   whisperingChat: "шёпот"
    pmChatFormat: "&7@%p:&5 %msg"
    pmChatFormat2: "&7@%p->%r:&5 %msg"
    #$1 имя игрока
@@ -56,6 +35,33 @@ String:
    noinputmsg: "&7Сообщение не введено"
    trybroadcastspy: "%p пытался использовать широкое вещание"
    broadcastspy: "%p использовал широкое вещание"
+Chat:   
+   Global:
+      #@Deprecated
+      Id: 264
+      Ma: DIAMOND
+      SubId: 0
+      format: "%pf%p%sf всем:&e %msg "
+      name: "глобальный чат"
+   World:
+     #@Deprecated
+      Id: 260
+      Ma: APPLE
+      SubId: 0
+      format: "%pf%p%sf в мир:&6 %msg "
+      name: "мировой чат"
+   Shout:
+      format: "%pf%p%sf кричит:&c %msg"
+      name: "крик"
+      range: 500
+   Local:
+      format: "%pf%p%sf:&f %msg"
+      name: "локальный чат"
+      range: 250
+   Whisper:
+      format: "&7%p&7 шепчет: %msg"
+      name: "шёпот"
+      range: 20
 help:
   base:
    - "&6?/. для справки режимов чата"
