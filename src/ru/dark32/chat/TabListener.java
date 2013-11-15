@@ -34,7 +34,7 @@ public class TabListener implements Listener {
 				}
 			}
 		} else if (firstChar == ChatMode.BROADCAST.getFirstChar()) {
-			for (String s : ValueStorage.broadcastList) {
+			for (String s : ValueStorage.broadList) {
 				String broad = chatMessage.length() > 1 ? chatMessage.substring(1) : "";
 				if ((broad.length() > 0 && s.startsWith(broad)) || broad.isEmpty()) {
 					completions.add(ChatMode.BROADCAST.getFirstLetter() + s);

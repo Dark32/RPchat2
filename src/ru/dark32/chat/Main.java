@@ -55,11 +55,11 @@ public class Main extends JavaPlugin {
 		Main.muteStorage = new Mute(new File(getDataFolder(), "storage.yml"));
 		Util.init(this);
 		ValueStorage.init();
-		getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		getServer().getPluginManager().registerEvents(new TabListener(), this);
 		getServer().getPluginManager().registerEvents(new JoinListener(), this);
-		getCommand("rpchat").setExecutor(new RPChatCommandExecutor(this));
-		getCommand("mute").setExecutor(new RPChatCommandExecutor(this));
+		getCommand("rpchat").setExecutor(new RPChatCommandExecutor());
+		getCommand("mute").setExecutor(new RPChatCommandExecutor());
 	}
 
 	@Override

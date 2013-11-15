@@ -20,12 +20,6 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class ChatListener implements Listener {
 	private Random	rand	= new Random();
-//	private Main	plugin;
-
-	public ChatListener(Main pluging ){
-	//	this.plugin = pluging;
-	}
-
 	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event ) {
 		Player player = event.getPlayer();// получаем игрока, вызвавшего событие
@@ -36,7 +30,7 @@ public class ChatListener implements Listener {
 		char thirdChar = chatMessage.length() > 2 ? chatMessage.charAt(2) : 0;
 		ItemStack inHand = player.getItemInHand();// вещь в руках
 		double range = ValueStorage.local.getRange();// локальный чат, радиус по
-												// умолчанию
+		// умолчанию
 		int mode = Util.getChatMode(player.getName());
 		boolean isMoreThenOne = chatMessage.length() > 1;
 		boolean isGlobalChatItemInHand = inHand != null
@@ -45,11 +39,15 @@ public class ChatListener implements Listener {
 				&& inHand.getDurability() == ValueStorage.world.getSubId();
 
 		if (ValueStorage.experemental) {
-			isGlobalChatItemInHand &= inHand != null && inHand.getType() == ValueStorage.global.getMaterial();
-			isWorldChatItemInHand &= inHand != null && inHand.getType() == ValueStorage.world.getMaterial();
+			isGlobalChatItemInHand &= inHand != null
+					&& inHand.getType() == ValueStorage.global.getMaterial();
+			isWorldChatItemInHand &= inHand != null
+					&& inHand.getType() == ValueStorage.world.getMaterial();
 		} else {
-			isGlobalChatItemInHand &= inHand != null && inHand.getTypeId() == ValueStorage.global.getId();
-			isWorldChatItemInHand &= inHand != null && inHand.getTypeId() == ValueStorage.world.getId();
+			isGlobalChatItemInHand &= inHand != null
+					&& inHand.getTypeId() == ValueStorage.global.getId();
+			isWorldChatItemInHand &= inHand != null
+					&& inHand.getTypeId() == ValueStorage.world.getId();
 		}
 		if (isMoreThenOne) {
 			if (firstChar == ChatMode.GLOBAL.getFirstChar()) {
@@ -150,7 +148,7 @@ public class ChatListener implements Listener {
 			}
 			int _ind = chatMessage.indexOf(" ");
 			if (_ind == -1) {
-				player.sendMessage(ValueStorage.noinputmsg);
+				player.sendMessage(ValueStorage.pmNoinputMsg);
 				event.setCancelled(true);
 				return;
 			}
@@ -158,16 +156,16 @@ public class ChatListener implements Listener {
 			String _msg = chatMessage.substring(_ind + 1, chatMessage.length());
 			Player recipient = getPlayerByName(pmNick);
 			if (recipient == null) {
-				player.sendMessage(ValueStorage.playeNotFound.replace("$1", pmNick));
+				player.sendMessage(ValueStorage.pmPlayeNotFound.replace("$1", pmNick));
 				event.setCancelled(true);
 				return;
 			}
-			String pmMSG1 = ValueStorage.pmChatFormat
+			String pmMSG1 = ValueStorage.pmFormatTo
 					.replace("%sf", ChatListener.getSuffix(player.getName()))
 					.replace("%pf", ChatListener.getPreffix(player.getName()))
 					.replace("%p", player.getName()).replace("%r", recipient.getName())
 					.replace(" %msg", _msg);
-			String pmMSG2 = ValueStorage.pmChatFormat2
+			String pmMSG2 = ValueStorage.pmFormatFrom
 					.replace("%sf", ChatListener.getSuffix(player.getName()))
 					.replace("%pf", ChatListener.getPreffix(player.getName()))
 					.replace("%p", player.getName()).replace("%r", recipient.getName())
@@ -194,19 +192,17 @@ public class ChatListener implements Listener {
 			int iChance;
 			if (Util.isInteger(chatMessage)) {
 				iChance = chatMessage.length() < 5 ? Integer.parseInt(chatMessage) : 9999;
-				iChance = iChance > ValueStorage.minroll ? iChance : ValueStorage.randrolldef;
+				iChance = iChance > ValueStorage.chanseMinRoll ? iChance : ValueStorage.chanseDefaultRoll;
 				int iRoll = rand.nextInt(iChance) + 1;
-				message = ValueStorage.rnd.replace("$1", String.valueOf(iRoll)).replace(
-						"$2",
-							String.valueOf(iChance));
+				message = ValueStorage.chansrRollFormat.replace("$1", String.valueOf(iRoll)).replace("$2",
+						String.valueOf(iChance));
 
 			} else {
 				chatMessage = ChatListener.tCC("&5" + chatMessage);
 				int chance = rand.nextInt(100);
-				message = ChatListener.tCC(ValueStorage.roll.replace(
-						"$1",
-							(chance > ValueStorage.defchanse) ? ValueStorage.luck
-									: ValueStorage.unluck));
+				message = ChatListener.tCC(ValueStorage.chanseFormat
+						.replace("$1", (chance > ValueStorage.chanseVaule) ? ValueStorage.chanseLuck
+								: ValueStorage.chanseUnluck));
 			}
 
 		} else if (mode == ChatMode.BROADCAST.getModeId()) {// Броадкаст
@@ -217,18 +213,18 @@ public class ChatListener implements Listener {
 			if (Util.hasPermission(player, "mcnw.broadcast")) {
 				message = "%2$s";
 				Bukkit.getConsoleSender().sendMessage(
-						ValueStorage.broadcastspy.replace("%p", player.getName()));
+						ValueStorage.broadConsoleSpy.replace("%p", player.getName()));
 			} else {
-				player.sendMessage(ValueStorage.noPerm.replace("$1", ValueStorage.broadcast));
+				player.sendMessage(ValueStorage.noPerm.replace("$1", ValueStorage.broadName));
 				Bukkit.getConsoleSender().sendMessage(
-						ValueStorage.trybroadcastspy.replace("%p", player.getName()));
+						ValueStorage.broadSpy.replace("%p", player.getName()));
 				event.setCancelled(true);
 				return;
 			}
 		} else if (mode == -1) {
 			int _ind = chatMessage.indexOf(" ");
 			if (_ind == -1) {
-				player.sendMessage(ValueStorage.noinputmsg);
+				player.sendMessage(ValueStorage.pmNoinputMsg);
 				event.setCancelled(true);
 				return;
 			}
@@ -352,7 +348,7 @@ public class ChatListener implements Listener {
 
 	private Boolean hasMute(Player player, int i ) {
 		if (Main.getBanStorage().isMuted(player.getName(), i)) {
-			player.sendMessage(ValueStorage.mute.replace("$1", ""
+			player.sendMessage(ValueStorage.muteMessage.replace("$1", ""
 					+ Main.getBanStorage().getTimeMute(player.getName(), i)));
 			return true;
 		}
@@ -366,7 +362,7 @@ public class ChatListener implements Listener {
 		msg.add("&6Autors: ufatos, dark32");
 		msg.add("&6License: CC-BY-NC-ND");
 		msg.add("&6Link: http://goo.gl/wRJecu");
-		msg.addAll(ValueStorage.baseHelp);
+		msg.addAll(ValueStorage.helpBase);
 		msg.add("&b=============================================");
 		for (String s : msg) {
 			player.sendMessage(ChatListener.tCC(s));
@@ -379,27 +375,27 @@ public class ChatListener implements Listener {
 		switch (thirdChar) {
 			case ('g'): {
 				Util.setChatMode(player.getName(), ChatMode.GLOBAL.getModeId());
-				msg.add(ValueStorage.changechanel.replace("$1", ValueStorage.global.getName()));
+				msg.add(ValueStorage.helpChangeChanel.replace("$1", ValueStorage.global.getName()));
 				break;
 			}
 			case ('w'): {
 				Util.setChatMode(player.getName(), ChatMode.WORLD.getModeId());
-				msg.add(ValueStorage.changechanel.replace("$1", ValueStorage.world.getName()));
+				msg.add(ValueStorage.helpChangeChanel.replace("$1", ValueStorage.world.getName()));
 				break;
 			}
 			case ('s'): {
 				Util.setChatMode(player.getName(), ChatMode.SHOUT.getModeId());
-				msg.add(ValueStorage.changechanel.replace("$1", ValueStorage.shout.getName()));
+				msg.add(ValueStorage.helpChangeChanel.replace("$1", ValueStorage.shout.getName()));
 				break;
 			}
 			case ('l'): {
 				Util.setChatMode(player.getName(), ChatMode.LOCAL.getModeId());
-				msg.add(ValueStorage.changechanel.replace("$1", ValueStorage.local.getName()));
+				msg.add(ValueStorage.helpChangeChanel.replace("$1", ValueStorage.local.getName()));
 				break;
 			}
 			case ('v'): {
 				Util.setChatMode(player.getName(), ChatMode.WHISPER.getModeId());
-				msg.add(ValueStorage.changechanel.replace("$1", ValueStorage.whisper.getName()));
+				msg.add(ValueStorage.helpChangeChanel.replace("$1", ValueStorage.whisper.getName()));
 				break;
 			}
 			case '.': {
@@ -407,9 +403,9 @@ public class ChatListener implements Listener {
 				break;
 			}
 			case '?': {
-				msg.addAll(ValueStorage.chanelswitch);
+				msg.addAll(ValueStorage.helpChanelsSitch);
 				if (Util.hasPermission(player, "mcnw.mute.help")) {
-					msg.add(ValueStorage.muteHelp);
+					msg.add(ValueStorage.helpMute);
 				}
 				break;
 			}
@@ -421,12 +417,12 @@ public class ChatListener implements Listener {
 					msg.add(ValueStorage.muteUnmute);
 				}
 				if (Util.hasPermission(player, "mcnw.mute.help")) {
-					msg.addAll(ValueStorage.muteHelp2);
+					msg.addAll(ValueStorage.muteHelp);
 				}
 				break;
 			}
 			default: {
-				msg.add(ValueStorage.unknow  + thirdChar);
+				msg.add(ValueStorage.muteUnknow + thirdChar);
 				break;
 			}
 		}
@@ -437,7 +433,7 @@ public class ChatListener implements Listener {
 	}
 
 	private Player getPlayerByName(String name ) {
-		switch (ValueStorage.PMSearchNickMode) {
+		switch (ValueStorage.PmSearchNickMode) {
 			case -1:
 				return Bukkit.getServer().getPlayerExact(name);
 			case 0:
