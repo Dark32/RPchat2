@@ -6,38 +6,7 @@ import java.util.regex.Pattern;
 
 import org.bukkit.Material;
 
-public class ValueStorage {
-	public static class Global{
-		public static String format;
-		public static String name;
-		@Deprecated
-		public static int				Id;
-		public static int				SubId;
-		public static Material			Ma;
-	}
-	public static class World{
-		public static String format;
-		public static String name;
-		@Deprecated
-		public static int				Id;
-		public static int				SubId;
-		public static Material			Ma;
-	}
-	public static class Shout{
-		public static String format;
-		public static String name;
-		public static double	 range;
-	}
-	public static class Local{
-		public static String format;
-		public static String name;
-		public static double	 range;
-	}
-	public static class Whisper{
-		public static String format;
-		public static String name;
-		public static double	 range;
-	}
+public class ValueStorage {	
 	public static String			luck;
 	public static String			unluck;
 	public static String			roll;
@@ -64,74 +33,79 @@ public class ValueStorage {
 	public static String			muteUnmute;
 	public static String			unknow;
 
-	public static boolean			experemental	= false;
-	/* <--experemental */
+	public static boolean			experemental;
 	public static int				randrolldef;
 	public static int				PMSearchNickMode;
 	public static int				defchanse;
 	public static int				minroll;
 
 	protected final static Pattern	nickForMute		= Pattern.compile("%([\\d\\w_]+)\\s(.+)");
-
+	
+	public static Chanel global;
+	public static Chanel world;
+	public static Chanel shout;
+	public static Chanel local;
+	public static Chanel whisper;
+	
 	public static void init() {
 		
-		Global.Id = Main.config.getInt("Chat.Global.Id", 260);
-		Global.SubId = Main.config.getInt("Chat.Global.SubId", 0);
-		Global.Ma = Material.getMaterial(Main.config.getString("Chat.Global.Ma"));
-		Global.name = ChatListener.tCC(Main.config.getString("Chat.Global.name"));
-		Global.format = ChatListener.tCC(Main.config.getString("Chat.Global.format"));
+		global = new Chanel("Chat.Global.name","Chat.Global.format");
+		global.setId("Chat.Global.Id", 260);
+		global.setSubId("Chat.Global.SubId", 0);
+		global.setMaterial("Chat.Global.Ma");
 		
-		World.Id = Main.config.getInt("Chat.World.Id", 260);
-		World.SubId = Main.config.getInt("Chat.World.SubId", 0);
-		World.Ma = Material.getMaterial(Main.config.getString("Chat.World.Ma"));
-		World.name = ChatListener.tCC(Main.config.getString("Chat.World.name"));
-		World.format = ChatListener.tCC(Main.config.getString("Chat.World.format"));
+		world = new Chanel("Chat.World.name","Chat.World.format");
+		world.setId("Chat.World.Id", 260);
+		world.setSubId("Chat.World.SubId", 0);
+		world.setMaterial("Chat.World.Ma");
+	
+		shout =  new Chanel("Chat.Shout.name","Chat.Shout.format");
+		shout.setRange("Chat.Shout.range", 500d);
 		
-		Shout.name = ChatListener.tCC(Main.config.getString("Chat.Shout.name"));
-		Shout.format = ChatListener.tCC(Main.config.getString("Chat.Shout.format"));
-		Shout.range = Main.config.getDouble("Chat.Shout.range", 500d);
+		local =  new Chanel("Chat.Local.name","Chat.Local.format");
+		local.setRange("Chat.Local.range", 250d);
 		
-		Local.name = ChatListener.tCC(Main.config.getString("Chat.Local.name"));
-		Local.format = ChatListener.tCC(Main.config.getString("Chat.Local.format"));
-		Local.range = Main.config.getDouble("Chat.Local.range", 250d);
+		whisper =  new Chanel("Chat.Whisper.name","Chat.Whisper.format");
+		whisper.setRange("Chat.Whisper.range", 20d);
 		
-		Whisper.name = ChatListener.tCC(Main.config.getString("Chat.Whisper.name"));
-		Whisper.format = ChatListener.tCC(Main.config.getString("Chat.Whisper.format"));
-		Whisper.range = Main.config.getDouble("Chat.Whisper.range", 20d);
-		
-		experemental = Main.config.getBoolean("experemental", experemental);
+		experemental = Main.config.getBoolean("experemental", false);
 	
 		randrolldef = Main.config.getInt("roll.def", 5);
-		defchanse = Main.config.getInt("roll.defchanse", 50);
-		minroll = Main.config.getInt("roll.min", 5);
+		defchanse   = Main.config.getInt("roll.defchanse", 50);
+		minroll     = Main.config.getInt("roll.min", 5);
 		
-		PMSearchNickMode = Main.config.getInt("PMSearchNickMode", 0);
-
-		luck = ChatListener.tCC(Main.config.getString("String.luck"));
-		unluck = ChatListener.tCC(Main.config.getString("String.unluck"));
-		roll = ChatListener.tCC(Main.config.getString("String.roll"));
-		rnd = ChatListener.tCC(Main.config.getString("String.rnd"));
-		nei = ChatListener.tCC(Main.config.getString("String.nei"));
-		noPerm = ChatListener.tCC(Main.config.getString("String.noPerm"));
+		roll   = getByKey("String.roll");
+		rnd    = getByKey("String.rnd");
+		luck   = getByKey("String.luck");
+		unluck = getByKey("String.unluck");
 		
-		pmChatFormat = ChatListener.tCC(Main.config.getString("String.localChatFormat"));
-		pmChatFormat2 = ChatListener.tCC(Main.config.getString("String.pmChatFormat2"));
-		playeNotFound = ChatListener.tCC(Main.config.getString("String.playeNotFound"));
-		mute = ChatListener.tCC(Main.config.getString("String.mute"));
-		broadcast = ChatListener.tCC(Main.config.getString("String.broadcast"));
-		noinputmsg = ChatListener.tCC(Main.config.getString("String.noinputmsg"));
-		trybroadcastspy = ChatListener.tCC(Main.config.getString("String.trybroadcastspy"));
-		broadcastspy = ChatListener.tCC(Main.config.getString("String.broadcastspy"));
-		changechanel = ChatListener.tCC(Main.config.getString("help.changechanel"));
+		nei    = getByKey("String.nei");
+		noPerm = getByKey("String.noPerm");
+		
+		pmChatFormat    = getByKey("Chat.PM.formatTo");
+		pmChatFormat2   = getByKey("Chat.PM.formatFrom");
+		noinputmsg      = getByKey("Chat.PM.noinputmsg");
+		playeNotFound   = getByKey("Chat.PM.playeNotFound");
+		PMSearchNickMode = Main.config.getInt("Chat.PM.PMSearchNickMode", 0);
+		
+		broadcast       = getByKey("Chat.Broad.name");
+		trybroadcastspy = getByKey("Chat.Broad.spy");
+		broadcastspy    = getByKey("Chat.Broad.consoleSpy");
+		broadcastList = Main.config.getStringList("Chat.Broad.list");
+		
+		mute            = getByKey("String.mute");
 		muteHelp = Main.config.getString("mute.help");
 		muteUnmute = Main.config.getString("mute.unmute");
 		unknow = Main.config.getString("mute.unknow");
-
-		broadcastList = Main.config.getStringList("String.broadcastList");
+		muteMute = Main.config.getStringList("mue.mute");
+		muteHelp2 = Main.config.getStringList("mue.help2");
+		
+		changechanel = getByKey("help.changechanel");
 		baseHelp = Main.config.getStringList("help.base");
 		List<String> _helpPrefix = Main.config.getStringList("help.prefix");
 		for (String s : _helpPrefix) {
-			helpPrefix.add(s.replace("$1", ChatMode.GLOBAL.getFirstLetter())
+			helpPrefix.add(s
+					.replace("$1", ChatMode.GLOBAL.getFirstLetter())
 					.replace("$2", ChatMode.WORLD.getFirstLetter())
 					.replace("$3", ChatMode.SHOUT.getFirstLetter())
 					.replace("$4", ChatMode.LOCAL.getFirstLetter())
@@ -142,7 +116,9 @@ public class ValueStorage {
 		_helpPrefix.clear();
 		chanelswitch = Main.config.getStringList("help.chanelswitch");
 		joinmsg = Main.config.getStringList("joinmsg");
-		muteMute = Main.config.getStringList("mue.mute");
-		muteHelp2 = Main.config.getStringList("mue.help2");
+
+	}
+	private static String getByKey(String key){
+		return ChatListener.tCC(Main.config.getString(key,key));
 	}
 }

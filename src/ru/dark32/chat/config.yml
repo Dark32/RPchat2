@@ -4,14 +4,13 @@ roll:
    defchanse: 50
 experemental: false
 # режим поиска грока по нику: -1 - строго, 0 - стандартно, 1 - мягко (не реализованно)
-PMSearchNickMode: 0
+
 
 String:
 # не все заменители работают всюду
 # %p - имя игрока
 # %pf | %sf - зкуаашч/Suffix
 # %msg - сообщение
-# %r - Кому ЛС
 # $1,$2,... - замена в зависимости от контекста
    #$1 - Удачо/Неудачно
    roll: "&5* %p %msg $1 *"
@@ -22,20 +21,26 @@ String:
    nei: "&7У вас нет нужного предмета"
    # название чата: глобальный или локальный
    noPerm: "&7У вас нет прав писать в $1"
-   pmChatFormat: "&7@%p:&5 %msg"
-   pmChatFormat2: "&7@%p->%r:&5 %msg"
-   #$1 имя игрока
-   playeNotFound: "&o&7Игрока $1 нет в сети"
+
    mute: "&o&7Вам велено заткнутся в этом чате и молчать ещё $1 секунд."
-   broadcastList:
-     - "&b[Broadcast]:"
-     - "&b[INFO]:"
-     - "&d[CONSOLE]:"
-   broadcast: "широкое вещание"
-   noinputmsg: "&7Сообщение не введено"
-   trybroadcastspy: "%p пытался использовать широкое вещание"
-   broadcastspy: "%p использовал широкое вещание"
-Chat:   
+  
+Chat: 
+   Broad:
+      list:
+        - "&b[Broadcast]:"
+        - "&b[INFO]:"
+        - "&d[CONSOLE]:"
+      name: "широкое вещание"
+      spy: "%p пытался использовать широкое вещание"
+      consoleSpy: "%p использовал широкое вещание"
+   PM:
+      formatTo: "&7@%p:&5 %msg"
+      # %r - Кому ЛС
+      formatFrom: "&7@%p->%r:&5 %msg"
+      noinputmsg: "&7Сообщение не введено"
+      #$1 имя игрока
+      playeNotFound: "&o&7Игрока $1 нет в сети"
+      PMSearchNickMode: 0
    Global:
       #@Deprecated
       Id: 264
@@ -78,12 +83,13 @@ help:
    - "&6$6<имя> сообщени для личного чата"
    - "&6*<действие> для вероятного действия или *<целое число больше $7 для выброса случайного числа"
   chanelswitch:
-   - "&6?/g - для выбора глобального режима"
-   - "&6?/w - для выбора мирового мирового"
-   - "&6?/s - для выбора режима крика"
-   - "&6?/v - для выбора режима шепота"
-   - "&6?/l - для выбора локального режима"
-   - "&6?/? - для вызоа этой справки"
+    - "&6?/g - для выбора глобального режима"
+    - "&6?/w - для выбора мирового мирового"
+    - "&6?/s - для выбора режима крика"
+    - "&6?/v - для выбора режима шепота"
+    - "&6?/l - для выбора локального режима"
+    - "&6?/? - для вызоа этой справки"
+  mute: "&6?/m - для вызоа справки по молчанке"
 mute:
   mute:
    -"&b%<nick> <chanel=g|w|s|v|l|p|a> <time=sec> <reason> &6- для молчанки"
@@ -103,19 +109,6 @@ joinmsg:
   - "ваше имя - %p"
 
 #------------------------------------------
-#Range:
-#   main: 500 - локальный чат
-#   whispering: 15 - шёпот
-#   shout: 1000 - крик
-# randrolldef:6 - Число граней кубика
-#Prefix: false использовать ли префиксы всюду в чате
-#defchanse: 50 шанс удачи
-#Id:
-#   worldId: 260 - в мир
-#   worldSubId: 0 - в мир
-#   globalId: 264 - в глобал
-#   globalSubId: 0 - в глобал
-#
 # Permission
 #	mcnw.global
 #	mcnw.global.no_item
@@ -131,21 +124,21 @@ joinmsg:
 #http://jd.bukkit.org/rb/doxygen/d6/d0e/enumorg_1_1bukkit_1_1Material.html#pub-attribs
 #------------------------------------------
 #0x00	 &0  	BLACK
-#0x1	 &1  	DARK_BLUE
-#0x2	 &2  	DARK_GREEN
-#0x3	 &3  	DARK_AQUA
-#0x4	 &4  	DARK_RED
-#0x5	 &5  	DARK_PURPLE
-#0x6	 &6  	GOLD
-#0x7	 &7  	GRAY
-#0x8	 &8  	DARK_GRAY
-#0x9	 &9  	BLUE
-#0xA	 &a  	GREEN
-#0xB	 &b  	AQUA
-#0xC	 &c  	RED
-#0xD	 &d  	LIGHT_PURPLE
-#0xE	 &e  	YELLOW
-#0xF	 &f  	WHITE
+#0x01	 &1  	DARK_BLUE
+#0x02	 &2  	DARK_GREEN
+#0x03	 &3  	DARK_AQUA
+#0x04	 &4  	DARK_RED
+#0x05	 &5  	DARK_PURPLE
+#0x06	 &6  	GOLD
+#0x07	 &7  	GRAY
+#0x08	 &8  	DARK_GRAY
+#0x09	 &9  	BLUE
+#0x0A	 &a  	GREEN
+#0x0B	 &b  	AQUA
+#0x0C	 &c  	RED
+#0x0D	 &d  	LIGHT_PURPLE
+#0x0E	 &e  	YELLOW
+#0x0F	 &f  	WHITE
 #0x10	 &k  	MAGIC
 #0x11	 &l  	BOLD
 #0x12	 &m  	STRIKETHROUGH

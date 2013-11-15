@@ -29,27 +29,27 @@ public class ChatListener implements Listener {
 	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event ) {
 		Player player = event.getPlayer();// получаем игрока, вызвавшего событие
-		String message = ValueStorage.Local.format;
+		String message = ValueStorage.local.getFormat();
 		String chatMessage = event.getMessage();// сообщение
 		char firstChar = chatMessage.charAt(0);
 		char secondChar = chatMessage.length() > 1 ? chatMessage.charAt(1) : 0;
 		char thirdChar = chatMessage.length() > 2 ? chatMessage.charAt(2) : 0;
 		ItemStack inHand = player.getItemInHand();// вещь в руках
-		double range = ValueStorage.Local.range;// локальный чат, радиус по
+		double range = ValueStorage.local.getRange();// локальный чат, радиус по
 												// умолчанию
 		int mode = Util.getChatMode(player.getName());
 		boolean isMoreThenOne = chatMessage.length() > 1;
 		boolean isGlobalChatItemInHand = inHand != null
-				&& inHand.getDurability() == ValueStorage.Global.SubId;
+				&& inHand.getDurability() == ValueStorage.global.getSubId();
 		boolean isWorldChatItemInHand = inHand != null
-				&& inHand.getDurability() == ValueStorage.World.SubId;
+				&& inHand.getDurability() == ValueStorage.world.getSubId();
 
 		if (ValueStorage.experemental) {
-			isGlobalChatItemInHand &= inHand != null && inHand.getType() == ValueStorage.Global.Ma;
-			isWorldChatItemInHand &= inHand != null && inHand.getType() == ValueStorage.World.Ma;
+			isGlobalChatItemInHand &= inHand != null && inHand.getType() == ValueStorage.global.getMaterial();
+			isWorldChatItemInHand &= inHand != null && inHand.getType() == ValueStorage.world.getMaterial();
 		} else {
-			isGlobalChatItemInHand &= inHand != null && inHand.getTypeId() == ValueStorage.Global.Id;
-			isWorldChatItemInHand &= inHand != null && inHand.getTypeId() == ValueStorage.World.Id;
+			isGlobalChatItemInHand &= inHand != null && inHand.getTypeId() == ValueStorage.global.getId();
+			isWorldChatItemInHand &= inHand != null && inHand.getTypeId() == ValueStorage.world.getId();
 		}
 		if (isMoreThenOne) {
 			if (firstChar == ChatMode.GLOBAL.getFirstChar()) {
@@ -87,7 +87,7 @@ public class ChatListener implements Listener {
 				event.setCancelled(true);
 				return;
 			} else if (Util.hasPermission(player, "mcnw.global")) {
-				message = ValueStorage.Global.format;
+				message = ValueStorage.global.getFormat();
 				if (!Util.hasPermission(player, "mcnw.global.no_item")) {
 					if (isGlobalChatItemInHand) {
 						loseitem(player);
@@ -98,7 +98,7 @@ public class ChatListener implements Listener {
 					}
 				}
 			} else {
-				player.sendMessage(ValueStorage.noPerm.replace("$1", ValueStorage.Global.name));
+				player.sendMessage(ValueStorage.noPerm.replace("$1", ValueStorage.global.getName()));
 				event.setCancelled(true);
 				return;
 			}
@@ -107,7 +107,7 @@ public class ChatListener implements Listener {
 				event.setCancelled(true);
 			}
 			if (Util.hasPermission(player, "mcnw.world")) {
-				message = ValueStorage.World.format;
+				message = ValueStorage.world.getFormat();
 				if (!Util.hasPermission(player, "mcnw.world.no_item")) {
 					if (isWorldChatItemInHand) {
 						loseitem(player);
@@ -118,7 +118,7 @@ public class ChatListener implements Listener {
 					}
 				}
 			} else {
-				player.sendMessage(ValueStorage.noPerm.replace("$1", ValueStorage.World.name));
+				player.sendMessage(ValueStorage.noPerm.replace("$1", ValueStorage.world.getName()));
 				event.setCancelled(true);
 				return;
 			}
@@ -127,22 +127,22 @@ public class ChatListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-			range = ValueStorage.Shout.range;
-			message = ValueStorage.Shout.format;
+			range = ValueStorage.shout.getRange();
+			message = ValueStorage.shout.getFormat();
 		} else if (mode == ChatMode.LOCAL.getModeId()) {// локаль
 			if (hasMute(player, mode)) {
 				event.setCancelled(true);
 				return;
 			}
-			range = ValueStorage.Local.range;
-			message = ValueStorage.Local.format;
+			range = ValueStorage.local.getRange();
+			message = ValueStorage.local.getFormat();
 		} else if (mode == ChatMode.WHISPER.getModeId()) {// шепот
 			if (hasMute(player, mode)) {
 				event.setCancelled(true);
 				return;
 			}
-			range = ValueStorage.Whisper.range;
-			message = ValueStorage.Whisper.format;
+			range = ValueStorage.whisper.getRange();
+			message = ValueStorage.whisper.getFormat();
 		} else if (mode == ChatMode.PM.getModeId()) {// PM
 			if (hasMute(player, mode)) {
 				event.setCancelled(true);
@@ -190,7 +190,7 @@ public class ChatListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-			range = ValueStorage.Local.range;
+			range = ValueStorage.local.getRange();
 			int iChance;
 			if (Util.isInteger(chatMessage)) {
 				iChance = chatMessage.length() < 5 ? Integer.parseInt(chatMessage) : 9999;
@@ -379,27 +379,27 @@ public class ChatListener implements Listener {
 		switch (thirdChar) {
 			case ('g'): {
 				Util.setChatMode(player.getName(), ChatMode.GLOBAL.getModeId());
-				msg.add(ValueStorage.changechanel.replace("$1", ValueStorage.Global.name));
+				msg.add(ValueStorage.changechanel.replace("$1", ValueStorage.global.getName()));
 				break;
 			}
 			case ('w'): {
 				Util.setChatMode(player.getName(), ChatMode.WORLD.getModeId());
-				msg.add(ValueStorage.changechanel.replace("$1", ValueStorage.World.name));
+				msg.add(ValueStorage.changechanel.replace("$1", ValueStorage.world.getName()));
 				break;
 			}
 			case ('s'): {
 				Util.setChatMode(player.getName(), ChatMode.SHOUT.getModeId());
-				msg.add(ValueStorage.changechanel.replace("$1", ValueStorage.Shout.name));
+				msg.add(ValueStorage.changechanel.replace("$1", ValueStorage.shout.getName()));
 				break;
 			}
 			case ('l'): {
 				Util.setChatMode(player.getName(), ChatMode.LOCAL.getModeId());
-				msg.add(ValueStorage.changechanel.replace("$1", ValueStorage.Local.name));
+				msg.add(ValueStorage.changechanel.replace("$1", ValueStorage.local.getName()));
 				break;
 			}
 			case ('v'): {
 				Util.setChatMode(player.getName(), ChatMode.WHISPER.getModeId());
-				msg.add(ValueStorage.changechanel.replace("$1", ValueStorage.Whisper.name));
+				msg.add(ValueStorage.changechanel.replace("$1", ValueStorage.whisper.getName()));
 				break;
 			}
 			case '.': {
