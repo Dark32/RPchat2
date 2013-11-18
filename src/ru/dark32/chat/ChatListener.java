@@ -20,6 +20,7 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class ChatListener implements Listener {
 	private Random	rand	= new Random();
+
 	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event ) {
 		Player player = event.getPlayer();// получаем игрока, вызвавшего событие
@@ -51,38 +52,10 @@ public class ChatListener implements Listener {
 		}
 		if (isMoreThenOne) {
 			int _mode = Chanel.getIndexByPrefix(firstChar);
-			if (_mode!=-2){
+			if (_mode != -2) {
 				mode = _mode;
 				chatMessage = chatMessage.substring(1).trim();
 			}
-		  /*  if (firstChar == ValueStorage.global.getFirstChar()) {
-				mode = ValueStorage.global.getModeId();
-				chatMessage = chatMessage.substring(1).trim();
-			} else if (firstChar == ValueStorage.world.getFirstChar()) {
-				mode = ValueStorage.world.getModeId();
-				chatMessage = chatMessage.substring(1).trim();
-			} else if (firstChar == ValueStorage.shout.getFirstChar()) {
-				mode = ValueStorage.shout.getModeId();
-				chatMessage = chatMessage.substring(1).trim();
-			} else if (firstChar == ValueStorage.local.getFirstChar()) {
-				mode = ValueStorage.local.getModeId();
-				chatMessage = chatMessage.substring(1).trim();
-			} else if (firstChar == ValueStorage.whisper.getFirstChar()) {
-				mode = ValueStorage.whisper.getModeId();
-				chatMessage = chatMessage.substring(1).trim();
-			} else if (firstChar == ValueStorage.pm.getFirstChar()) {
-				mode = ValueStorage.pm.getModeId();
-				chatMessage = chatMessage.substring(1).trim();
-			} else if (firstChar == ValueStorage.chance.getFirstChar()) {
-				mode = ValueStorage.chance.getModeId();
-				chatMessage = chatMessage.substring(1).trim();
-			} else if (firstChar == ValueStorage.broadcast.getFirstChar()) {
-				mode = ValueStorage.broadcast.getModeId();
-				chatMessage = chatMessage.substring(1).trim();
-			} else if (firstChar == '%') {
-				mode = -1;
-				chatMessage = chatMessage.substring(1).trim();
-			}*/
 		}
 
 		if (mode == ValueStorage.global.getIndex()) {// Глобальный
@@ -153,7 +126,7 @@ public class ChatListener implements Listener {
 			}
 			int _ind = chatMessage.indexOf(" ");
 			if (_ind == -1) {
-				player.sendMessage(ValueStorage.pmNoinputMsg);
+				player.sendMessage(ValueStorage.pm.get("NoinputMsg"));
 				event.setCancelled(true);
 				return;
 			}
@@ -161,16 +134,16 @@ public class ChatListener implements Listener {
 			String _msg = chatMessage.substring(_ind + 1, chatMessage.length());
 			Player recipient = getPlayerByName(pmNick);
 			if (recipient == null) {
-				player.sendMessage(ValueStorage.pmPlayeNotFound.replace("$1", pmNick));
+				player.sendMessage(ValueStorage.pm.get("PlayeNotFound").replace("$1", pmNick));
 				event.setCancelled(true);
 				return;
 			}
-			String pmMSG1 = ValueStorage.pmFormatTo
+			String pmMSG1 = ValueStorage.pm.getFormat()
 					.replace("%sf", ChatListener.getSuffix(player.getName()))
 					.replace("%pf", ChatListener.getPreffix(player.getName()))
 					.replace("%p", player.getName()).replace("%r", recipient.getName())
 					.replace(" %msg", _msg);
-			String pmMSG2 = ValueStorage.pmFormatFrom
+			String pmMSG2 = ValueStorage.pm.get("FormatFrom")
 					.replace("%sf", ChatListener.getSuffix(player.getName()))
 					.replace("%pf", ChatListener.getPreffix(player.getName()))
 					.replace("%p", player.getName()).replace("%r", recipient.getName())
@@ -197,17 +170,20 @@ public class ChatListener implements Listener {
 			int iChance;
 			if (Util.isInteger(chatMessage)) {
 				iChance = chatMessage.length() < 5 ? Integer.parseInt(chatMessage) : 9999;
-				iChance = iChance > ValueStorage.chanseMinRoll ? iChance : ValueStorage.chanseDefaultRoll;
+				iChance = iChance > ValueStorage.chanseMinRoll ? iChance
+						: ValueStorage.chanseDefaultRoll;
 				int iRoll = rand.nextInt(iChance) + 1;
-				message = ValueStorage.chansrRollFormat.replace("$1", String.valueOf(iRoll)).replace("$2",
-						String.valueOf(iChance));
+				message = ValueStorage.chance.get("RollFormat")
+						.replace("$1", String.valueOf(iRoll))
+						.replace("$2", String.valueOf(iChance));
 
 			} else {
 				chatMessage = ChatListener.tCC("&5" + chatMessage);
 				int chance = rand.nextInt(100);
-				message = ChatListener.tCC(ValueStorage.chanseFormat
-						.replace("$1", (chance > ValueStorage.chanseVaule) ? ValueStorage.chanseLuck
-								: ValueStorage.chanseUnluck));
+				message = ChatListener.tCC(ValueStorage.chance.getFormat().replace(
+						"$1",
+						(chance > ValueStorage.chanseVaule) ? ValueStorage.chance.get("Luck")
+								: ValueStorage.chance.get("Unluck")));
 			}
 
 		} else if (mode == ValueStorage.broadcast.getIndex()) {// Броадкаст
@@ -218,18 +194,19 @@ public class ChatListener implements Listener {
 			if (Util.hasPermission(player, "mcnw.broadcast")) {
 				message = "%2$s";
 				Bukkit.getConsoleSender().sendMessage(
-						ValueStorage.broadConsoleSpy.replace("%p", player.getName()));
+						ValueStorage.broadcast.get("ConsoleSpy").replace("%p", player.getName()));
 			} else {
-				player.sendMessage(ValueStorage.noPerm.replace("$1", ValueStorage.broadName));
+				player.sendMessage(ValueStorage.noPerm.replace("$1",
+						ValueStorage.broadcast.getName()));
 				Bukkit.getConsoleSender().sendMessage(
-						ValueStorage.broadSpy.replace("%p", player.getName()));
+						ValueStorage.broadcast.get("Spy").replace("%p", player.getName()));
 				event.setCancelled(true);
 				return;
 			}
 		} else if (mode == -1) {
 			int _ind = chatMessage.indexOf(" ");
 			if (_ind == -1) {
-				player.sendMessage(ValueStorage.pmNoinputMsg);
+				player.sendMessage(ValueStorage.pm.get("NoinputMsg"));
 				event.setCancelled(true);
 				return;
 			}

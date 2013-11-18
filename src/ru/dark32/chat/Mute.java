@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 public class Mute implements IMute {
 	private final SimpleDateFormat	SDF			= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private YamlConfiguration		yaml;
-	final private int				chaneles	= ChatMode.values().length;
+	final private int				chaneles	= Chanel.getValues();
 	private File					yamlFile;
 
 	public Mute(File file ){
@@ -31,7 +31,7 @@ public class Mute implements IMute {
 	}
 
 	private String getPlayerMuteString(String playerName, int chanel ) {
-		return playerName + ".mute." + ChatMode.values()[chanel].getSign();
+		return playerName + ".mute." + Chanel.getByIndex(chanel).getSign();
 	}
 
 	@Override
@@ -104,34 +104,24 @@ public class Mute implements IMute {
 			String reason = s.length >= 3 ? StringUtils.join(s, " ", 2, s.length)
 					: "причина не указана";
 			int[] chanelMuteTime = new int[chaneles];
-			if (chanel == ChatMode.GLOBAL.getSign()) {
-				chanelMuteTime[0] = time;
-			} else if (chanel == ChatMode.WORLD.getSign()) {
-				chanelMuteTime[1] = time;
-			} else if (chanel == ChatMode.SHOUT.getSign()) {
-				chanelMuteTime[2] = time;
-			} else if (chanel == ChatMode.LOCAL.getSign()) {
-				chanelMuteTime[3] = time;
-			} else if (chanel == ChatMode.WHISPER.getSign()) {
-				chanelMuteTime[4] = time;
-			} else if (chanel == ChatMode.PM.getSign()) {
-				chanelMuteTime[5] = time;
-			} else if (chanel == ChatMode.CHANCE.getSign()) {
-				chanelMuteTime[6] = time;
-			} else if (chanel == ChatMode.BROADCAST.getSign()) {
-				chanelMuteTime[7] = time;
-			} else if (chanel == 'a') {
-				chanelMuteTime[0] = time;
-				chanelMuteTime[1] = time;
-				chanelMuteTime[2] = time;
-				chanelMuteTime[3] = time;
-				chanelMuteTime[4] = time;
-				chanelMuteTime[5] = time;
-				chanelMuteTime[6] = time;
-				chanelMuteTime[7] = time;
+			if (chanel != 'a') {
+				int _ind = Chanel.getIndexBySign(chanel);
+				if (_ind >= 0) {
+					chanelMuteTime[_ind] = time;
+				} else {
+					sender.sendMessage(ChatColor.GRAY + "%Сигнатура канала указана не верно: "
+							+ chanel);
+					return;
+				}
 			} else {
-				sender.sendMessage(ChatColor.GRAY + "%Сигнатура канала указана не верно: " + s[0]);
-				return;
+				chanelMuteTime[0] = time;
+				chanelMuteTime[1] = time;
+				chanelMuteTime[2] = time;
+				chanelMuteTime[3] = time;
+				chanelMuteTime[4] = time;
+				chanelMuteTime[5] = time;
+				chanelMuteTime[6] = time;
+				chanelMuteTime[7] = time;
 			}
 			mute(playerName, chanelMuteTime, reason);
 			sender.sendMessage(ChatColor.GRAY + "%" + playerName + " теперь молчит (" + chanel
@@ -159,7 +149,7 @@ public class Mute implements IMute {
 										+ "%"
 										+ playerName
 										+ " "
-										+ (ChatMode.values()[i].getSign())
+										+ (Chanel.getByIndex(i).getSign())
 										+ (muted ? " молчит" : " молчал")
 										+ (muted ? (". Осталось " + time + " секунд. Причина: "
 												+ ChatColor.UNDERLINE + reason) : ""));

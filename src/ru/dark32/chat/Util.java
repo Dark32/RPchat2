@@ -16,7 +16,7 @@ public class Util {
 
 	public static int getChatMode(String player ) {
 		if (!modes.containsKey(player)) {
-			return ChatMode.LOCAL.getModeId();
+			return ValueStorage.local.getIndex();
 		} else {
 			return modes.get(player);
 		}

@@ -18,7 +18,7 @@ String:
 
   
 Chat: 
-   Chance:
+   Chanse:
      #$1 - Удачо/Неудачно
      format: "&5* %p %msg $1 *"
      # $1 - сколько выпало, из $2 скольки
@@ -28,6 +28,7 @@ Chat:
      default: 6
      min: 5
      vaule: 50
+     prefix: "*"
    Broad:
       list:
         - "&b[Broadcast]:"
@@ -36,6 +37,7 @@ Chat:
       name: "широкое вещание"
       spy: "%p пытался использовать широкое вещание"
       consoleSpy: "%p использовал широкое вещание"
+      prefix: "~"
    PM:
       formatTo: "&7@%p:&5 %msg"
       # %r - Кому ЛС
@@ -43,8 +45,9 @@ Chat:
       noinputmsg: "&7Сообщение не введено"
       #$1 имя игрока
       playeNotFound: "&o&7Игрока $1 нет в сети"
-      # режим поиска грока по нику: -1 - строго, 0 - стандартно, 1 - мягко (не реализованно)
-      PMSearchNickMode: 0 
+      # режим поиска грока по нику: -1 - строго, 0 - стандартно, 1 - мягко 
+      PMSearchNickMode: 1
+      prefix: "@"
    Global:
       #@Deprecated
       Id: 264
@@ -52,6 +55,7 @@ Chat:
       SubId: 0
       format: "%pf%p%sf всем:&e %msg "
       name: "глобальный чат"
+      prefix: "$"
    World:
      #@Deprecated
       Id: 260
@@ -59,18 +63,22 @@ Chat:
       SubId: 0
       format: "%pf%p%sf в мир:&6 %msg "
       name: "мировой чат"
+      prefix: ">"
    Shout:
       format: "%pf%p%sf кричит:&c %msg"
       name: "крик"
       range: 500
+      prefix: "!"
    Local:
       format: "%pf%p%sf:&f %msg"
       name: "локальный чат"
       range: 250
+      prefix: "-"
    Whisper:
       format: "&7%p&7 шепчет: %msg"
       name: "шёпот"
       range: 20
+      prefix: "#"
 help:
   base:
    - "&6?/. для справки режимов чата"
