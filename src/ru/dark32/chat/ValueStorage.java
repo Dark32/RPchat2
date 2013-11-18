@@ -77,7 +77,9 @@ public class ValueStorage {
 
 		pm = new Chanel("Chat.PM.name", "Chat.PM.formatTo",
 						ChatMode.PM.getFirstChar(),ChatMode.PM.getSign());
-		pmFormatTo = colorByString("Chat.PM.formatTo");
+		pm.set("pmFormatTo", colorByString("Chat.PM.formatTo"));
+		
+		pmFormatTo =pm.get("pmFormatTo"); //colorByString("Chat.PM.formatTo");
 		pmFormatFrom = colorByString("Chat.PM.formatFrom");
 		pmNoinputMsg = colorByString("Chat.PM.noinputmsg");
 		pmPlayeNotFound = colorByString("Chat.PM.playeNotFound");

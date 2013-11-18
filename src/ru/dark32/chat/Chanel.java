@@ -1,8 +1,12 @@
 package ru.dark32.chat;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Material;
 
 public class Chanel {
+	
 	private String name;
 	private String format;
 	private double range;
@@ -14,7 +18,7 @@ public class Chanel {
 	private static int values = 0;// всего каналов
 	private char prefix;
 	private char sign;
-
+	private Map<String, String> custom = new HashMap<String, String>();
 	public Chanel(String name, String format, char prefix, char sign) {
 		setName(name);
 		setFormat(format);
@@ -181,4 +185,13 @@ public class Chanel {
 	public void setSign(char sign) {
 		this.sign = sign;
 	}
+	
+	public void set(String key, String value){
+		custom.put(key, value);
+	}
+	
+	public String get(String key){
+		return custom.containsKey(key) ? custom.get(key) : "key error";
+	}
+
 }
