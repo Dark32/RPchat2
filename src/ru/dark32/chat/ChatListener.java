@@ -29,8 +29,8 @@ public class ChatListener implements Listener {
 		char secondChar = chatMessage.length() > 1 ? chatMessage.charAt(1) : 0;
 		char thirdChar = chatMessage.length() > 2 ? chatMessage.charAt(2) : 0;
 		ItemStack inHand = player.getItemInHand();// вещь в руках
-		double range = ValueStorage.local.getRange();// локальный чат, радиус по
-		// умолчанию
+		// локальный чат, радиус по умолчанию
+		double range = ValueStorage.local.getRange();
 		int mode = Util.getChatMode(player.getName());
 		boolean isMoreThenOne = chatMessage.length() > 1;
 		boolean isGlobalChatItemInHand = inHand != null
@@ -50,37 +50,42 @@ public class ChatListener implements Listener {
 					&& inHand.getTypeId() == ValueStorage.world.getId();
 		}
 		if (isMoreThenOne) {
-			if (firstChar == ChatMode.GLOBAL.getFirstChar()) {
-				mode = ChatMode.GLOBAL.getModeId();
+			int _mode = Chanel.getIndexByPrefix(firstChar);
+			if (_mode!=-2){
+				mode = _mode;
 				chatMessage = chatMessage.substring(1).trim();
-			} else if (firstChar == ChatMode.WORLD.getFirstChar()) {
-				mode = ChatMode.WORLD.getModeId();
+			}
+		  /*  if (firstChar == ValueStorage.global.getFirstChar()) {
+				mode = ValueStorage.global.getModeId();
 				chatMessage = chatMessage.substring(1).trim();
-			} else if (firstChar == ChatMode.SHOUT.getFirstChar()) {
-				mode = ChatMode.SHOUT.getModeId();
+			} else if (firstChar == ValueStorage.world.getFirstChar()) {
+				mode = ValueStorage.world.getModeId();
 				chatMessage = chatMessage.substring(1).trim();
-			} else if (firstChar == ChatMode.LOCAL.getFirstChar()) {
-				mode = ChatMode.LOCAL.getModeId();
+			} else if (firstChar == ValueStorage.shout.getFirstChar()) {
+				mode = ValueStorage.shout.getModeId();
 				chatMessage = chatMessage.substring(1).trim();
-			} else if (firstChar == ChatMode.WHISPER.getFirstChar()) {
-				mode = ChatMode.WHISPER.getModeId();
+			} else if (firstChar == ValueStorage.local.getFirstChar()) {
+				mode = ValueStorage.local.getModeId();
 				chatMessage = chatMessage.substring(1).trim();
-			} else if (firstChar == ChatMode.PM.getFirstChar()) {
-				mode = ChatMode.PM.getModeId();
+			} else if (firstChar == ValueStorage.whisper.getFirstChar()) {
+				mode = ValueStorage.whisper.getModeId();
 				chatMessage = chatMessage.substring(1).trim();
-			} else if (firstChar == ChatMode.CHANCE.getFirstChar()) {
-				mode = ChatMode.CHANCE.getModeId();
+			} else if (firstChar == ValueStorage.pm.getFirstChar()) {
+				mode = ValueStorage.pm.getModeId();
 				chatMessage = chatMessage.substring(1).trim();
-			} else if (firstChar == ChatMode.BROADCAST.getFirstChar()) {
-				mode = ChatMode.BROADCAST.getModeId();
+			} else if (firstChar == ValueStorage.chance.getFirstChar()) {
+				mode = ValueStorage.chance.getModeId();
+				chatMessage = chatMessage.substring(1).trim();
+			} else if (firstChar == ValueStorage.broadcast.getFirstChar()) {
+				mode = ValueStorage.broadcast.getModeId();
 				chatMessage = chatMessage.substring(1).trim();
 			} else if (firstChar == '%') {
 				mode = -1;
 				chatMessage = chatMessage.substring(1).trim();
-			}
+			}*/
 		}
 
-		if (mode == ChatMode.GLOBAL.getModeId()) {// Глобальный
+		if (mode == ValueStorage.global.getIndex()) {// Глобальный
 			if (hasMute(player, mode)) {
 				event.setCancelled(true);
 				return;
@@ -100,7 +105,7 @@ public class ChatListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-		} else if (mode == ChatMode.WORLD.getModeId()) {// Мировой
+		} else if (mode == ValueStorage.world.getIndex()) {// Мировой
 			if (hasMute(player, mode)) {
 				event.setCancelled(true);
 			}
@@ -120,28 +125,28 @@ public class ChatListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-		} else if (mode == ChatMode.SHOUT.getModeId()) {// Крик
+		} else if (mode == ValueStorage.shout.getIndex()) {// Крик
 			if (hasMute(player, mode)) {
 				event.setCancelled(true);
 				return;
 			}
 			range = ValueStorage.shout.getRange();
 			message = ValueStorage.shout.getFormat();
-		} else if (mode == ChatMode.LOCAL.getModeId()) {// локаль
+		} else if (mode == ValueStorage.local.getIndex()) {// локаль
 			if (hasMute(player, mode)) {
 				event.setCancelled(true);
 				return;
 			}
 			range = ValueStorage.local.getRange();
 			message = ValueStorage.local.getFormat();
-		} else if (mode == ChatMode.WHISPER.getModeId()) {// шепот
+		} else if (mode == ValueStorage.whisper.getIndex()) {// шепот
 			if (hasMute(player, mode)) {
 				event.setCancelled(true);
 				return;
 			}
 			range = ValueStorage.whisper.getRange();
 			message = ValueStorage.whisper.getFormat();
-		} else if (mode == ChatMode.PM.getModeId()) {// PM
+		} else if (mode == ValueStorage.pm.getIndex()) {// pm
 			if (hasMute(player, mode)) {
 				event.setCancelled(true);
 				return;
@@ -182,7 +187,7 @@ public class ChatListener implements Listener {
 			Bukkit.getConsoleSender().sendMessage(pmCnsoleSpy);
 			event.setCancelled(true);
 			return;
-		} else if (mode == ChatMode.CHANCE.getModeId()) {
+		} else if (mode == ValueStorage.chance.getIndex()) {
 			// действия с вероятностью
 			if (hasMute(player, mode)) {
 				event.setCancelled(true);
@@ -205,7 +210,7 @@ public class ChatListener implements Listener {
 								: ValueStorage.chanseUnluck));
 			}
 
-		} else if (mode == ChatMode.BROADCAST.getModeId()) {// Броадкаст
+		} else if (mode == ValueStorage.broadcast.getIndex()) {// Броадкаст
 			if (hasMute(player, mode)) {
 				event.setCancelled(true);
 				return;
@@ -245,14 +250,14 @@ public class ChatListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		if (mode == ChatMode.SHOUT.getModeId() || mode == ChatMode.WHISPER.getModeId()
-				|| mode == ChatMode.LOCAL.getModeId()) {
+		if (mode == ValueStorage.shout.getIndex() || mode == ValueStorage.whisper.getIndex()
+				|| mode == ValueStorage.local.getIndex()) {
 			event.getRecipients().clear();
 			event.getRecipients().addAll(this.getLocalRecipients(player, range));
-		} else if (mode == ChatMode.WORLD.getModeId()) {
+		} else if (mode == ValueStorage.world.getIndex()) {
 			event.getRecipients().clear();
 			event.getRecipients().addAll(this.getWorldRecipients(player, message));
-		} else if (mode == ChatMode.BROADCAST.getModeId()) {
+		} else if (mode == ValueStorage.broadcast.getIndex()) {
 			chatMessage = ChatListener.tCC(chatMessage);
 		}
 		message = message.replace("%sf", ChatListener.getSuffix(player.getName()))
@@ -374,27 +379,27 @@ public class ChatListener implements Listener {
 		msg.add("&b=============================================");
 		switch (thirdChar) {
 			case ('g'): {
-				Util.setChatMode(player.getName(), ChatMode.GLOBAL.getModeId());
+				Util.setChatMode(player.getName(), ValueStorage.global.getIndex());
 				msg.add(ValueStorage.helpChangeChanel.replace("$1", ValueStorage.global.getName()));
 				break;
 			}
 			case ('w'): {
-				Util.setChatMode(player.getName(), ChatMode.WORLD.getModeId());
+				Util.setChatMode(player.getName(), ValueStorage.world.getIndex());
 				msg.add(ValueStorage.helpChangeChanel.replace("$1", ValueStorage.world.getName()));
 				break;
 			}
 			case ('s'): {
-				Util.setChatMode(player.getName(), ChatMode.SHOUT.getModeId());
+				Util.setChatMode(player.getName(), ValueStorage.shout.getIndex());
 				msg.add(ValueStorage.helpChangeChanel.replace("$1", ValueStorage.shout.getName()));
 				break;
 			}
 			case ('l'): {
-				Util.setChatMode(player.getName(), ChatMode.LOCAL.getModeId());
+				Util.setChatMode(player.getName(), ValueStorage.local.getIndex());
 				msg.add(ValueStorage.helpChangeChanel.replace("$1", ValueStorage.local.getName()));
 				break;
 			}
 			case ('v'): {
-				Util.setChatMode(player.getName(), ChatMode.WHISPER.getModeId());
+				Util.setChatMode(player.getName(), ValueStorage.whisper.getIndex());
 				msg.add(ValueStorage.helpChangeChanel.replace("$1", ValueStorage.whisper.getName()));
 				break;
 			}

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.bukkit.Material;
-
 public class ValueStorage {
 	public static String			chanseLuck;
 	public static String			chanseUnluck;
@@ -46,62 +44,76 @@ public class ValueStorage {
 	public static Chanel			shout;
 	public static Chanel			local;
 	public static Chanel			whisper;
-
+	public static Chanel			pm;
+	public static Chanel            chance;
+	public static Chanel 			broadcast;
+	
 	public static void init() {
-
-		global = new Chanel("Chat.Global.name", "Chat.Global.format");
+		experemental = Main.config.getBoolean("experemental", false);
+		
+		global = new Chanel("Chat.Global.name", "Chat.Global.format",
+							ChatMode.GLOBAL.getFirstChar(),ChatMode.GLOBAL.getSign());
 		global.setId("Chat.Global.Id", 260);
 		global.setSubId("Chat.Global.SubId", 0);
 		global.setMaterial("Chat.Global.Ma");
 
-		world = new Chanel("Chat.World.name", "Chat.World.format");
+		world = new Chanel("Chat.World.name", "Chat.World.format",
+							ChatMode.WORLD.getFirstChar(),ChatMode.WORLD.getSign());
 		world.setId("Chat.World.Id", 260);
 		world.setSubId("Chat.World.SubId", 0);
 		world.setMaterial("Chat.World.Ma");
 
-		shout = new Chanel("Chat.Shout.name", "Chat.Shout.format");
+		shout = new Chanel("Chat.Shout.name", "Chat.Shout.format",
+							ChatMode.SHOUT.getFirstChar(),ChatMode.SHOUT.getSign());
 		shout.setRange("Chat.Shout.range", 500d);
 
-		local = new Chanel("Chat.Local.name", "Chat.Local.format");
+		local = new Chanel("Chat.Local.name", "Chat.Local.format",
+							ChatMode.LOCAL.getFirstChar(),ChatMode.LOCAL.getSign());
 		local.setRange("Chat.Local.range", 250d);
 
-		whisper = new Chanel("Chat.Whisper.name", "Chat.Whisper.format");
+		whisper = new Chanel("Chat.Whisper.name", "Chat.Whisper.format",
+							ChatMode.WHISPER.getFirstChar(),ChatMode.WHISPER.getSign());
 		whisper.setRange("Chat.Whisper.range", 20d);
 
-		experemental = Main.config.getBoolean("experemental", false);
+		pm = new Chanel("Chat.PM.name", "Chat.PM.formatTo",
+						ChatMode.PM.getFirstChar(),ChatMode.PM.getSign());
+		pmFormatTo = colorByString("Chat.PM.formatTo");
+		pmFormatFrom = colorByString("Chat.PM.formatFrom");
+		pmNoinputMsg = colorByString("Chat.PM.noinputmsg");
+		pmPlayeNotFound = colorByString("Chat.PM.playeNotFound");
+		PmSearchNickMode = Main.config.getInt("Chat.PM.PMSearchNickMode", 0);
 
-		chanseDefaultRoll = Main.config.getInt("Chat.Chanse.default", 5);
-		chanseVaule = Main.config.getInt("Chat.Chanse.vaule", 50);
-		chanseMinRoll = Main.config.getInt("Chat.Chanse.min", 5);
-		chanseFormat = getByKey("Chat.Chanse.format");
-		chansrRollFormat = getByKey("Chat.Chanse.formatroll");
-		chanseLuck = getByKey("Chat.Chanse.luck");
-		chanseUnluck = getByKey("Chat.Chanse.unluck");
+	
+		chance = new Chanel("Chat.Chance.name", "Chat.Chance.format",
+							ChatMode.CHANCE.getFirstChar(),ChatMode.CHANCE.getSign());
+		chanseDefaultRoll = Main.config.getInt("Chat.Chance.default", 5);
+		chanseVaule = Main.config.getInt("Chat.Chance.vaule", 50);
+		chanseMinRoll = Main.config.getInt("Chat.Chance.min", 5);
+		chanseFormat = colorByString("Chat.Chance.format");
+		chansrRollFormat = colorByString("Chat.Chance.formatroll");
+		chanseLuck = colorByString("Chat.Chance.luck");
+		chanseUnluck = colorByString("Chat.Chance.unluck");
 
-		nei = getByKey("String.nei");
-		noPerm = getByKey("String.noPerm");
+		nei = colorByString("String.nei");
+		noPerm = colorByString("String.noPerm");
 		joinmsg = Main.config.getStringList("String.joinmsg");
 		
 		
-		pmFormatTo = getByKey("Chat.PM.formatTo");
-		pmFormatFrom = getByKey("Chat.PM.formatFrom");
-		pmNoinputMsg = getByKey("Chat.PM.noinputmsg");
-		pmPlayeNotFound = getByKey("Chat.PM.playeNotFound");
-		PmSearchNickMode = Main.config.getInt("Chat.PM.PMSearchNickMode", 0);
-
-		broadName = getByKey("Chat.Broad.name");
-		broadSpy = getByKey("Chat.Broad.spy");
-		broadConsoleSpy = getByKey("Chat.Broad.consoleSpy");
+		broadcast = new Chanel("Chat.Broad.name", "Chat.Broad.format",
+				ChatMode.BROADCAST.getFirstChar(),ChatMode.BROADCAST.getSign());
+		broadName = colorByString("Chat.Broad.name");
+		broadSpy = colorByString("Chat.Broad.spy");
+		broadConsoleSpy = colorByString("Chat.Broad.consoleSpy");
 		broadList = Main.config.getStringList("Chat.Broad.list");
 
-		muteMessage = getByKey("mute.message");
+		muteMessage = colorByString("mute.message");
 		muteUnmute = Main.config.getString("mute.unmute");
 		muteUnknow = Main.config.getString("mute.unknow");
 		muteMute = Main.config.getStringList("mue.mute");
 		muteHelp = Main.config.getStringList("mue.help");
 		
 		helpMute = Main.config.getString("help.mute");
-		helpChangeChanel = getByKey("help.changechanel");
+		helpChangeChanel = colorByString("help.changechanel");
 		helpBase = Main.config.getStringList("help.base");
 		List<String> _helpPrefix = Main.config.getStringList("help.prefix");
 		for (String s : _helpPrefix) {
@@ -116,10 +128,9 @@ public class ValueStorage {
 		_helpPrefix.clear();
 		helpChanelsSitch = Main.config.getStringList("help.chanelswitch");
 		
-
 	}
 
-	private static String getByKey(String key ) {
+	private static String colorByString(String key ) {
 		return ChatListener.tCC(Main.config.getString(key, key));
 	}
 }
