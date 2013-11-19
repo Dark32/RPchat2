@@ -1,6 +1,8 @@
 package ru.dark32.chat;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Material;
@@ -19,12 +21,16 @@ public class Chanel {
 	private char				prefix;
 	private char				sign;
 	private Map<String, String>	custom	= new HashMap<String, String>();
-
+	private static List<Character> signs =new ArrayList<Character>();
+	private static List<Character> prefixes =new ArrayList<Character>();
+	
 	public Chanel(String name, String format ){
 		setName(name);
 		setFormat(format);
 		index = values;
 		values++;
+		signs.add(index, this.getSign());
+		prefixes.add(index, this.getPrefix());
 	}
 
 	public Chanel(String name, String format, String prefix, char sign ){
@@ -158,7 +164,9 @@ public class Chanel {
 	}
 
 	public static int getIndexByPrefix(char ch ) {
-		if (ch == ValueStorage.global.getPrefix()) {
+		int ind = prefixes.indexOf(ch);
+		return ch=='%'? -1 : ind!=-1 ? ind : -2;
+		/*if (ch == ValueStorage.global.getPrefix()) {
 			return ValueStorage.global.index;
 		} else if (ch == ValueStorage.world.getPrefix()) {
 			return ValueStorage.world.index;
@@ -178,11 +186,13 @@ public class Chanel {
 			return -1;
 		} else {
 			return -2;
-		}
+		}*/
 	}
 
 	public static int getIndexBySign(char ch ) {
-		if (ch == ValueStorage.global.sign) {
+		int ind = signs.indexOf(ch);
+		return ind!=-1 ? ind : -2;
+		/*if (ch == ValueStorage.global.sign) {
 			return ValueStorage.global.index;
 		} else if (ch == ValueStorage.world.sign) {
 			return ValueStorage.world.index;
@@ -202,7 +212,7 @@ public class Chanel {
 			return -1;
 		} else {
 			return -2;
-		}
+		}*/
 	}
 
 	public char getSign() {

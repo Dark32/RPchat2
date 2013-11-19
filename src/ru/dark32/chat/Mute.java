@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -70,16 +71,18 @@ public class Mute implements IMute {
 		saveMute();
 	}
 
-	@Override
+	@Override // рабить на подмкетоды
 	public void mute(String playerName, String par2, CommandSender sender ) {
 		boolean isPlayer = (sender instanceof Player);
 		boolean hasMute = isPlayer ? Util.hasPermission((Player) sender, "mcnw.mute.mute") : true;
 		boolean hasUnMute = isPlayer ? Util.hasPermission((Player) sender, "mcnw.mute.unmute")
 				: true;
 		boolean hasSeeMute = isPlayer ? Util.hasPermission((Player) sender, "mcnw.mute.see") : true;
+		boolean hasSeeSelfMute = isPlayer ? Util.hasPermission((Player) sender, "mcnw.mute.see.self") : true;
+		boolean hasAllMute = isPlayer ? Util.hasPermission((Player) sender, "mcnw.mute.see.all") : true;
 		String[] s = par2.split("\\s");
 		if (s.length >= 2) {
-			if (isPlayer && !hasMute) {
+			if (!hasMute) {
 				sender.sendMessage(ChatColor.GRAY + "%У вас нет на это прав");
 				return;
 			}
@@ -97,7 +100,7 @@ public class Mute implements IMute {
 				sender.sendMessage(ChatColor.GRAY + "%Время должно быть числом: " + s[1]);
 				return;
 			}
-			if (isPlayer && !hasUnMute && time < 5) {
+			if ( !hasUnMute && time < 5) {
 				sender.sendMessage(ChatColor.GRAY + "%У вас нет прав на снятие молчанки");
 				return;
 			}
@@ -130,42 +133,54 @@ public class Mute implements IMute {
 		} else {
 			if (s.length == 1) {
 				if (s[0].equals("s") || s[0].equals("se") || s[0].equals("see")) {
-					if (isPlayer && !hasSeeMute) {
+					if (!hasSeeMute ||!(hasSeeSelfMute && sender.getName().equals(playerName))) {
 						sender.sendMessage(ChatColor.GRAY + "%Вам нельзя просматривать молчанки");
 						return;
 					}
 					sender.sendMessage(ChatColor.GRAY + "%===============================");
 					for (int i = 0; i < chaneles; i++) {
-						String dateStr = yaml.getString(getPlayerMuteString(playerName, i));
+						long time = getTimeMute(playerName, i);
 						String reason = yaml.getString(getPlayerMuteString(playerName, i)
 								+ "-reason");
-
-						if (dateStr != null) {
-							try {
-								Date date = SDF.parse(dateStr);
-								boolean muted = (date.getTime() > System.currentTimeMillis());
-								long time = (date.getTime() - System.currentTimeMillis()) / 1000;
-								sender.sendMessage(ChatColor.GRAY
-										+ "%"
-										+ playerName
-										+ " "
+						if (time > -1) {
+							boolean muted = time>0;
+							sender.sendMessage(ChatColor.GRAY
+									+ "%"+ playerName+ " "
 										+ (Chanel.getByIndex(i).getSign())
 										+ (muted ? " молчит" : " молчал")
 										+ (muted ? (". Осталось " + time + " секунд. Причина: "
 												+ ChatColor.UNDERLINE + reason) : ""));
-							}
-							catch (ParseException e) {
-								e.printStackTrace();
-								sender.sendMessage(ChatColor.GRAY
-										+ "%Что-то не так с форматом времени: " + dateStr);
-							}
-
 						}
 					}
-				} else {
-					sender.sendMessage(ChatColor.GRAY + "%Ошибка форматирования #2 [see]");
+				}if (s[0].equals("all")){
+					if (!hasAllMute) {
+						sender.sendMessage(ChatColor.GRAY + "%Вам нельзя просматривать список молчанок");
+						return;
+					}
+					ConfigurationSection cs = yaml.getConfigurationSection("mute");
+					if (cs != null) {
+						Set<String> list = cs.getKeys(false);
+						for (String name : list) {
+							for (int i = 0; i < chaneles; i++) {
+								long time = getTimeMute(playerName, i);
+								String reason = yaml.getString(getPlayerMuteString(playerName, i)
+										+ "-reason");
+								if (isMuted(name, i)){
+									if (time > -1) {
+									  sender.sendMessage(ChatColor.GRAY
+											+ "%"+ playerName+ " "
+										+ (Chanel.getByIndex(i).getSign())
+										+ " молчит. Осталось " + time + " секунд. Причина: "
+												+ ChatColor.UNDERLINE + reason);
+									  }
+								}
+							}
+						}
+					}
+				}else {
+					sender.sendMessage(ChatColor.GRAY + "%Ошибка форматирования #2 [see|all]");
 					sender.sendMessage(ChatColor.GRAY
-							+ "%Сигнатура или [see] введено не правильно: " + s[0]);
+							+ "%Сигнатура или [see|all] введено не правильно: " + s[0]);
 				}
 			} else {
 				sender.sendMessage(ChatColor.GRAY + "%Ошибка форматирования #1 [length]");
@@ -185,7 +200,6 @@ public class Mute implements IMute {
 				}
 			}
 		}
-
 		try {
 			yaml.save(yamlFile);
 		}
@@ -206,8 +220,6 @@ public class Mute implements IMute {
 
 	@Override
 	public long getTimeMute(String playerName, int chanel ) {
-		int[] chs = new int[6];
-		chs[chanel] = -1;
 		String dateStr = yaml.getString(getPlayerMuteString(playerName, chanel));
 		if (dateStr != null) {
 			try {
@@ -215,6 +227,8 @@ public class Mute implements IMute {
 				return (date.getTime() - System.currentTimeMillis()) / 1000;
 			}
 			catch (ParseException e) {
+				Bukkit.getConsoleSender().sendMessage(getPlayerMuteString(playerName, chanel));
+				Bukkit.getConsoleSender().sendMessage("%Что-то не так с форматом времени: " + dateStr);
 				e.printStackTrace();
 			}
 		}
