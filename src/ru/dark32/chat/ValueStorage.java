@@ -19,6 +19,8 @@ public class ValueStorage {
 	public static String			helpMute;
 	public static String			muteUnmute;
 	public static String			muteUnknow;
+	public static String			muteSee;
+	public static String			muteSeeSelf;
 
 	public static boolean			experemental;
 	public static int				chanseDefaultRoll;
@@ -85,19 +87,20 @@ public class ValueStorage {
 		muteMessage = colorByString("mute.message");
 		muteUnmute = Main.config.getString("mute.unmute");
 		muteUnknow = Main.config.getString("mute.unknow");
+		muteSee = Main.config.getString("mue.see.any");
+		muteSeeSelf = Main.config.getString("mue.see.self");
 		muteMute = Main.config.getStringList("mue.mute");
 		muteHelp = Main.config.getStringList("mue.help");
 
+		
 		helpMute = Main.config.getString("help.mute");
 		helpChangeChanel = colorByString("help.changechanel");
 		helpBase = Main.config.getStringList("help.base");
 		List<String> _helpPrefix = Main.config.getStringList("help.prefix");
 		for (String s : _helpPrefix) {
 			helpPrefix.add(s.replace("$1", global.getFirstLetter())
-					.replace("$2", world.getFirstLetter())
-					.replace("$3", shout.getFirstLetter())
-					.replace("$4", local.getFirstLetter())
-					.replace("$5", whisper.getFirstLetter())
+					.replace("$2", world.getFirstLetter()).replace("$3", shout.getFirstLetter())
+					.replace("$4", local.getFirstLetter()).replace("$5", whisper.getFirstLetter())
 					.replace("$6", pm.getFirstLetter())
 					.replace("$7", String.valueOf(chanseMinRoll)));
 		}

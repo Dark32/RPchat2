@@ -15,7 +15,7 @@ public class Main extends JavaPlugin {
 	public static final Logger		_log	= Logger.getLogger("Minecraft");
 	public PluginManager			pm;
 	private static IMute			muteStorage;
-	public static final String		version	= "RPchat v 1.3c";
+	public static final String		version	= "RPchat v 1.5b";
 	public static FileConfiguration	config;
 
 	@Override
@@ -52,12 +52,12 @@ public class Main extends JavaPlugin {
 			getLogger().info("Сonfig loaded");
 		}
 		config = this.getConfig();
-		Main.muteStorage = new Mute(new File(getDataFolder(), "storage.yml"));
 		Util.init(this);
 		ValueStorage.init();
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		getServer().getPluginManager().registerEvents(new TabListener(), this);
 		getServer().getPluginManager().registerEvents(new JoinListener(), this);
+		Main.muteStorage = new Mute(new File(getDataFolder(), "storage.yml"));
 		getCommand("rpchat").setExecutor(new RPChatCommandExecutor());
 		getCommand("mute").setExecutor(new RPChatCommandExecutor());
 	}

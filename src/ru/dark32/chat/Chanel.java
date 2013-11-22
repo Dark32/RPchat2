@@ -5,38 +5,39 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
 public class Chanel {
 
-	private String				name;
-	private String				format;
-	private double				range;
+	private String					name;
+	private String					format;
+	private double					range;
 	@Deprecated
-	private int					id;
-	private int					subId;
-	private Material			material;
-	private int					index;										
-	private static int			values	= 0;							
-	private char				prefix;
-	private char				sign;
-	private Map<String, String>	custom	= new HashMap<String, String>();
-	private static List<Character> signs =new ArrayList<Character>();
-	private static List<Character> prefixes =new ArrayList<Character>();
-	
+	private int						id;
+	private int						subId;
+	private Material				material;
+	private int						index;
+	private static int				values		= 0;
+	private char					prefix;
+	private char					sign;
+	private Map<String, String>		custom		= new HashMap<String, String>();
+	private static List<Character>	signs		= new ArrayList<Character>();
+	private static List<Character>	prefixes	= new ArrayList<Character>();
+
 	public Chanel(String name, String format ){
 		setName(name);
 		setFormat(format);
 		index = values;
 		values++;
-		signs.add(index, this.getSign());
-		prefixes.add(index, this.getPrefix());
 	}
 
 	public Chanel(String name, String format, String prefix, char sign ){
 		this(name, format);
 		setPrefix(prefix);
 		setSign(sign);
+		signs.add(index, this.getSign());
+		prefixes.add(index, this.getPrefix());
 	}
 
 	public Chanel(String name, String format, char prefix, char sign ){
@@ -130,6 +131,7 @@ public class Chanel {
 	public char getPrefix() {
 		return prefix;
 	}
+
 	public String getFirstLetter() {
 		return String.valueOf(prefix);
 	}
@@ -165,59 +167,18 @@ public class Chanel {
 
 	public static int getIndexByPrefix(char ch ) {
 		int ind = prefixes.indexOf(ch);
-		return ch=='%'? -1 : ind!=-1 ? ind : -2;
-		/*if (ch == ValueStorage.global.getPrefix()) {
-			return ValueStorage.global.index;
-		} else if (ch == ValueStorage.world.getPrefix()) {
-			return ValueStorage.world.index;
-		} else if (ch == ValueStorage.shout.getPrefix()) {
-			return ValueStorage.shout.index;
-		} else if (ch == ValueStorage.local.getPrefix()) {
-			return ValueStorage.local.index;
-		} else if (ch == ValueStorage.whisper.getPrefix()) {
-			return ValueStorage.whisper.index;
-		} else if (ch == ValueStorage.pm.getPrefix()) {
-			return ValueStorage.pm.index;
-		} else if (ch == ValueStorage.chance.getPrefix()) {
-			return ValueStorage.chance.index;
-		} else if (ch == ValueStorage.broadcast.getPrefix()) {
-			return ValueStorage.broadcast.index;
-		} else if (ch == '%') {
-			return -1;
-		} else {
-			return -2;
-		}*/
+		return ch == '%' ? -1 : ind != -1 ? ind : -2;
 	}
 
 	public static int getIndexBySign(char ch ) {
 		int ind = signs.indexOf(ch);
-		return ind!=-1 ? ind : -2;
-		/*if (ch == ValueStorage.global.sign) {
-			return ValueStorage.global.index;
-		} else if (ch == ValueStorage.world.sign) {
-			return ValueStorage.world.index;
-		} else if (ch == ValueStorage.shout.sign) {
-			return ValueStorage.shout.index;
-		} else if (ch == ValueStorage.local.sign) {
-			return ValueStorage.local.index;
-		} else if (ch == ValueStorage.whisper.sign) {
-			return ValueStorage.whisper.index;
-		} else if (ch == ValueStorage.pm.sign) {
-			return ValueStorage.pm.index;
-		} else if (ch == ValueStorage.chance.sign) {
-			return ValueStorage.chance.index;
-		} else if (ch == ValueStorage.broadcast.sign) {
-			return ValueStorage.broadcast.index;
-		} else if (ch == '%') {
-			return -1;
-		} else {
-			return -2;
-		}*/
+		return ind != -1 ? ind : -2;
 	}
 
 	public char getSign() {
 		return sign;
 	}
+
 	public void setSign(char sign ) {
 		this.sign = sign;
 	}
@@ -229,6 +190,5 @@ public class Chanel {
 	public String get(String key ) {
 		return custom.containsKey(key) ? custom.get(key) : "key error";
 	}
-
 
 }

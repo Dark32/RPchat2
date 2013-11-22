@@ -332,6 +332,7 @@ public class ChatListener implements Listener {
 		if (Main.getBanStorage().isMuted(player.getName(), i)) {
 			player.sendMessage(ValueStorage.muteMessage.replace("$1", ""
 					+ Main.getBanStorage().getTimeMute(player.getName(), i)));
+		
 			return true;
 		}
 		return false;
@@ -399,10 +400,10 @@ public class ChatListener implements Listener {
 					msg.add(ValueStorage.muteUnmute);
 				}
 				if (Util.hasPermission(player, "mcnw.mute.see")) {
-					msg.add("&b%nick all &6- для просмотра молчанок");
+					msg.add(ValueStorage.muteSee);
 				}
 				if (Util.hasPermission(player, "mcnw.mute.see.self")) {
-					msg.add("&b%ваш ник s[ee] &6- для просмотра своей молчанки");
+					msg.add(ValueStorage.muteSeeSelf);
 				}
 				if (Util.hasPermission(player, "mcnw.mute.help")) {
 					msg.addAll(ValueStorage.muteHelp);
