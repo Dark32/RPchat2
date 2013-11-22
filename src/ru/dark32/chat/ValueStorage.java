@@ -92,7 +92,6 @@ public class ValueStorage {
 		muteMute = Main.config.getStringList("mue.mute");
 		muteHelp = Main.config.getStringList("mue.help");
 
-		
 		helpMute = Main.config.getString("help.mute");
 		helpChangeChanel = colorByString("help.changechanel");
 		helpBase = Main.config.getStringList("help.base");

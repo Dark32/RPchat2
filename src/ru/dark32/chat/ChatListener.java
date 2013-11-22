@@ -332,7 +332,7 @@ public class ChatListener implements Listener {
 		if (Main.getBanStorage().isMuted(player.getName(), i)) {
 			player.sendMessage(ValueStorage.muteMessage.replace("$1", ""
 					+ Main.getBanStorage().getTimeMute(player.getName(), i)));
-		
+
 			return true;
 		}
 		return false;
@@ -344,7 +344,7 @@ public class ChatListener implements Listener {
 		msg.add("&6" + Main.version);
 		msg.add("&6Autors: ufatos, dark32");
 		msg.add("&6License: CC-BY-NC-ND");
-		//msg.add("&6Link: http://goo.gl/wRJecu");
+		// msg.add("&6Link: http://goo.gl/wRJecu");
 		msg.addAll(ValueStorage.helpBase);
 		msg.add("&b=============================================");
 		for (String s : msg) {
