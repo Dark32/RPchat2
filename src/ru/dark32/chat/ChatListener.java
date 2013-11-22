@@ -343,7 +343,7 @@ public class ChatListener implements Listener {
 		msg.add("&6" + Main.version);
 		msg.add("&6Autors: ufatos, dark32");
 		msg.add("&6License: CC-BY-NC-ND");
-		msg.add("&6Link: http://goo.gl/wRJecu");
+		//msg.add("&6Link: http://goo.gl/wRJecu");
 		msg.addAll(ValueStorage.helpBase);
 		msg.add("&b=============================================");
 		for (String s : msg) {
@@ -397,6 +397,12 @@ public class ChatListener implements Listener {
 				}
 				if (Util.hasPermission(player, "mcnw.mute.unmute")) {
 					msg.add(ValueStorage.muteUnmute);
+				}
+				if (Util.hasPermission(player, "mcnw.mute.see")) {
+					msg.add("&b%nick all &6- для просмотра молчанок");
+				}
+				if (Util.hasPermission(player, "mcnw.mute.see.self")) {
+					msg.add("&b%ваш ник s[ee] &6- для просмотра своей молчанки");
 				}
 				if (Util.hasPermission(player, "mcnw.mute.help")) {
 					msg.addAll(ValueStorage.muteHelp);

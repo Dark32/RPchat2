@@ -231,7 +231,6 @@ public class Mute implements IMute {
 			catch (ParseException e) {
 				Bukkit.getConsoleSender().sendMessage(getPlayerMuteString(playerName, chanel));
 				Bukkit.getConsoleSender().sendMessage("%Что-то не так с форматом времени: " + dateStr);
-				e.printStackTrace();
 			}
 		}
 		return -1;
