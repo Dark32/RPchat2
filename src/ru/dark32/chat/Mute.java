@@ -70,122 +70,124 @@ public class Mute implements IMute {
 		}
 		saveMute();
 	}
-
-	@Override // рабить на подмкетоды
-	public void mute(String playerName, String par2, CommandSender sender ) {
-		boolean isPlayer = (sender instanceof Player);
+    
+	public void muteTwoArg(String playerName, CommandSender sender, boolean isPlayer, String[] args ){
 		boolean hasMute = isPlayer ? Util.hasPermission((Player) sender, "mcnw.mute.mute") : true;
-		boolean hasUnMute = isPlayer ? Util.hasPermission((Player) sender, "mcnw.mute.unmute")
-				: true;
+		boolean hasUnMute = isPlayer ? Util.hasPermission((Player) sender, "mcnw.mute.unmute")	: true;
+		if (!hasMute) {
+			sender.sendMessage(ChatColor.GRAY + "%У вас нет на это прав");
+			return;
+		}
+		if (args[0].length() != 1) {
+			sender.sendMessage(ChatColor.GRAY
+					+ "%Сокращение канала не может быть длинее 1 символа: " + args[0]);
+			return;
+		}
+		char chanel = args[0].charAt(0);
+		int time = 0;
+		try {
+			time = Integer.parseInt(args[1]);
+		}
+		catch (Exception e) {
+			sender.sendMessage(ChatColor.GRAY + "%Время должно быть числом: " + args[1]);
+			return;
+		}
+		if ( !hasUnMute && time < 5) {
+			sender.sendMessage(ChatColor.GRAY + "%У вас нет прав на снятие молчанки");
+			return;
+		}
+		String reason = args.length >= 3 ? StringUtils.join(args, " ", 2, args.length)
+				: "причина не указана";
+		int[] chanelMuteTime = new int[chaneles];
+		if (chanel != 'a') {
+			int _ind = Chanel.getIndexBySign(chanel);
+			if (_ind >= 0) {
+				chanelMuteTime[_ind] = time;
+			} else {
+				sender.sendMessage(ChatColor.GRAY + "%Сигнатура канала указана не верно: "
+						+ chanel);
+				return;
+			}
+		} else {
+			chanelMuteTime[0] = time;
+			chanelMuteTime[1] = time;
+			chanelMuteTime[2] = time;
+			chanelMuteTime[3] = time;
+			chanelMuteTime[4] = time;
+			chanelMuteTime[5] = time;
+			chanelMuteTime[6] = time;
+			chanelMuteTime[7] = time;
+		}
+		mute(playerName, chanelMuteTime, reason);
+		sender.sendMessage(ChatColor.GRAY + "%" + playerName + " теперь молчит (" + chanel
+				+ ") из-за " + ChatColor.UNDERLINE + reason + ChatColor.RESET + ChatColor.GRAY
+				+ " на срок " + time + " секунд");
+	}
+	
+	public void muteSee(String playerName, CommandSender sender, boolean isPlayer){
 		boolean hasSeeMute = isPlayer ? Util.hasPermission((Player) sender, "mcnw.mute.see") : true;
 		boolean hasSeeSelfMute = isPlayer ? Util.hasPermission((Player) sender, "mcnw.mute.see.self") : true;
-		boolean hasAllMute = isPlayer ? Util.hasPermission((Player) sender, "mcnw.mute.see.all") : true;
-		String[] s = par2.split("\\s");
-		if (s.length >= 2) {
-			if (!hasMute) {
-				sender.sendMessage(ChatColor.GRAY + "%У вас нет на это прав");
-				return;
-			}
-			if (s[0].length() != 1) {
-				sender.sendMessage(ChatColor.GRAY
-						+ "%Сокращение канала не может быть длинее 1 символа: " + s[0]);
-				return;
-			}
-			char chanel = s[0].charAt(0);
-			int time = 0;
-			try {
-				time = Integer.parseInt(s[1]);
-			}
-			catch (Exception e) {
-				sender.sendMessage(ChatColor.GRAY + "%Время должно быть числом: " + s[1]);
-				return;
-			}
-			if ( !hasUnMute && time < 5) {
-				sender.sendMessage(ChatColor.GRAY + "%У вас нет прав на снятие молчанки");
-				return;
-			}
-			String reason = s.length >= 3 ? StringUtils.join(s, " ", 2, s.length)
-					: "причина не указана";
-			int[] chanelMuteTime = new int[chaneles];
-			if (chanel != 'a') {
-				int _ind = Chanel.getIndexBySign(chanel);
-				if (_ind >= 0) {
-					chanelMuteTime[_ind] = time;
-				} else {
-					sender.sendMessage(ChatColor.GRAY + "%Сигнатура канала указана не верно: "
-							+ chanel);
-					return;
-				}
-			} else {
-				chanelMuteTime[0] = time;
-				chanelMuteTime[1] = time;
-				chanelMuteTime[2] = time;
-				chanelMuteTime[3] = time;
-				chanelMuteTime[4] = time;
-				chanelMuteTime[5] = time;
-				chanelMuteTime[6] = time;
-				chanelMuteTime[7] = time;
-			}
-			mute(playerName, chanelMuteTime, reason);
-			sender.sendMessage(ChatColor.GRAY + "%" + playerName + " теперь молчит (" + chanel
-					+ ") из-за " + ChatColor.UNDERLINE + reason + ChatColor.RESET + ChatColor.GRAY
-					+ " на срок " + time + " секунд");
-		} else {
-			if (s.length == 1) {
-				if (s[0].equals("s") || s[0].equals("se") || s[0].equals("see")) {
-					if (!hasSeeMute ||!(hasSeeSelfMute && sender.getName().equals(playerName))) {
-						sender.sendMessage(ChatColor.GRAY + "%Вам нельзя просматривать молчанки");
-						return;
-					}
-					sender.sendMessage(ChatColor.GRAY + "%===============================");
-					for (int i = 0; i < chaneles; i++) {
-						long time = getTimeMute(playerName, i);
-						String reason = yaml.getString(getPlayerMuteString(playerName, i)
-								+ "-reason");
-						if (time > -1) {
-							boolean muted = time>0;
-							sender.sendMessage(ChatColor.GRAY
-									+ "%"+ playerName+ " "
-										+ (Chanel.getByIndex(i).getSign())
-										+ (muted ? " молчит" : " молчал")
-										+ (muted ? (". Осталось " + time + " секунд. Причина: "
-												+ ChatColor.UNDERLINE + reason) : ""));
-						}
-					}
-				}if (s[0].equals("all")){
-					if (!hasAllMute) {
-						sender.sendMessage(ChatColor.GRAY + "%Вам нельзя просматривать список молчанок");
-						return;
-					}
-					ConfigurationSection cs = yaml.getConfigurationSection("mute");
-					if (cs != null) {
-						Set<String> list = cs.getKeys(false);
-						for (String name : list) {
-							for (int i = 0; i < chaneles; i++) {
-								long time = getTimeMute(playerName, i);
-								String reason = yaml.getString(getPlayerMuteString(playerName, i)
-										+ "-reason");
-								if (isMuted(name, i)){
-									if (time > -1) {
-									  sender.sendMessage(ChatColor.GRAY
-											+ "%"+ playerName+ " "
-										+ (Chanel.getByIndex(i).getSign())
-										+ " молчит. Осталось " + time + " секунд. Причина: "
-												+ ChatColor.UNDERLINE + reason);
-									  }
-								}
-							}
-						}
-					}
-				}else {
-					sender.sendMessage(ChatColor.GRAY + "%Ошибка форматирования #2 [see|all]");
-					sender.sendMessage(ChatColor.GRAY
-							+ "%Сигнатура или [see|all] введено не правильно: " + s[0]);
-				}
-			} else {
-				sender.sendMessage(ChatColor.GRAY + "%Ошибка форматирования #1 [length]");
+		if (!hasSeeMute ||!(hasSeeSelfMute && sender.getName().equals(playerName))) {
+			sender.sendMessage(ChatColor.GRAY + "%Вам нельзя просматривать молчанки");
+			return;
+		}
+		sender.sendMessage(ChatColor.GRAY + "%===============================");
+		for (int i = 0; i < chaneles; i++) {
+			long time = getTimeMute(playerName, i);
+			String reason = yaml.getString(getPlayerMuteString(playerName, i)
+					+ "-reason");
+			if (time > -1) {
+				boolean muted = time>0;
+				sender.sendMessage(ChatColor.GRAY + "%"+ playerName+ " "	+ (Chanel.getByIndex(i).getSign())
+							+ (muted ? " молчит" : " молчал")
+							+ (muted ? (". Осталось " + time + " секунд. Причина: "
+									+ ChatColor.UNDERLINE + reason) : ""));
 			}
 		}
+	}
+	public void muteAll(String playerName, CommandSender sender, boolean isPlayer){
+		boolean hasAllMute = isPlayer ? Util.hasPermission((Player) sender, "mcnw.mute.see.all") : true;
+		if (!hasAllMute) {
+			sender.sendMessage(ChatColor.GRAY + "%Вам нельзя просматривать список молчанок");
+			return;
+		}
+		ConfigurationSection cs = yaml.getConfigurationSection("mute");
+		if (cs==null) {return;}
+		Set<String> list = cs.getKeys(false);
+		for (String name : list) {
+			for (int i = 0; i < chaneles; i++) {
+				long time = getTimeMute(playerName, i);
+				String reason = yaml.getString(getPlayerMuteString(playerName, i)
+						+ "-reason");
+				if (isMuted(name, i) && time > -1){
+					sender.sendMessage(ChatColor.GRAY + "%"+ playerName+ " "
+							+ (Chanel.getByIndex(i).getSign())+ " молчит. Осталось " + time 
+							+ " секунд. Причина: "+ ChatColor.UNDERLINE + reason);
+					  
+				}
+			}
+		}		
+	}
+	
+	@Override 
+	public void mute(String playerName, String par2, CommandSender sender ) {
+		boolean isPlayer = (sender instanceof Player);
+		String[] s = par2.split("\\s");
+		if (s.length >= 2) {
+			muteTwoArg(playerName, sender, isPlayer, s);
+		} else if (s.length == 1) {
+			if (s[0].equals("s") || s[0].equals("se") || s[0].equals("see")) {
+				muteSee(playerName, sender, isPlayer);
+			}else if (s[0].equals("all")){
+				muteAll(playerName, sender, isPlayer);
+			}else {
+				sender.sendMessage(ChatColor.GRAY + "%Ошибка форматирования #2 [see|all]");
+				sender.sendMessage(ChatColor.GRAY + "%Сигнатура или [see|all] введено не правильно: " + s[0]);
+			}
+		} else {
+			sender.sendMessage(ChatColor.GRAY + "%Ошибка форматирования #1 [length]");
+		}
+		
 	}
 
 	@Override
