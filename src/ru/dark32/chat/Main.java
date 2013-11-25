@@ -15,6 +15,7 @@ public class Main extends JavaPlugin {
 	public static final Logger		_log	= Logger.getLogger("Minecraft");
 	public PluginManager			pm;
 	private static IMute			muteStorage;
+	private static IDeaf			deafStorage;
 	public static final String		version	= "RPchat v 1.5b";
 	public static FileConfiguration	config;
 
@@ -58,6 +59,8 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new TabListener(), this);
 		getServer().getPluginManager().registerEvents(new JoinListener(), this);
 		Main.muteStorage = new Mute(new File(getDataFolder(), "storage.yml"));
+		Main.deafStorage = new Deaf(new File(getDataFolder(), "storage.yml"));
+		
 		getCommand("rpchat").setExecutor(new RPChatCommandExecutor());
 		getCommand("mute").setExecutor(new RPChatCommandExecutor());
 	}
@@ -65,10 +68,13 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		muteStorage.saveMute();
+		deafStorage.saveDeaf();
 	}
 
 	public static IMute getBanStorage() {
 		return muteStorage;
 	}
-
+	public static IDeaf getDeafStorage() {
+		return deafStorage;
+	}
 }

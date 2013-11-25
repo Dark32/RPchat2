@@ -53,13 +53,11 @@ public class Mute implements IMute {
 				// empty
 			}
 		}
-
 		return false;
-
 	}
 
 	@Override
-	public void mute(String playerName, int[] seconds, String reason ) {
+	public void causeMute(String playerName, int[] seconds, String reason ) {
 		for (int i = 0; i < chaneles; i++) {
 			if (seconds[i] > 0) {
 				Calendar cal = Calendar.getInstance();
@@ -118,7 +116,7 @@ public class Mute implements IMute {
 			chanelMuteTime[6] = time;
 			chanelMuteTime[7] = time;
 		}
-		mute(playerName, chanelMuteTime, reason);
+		causeMute(playerName, chanelMuteTime, reason);
 		sender.sendMessage(ChatColor.GRAY + "%" + playerName + " теперь молчит (" + chanel
 				+ ") из-за " + ChatColor.UNDERLINE + reason + ChatColor.RESET + ChatColor.GRAY
 				+ " на срок " + time + " секунд");

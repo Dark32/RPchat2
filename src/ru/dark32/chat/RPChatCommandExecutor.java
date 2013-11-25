@@ -13,7 +13,13 @@ public class RPChatCommandExecutor implements CommandExecutor {
 			return true;
 		}
 		if (cmd.getName().equalsIgnoreCase("mute")) {
-			String _msg = (args.length > 1) ? StringUtils.join(args, " ", 1, args.length) : "see";
+			String _msg = (args.length > 1) ? StringUtils.join(args, " ", 1, args.length) : "all";
+			String target = (args.length >= 1) ? target = args[0] : sender.getName();
+			Main.getBanStorage().mute(target, _msg, sender);
+			return true;
+		}
+		if (cmd.getName().equalsIgnoreCase("deaf")) {
+			String _msg = (args.length > 1) ? StringUtils.join(args, " ", 1, args.length) : "all";
 			String target = (args.length >= 1) ? target = args[0] : sender.getName();
 			Main.getBanStorage().mute(target, _msg, sender);
 			return true;

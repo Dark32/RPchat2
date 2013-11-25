@@ -7,4 +7,7 @@ commands:
      usage: '/<command>'
    mute:
      description: 'Mute'
-     usage: '/<command> <nick> <s[ee]|g|w|s|l|v|p> <time> <reason>'
+     usage: '/<command> <nick> <s[ee]|all|g|w|s|l|v|p> <time> <reason>'
+   deaf:
+     description: 'Deaf'
+     usage: '/<command> <nick> <s[ee]|all|w|s|l|v> <reason>'

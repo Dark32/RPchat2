@@ -24,7 +24,7 @@ public interface IMute {
 	 * 
 	 */
 
-	public void mute(String playerName, int[] seconds, String reason );
+	public void causeMute(String playerName, int[] seconds, String reason );
 
 	/**
 	 * Разрешить игроку писать в чат
@@ -41,7 +41,7 @@ public interface IMute {
 	 */
 	public void saveMute();
 
-	public void mute(String group, String group2, CommandSender sender );
+	public void mute(String name, String group2, CommandSender sender );
 
 	public long getTimeMute(String playerName, int chanel );
 }

@@ -230,7 +230,7 @@ public class ChatListener implements Listener {
 		if (mode == ValueStorage.shout.getIndex() || mode == ValueStorage.whisper.getIndex()
 				|| mode == ValueStorage.local.getIndex()) {
 			event.getRecipients().clear();
-			event.getRecipients().addAll(this.getLocalRecipients(player, range));
+			event.getRecipients().addAll(this.getLocalRecipients(player, range, mode));
 		} else if (mode == ValueStorage.world.getIndex()) {
 			event.getRecipients().clear();
 			event.getRecipients().addAll(this.getWorldRecipients(player, message));
@@ -262,13 +262,16 @@ public class ChatListener implements Listener {
 	}
 
 	// Лакальный чат. Список кому отправлять
-	protected List<Player> getLocalRecipients(Player sender, double range ) {
+	protected List<Player> getLocalRecipients(Player sender, double range, int chanel ) {
 		Location playerLocation = sender.getLocation();
 		List<Player> recipients = new LinkedList<Player>();
 		double squaredDistance = Math.pow(range, 2);
 		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			if (recipient.getWorld().equals(sender.getWorld())
-					&& playerLocation.distanceSquared(recipient.getLocation()) < squaredDistance) {
+			if ( Main.getDeafStorage().isDeaf(sender.getName(), chanel)){
+				continue;
+			}else if (recipient.getWorld().equals(sender.getWorld())
+					&& playerLocation.distanceSquared(recipient.getLocation()) < squaredDistance
+					) {
 				recipients.add(recipient);
 			} else if (Util.hasPermission(recipient, "mcnw.spy")) {
 				recipients.add(recipient);
@@ -283,7 +286,10 @@ public class ChatListener implements Listener {
 	protected List<Player> getWorldRecipients(Player sender, String message ) {
 		List<Player> recipients = new LinkedList<Player>();
 		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			if (!recipient.getWorld().equals(sender.getWorld())) {
+			if ( Main.getDeafStorage().isDeaf(sender.getName(),ValueStorage.world.getIndex())){
+				continue;
+			}else if (!recipient.getWorld().equals(sender.getWorld()) 
+					&& !Util.hasPermission(recipient, "mcnw.spy")) {
 				continue;
 			}
 			recipients.add(recipient);
