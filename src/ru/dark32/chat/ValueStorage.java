@@ -27,7 +27,7 @@ public class ValueStorage {
 	public static int				PmSearchNickMode;
 	public static int				chanseVaule;
 	public static int				chanseMinRoll;
-
+	public static boolean			lister;
 	protected final static Pattern	nickForMute	= Pattern.compile("%([\\d\\w_]+)\\s(.+)");
 
 	public static Chanel			global;
@@ -91,7 +91,7 @@ public class ValueStorage {
 		muteSeeSelf = Main.config.getString("mue.see.self");
 		muteMute = Main.config.getStringList("mue.mute");
 		muteHelp = Main.config.getStringList("mue.help");
-
+		lister=Main.config.getBoolean("liteners", false);
 		helpMute = Main.config.getString("help.mute");
 		helpChangeChanel = colorByString("help.changechanel");
 		helpBase = Main.config.getStringList("help.base");
