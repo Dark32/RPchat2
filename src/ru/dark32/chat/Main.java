@@ -16,7 +16,7 @@ public class Main extends JavaPlugin {
 	public PluginManager			pm;
 	private static IMute			muteStorage;
 	private static IDeaf			deafStorage;
-	public static final String		version	= "RPchat v 1.6h";
+	public static final String		version	= "RPchat v 1.6h-0";
 	public static FileConfiguration	config;
 
 	@Override
