@@ -38,6 +38,7 @@ public class ValueStorage {
 	public static Chanel			pm;
 	public static Chanel			chance;
 	public static Chanel			broadcast;
+	private static int русский;
 
 	public static void init() {
 		experemental = Main.config.getBoolean("experemental", false);
@@ -87,11 +88,13 @@ public class ValueStorage {
 		muteMessage = colorByString("mute.message");
 		muteUnmute = Main.config.getString("mute.unmute");
 		muteUnknow = Main.config.getString("mute.unknow");
-		muteSee = Main.config.getString("mue.see.any");
-		muteSeeSelf = Main.config.getString("mue.see.self");
-		muteMute = Main.config.getStringList("mue.mute");
-		muteHelp = Main.config.getStringList("mue.help");
+		muteSee = Main.config.getString("mute.see.any");
+		muteSeeSelf = Main.config.getString("mute.see.self");
+		muteMute = Main.config.getStringList("mute.mute");
+		muteHelp = Main.config.getStringList("mute.help");
+		
 		lister=Main.config.getBoolean("liteners", false);
+		
 		helpMute = Main.config.getString("help.mute");
 		helpChangeChanel = colorByString("help.changechanel");
 		helpBase = Main.config.getStringList("help.base");
@@ -105,7 +108,10 @@ public class ValueStorage {
 		}
 		_helpPrefix.clear();
 		helpChanelsSitch = Main.config.getStringList("help.chanelswitch");
-
+		/***Не бери в серьёз ***/
+		русский = 4;
+		String $еуые = "Это сообщение неправильное.⁯‮  Даже не пытайся понять";
+		String $Это_вообще⁯⁯‮_как_работает = "Это уже ‮слишком";
 	}
 
 	private static String colorByString(String key ) {

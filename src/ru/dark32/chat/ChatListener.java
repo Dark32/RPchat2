@@ -203,7 +203,7 @@ public class ChatListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-		} else if (mode == -1) {
+		} /*else if (mode == -1) {
 			int _ind = chatMessage.indexOf(" ");
 			if (_ind == -1) {
 				player.sendMessage(ValueStorage.pm.get("NoinputMsg"));
@@ -216,7 +216,7 @@ public class ChatListener implements Listener {
 			event.setCancelled(true);
 			return;
 
-		}
+		}*/
 		if (firstChar == '?' && chatMessage.length() == 1) {
 			ChatListener.getHelp(player);
 			event.setCancelled(true);
@@ -271,12 +271,11 @@ public class ChatListener implements Listener {
 	protected List<Player> getLocalRecipients(Player sender, double range, int chanel ) {
 		Location playerLocation = sender.getLocation();
 		List<Player> recipients = new LinkedList<Player>();
-		// double squaredDistance = Math.pow(range, 2);
 		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			int dist = (int) playerLocation.distanceSquared(recipient.getLocation());
-			if (Main.getDeafStorage().isDeaf(sender.getName(), chanel)) {
+			if ( Main.getDeafStorage().isDeaf(sender.getName(), chanel)){
 				continue;
-			} else if (recipient.getWorld().equals(sender.getWorld()) && dist < range) {
+			}else if (recipient.getWorld().equals(sender.getWorld())&& dist < range	) {
 				recipients.add(recipient);
 			} else if (Util.hasPermission(recipient, "mcnw.spy")) {
 				recipients.add(recipient);
@@ -291,10 +290,10 @@ public class ChatListener implements Listener {
 	protected List<Player> getWorldRecipients(Player sender, String message ) {
 		List<Player> recipients = new LinkedList<Player>();
 		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			if (Main.getDeafStorage().isDeaf(sender.getName(), ValueStorage.world.getIndex())) {
+			if ( Main.getDeafStorage().isDeaf(sender.getName(),ValueStorage.world.getIndex())){
 				continue;
-			} else if (!recipient.getWorld().equals(sender.getWorld())
-					&& !Util.hasPermission(recipient, "mcnw.spy")) {
+			}else if (!recipient.getWorld().equals(sender.getWorld()) 
+				   && !Util.hasPermission(recipient, "mcnw.spy")) {
 				continue;
 			}
 			recipients.add(recipient);
@@ -398,33 +397,9 @@ public class ChatListener implements Listener {
 			}
 			case '?': {
 				msg.addAll(ValueStorage.helpChanelsSitch);
-				if (Util.hasPermission(player, "mcnw.mute.help")) {
-					msg.add(ValueStorage.helpMute);
-				}
 				break;
 			}
-			case 'm': {
-				if (Util.hasPermission(player, "mcnw.mute.mute")) {
-					msg.addAll(ValueStorage.muteMute);
-				}
-				if (Util.hasPermission(player, "mcnw.mute.unmute")) {
-					msg.add(ValueStorage.muteUnmute);
-				}
-				if (Util.hasPermission(player, "mcnw.mute.see")) {
-					msg.add(ValueStorage.muteSee);
-				}
-				if (Util.hasPermission(player, "mcnw.mute.see.self")) {
-					msg.add(ValueStorage.muteSeeSelf);
-				}
-				if (Util.hasPermission(player, "mcnw.mute.help")) {
-					msg.addAll(ValueStorage.muteHelp);
-				}
-				break;
-			}
-			default: {
-				msg.add(ValueStorage.muteUnknow + thirdChar);
-				break;
-			}
+			
 		}
 		msg.add("&b=============================================");
 		for (String s : msg) {

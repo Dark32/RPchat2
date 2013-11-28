@@ -1,27 +1,38 @@
 package ru.dark32.chat;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class RPChatCommandExecutor implements CommandExecutor {
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args ) {
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (cmd.getName().equalsIgnoreCase("rpchat")) {
 			ChatListener.getHelp(sender);
 			return true;
 		}
 		if (cmd.getName().equalsIgnoreCase("mute")) {
-			String _msg = (args.length > 1) ? StringUtils.join(args, " ", 1, args.length) : "all";
-			String target = (args.length >= 1) ? target = args[0] : sender.getName();
-			Main.getBanStorage().mute(target, _msg, sender);
+			Main.getBanStorage().mute(args, sender);
+			return true;
+		}
+		if (cmd.getName().equalsIgnoreCase("unmute")) {
+			String[] _args = new String[3];
+			_args[0] = args[0];
+			_args[1] = args[1];
+			_args[2] = "1";
+			Main.getBanStorage().mute(_args, sender);
 			return true;
 		}
 		if (cmd.getName().equalsIgnoreCase("deaf")) {
-			String _msg = (args.length > 1) ? StringUtils.join(args, " ", 1, args.length) : "all";
-			String target = (args.length >= 1) ? target = args[0] : sender.getName();
-			Main.getBanStorage().mute(target, _msg, sender);
+			Main.getDeafStorage().deaf(args, sender);
+			return true;
+		}
+		if (cmd.getName().equalsIgnoreCase("undeaf")) {
+			String[] _args = new String[3];
+			_args[0] = args[0];
+			_args[1] = args[1];
+			_args[2] = "undeaf";
+			Main.getDeafStorage().deaf(_args, sender);
 			return true;
 		}
 		return false;

@@ -11,3 +11,9 @@ commands:
    deaf:
      description: 'Deaf'
      usage: '/<command> <nick> <s[ee]|all|w|s|l|v> <reason>'
+   unmute:
+     description: 'unmute'
+     usage: '/<command> <nick> <s[ee]|all|g|w|s|l|v|p>'
+   undeaf:
+     description: 'undeaf'
+     usage: '/<command> <nick> <s[ee]|all|g|w|s|l|v|p>'

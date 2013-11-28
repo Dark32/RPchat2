@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,9 +17,10 @@ public class Main extends JavaPlugin {
 	public PluginManager			pm;
 	private static IMute			muteStorage;
 	private static IDeaf			deafStorage;
-	public static final String		version	= "RPchat v 1.6h-0";
+	public static final String		version	= "RPchat v 1.6w-2";
 	public static FileConfiguration	config;
-
+	public static File yamlFile;
+	public static YamlConfiguration yaml;
 	@Override
 	public void onEnable() {
 		pm = Bukkit.getPluginManager();
@@ -55,11 +57,20 @@ public class Main extends JavaPlugin {
 		config = this.getConfig();
 		Util.init(this);
 		ValueStorage.init();
+		File file = new File(getDataFolder(), "storage.yml");
+		this.yamlFile =file;
+		if (this.yamlFile.exists()) {
+			yaml = YamlConfiguration.loadConfiguration(file);
+		} else {
+			yaml = new YamlConfiguration();
+		}
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		getServer().getPluginManager().registerEvents(new TabListener(), this);
 		getServer().getPluginManager().registerEvents(new JoinListener(), this);
-		Main.muteStorage = new Mute(new File(getDataFolder(), "storage.yml"));
-		Main.deafStorage = new Deaf(new File(getDataFolder(), "storage.yml"));
+		
+
+		Main.muteStorage = new Mute();
+		Main.deafStorage = new Deaf();
 		
 		getCommand("rpchat").setExecutor(new RPChatCommandExecutor());
 		getCommand("mute").setExecutor(new RPChatCommandExecutor());
@@ -68,7 +79,7 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		muteStorage.saveMute();
-		deafStorage.saveDeaf();
+		//deafStorage.saveDeaf();
 	}
 
 	public static IMute getBanStorage() {

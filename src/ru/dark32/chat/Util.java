@@ -3,6 +3,7 @@ package ru.dark32.chat;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import ru.tehkode.permissions.bukkit.PermissionsEx;
@@ -45,9 +46,11 @@ public class Util {
 		return found;
 	}
 
-	public static boolean hasPermission(Player player, String permission ) {
-		if (usePEX) {
-			return PermissionsEx.getUser(player).has(permission);
+	public static boolean hasPermission(CommandSender player, String permission ) {
+		if (player instanceof Player ){
+			return true;
+		}else if (usePEX) {
+			return PermissionsEx.getUser((Player)player).has(permission);
 		} else if (usePB) {
 			return player.hasPermission(permission);
 		} else {

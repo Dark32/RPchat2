@@ -8,48 +8,31 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
+
 
 public class Deaf implements IDeaf {
-	private YamlConfiguration yaml;
 	final private int chaneles = Chanel.getValues();
-	private File yamlFile;
-
-	public Deaf(File file) {
-		this.yamlFile = file;
-		if (this.yamlFile.exists()) {
-			yaml = YamlConfiguration.loadConfiguration(file);
-		} else {
-			yaml = new YamlConfiguration();
-		}
-	}
-
 	private String getPlayerDeafString(String playerName, int chanel) {
 		return playerName + ".deaf." + Chanel.getByIndex(chanel).getSign();
 	}
 
 	@Override
 	public void deaf(String[] args, CommandSender sender) {
-		boolean isPlayer = (sender instanceof Player);
-		boolean hasHelp = isPlayer ? Util.hasPermission((Player) sender,
-				"mcnw.deaf.help") : true;
-		boolean hasSee = isPlayer ? Util.hasPermission((Player) sender,
-				"mcnw.deaf.see") : true;
-		boolean hasAll = isPlayer ? Util.hasPermission((Player) sender,
-				"mcnw.deaf.all") : true;
-		boolean hasSeeSelf = isPlayer ? Util.hasPermission((Player) sender,
-				"mcnw.deaf.see.self") || hasSee : true;
-		boolean hasDeaf = isPlayer ? Util.hasPermission((Player) sender,
-				"mcnw.deaf.deaf") : true;
-		boolean hasDeafSelf = isPlayer ? Util.hasPermission((Player) sender,
-				"mcnw.deaf.deaf.self") || hasDeaf : true;
+		//boolean isPlayer = (sender instanceof Player);
+		boolean hasHelp = Util.hasPermission(sender,"mcnw.deaf.help") ;
+		boolean hasSee =  Util.hasPermission(sender,"mcnw.deaf.see");
+		boolean hasAll = Util.hasPermission( sender,"mcnw.deaf.all") ;
+		boolean hasSeeSelf = Util.hasPermission( sender,"mcnw.deaf.see.self") || hasSee ;
+		boolean hasDeaf =  Util.hasPermission( sender,"mcnw.deaf.deaf");
+		boolean hasDeafSelf = Util.hasPermission(sender,"mcnw.deaf.deaf.self") || hasDeaf ;
+		boolean hasUnDeaf =  Util.hasPermission( sender,"mcnw.deaf.undeaf");
+		boolean hasUnDeafSelf =  Util.hasPermission( sender,"mcnw.deaf.undeaf.self") || hasUnDeaf ;
+
 		String target = args[0];
 		boolean isSelf = sender.getName().equalsIgnoreCase(target);
 		if (args.length == 1) {
 			if (!hasHelp) {
-				sender.sendMessage(ChatColor.GRAY
-						+ "%Вы не можете смотреть справку");
+				sender.sendMessage(ChatColor.GRAY+ "%Вы не можете смотреть справку");
 				return;
 			}
 			deafHelp(sender);
@@ -70,34 +53,44 @@ public class Deaf implements IDeaf {
 				deafSeeAll(sender);
 			} else {
 				if (!hasSee) {
-					sender.sendMessage(ChatColor.GRAY
-							+ "%Вы не можете смотреть глухоту цели");
+					sender.sendMessage(ChatColor.GRAY+ "%Вы не можете смотреть глухоту цели");
 					return;
 				}
 				deafSeeTarget(sender, target);
 			}
 		} else if (args.length > 2) {
+			if(args[2].equals("undeaf")){
+				if (isSelf){
+					if (!hasUnDeaf) {
+						sender.sendMessage(ChatColor.GRAY	+ "%Вы не можете снять глухоту с себя");
+						return;
+					}
+					caseUnDeaf(target, chaneles);
+				}else{
+					if (!hasUnDeafSelf) {
+						sender.sendMessage(ChatColor.GRAY+ "%Вы не можете снять глухоту с другово");
+						return;
+					}
+					caseUnDeaf(target, chaneles);
+				}
+			}
 			if (!(hasDeafSelf && isSelf) || !hasDeaf) {
-				sender.sendMessage(ChatColor.GRAY
-						+ "%Вы не можете устанавливать глухоту "
+				sender.sendMessage(ChatColor.GRAY+ "%Вы не можете устанавливать глухоту "
 						+ (isSelf ? "себе" : "другим"));
 				return;
 			}
 			if (args[1].length() != 1) {
-				sender.sendMessage(ChatColor.GRAY
-						+ "%Сокращение канала не может быть длинее 1 символа: "
-						+ args[0]);
+				sender.sendMessage(ChatColor.GRAY	+ "%Сокращение канала не может быть длинее 1 символа: "	+ args[0]);
 				return;
 			}
 			int chanel = Chanel.getIndexBySign(args[1].charAt(0));
-			String reason = args.length >= 3 ? StringUtils.join(args, " ", 2,
-					args.length) : "не указана";
-			caseDeaf(sender.getName(), chanel, reason);
+			String reason = args.length >= 3 ? StringUtils.join(args, " ", 2,args.length) : "не указана";
+			caseDeaf(target, chanel, reason);
 		}
 	}
-
-	private void deafSeeAll(CommandSender sender) {
-		ConfigurationSection cs = yaml.getRoot();
+	@Override
+	public void deafSeeAll(CommandSender sender) {
+		ConfigurationSection cs = Main.yaml.getRoot();
 		sender.sendMessage(ChatColor.GRAY
 				+ "%===============all================");
 		if (cs == null) {
@@ -109,16 +102,16 @@ public class Deaf implements IDeaf {
 			deafSeeTarget(sender, name);
 		}
 	}
-
-	private void deafSeeSelf(CommandSender sender) {
+	@Override
+	public void deafSeeSelf(CommandSender sender) {
 		deafSeeTarget(sender, sender.getName());
 
 	}
-
-	private void deafSeeTarget(CommandSender sender, String name) {
+	@Override
+	public void deafSeeTarget(CommandSender sender, String name) {
 		sender.sendMessage(ChatColor.GRAY + "=======" + name + "=======");
 		for (int i = 0; i < chaneles; i++) {
-			String reason = yaml.getString(getPlayerDeafString(name, i)
+			String reason = Main.yaml.getString(getPlayerDeafString(name, i)
 					+ "-reason");
 			boolean isDeaf = this.isDeaf(name, i);
 			if (isDeaf) {
@@ -137,11 +130,11 @@ public class Deaf implements IDeaf {
 	}
 
 	@Override
-	public void caseDeaf(String playerName, int chanel, String reason) {
+	public void caseDeaf(String name, int chanel, String reason) {
 		for (int i = 0; i < chaneles; i++) {
 			if (chanel == i || chanel == -2) {
-				yaml.set(getPlayerDeafString(playerName, i), true);
-				yaml.set(getPlayerDeafString(playerName, i) + "-reason", reason);
+				Main.yaml.set(getPlayerDeafString(name, i), true);
+				Main.yaml.set(getPlayerDeafString(name, i) + "-reason", reason);
 			}
 		}
 		saveDeaf();
@@ -151,21 +144,21 @@ public class Deaf implements IDeaf {
 	public void caseUnDeaf(String playerName, int chanel) {
 		for (int i = 0; i < chaneles; i++) {
 			if (chanel == i || chanel == -2) {
-				yaml.set(getPlayerDeafString(playerName, i), null);
-				yaml.set(getPlayerDeafString(playerName, i) + "-reason", null);
+				Main.yaml.set(getPlayerDeafString(playerName, i), null);
+				Main.yaml.set(getPlayerDeafString(playerName, i) + "-reason", null);
 			}
 		}
 	}
 
 	@Override
 	public boolean isDeaf(String name, int chanel) {
-		return yaml.getBoolean(getPlayerDeafString(name, chanel));
+		return Main.yaml.getBoolean(getPlayerDeafString(name, chanel));
 	}
 
 	@Override
 	public void saveDeaf() {
 		try {
-			yaml.save(yamlFile);
+			Main.yaml.save(Main.yamlFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
