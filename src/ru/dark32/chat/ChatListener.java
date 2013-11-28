@@ -203,20 +203,15 @@ public class ChatListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-		} /*else if (mode == -1) {
-			int _ind = chatMessage.indexOf(" ");
-			if (_ind == -1) {
-				player.sendMessage(ValueStorage.pm.get("NoinputMsg"));
-				event.setCancelled(true);
-				return;
-			}
-			String pmNick = chatMessage.substring(0, _ind);
-			String _msg = chatMessage.substring(_ind + 1, chatMessage.length());
-			Main.getBanStorage().mute(pmNick, _msg, player);
-			event.setCancelled(true);
-			return;
-
-		}*/
+		} /*
+		 * else if (mode == -1) { int _ind = chatMessage.indexOf(" "); if (_ind
+		 * == -1) { player.sendMessage(ValueStorage.pm.get("NoinputMsg"));
+		 * event.setCancelled(true); return; } String pmNick =
+		 * chatMessage.substring(0, _ind); String _msg =
+		 * chatMessage.substring(_ind + 1, chatMessage.length());
+		 * Main.getBanStorage().mute(pmNick, _msg, player);
+		 * event.setCancelled(true); return; }
+		 */
 		if (firstChar == '?' && chatMessage.length() == 1) {
 			ChatListener.getHelp(player);
 			event.setCancelled(true);
@@ -231,12 +226,12 @@ public class ChatListener implements Listener {
 				|| mode == ValueStorage.local.getIndex()) {
 			event.getRecipients().clear();
 			event.getRecipients().addAll(this.getLocalRecipients(player, range, mode));
-			if (ValueStorage.lister) {
+			//if (ValueStorage.lister) {
 				if (event.getRecipients().size() > 1) player
 						.sendMessage(tCC("&7Вас услышало жителей: "
 								+ (event.getRecipients().size() - 1)));
-				else player.sendMessage(tCC("&7Вас ни кто не услышал"));
-			}
+				else player.sendMessage(tCC("&7Вас никто не услышал"));
+			//}
 		} else if (mode == ValueStorage.world.getIndex()) {
 			event.getRecipients().clear();
 			event.getRecipients().addAll(this.getWorldRecipients(player, message));
@@ -272,10 +267,11 @@ public class ChatListener implements Listener {
 		Location playerLocation = sender.getLocation();
 		List<Player> recipients = new LinkedList<Player>();
 		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			int dist = (int) playerLocation.distanceSquared(recipient.getLocation());
-			if ( Main.getDeafStorage().isDeaf(sender.getName(), chanel)){
+			//int dist = (int) playerLocation.distanceSquared(recipient.getLocation());
+			if (Main.getDeafStorage().isDeaf(sender.getName(), chanel)) {
 				continue;
-			}else if (recipient.getWorld().equals(sender.getWorld())&& dist < range	) {
+			} else if (recipient.getWorld().equals(sender.getWorld())
+					&& playerLocation.distanceSquared(recipient.getLocation()) < range) {
 				recipients.add(recipient);
 			} else if (Util.hasPermission(recipient, "mcnw.spy")) {
 				recipients.add(recipient);
@@ -290,10 +286,10 @@ public class ChatListener implements Listener {
 	protected List<Player> getWorldRecipients(Player sender, String message ) {
 		List<Player> recipients = new LinkedList<Player>();
 		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			if ( Main.getDeafStorage().isDeaf(sender.getName(),ValueStorage.world.getIndex())){
+			if (Main.getDeafStorage().isDeaf(sender.getName(), ValueStorage.world.getIndex())) {
 				continue;
-			}else if (!recipient.getWorld().equals(sender.getWorld()) 
-				   && !Util.hasPermission(recipient, "mcnw.spy")) {
+			} else if (!recipient.getWorld().equals(sender.getWorld())
+					&& !Util.hasPermission(recipient, "mcnw.spy")) {
 				continue;
 			}
 			recipients.add(recipient);
@@ -399,7 +395,7 @@ public class ChatListener implements Listener {
 				msg.addAll(ValueStorage.helpChanelsSitch);
 				break;
 			}
-			
+
 		}
 		msg.add("&b=============================================");
 		for (String s : msg) {
