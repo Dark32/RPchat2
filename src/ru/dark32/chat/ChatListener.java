@@ -143,7 +143,7 @@ public class ChatListener implements Listener {
 					.replace("%pf", ChatListener.getPreffix(player.getName()))
 					.replace("%p", player.getName()).replace("%r", recipient.getName())
 					.replace(" %msg", _msg);
-			String pmMSG2 = ValueStorage.pm.get("FormatFrom")
+			String pmMSG2 = ValueStorage.pm.get("formatFrom")
 					.replace("%sf", ChatListener.getSuffix(player.getName()))
 					.replace("%pf", ChatListener.getPreffix(player.getName()))
 					.replace("%p", player.getName()).replace("%r", recipient.getName())
