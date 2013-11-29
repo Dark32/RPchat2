@@ -14,10 +14,9 @@ public class ValueStorage {
 	public static List<String>		helpPrefix	= new ArrayList<String>();
 	public static List<String>		helpChanelsSitch;
 	public static List<String>		joinmsg;
-	public static List<String>		muteMute;
 	public static List<String>		muteHelp;
+	public static List<String>		deafHelp;
 	public static String			helpMute;
-	public static String			muteUnmute;
 	public static String			muteUnknow;
 	public static String			muteSee;
 	public static String			muteSeeSelf;
@@ -38,7 +37,7 @@ public class ValueStorage {
 	public static Chanel			pm;
 	public static Chanel			chance;
 	public static Chanel			broadcast;
-	private static int русский;
+	private static int				русский;
 
 	public static void init() {
 		experemental = Main.config.getBoolean("experemental", false);
@@ -86,15 +85,14 @@ public class ValueStorage {
 		broadList = Main.config.getStringList("Chat.Broad.list");
 
 		muteMessage = colorByString("mute.message");
-		muteUnmute = Main.config.getString("mute.unmute");
 		muteUnknow = Main.config.getString("mute.unknow");
 		muteSee = Main.config.getString("mute.see.any");
 		muteSeeSelf = Main.config.getString("mute.see.self");
-		muteMute = Main.config.getStringList("mute.mute");
 		muteHelp = Main.config.getStringList("mute.help");
-		
-		lister=Main.config.getBoolean("liteners", false);
-		
+		deafHelp = Main.config.getStringList("deaf.help");
+
+		lister = Main.config.getBoolean("liteners", true);
+
 		helpMute = Main.config.getString("help.mute");
 		helpChangeChanel = colorByString("help.changechanel");
 		helpBase = Main.config.getStringList("help.base");
@@ -108,7 +106,7 @@ public class ValueStorage {
 		}
 		_helpPrefix.clear();
 		helpChanelsSitch = Main.config.getStringList("help.chanelswitch");
-		/***Не бери в серьёз ***/
+		/*** Не бери в серьёз ***/
 		русский = 4;
 		String $еуые = "Это сообщение неправильное.⁯‮  Даже не пытайся понять";
 		String $Это_вообще⁯⁯‮_как_работает = "Это уже ‮слишком";

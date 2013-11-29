@@ -14,7 +14,9 @@ String:
     - "это тестово сообщение"
     - "ваше имя - %p"
 
-liteners: false
+
+
+  
 Chat: 
    Chanse:
      #$1 - Удачо/Неудачно
@@ -102,21 +104,34 @@ help:
   mute: "&6?/m - для вызоа справки по молчанке"
 mute:
   message: "&o&7Вам велено заткнутся в этом чате и молчать ещё $1 секунд."
-  mute:
-   -"&b%<nick> <chanel=g|w|s|v|l|p|a> <time=sec> <reason> &6- для молчанки"
-   -"&bg &6- Глобалный  &bw&6 - мировой"
-   -"&bs &6- крик       &bv&6 - шёпот"
-   -"&bl &6- локальный  &bp&6 - личные сообщения"
-   -"&ba &6- все");
   help:
-   -"&b%nick s[ee] &6- для просмотра молчанки"
-   -"&6?/m - для вызоа справки по молчанке"
-  unmute: "&6 время равное 0 - для принудительносго снятия молчанки"
+   - "&b/mute <nick> <sign> <time> <reason> &6- для молчанки"
+   - "&bg &6- Глобалный  &bw&6 - мировой"
+   - "&bs &6- крик       &bv&6 - шёпот"
+   - "&bl &6- локальный  &bp&6 - личные сообщения"
+   - "&ba &6- все"
+   - "&b/mute see &6- для просмотра своей молчанки"
+   - "&b/mute all &6- для просмотра списка молчащих"
+   - "&b/mute <nick> [see] &6- для просмотра молчанки цели"
+   - "&b/mute - для вызоа справки по молчанке"
+   - "&b/unmute <nick> [sign] &6- для снятия молчанки"
+   - "&6 время меньше 5 - для принудительносго снятия молчанки"
   unknow: "&bНеизвестнй параметр "
   see:
    any:"&b%nick all &6- для просмотра молчанок"
    self:"&b%ваш ник s[ee] &6- для просмотра своей молчанки"
-
+deaf:
+  help:
+   - "&b/deaf <nick> <sign> <reason> &6- для глухоты"
+   - "&bg &6- Глобалный  &bw&6 - мировой"
+   - "&bs &6- крик       &bv&6 - шёпот"
+   - "&bl &6- локальный  &bp&6 - личные сообщения"
+   - "&ba &6- все"
+   - "&b/deaf see &6- для просмотра своей глухоты"
+   - "&b/deaf all &6- для просмотра списка глухих"
+   - "&b/deaf <nick> &6- для просмотра глухоты цели"
+   - "&b/deaf - для вызоа справки по глухоте"
+   - "&b/unmdeaf<nick> [sign] &6- для снятия глухоты"
 #------------------------------------------
 # Permission
 #	mcnw.global
@@ -127,7 +142,18 @@ mute:
 #	mcnw.spy
 #	mcnw.pmspy
 #	mcnw.mute.help
+#	mcnw.mute.see
+#	mcnw.mute.see.self
 #	mcnw.mute.mute
+#	mcnw.mute.all
+#	mcnw.deaf.help"
+#	mcnw.deaf.see"
+#	mcnw.deaf.all
+#	mcnw.deaf.see.self
+#	mcnw.deaf.deaf
+#	mcnw.deaf.deaf.self
+#	mcnw.deaf.undeaf
+#	mcnw.deaf.undeaf.self
 #	mcnw.mute.unmute
 #	mcnw.broadcast
 #http://jd.bukkit.org/rb/doxygen/d6/d0e/enumorg_1_1bukkit_1_1Material.html#pub-attribs

@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 public class JoinListener implements Listener {
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event ) {
-		event.setJoinMessage("");
+		//event.setJoinMessage("");
 		Player player = event.getPlayer();
 		for (String s : ValueStorage.joinmsg) {
 			player.sendMessage(ChatListener.tCC(s

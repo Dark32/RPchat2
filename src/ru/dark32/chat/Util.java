@@ -47,7 +47,7 @@ public class Util {
 	}
 
 	public static boolean hasPermission(CommandSender player, String permission ) {
-		if (player instanceof Player ){
+		if (!(player instanceof Player )){
 			return true;
 		}else if (usePEX) {
 			return PermissionsEx.getUser((Player)player).has(permission);

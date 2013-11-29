@@ -7,13 +7,13 @@ commands:
      usage: '/<command>'
    mute:
      description: 'Mute'
-     usage: '/<command> <nick> <s[ee]|all|g|w|s|l|v|p> <time> <reason>'
+     usage: '/<command> <nick> <see|all|sign> <time> <reason>'
    deaf:
      description: 'Deaf'
-     usage: '/<command> <nick> <s[ee]|all|w|s|l|v> <reason>'
+     usage: '/<command> <nick> <see|all|sign> <reason>'
    unmute:
      description: 'unmute'
-     usage: '/<command> <nick> <s[ee]|all|g|w|s|l|v|p>'
+     usage: '/<command> <nick> <sign>'
    undeaf:
      description: 'undeaf'
-     usage: '/<command> <nick> <s[ee]|all|g|w|s|l|v|p>'
+     usage: '/<command> <nick> <sign>'

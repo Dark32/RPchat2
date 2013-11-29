@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 
 public class TabListener implements Listener {
 	@EventHandler
-	public void tabComplete(PlayerChatTabCompleteEvent e ) {
+	public void tabComplete(PlayerChatTabCompleteEvent e ) { 
 		e.getTabCompletions().clear();
 		String chatMessage = e.getChatMessage();
 		Collection<String> completions = e.getTabCompletions();

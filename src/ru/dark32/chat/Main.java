@@ -17,7 +17,7 @@ public class Main extends JavaPlugin {
 	public PluginManager			pm;
 	private static IMute			muteStorage;
 	private static IDeaf			deafStorage;
-	public static final String		version	= "RPchat v 1.6h-3u";
+	public static final String		version	= "RPchat v 1.6h-4t";
 	public static FileConfiguration	config;
 	public static File yamlFile;
 	public static YamlConfiguration yaml;
@@ -67,13 +67,14 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		getServer().getPluginManager().registerEvents(new TabListener(), this);
 		getServer().getPluginManager().registerEvents(new JoinListener(), this);
-		
-
 		Main.muteStorage = new Mute();
 		Main.deafStorage = new Deaf();
-		
-		getCommand("rpchat").setExecutor(new RPChatCommandExecutor());
-		getCommand("mute").setExecutor(new RPChatCommandExecutor());
+		RPChatCommandExecutor executer = new RPChatCommandExecutor();
+		getCommand("rpchat").setExecutor(executer);
+		getCommand("mute").setExecutor(executer);
+		getCommand("unmute").setExecutor(executer);
+		getCommand("deaf").setExecutor(executer);
+		getCommand("undeaf").setExecutor(executer);
 	}
 
 	@Override

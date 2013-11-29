@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 
 public class RPChatCommandExecutor implements CommandExecutor {
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args ) {
 		if (cmd.getName().equalsIgnoreCase("rpchat")) {
 			ChatListener.getHelp(sender);
 			return true;
@@ -17,8 +17,8 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		}
 		if (cmd.getName().equalsIgnoreCase("unmute")) {
 			String[] _args = new String[3];
-			_args[0] = args[0];
-			_args[1] = args[1];
+			_args[0] = args.length>0? args[0]:"empty";
+			_args[1] = args.length>1? args[1]: "a";
 			_args[2] = "1";
 			Main.getBanStorage().mute(_args, sender);
 			return true;
@@ -28,6 +28,9 @@ public class RPChatCommandExecutor implements CommandExecutor {
 			return true;
 		}
 		if (cmd.getName().equalsIgnoreCase("undeaf")) {
+			if (args.length != 2) {
+				return false;
+			}
 			String[] _args = new String[3];
 			_args[0] = args[0];
 			_args[1] = args[1];

@@ -203,15 +203,7 @@ public class ChatListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-		} /*
-		 * else if (mode == -1) { int _ind = chatMessage.indexOf(" "); if (_ind
-		 * == -1) { player.sendMessage(ValueStorage.pm.get("NoinputMsg"));
-		 * event.setCancelled(true); return; } String pmNick =
-		 * chatMessage.substring(0, _ind); String _msg =
-		 * chatMessage.substring(_ind + 1, chatMessage.length());
-		 * Main.getBanStorage().mute(pmNick, _msg, player);
-		 * event.setCancelled(true); return; }
-		 */
+		} 
 		if (firstChar == '?' && chatMessage.length() == 1) {
 			ChatListener.getHelp(player);
 			event.setCancelled(true);
@@ -226,12 +218,11 @@ public class ChatListener implements Listener {
 				|| mode == ValueStorage.local.getIndex()) {
 			event.getRecipients().clear();
 			event.getRecipients().addAll(this.getLocalRecipients(player, range, mode));
-			//if (ValueStorage.lister) {
-				if (event.getRecipients().size() > 1) player
-						.sendMessage(tCC("&7Вас услышало жителей: "
-								+ (event.getRecipients().size() - 1)));
-				else player.sendMessage(tCC("&7Вас никто не услышал"));
-			//}
+		 if (ValueStorage.lister) {
+			if (event.getRecipients().size() > 1) player.sendMessage(tCC("&7Вас услышало жителей: "
+					+ (event.getRecipients().size() - 1)));
+			else player.sendMessage(tCC("&7Вас никто не услышал"));
+		 }
 		} else if (mode == ValueStorage.world.getIndex()) {
 			event.getRecipients().clear();
 			event.getRecipients().addAll(this.getWorldRecipients(player, message));
@@ -267,11 +258,13 @@ public class ChatListener implements Listener {
 		Location playerLocation = sender.getLocation();
 		List<Player> recipients = new LinkedList<Player>();
 		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			//int dist = (int) playerLocation.distanceSquared(recipient.getLocation());
-			if (Main.getDeafStorage().isDeaf(sender.getName(), chanel)) {
+			boolean inOneWorld = recipient.getWorld().equals(sender.getWorld());
+			int dist = inOneWorld ? (int) playerLocation.distanceSquared(recipient.getLocation()): -1;
+			boolean isHear = Main.getDeafStorage().isDeaf(recipient.getName(), chanel);
+			//sender.sendMessage("" + dist + "/" + range + "|" + recipient.getName());
+			if (isHear) {
 				continue;
-			} else if (recipient.getWorld().equals(sender.getWorld())
-					&& playerLocation.distanceSquared(recipient.getLocation()) < range) {
+			} else if (inOneWorld && dist < range) {
 				recipients.add(recipient);
 			} else if (Util.hasPermission(recipient, "mcnw.spy")) {
 				recipients.add(recipient);
