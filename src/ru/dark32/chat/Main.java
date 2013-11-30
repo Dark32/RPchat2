@@ -11,6 +11,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import ru.dark32.chat.chanels.ChanelRegister;
+
 public class Main extends JavaPlugin {
 
 	public static final Logger		_log	= Logger.getLogger("Minecraft");
@@ -75,7 +77,8 @@ public class Main extends JavaPlugin {
 		getCommand("unmute").setExecutor(executer);
 		getCommand("deaf").setExecutor(executer);
 		getCommand("undeaf").setExecutor(executer);
-	}
+		//ChanelRegister.init();
+		}
 
 	@Override
 	public void onDisable() {

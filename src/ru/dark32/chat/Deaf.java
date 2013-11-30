@@ -162,7 +162,6 @@ public class Deaf implements IDeaf {
 				Main.yaml.set(getPlayerDeafString(name, i) + "-reason", null);
 			}
 		}
-		System.out.print(chanel);
 		sender.sendMessage(ChatColor.GRAY + "%"+name+" теперь слышит канал "+(chanel >= 0 && chanel< Chanel.getValues()? Chanel.getByIndex(chanel).getSign() : "a"));
 	}
 

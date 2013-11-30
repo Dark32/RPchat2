@@ -58,6 +58,17 @@ public class ChatListener implements Listener {
 			}
 		}
 
+		if (firstChar == '?' && chatMessage.length() == 1) {
+			ChatListener.getHelp(player);
+			event.setCancelled(true);
+			return;
+		}
+		if (firstChar == '?' && secondChar == '/' && chatMessage.length() == 3) {
+			getAnotherHelp(player, thirdChar);
+			event.setCancelled(true);
+			return;
+		}
+		
 		if (mode == ValueStorage.global.getIndex()) {// Глобальный
 			if (hasMute(player, mode)) {
 				event.setCancelled(true);
@@ -204,25 +215,20 @@ public class ChatListener implements Listener {
 				return;
 			}
 		} 
-		if (firstChar == '?' && chatMessage.length() == 1) {
-			ChatListener.getHelp(player);
-			event.setCancelled(true);
-			return;
-		}
-		if (firstChar == '?' && secondChar == '/' && chatMessage.length() == 3) {
-			getAnotherHelp(player, thirdChar);
-			event.setCancelled(true);
-			return;
-		}
+		
+		
 		if (mode == ValueStorage.shout.getIndex() || mode == ValueStorage.whisper.getIndex()
 				|| mode == ValueStorage.local.getIndex()) {
 			event.getRecipients().clear();
 			event.getRecipients().addAll(this.getLocalRecipients(player, range, mode));
-		 if (ValueStorage.lister) {
-			if (event.getRecipients().size() > 1) player.sendMessage(tCC("&7Вас услышало жителей: "
-					+ (event.getRecipients().size() - 1)));
-			else player.sendMessage(tCC("&7Вас никто не услышал"));
-		 }
+			if (ValueStorage.lister) {
+				if (event.getRecipients().size() > 1) {
+					player.sendMessage(tCC("&7Вас услышало жителей: "
+							+ (event.getRecipients().size() - 1)));
+				} else {
+					player.sendMessage(tCC("&7Вас никто не услышал"));
+				}
+			}
 		} else if (mode == ValueStorage.world.getIndex()) {
 			event.getRecipients().clear();
 			event.getRecipients().addAll(this.getWorldRecipients(player, message));
@@ -255,16 +261,18 @@ public class ChatListener implements Listener {
 
 	// Лакальный чат. Список кому отправлять
 	protected List<Player> getLocalRecipients(Player sender, double range, int chanel ) {
+		range*=range; 
 		Location playerLocation = sender.getLocation();
 		List<Player> recipients = new LinkedList<Player>();
 		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			boolean inOneWorld = recipient.getWorld().equals(sender.getWorld());
-			int dist = inOneWorld ? (int) playerLocation.distanceSquared(recipient.getLocation()): -1;
+			int dist = inOneWorld ? (int) playerLocation.distanceSquared(recipient.getLocation())
+					: -1;
 			boolean isHear = Main.getDeafStorage().isDeaf(recipient.getName(), chanel);
 			//sender.sendMessage("" + dist + "/" + range + "|" + recipient.getName());
 			if (isHear) {
 				continue;
-			} else if (inOneWorld && dist < range) {
+			} else if (inOneWorld && dist < (range)) {
 				recipients.add(recipient);
 			} else if (Util.hasPermission(recipient, "mcnw.spy")) {
 				recipients.add(recipient);
@@ -300,7 +308,7 @@ public class ChatListener implements Listener {
 		}
 	}
 
-	static String tCC(String string ) {
+	public static String tCC(String string ) {
 		return ChatColor.translateAlternateColorCodes('&', string);
 	}
 

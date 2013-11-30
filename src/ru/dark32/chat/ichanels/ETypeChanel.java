@@ -1,0 +1,103 @@
+/**
+ * 
+ */
+package ru.dark32.chat.ichanels;
+
+import org.bukkit.Material;
+
+import ru.dark32.chat.Main;
+import ru.dark32.chat.chanels.BaseChanel;
+import ru.dark32.chat.chanels.ChanelRegister;
+import ru.dark32.chat.chanels.ItemChanel;
+import ru.dark32.chat.chanels.PersonalMessageChanel;
+import ru.dark32.chat.chanels.RangeChanel;
+import ru.dark32.chat.chanels.RangeItemChanel;
+
+/**
+ * @author Andrew
+ * 
+ */
+public enum ETypeChanel {
+		BASE {
+			public IChanel setChanel(String name ) {
+				IChanel chanel = new BaseChanel();
+				chanel = setBase(chanel, name);
+				return chanel;
+
+			}
+		},
+		RANGE {
+			@Override
+			public IChanel setChanel(String name ) {
+				IChanel chanel = new RangeChanel();
+				chanel = setBase(chanel, name);
+				((IRangeChanel) chanel).setRange(Main.config.getInt("Chat." + name + ".range"));
+				return chanel;
+			}
+		},
+		ITEM {
+			@Override
+			public IChanel setChanel(String name ) {
+				IChanel chanel = new ItemChanel();
+				chanel = setBase(chanel, name);
+				((IItemChanel) chanel).setItemId(Main.config.getInt("Chat." + name + ".id", 0));
+				((IItemChanel) chanel).setSubId(Main.config.getInt("Chat." + name + ".subid", 0));
+				((IItemChanel) chanel).setMaterial(Material.getMaterial(Main.config.getString(
+						"Chat." + name + ".id", "DIAMOND")));
+				return chanel;
+			}
+		},
+		PM {
+			@Override
+			public IChanel setChanel(String name ) {
+				IChanel chanel = new PersonalMessageChanel();
+				chanel = setBase(chanel, name);
+				return chanel;
+			}
+		},
+		RANGE_ITEM {
+			@Override
+			public IChanel setChanel(String name ) {
+				IChanel chanel = new RangeItemChanel();
+				chanel = setBase(chanel, name);
+				((IRangeChanel) chanel).setRange(Main.config.getInt("Chat." + name + ".range"));
+				((IItemChanel) chanel).setItemId(Main.config.getInt("Chat." + name + ".id", 0));
+				((IItemChanel) chanel).setSubId(Main.config.getInt("Chat." + name + ".subid", 0));
+				((IItemChanel) chanel).setMaterial(Material.getMaterial(Main.config.getString(
+						"Chat." + name + ".id", "DIAMOND")));
+				return chanel;
+			}
+		},
+		NONE {
+			@Override
+			public IChanel setChanel(String name ) {
+				return null;
+			}
+		};
+	public static ETypeChanel get(String type ) {
+		if (type.equalsIgnoreCase("BASE")) return BASE;
+		if (type.equalsIgnoreCase("RANGE")) return RANGE;
+		if (type.equalsIgnoreCase("ITEM")) return ITEM;
+		if (type.equalsIgnoreCase("PM")) return PM;
+		if (type.equalsIgnoreCase("RANGE_ITEM")) return RANGE_ITEM;
+		if (type.equalsIgnoreCase("NONE")) return NONE;
+		return NONE;
+	}
+
+	/**
+	 * 
+	 */
+	public abstract IChanel setChanel(String name );
+
+	public IChanel setBase(IChanel chanel, String name ) {
+		chanel.setIndex(ChanelRegister.intex);
+		chanel.setName("Chat." + name + ".name");
+		chanel.setFormat("Chat." + name + ".format");
+		chanel.setType(BASE);
+		chanel.setEnable(Main.config.getBoolean("Chat." + name + ".enable", false));
+		chanel.setWorldChat(Main.config.getBoolean("Chat." + name + ".world", false));
+		chanel.setPrefix("Chat." + name + ".prefix");
+		chanel.setSign(Main.config.getString("Chat." + name + ".prefix").charAt(0));
+		return chanel;
+	}
+}

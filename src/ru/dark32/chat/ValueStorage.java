@@ -98,10 +98,12 @@ public class ValueStorage {
 		helpBase = Main.config.getStringList("help.base");
 		List<String> _helpPrefix = Main.config.getStringList("help.prefix");
 		for (String s : _helpPrefix) {
-			helpPrefix.add(s.replace("$1", global.getFirstLetter())
-					.replace("$2", world.getFirstLetter()).replace("$3", shout.getFirstLetter())
-					.replace("$4", local.getFirstLetter()).replace("$5", whisper.getFirstLetter())
-					.replace("$6", pm.getFirstLetter())
+			helpPrefix.add(s.replace("$1", String.valueOf(global.getPrefix()))
+					.replace("$2", String.valueOf(world.getPrefix()))
+					.replace("$3", String.valueOf(shout.getPrefix()))
+					.replace("$4", String.valueOf(local.getPrefix()))
+					.replace("$5", String.valueOf(whisper.getPrefix()))
+					.replace("$6", String.valueOf(pm.getPrefix()))
 					.replace("$7", String.valueOf(chanseMinRoll)));
 		}
 		_helpPrefix.clear();

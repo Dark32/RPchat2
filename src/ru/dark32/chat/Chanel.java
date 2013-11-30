@@ -7,7 +7,9 @@ import java.util.Map;
 
 import org.bukkit.Material;
 
-public class Chanel {
+import ru.dark32.chat.ichanels.IChanel;
+
+public class Chanel{
 
 	private String					name;
 	private String					format;
@@ -21,6 +23,7 @@ public class Chanel {
 	private char					prefix;
 	private char					sign;
 	private Map<String, String>		custom		= new HashMap<String, String>();
+	private boolean	enable;
 	private static List<Character>	signs		= new ArrayList<Character>();
 	private static List<Character>	prefixes	= new ArrayList<Character>();
 
@@ -131,10 +134,6 @@ public class Chanel {
 		return prefix;
 	}
 
-	public String getFirstLetter() {
-		return String.valueOf(prefix);
-	}
-
 	public void setPrefix(String key ) {
 		this.prefix = Main.config.getString(key, key).charAt(0);
 	}
@@ -187,7 +186,16 @@ public class Chanel {
 	}
 
 	public String get(String key ) {
-		return custom.containsKey(key) ? custom.get(key) : "key error";
+		return custom.containsKey(key) ? custom.get(key) : this.toString()+"Неправильный ключ: "+ key;
+	}
+
+
+	public boolean getEnable() {
+		return enable;
+	}
+
+	public void setEnable(boolean enbl ) {
+		enable = enbl;
 	}
 
 }

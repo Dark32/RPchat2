@@ -29,7 +29,11 @@ Chat:
      min: 5
      vaule: 50
      prefix: "*"
+     type: none
+     enable: true
    Broad:
+      type: none
+      enable: true
       list:
         - "&b[Broadcast]:"
         - "&b[INFO]:"
@@ -39,6 +43,8 @@ Chat:
       consoleSpy: "%p использовал широкое вещание"
       prefix: "~"
    PM:
+      type: pm
+      enable: true
       formatTo: "&7@%p:&5 %msg"
       # %r - Кому ЛС
       formatFrom: "&7@%p->%r:&5 %msg"
@@ -49,6 +55,8 @@ Chat:
       PMSearchNickMode: 1
       prefix: "@"
    Global:
+      type: world
+      enable: true
       #@Deprecated
       Id: 264
       Ma: DIAMOND
@@ -57,6 +65,8 @@ Chat:
       name: "глобальный чат"
       prefix: "$"
    World:
+      type: world
+      enable: true
      #@Deprecated
       Id: 260
       Ma: APPLE
@@ -65,16 +75,22 @@ Chat:
       name: "мировой чат"
       prefix: ">"
    Shout:
+      type: ranged
+      enable: true
       format: "%pf%p%sf кричит:&c %msg"
       name: "крик"
       range: 500
       prefix: "!"
    Local:
+      type: ranged
+      enable: true
       format: "%pf%p%sf:&f %msg"
       name: "локальный чат"
       range: 250
       prefix: "-"
    Whisper:
+      type: ranged
+      enable: true
       format: "&7%p&7 шепчет: %msg"
       name: "шёпот"
       range: 20
