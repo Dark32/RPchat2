@@ -12,6 +12,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import ru.dark32.chat.chanels.ChanelRegister;
+import ru.dark32.chat.chanels.ChatListener2;
 
 public class Main extends JavaPlugin {
 
@@ -23,6 +24,7 @@ public class Main extends JavaPlugin {
 	public static FileConfiguration	config;
 	public static File yamlFile;
 	public static YamlConfiguration yaml;
+	public static final boolean		DEBUG_MODE	= true; // включить в релизе
 	@Override
 	public void onEnable() {
 		pm = Bukkit.getPluginManager();
@@ -59,6 +61,8 @@ public class Main extends JavaPlugin {
 		config = this.getConfig();
 		Util.init(this);
 		ValueStorage.init();
+		ChanelRegister.init();
+		//System.out.println(ChanelRegister.listChat.size());
 		File file = new File(getDataFolder(), "storage.yml");
 		this.yamlFile =file;
 		if (this.yamlFile.exists()) {
@@ -66,7 +70,7 @@ public class Main extends JavaPlugin {
 		} else {
 			yaml = new YamlConfiguration();
 		}
-		getServer().getPluginManager().registerEvents(new ChatListener(), this);
+		//getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		getServer().getPluginManager().registerEvents(new TabListener(), this);
 		getServer().getPluginManager().registerEvents(new JoinListener(), this);
 		Main.muteStorage = new Mute();
@@ -77,7 +81,8 @@ public class Main extends JavaPlugin {
 		getCommand("unmute").setExecutor(executer);
 		getCommand("deaf").setExecutor(executer);
 		getCommand("undeaf").setExecutor(executer);
-		//ChanelRegister.init();
+		getServer().getPluginManager().registerEvents(new ChatListener2(), this);
+		
 		}
 
 	@Override

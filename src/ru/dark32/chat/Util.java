@@ -6,12 +6,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import ru.dark32.chat.chanels.ChanelRegister;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class Util {
 
 	public static HashMap<String, Integer>	modes;
-
+	public static HashMap<String, Integer>	modes2;
+	
 	static boolean							usePB	= false;
 	static boolean							usePEX	= false;
 
@@ -22,7 +24,14 @@ public class Util {
 			return modes.get(player);
 		}
 	}
-
+	
+	public static int getModeIndex(String name ) {
+		if (!modes2.containsKey(name)) {
+			return ChanelRegister.defaultChanel;
+		} else {
+			return modes2.get(name);
+		}
+	}
 	public static Player getPlayerSoft(final String name ) {
 		if (name.equals("")) {
 			return null;
@@ -60,6 +69,7 @@ public class Util {
 
 	public static void init(Main main ) {
 		modes = new HashMap<String, Integer>();
+		modes2 = new HashMap<String, Integer>();
 	}
 
 	public static boolean isInteger(String string ) {

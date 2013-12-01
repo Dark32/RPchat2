@@ -13,14 +13,15 @@ import ru.dark32.chat.ichanels.ETypeChanel;
 import ru.dark32.chat.ichanels.IChanel;
 
 public class BaseChanel implements IChanel {
-	private boolean	enable;
-	private String	format;
-	private int		index;
-	private boolean	isWorld;
-	private String	name;
-	private char	prefix;
-	private char	sign;
+	private boolean		enable;
+	private String		format;
+	private int			index;
+	private boolean		isWorld;
+	private String		name;
+	private char		prefix;
+	private char		sign;
 	private ETypeChanel	type;
+	private String		innerName;
 
 	@Override
 	public boolean getEnable() {
@@ -96,8 +97,8 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public void setName(String key ) {
-		this.name = getString(key);
+	public void setName(String name ) {
+		this.name = name;
 	}
 
 	@Override
@@ -122,8 +123,25 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public ETypeChanel getType() { 
+	public ETypeChanel getType() {
 		return this.type;
 	}
 
+	@Override
+	public String toString() {
+		return super.toString() + ", index =>" + this.index + ", isWorld =>" + this.isWorld
+				+ ", name =>" + this.name + ", prefix =>" + this.prefix + ", sign =>" + this.sign
+				+ ", type =>" + this.type;
+	}
+
+	@Override
+	public String getInnerName() {
+		return innerName;
+	}
+
+	@Override
+	public void setInnerName(String name ) {
+		innerName = name.toLowerCase();
+
+	}
 }

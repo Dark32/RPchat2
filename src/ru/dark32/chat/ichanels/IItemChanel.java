@@ -2,6 +2,7 @@ package ru.dark32.chat.ichanels;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Andrew
@@ -43,5 +44,11 @@ public interface IItemChanel extends IChanel {
 	/**
 	 * @param player
 	 */
-	void loseItem(Player player );
+	public void loseItem(Player player );
+	
+	/**
+	 * @param item вещь в руках
+	 * @return истина, если совпало с вещью канала
+	 */
+	public boolean equalItem(ItemStack item);
 }

@@ -65,5 +65,8 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 				- t.getZ()));
 
 	}
-
+	@Override
+	public String toString() {
+		return super.toString() + ", range =>" + this.range;
+	}
 }

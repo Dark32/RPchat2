@@ -19,21 +19,23 @@ String:
   
 Chat: 
    Chanse:
-     #$1 - Удачо/Неудачно
-     format: "&5* %p %msg $1 *"
-     # $1 - сколько выпало, из $2 скольки
-     formatroll: "&d* %p &d* выбрасывает $1 из $2 *"
-     luck: "&a (удачно) &d"
-     unluck: "&a (неудачно) &d"
-     default: 6
-     min: 5
-     vaule: 50
-     prefix: "*"
-     type: none
-     enable: true
+      #$1 - Удачо/Неудачно
+      format: "&5* %p %msg $1 *"
+      # $1 - сколько выпало, из $2 скольки
+      formatroll: "&d* %p &d* выбрасывает $1 из $2 *"
+      luck: "&a (удачно) &d"
+      unluck: "&a (неудачно) &d"
+      default: 6
+      min: 5
+      vaule: 50
+      prefix: "*"
+      type: none
+      enable: true
+      world: false
    Broad:
       type: none
       enable: true
+      world: true
       list:
         - "&b[Broadcast]:"
         - "&b[INFO]:"
@@ -44,7 +46,8 @@ Chat:
       prefix: "~"
    PM:
       type: pm
-      enable: true
+      enable: false
+      world: true
       formatTo: "&7@%p:&5 %msg"
       # %r - Кому ЛС
       formatFrom: "&7@%p->%r:&5 %msg"
@@ -54,9 +57,11 @@ Chat:
       # режим поиска грока по нику: -1 - строго, 0 - стандартно, 1 - мягко 
       PMSearchNickMode: 1
       prefix: "@"
+      sign: p
    Global:
-      type: world
+      type: item
       enable: true
+      world: true
       #@Deprecated
       Id: 264
       Ma: DIAMOND
@@ -64,9 +69,11 @@ Chat:
       format: "%pf%p%sf всем:&e %msg "
       name: "глобальный чат"
       prefix: "$"
+      sign: g
    World:
-      type: world
+      type: item
       enable: true
+      world: true
      #@Deprecated
       Id: 260
       Ma: APPLE
@@ -74,27 +81,35 @@ Chat:
       format: "%pf%p%sf в мир:&6 %msg "
       name: "мировой чат"
       prefix: ">"
+      sign: w
    Shout:
-      type: ranged
+      type: range
       enable: true
+      world: false
       format: "%pf%p%sf кричит:&c %msg"
       name: "крик"
       range: 500
       prefix: "!"
+      sign: s
    Local:
-      type: ranged
+      type: range
       enable: true
+      world: true
       format: "%pf%p%sf:&f %msg"
       name: "локальный чат"
       range: 250
       prefix: "-"
+      sign: l
+      default: true
    Whisper:
-      type: ranged
+      type: range
       enable: true
+      world: true
       format: "&7%p&7 шепчет: %msg"
       name: "шёпот"
       range: 20
       prefix: "#"
+      sign: v
 help:
   base:
    - "&6?/. для справки режимов чата"

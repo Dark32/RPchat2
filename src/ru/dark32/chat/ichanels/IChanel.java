@@ -118,4 +118,15 @@ public interface IChanel {
 	 *         none - не канал
 	 */
 	public ETypeChanel getType();
+
+	/**
+	 * @return внутреннее имя
+	 */
+	public String getInnerName();
+
+	/**
+	 * @param name
+	 *            внутреннее имя
+	 */
+	public void setInnerName(String name );
 }

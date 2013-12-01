@@ -40,10 +40,10 @@ public enum ETypeChanel {
 			public IChanel setChanel(String name ) {
 				IChanel chanel = new ItemChanel();
 				chanel = setBase(chanel, name);
-				((IItemChanel) chanel).setItemId(Main.config.getInt("Chat." + name + ".id", 0));
-				((IItemChanel) chanel).setSubId(Main.config.getInt("Chat." + name + ".subid", 0));
+				((IItemChanel) chanel).setItemId(Main.config.getInt("Chat." + name + ".Id", 0));
+				((IItemChanel) chanel).setSubId(Main.config.getInt("Chat." + name + ".SubId", 0));
 				((IItemChanel) chanel).setMaterial(Material.getMaterial(Main.config.getString(
-						"Chat." + name + ".id", "DIAMOND")));
+						"Chat." + name + ".Ma", "DIAMOND")));
 				return chanel;
 			}
 		},
@@ -90,14 +90,14 @@ public enum ETypeChanel {
 	public abstract IChanel setChanel(String name );
 
 	public IChanel setBase(IChanel chanel, String name ) {
-		chanel.setIndex(ChanelRegister.intex);
-		chanel.setName("Chat." + name + ".name");
+		chanel.setIndex(ChanelRegister.getNextIndex());
+		chanel.setName(Main.config.getString("Chat." + name + ".name"));
 		chanel.setFormat("Chat." + name + ".format");
-		chanel.setType(BASE);
 		chanel.setEnable(Main.config.getBoolean("Chat." + name + ".enable", false));
 		chanel.setWorldChat(Main.config.getBoolean("Chat." + name + ".world", false));
 		chanel.setPrefix("Chat." + name + ".prefix");
-		chanel.setSign(Main.config.getString("Chat." + name + ".prefix").charAt(0));
+		chanel.setSign(Main.config.getString("Chat." + name + ".sign").charAt(0));
+		chanel.setInnerName(name);
 		return chanel;
 	}
 }
