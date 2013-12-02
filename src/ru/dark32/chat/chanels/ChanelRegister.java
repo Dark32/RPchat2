@@ -6,16 +6,17 @@ import java.util.List;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import ru.dark32.chat.ChatListener;
 import ru.dark32.chat.Main;
+import ru.dark32.chat.Util;
 import ru.dark32.chat.ichanels.ETypeChanel;
 import ru.dark32.chat.ichanels.IChanel;
-import ru.dark32.chat.ichanels.IItemChanel;
-import ru.dark32.chat.ichanels.IRangeChanel;
+import ru.tehkode.permissions.PermissionUser;
+import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 /**
  * @author Andrew
@@ -83,10 +84,31 @@ public class ChanelRegister {
 		return prefixes.indexOf(preffix);
 	}
 
-	public static String format(Player p, String msg ) {
-		msg = msg.replace("%sf", ChatListener.getSuffix(p.getName()))
-				.replace("%pf", ChatListener.getPreffix(p.getName())).replace("%p", "%1$s")
-				.replace("%msg", "%2$s");
-		return msg;
+	public static String colorize(String string ) {
+		return ChatColor.translateAlternateColorCodes('&', string);
+	}
+
+
+	public static String getPreffix(String name ) {
+		if (!Util.usePEX) {
+			return "";
+		}
+		PermissionUser user = PermissionsEx.getPermissionManager().getUser(name);
+		if (user == null) {
+			return "";
+		}
+
+		return colorize(user.getPrefix());
+	}
+
+	public static String getSuffix(String name ) {
+		if (!Util.usePEX) {
+			return "";
+		}
+		PermissionUser user = PermissionsEx.getPermissionManager().getUser(name);
+		if (user == null) {
+			return "";
+		}
+		return colorize(user.getSuffix());
 	}
 }

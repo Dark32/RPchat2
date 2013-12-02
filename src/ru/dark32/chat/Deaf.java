@@ -11,6 +11,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
+import ru.dark32.chat.chanels.ChanelRegister;
+
 public class Deaf implements IDeaf {
 	final private int	chaneles	= Chanel.getValues();
 
@@ -137,7 +139,7 @@ public class Deaf implements IDeaf {
 		List<String> msg = new ArrayList<String>();
 		msg.addAll(ValueStorage.deafHelp);
 		for (String s : msg) {
-			sender.sendMessage(ChatListener.tCC(s));
+			sender.sendMessage(ChanelRegister.colorize(s));
 		}
 
 	}

@@ -6,7 +6,6 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import ru.dark32.chat.ChatListener;
 import ru.dark32.chat.Main;
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ichanels.ETypeChanel;
@@ -73,7 +72,7 @@ public class BaseChanel implements IChanel {
 	}
 
 	private String getString(String key ) {
-		return ChatListener.tCC(Main.config.getString(key, key));
+		return ChanelRegister.colorize(Main.config.getString(key, key));
 	}
 
 	@Override
@@ -143,5 +142,13 @@ public class BaseChanel implements IChanel {
 	public void setInnerName(String name ) {
 		innerName = name.toLowerCase();
 
+	}
+	
+	@Override
+	public String format(Player p, String msg ) {
+		msg = msg.replace("%sf", ChanelRegister.getSuffix(p.getName()))
+				.replace("%pf", ChanelRegister.getPreffix(p.getName())).replace("%p", "%1$s")
+				.replace("%msg", "%2$s");
+		return msg;
 	}
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import ru.dark32.chat.chanels.ChanelRegister;
+
 public class ValueStorage {
 	public static String			nei;
 	public static String			noPerm;
@@ -115,6 +117,6 @@ public class ValueStorage {
 	}
 
 	private static String colorByString(String key ) {
-		return ChatListener.tCC(Main.config.getString(key, key));
+		return ChanelRegister.colorize(Main.config.getString(key, key));
 	}
 }

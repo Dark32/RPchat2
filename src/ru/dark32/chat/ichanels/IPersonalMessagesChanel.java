@@ -32,8 +32,10 @@ public interface IPersonalMessagesChanel extends IChanel {
 	public int hasMessage(String raw );
 
 	/**
-	 * @param raw  сырая строка
-	 * @param _ind индекс начала сообщения
+	 * @param raw
+	 *            сырая строка
+	 * @param _ind
+	 *            индекс начала сообщения
 	 * @return сообщение
 	 */
 	public String getMessage(String raw, int _ind );
@@ -62,8 +64,83 @@ public interface IPersonalMessagesChanel extends IChanel {
 	 */
 	public void sendMessage(Player sender, String raw );
 
-	public void responseSendMessage(Player sender );
+	/**
+	 * отправить сообщение наблюдателям
+	 * 
+	 * @param sender
+	 *            отправитель
+	 * @param msg
+	 *            сообщение
+	 */
+	public void sendSpyMessage(Player sender, Player target,String msg );
 
-	public void sendSpyMessage(Player sender );
+	/**
+	 * отклик, вывести себе сообщение
+	 * 
+	 * @param sender
+	 *            - отправитель
+	 * @param msg
+	 *            - сообщение
+	 */
+	public void responseSendMessage(Player sender, String msg );
+
+	/**
+	 * Формат сообщения для получаталя
+	 * 
+	 * @param formatTo
+	 *            формат
+	 */
+	public void setFormatTo(String formatTo );
+
+	/**
+	 * Форматировать сообщение цели
+	 * 
+	 * @param sender
+	 *            отправитель
+	 * @param target
+	 *            цель
+	 * @param msg
+	 *            сообщение
+	 * @return отформатированное сообщение
+	 */
+	public String formatTo(Player sender, Player target, String msg );
+
+	/**
+	 * @param formatFrom
+	 *            формат сообщения ответа
+	 */
+	public void setFormatFrom(String formatFrom );
+
+	/**
+	 * Форматировать сообщение отправителя
+	 * 
+	 * @param sender
+	 *            отправитель
+	 * @param target
+	 *            цель
+	 * @param msg
+	 *            сообщение
+	 * @return отформатированное сообщение
+	 **/
+	public String formatFrom(Player sender, Player target, String msg );
+
+	/**
+	 * @param formatSpy
+	 *            формат прослушки
+	 */
+	public void setFormatSpy(String formatSpy );
+
+	/**
+	 * форматирование сообщения прослушки
+	 * 
+	 * @param sender
+	 *            отправитель
+	 * @param target
+	 *            цель
+	 * @param msg
+	 *            сообщение
+	 * @return отформатированное сообщение
+	 */
+	public String formatSpy(Player sender, Player target, String msg );
 
 }

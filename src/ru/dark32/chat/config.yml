@@ -46,11 +46,12 @@ Chat:
       prefix: "~"
    PM:
       type: pm
-      enable: false
+      enable: true
       world: true
       formatTo: "&7@%p:&5 %msg"
       # %r - Кому ЛС
       formatFrom: "&7@%p->%r:&5 %msg"
+      formatSpy: "&7@spy: %p->%r:&5 %msg"
       noinputmsg: "&7Сообщение не введено"
       #$1 имя игрока
       playeNotFound: "&o&7Игрока $1 нет в сети"

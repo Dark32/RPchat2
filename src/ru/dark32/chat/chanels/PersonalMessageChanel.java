@@ -17,6 +17,10 @@ import ru.dark32.chat.ichanels.IPersonalMessagesChanel;
  */
 public class PersonalMessageChanel extends BaseChanel implements IPersonalMessagesChanel {
 
+	private String	formatTo;
+	private String	formatSpy;
+	private String	formatFrom;
+
 	@Override
 	public boolean hasNameTarget(String raw ) {
 		return raw.length() > 1;
@@ -80,18 +84,66 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 			sender.sendMessage("Сообщение не введено");
 			return;
 		}
-		String messge = this.getMessage(raw, _ind);
+		String messge = this.getMessage(raw, _ind); // извлекаем сообщение
+		 // отсылаем цели
+		target.sendMessage(formatTo(sender, target, messge));
+		 // отсылаем себе
+		responseSendMessage(target, formatFrom(sender, target, messge));
+		 // отсылаем прослушку
+		sendSpyMessage(sender, target, formatSpy(sender, target, messge));
 	}
 
 	@Override
-	public void responseSendMessage(Player sender ) {
-		// TODO Auto-generated method stub
+	public void responseSendMessage(Player sender, String msg ) {
+		sender.sendMessage(msg);
 
 	}
 
 	@Override
-	public void sendSpyMessage(Player sender ) {
-		// TODO Auto-generated method stub
+	public void sendSpyMessage(Player sender, Player target, String msg ) {
+		Bukkit.getConsoleSender().sendMessage(msg);
+		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
+			if (Util.hasPermission(recipient, "mcnw." + this.getInnerName() + ".nospy")
+					&& !recipient.equals(target)) {
+				recipient.sendMessage(msg);
+			}
+		}
 
+	}
+
+	@Override
+	public void setFormatTo(String formatTo ) {
+		this.formatTo = ChanelRegister.colorize(formatTo);
+
+	}
+
+	@Override
+	public String formatTo(Player sender, Player target, String msg ) {
+		msg = format(sender, formatTo).replace("%2$s", msg);
+		return msg;
+	}
+
+	@Override
+	public void setFormatFrom(String formatFrom ) {
+		this.formatFrom = ChanelRegister.colorize(formatFrom);
+
+	}
+
+	@Override
+	public String formatFrom(Player sender, Player target, String msg ) {
+		msg = format(sender, formatFrom).replace("%r", target.getName()).replace("%2$s", msg);
+		return msg;
+	}
+
+	@Override
+	public void setFormatSpy(String formatSpy ) {
+		this.formatSpy = ChanelRegister.colorize(formatSpy);
+
+	}
+
+	@Override
+	public String formatSpy(Player sender, Player target, String msg ) {
+		msg = format(sender, formatSpy).replace("%r", target.getName()).replace("%2$s", msg);
+		return msg;
 	}
 }

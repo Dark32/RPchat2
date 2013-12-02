@@ -52,6 +52,9 @@ public enum ETypeChanel {
 			public IChanel setChanel(String name ) {
 				IChanel chanel = new PersonalMessageChanel();
 				chanel = setBase(chanel, name);
+				((IPersonalMessagesChanel)chanel).setFormatTo(Main.config.getString("Chat." + name + ".formatTo"));
+				((IPersonalMessagesChanel)chanel).setFormatFrom(Main.config.getString("Chat." + name + ".formatFrom"));
+				((IPersonalMessagesChanel)chanel).setFormatSpy(Main.config.getString("Chat." + name + ".formatSpy"));
 				return chanel;
 			}
 		},

@@ -15,6 +15,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
+import ru.dark32.chat.chanels.ChanelRegister;
+
 public class Mute implements IMute {
 	private final SimpleDateFormat	SDF			= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -200,7 +202,7 @@ public class Mute implements IMute {
 		List<String> msg = new ArrayList<String>();
 		msg.addAll(ValueStorage.muteHelp);
 		for (String s : msg) {
-			sender.sendMessage(ChatListener.tCC(s));
+			sender.sendMessage(ChanelRegister.colorize(s));
 		}
 	}
 

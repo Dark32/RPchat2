@@ -6,12 +6,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.ItemStack;
 
-import ru.dark32.chat.Chanel;
 import ru.dark32.chat.Main;
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ValueStorage;
 import ru.dark32.chat.ichanels.IChanel;
 import ru.dark32.chat.ichanels.IItemChanel;
+import ru.dark32.chat.ichanels.IPersonalMessagesChanel;
 
 /**
  * @author Andrew
@@ -64,7 +64,8 @@ public class ChatListener2 implements Listener {
 			case RANGE: {
 				break;
 			}
-			case RANGE_ITEM: case ITEM: {
+			case RANGE_ITEM:
+			case ITEM: {
 				// может ли говорить без вещи
 				if (!Util.hasPermission(sender, "mcnw." + chanel.getInnerName() + ".no_item")) {
 					// Вещь в руках
@@ -82,6 +83,10 @@ public class ChatListener2 implements Listener {
 				}
 				break;
 			}
+			case PM: {
+				((IPersonalMessagesChanel)chanel).sendMessage(sender, message);
+				break;
+			}
 			default:
 				break;
 		}
@@ -89,9 +94,9 @@ public class ChatListener2 implements Listener {
 		event.getRecipients().clear();
 		// добавляем получателей согласно типу чата
 		event.getRecipients().addAll(chanel.getRecipients(sender));
-	//	System.out.println(event.getRecipients());
+		// System.out.println(event.getRecipients());
 		// получаем и обрабатываем формат
-		format = ChanelRegister.format(sender, chanel.getFormat());
+		format = chanel.format(sender, chanel.getFormat());
 		// устанавливаем формат
 		event.setFormat(format);
 		// устанавливаем сообщение

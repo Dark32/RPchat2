@@ -15,7 +15,7 @@ public class Util {
 	public static HashMap<String, Integer>	modes2;
 	
 	static boolean							usePB	= false;
-	static boolean							usePEX	= false;
+	public static boolean							usePEX	= false;
 
 	public static int getChatMode(String player ) {
 		if (!modes.containsKey(player)) {

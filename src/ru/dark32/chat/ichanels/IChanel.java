@@ -4,9 +4,6 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import ru.dark32.chat.ChatListener;
-import ru.dark32.chat.Main;
-
 /**
  * @author Andrew Базовый интерфейс канала
  */
@@ -129,4 +126,11 @@ public interface IChanel {
 	 *            внутреннее имя
 	 */
 	public void setInnerName(String name );
+
+	/** форматировать сообщение
+	 * @param p - игрок
+	 * @param msg - сообщение
+	 * @return - отформатированное сообщение
+	 */
+	public String format(Player p, String msg );
 }
