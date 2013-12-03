@@ -6,7 +6,6 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.util.NumberConversions;
 
 import ru.dark32.chat.Main;
 import ru.dark32.chat.Util;
@@ -33,36 +32,47 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 	public List<Player> getRecipients(Player sender ) {
 		Location playerLocation = sender.getLocation();
 		List<Player> recipients = new LinkedList<Player>();
-		if (Main.DEBUG_MODE) sender.sendMessage("debug:--------------------------------");
+		if (Main.DEBUG_MODE) {
+			sender.sendMessage("debug:--------------------------------");
+		}
 		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			boolean isWorld = !isWorldChat() || sender.getWorld() == recipient.getWorld();
 			boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
 			int dist = getDist(sender.getLocation(), recipient.getLocation());
 			boolean isRange = dist < this.getRange() * this.getRange();
-			if (Main.DEBUG_MODE)
+			if (Main.DEBUG_MODE) {
 				sender.sendMessage("debug: " + recipient.getName() + " | " + dist + "/"
 						+ this.range * this.range + "|" + isWorld);
+			}
 			if (isDeaf) {
-				if (Main.DEBUG_MODE) sender.sendMessage("debug: deaf - " + recipient.getName());
+				if (Main.DEBUG_MODE) {
+					sender.sendMessage("debug: deaf - " + recipient.getName());
+				}
 				continue;
 			} else if (Util.hasPermission(recipient, "mcnw.spy")) {
-				if (Main.DEBUG_MODE) sender.sendMessage("debug: spy - " + recipient.getName());
+				if (Main.DEBUG_MODE) {
+					sender.sendMessage("debug: spy - " + recipient.getName());
+				}
 				recipients.add(recipient);
 			} else if (isRange) {
-				if (Main.DEBUG_MODE)
+				if (Main.DEBUG_MODE) {
 					sender.sendMessage("debug: in range - " + recipient.getName());
+				}
 				if (isWorld) {
-					if (Main.DEBUG_MODE)
+					if (Main.DEBUG_MODE) {
 						sender.sendMessage("debug: in world - " + recipient.getName());
+					}
 					recipients.add(recipient);
 				} else {
-					if (Main.DEBUG_MODE)
+					if (Main.DEBUG_MODE) {
 						sender.sendMessage("debug: out of world - " + recipient.getName());
+					}
 					continue;
 				}
 			} else {
-				if (Main.DEBUG_MODE)
+				if (Main.DEBUG_MODE) {
 					sender.sendMessage("debug: out of range - " + recipient.getName());
+				}
 				continue;
 			}
 		}

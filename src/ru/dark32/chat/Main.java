@@ -12,7 +12,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import ru.dark32.chat.chanels.ChanelRegister;
-import ru.dark32.chat.chanels.ChatListener2;
+import ru.dark32.chat.chanels.ChatListener;
 
 public class Main extends JavaPlugin {
 
@@ -81,7 +81,7 @@ public class Main extends JavaPlugin {
 		getCommand("unmute").setExecutor(executer);
 		getCommand("deaf").setExecutor(executer);
 		getCommand("undeaf").setExecutor(executer);
-		getServer().getPluginManager().registerEvents(new ChatListener2(), this);
+		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		
 		}
 

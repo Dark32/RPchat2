@@ -14,10 +14,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import ru.dark32.chat.chanels.ChanelRegister;
 
 public class Deaf implements IDeaf {
-	final private int	chaneles	= Chanel.getValues();
+	final private int	chaneles	= ChanelRegister.getChanels();
 
 	private String getPlayerDeafString(String playerName, int chanel ) {
-		return playerName + ".deaf." + Chanel.getByIndex(chanel).getSign();
+		return playerName + ".deaf." + ChanelRegister.getByIndex(chanel).getInnerName();
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class Deaf implements IDeaf {
 					sender.sendMessage(ChatColor.GRAY + "%Вы не можете смотреть глухоту цели");
 					return;
 				}
-				sender.sendMessage(ChatColor.GRAY + "%"+ target+" :");
+				sender.sendMessage(ChatColor.GRAY + "%" + target + " :");
 				deafSeeTarget(sender, target);
 			}
 		} else if (args.length > 1) {
@@ -66,7 +66,7 @@ public class Deaf implements IDeaf {
 						+ "%Сокращение канала не может быть длинее 1 символа: " + args[0]);
 				return;
 			}
-			int chanel = Chanel.getIndexBySign(args[1].charAt(0));
+			int chanel = ChanelRegister.getIndexBySign(args[1].charAt(0));
 			if (args.length > 2 && args[2].equals("undeaf")) {
 				if (isSelf) {
 					if (!hasUnDeafSelf) {
@@ -80,26 +80,28 @@ public class Deaf implements IDeaf {
 						sender.sendMessage(ChatColor.GRAY + "%Вы не можете снять глухоту с другово");
 						return;
 					}
-					caseUnDeaf(sender,target, chanel);
+					caseUnDeaf(sender, target, chanel);
 					return;
 				}
 			}
-			String reason = args.length >= 3 ? StringUtils.join(args, " ", 2, args.length): "не указана";
+			String reason = args.length >= 3 ? StringUtils.join(args, " ", 2, args.length)
+					: "не указана";
 			if (isSelf) {
 				if (!hasDeafSelf) {
 					sender.sendMessage(ChatColor.GRAY + "%Вы не можете устанавливать глухоту себе");
 					return;
 				}
-				caseDeaf(sender ,target, chanel, reason);
+				caseDeaf(sender, target, chanel, reason);
 				return;
 			} else {
 				if (!hasDeaf) {
-					sender.sendMessage(ChatColor.GRAY + "%Вы не можете устанавливать глухоту другим");
+					sender.sendMessage(ChatColor.GRAY
+							+ "%Вы не можете устанавливать глухоту другим");
 					return;
 				}
-				caseDeaf(sender ,target, chanel, reason);;
+				caseDeaf(sender, target, chanel, reason);;
 				return;
-			}		
+			}
 		}
 	}
 
@@ -128,8 +130,9 @@ public class Deaf implements IDeaf {
 			String reason = Main.yaml.getString(getPlayerDeafString(name, i) + "-reason");
 			boolean isDeaf = this.isDeaf(name, i);
 			if (isDeaf) {
-				sender.sendMessage(ChatColor.GRAY + "%" + name + (Chanel.getByIndex(i).getSign())
-						+ " не слушает. Причина: " + ChatColor.UNDERLINE + reason);
+				sender.sendMessage(ChatColor.GRAY + "%" + name
+						+ (ChanelRegister.getByIndex(i).getInnerName()) + " не слушает. Причина: "
+						+ ChatColor.UNDERLINE + reason);
 			}
 		}
 
@@ -152,19 +155,29 @@ public class Deaf implements IDeaf {
 				Main.yaml.set(getPlayerDeafString(name, i) + "-reason", reason);
 			}
 		}
-		sender.sendMessage(ChatColor.GRAY + "%" + name + " теперь не слушает канал "+ (chanel >= 0 && chanel< Chanel.getValues() ? Chanel.getByIndex(chanel).getSign() : "a"));
+		sender.sendMessage(ChatColor.GRAY
+				+ "%"
+				+ name
+				+ " теперь не слушает канал "
+				+ (chanel >= 0 && chanel < this.chaneles ? ChanelRegister.getByIndex(chanel)
+						.getInnerName() : "a"));
 		saveDeaf();
 	}
 
 	@Override
-	public void caseUnDeaf(CommandSender sender,String name, int chanel ) {
+	public void caseUnDeaf(CommandSender sender, String name, int chanel ) {
 		for (int i = 0; i < chaneles; i++) {
 			if (chanel == i || chanel == -2) {
 				Main.yaml.set(getPlayerDeafString(name, i), false);
 				Main.yaml.set(getPlayerDeafString(name, i) + "-reason", null);
 			}
 		}
-		sender.sendMessage(ChatColor.GRAY + "%"+name+" теперь слышит канал "+(chanel >= 0 && chanel< Chanel.getValues()? Chanel.getByIndex(chanel).getSign() : "a"));
+		sender.sendMessage(ChatColor.GRAY
+				+ "%"
+				+ name
+				+ " теперь слышит канал "
+				+ (chanel >= 0 && chanel < chaneles ? ChanelRegister.getByIndex(chanel)
+						.getInnerName() : "a"));
 	}
 
 	@Override

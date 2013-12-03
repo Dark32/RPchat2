@@ -17,13 +17,13 @@ public class Util {
 	static boolean							usePB	= false;
 	public static boolean							usePEX	= false;
 
-	public static int getChatMode(String player ) {
-		if (!modes.containsKey(player)) {
-			return ValueStorage.local.getIndex();
-		} else {
-			return modes.get(player);
-		}
-	}
+//	public static int getChatMode(String player ) {
+//		if (!modes.containsKey(player)) {
+//			return ValueStorage.local.getIndex();
+//		} else {
+//			return modes.get(player);
+//		}
+//	}
 	
 	public static int getModeIndex(String name ) {
 		if (!modes2.containsKey(name)) {

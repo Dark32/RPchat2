@@ -127,10 +127,34 @@ public interface IChanel {
 	 */
 	public void setInnerName(String name );
 
-	/** форматировать сообщение
-	 * @param p - игрок
-	 * @param msg - сообщение
+	/**
+	 * форматировать сообщение
+	 * 
+	 * @param p
+	 *            - игрок
+	 * @param msg
+	 *            - сообщение
 	 * @return - отформатированное сообщение
 	 */
 	public String format(Player p, String msg );
+
+	/**
+	 * @param tables
+	 *            Табаемо
+	 */
+	public void setTabes(boolean tables );
+
+	/**
+	 * @return набаемо ли?
+	 */
+	public boolean getTabes();
+
+	/**
+	 * обработка сообщения, не формата
+	 * 
+	 * @param message
+	 *            сообщение
+	 * @return обработанное сообщение
+	 */
+	public String preformat(String message );
 }

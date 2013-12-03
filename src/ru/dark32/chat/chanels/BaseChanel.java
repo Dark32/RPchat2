@@ -21,6 +21,7 @@ public class BaseChanel implements IChanel {
 	private char		sign;
 	private ETypeChanel	type;
 	private String		innerName;
+	private boolean	tabes;
 
 	@Override
 	public boolean getEnable() {
@@ -143,12 +144,28 @@ public class BaseChanel implements IChanel {
 		innerName = name.toLowerCase();
 
 	}
-	
+
 	@Override
 	public String format(Player p, String msg ) {
 		msg = msg.replace("%sf", ChanelRegister.getSuffix(p.getName()))
 				.replace("%pf", ChanelRegister.getPreffix(p.getName())).replace("%p", "%1$s")
 				.replace("%msg", "%2$s");
 		return msg;
+	}
+
+	@Override
+	public void setTabes(boolean tables ) {
+		this.tabes = tables;
+		
+	}
+
+	@Override
+	public boolean getTabes() {
+		return tabes;
+	}
+  // обычно не надо обрабатывать само сообщение
+	@Override
+	public String preformat(String message ) {
+		return message;
 	}
 }

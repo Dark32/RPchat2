@@ -1,14 +1,19 @@
 package ru.dark32.chat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+
+import ru.dark32.chat.chanels.ChanelRegister;
 
 public class RPChatCommandExecutor implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args ) {
 		if (cmd.getName().equalsIgnoreCase("rpchat")) {
-			ChatListener.getHelp(sender);
+			getHelp(sender);
 			return true;
 		}
 		if (cmd.getName().equalsIgnoreCase("mute")) {
@@ -40,5 +45,17 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		}
 		return false;
 	}
-
+	public static void getHelp(CommandSender player ) {
+		List<String> msg = new ArrayList<String>();
+		msg.add("&b=============================================");
+		msg.add("&6" + Main.version);
+		msg.add("&6Autors: ufatos, dark32");
+		msg.add("&6License: CC-BY-NC-ND");
+		msg.add("&6Link: http://goo.gl/KpvB7c");
+		msg.addAll(ValueStorage.helpBase);
+		msg.add("&b=============================================");
+		for (String s : msg) {
+			player.sendMessage(ChanelRegister.colorize(s));
+		}
+	}
 }

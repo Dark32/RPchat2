@@ -1,20 +1,19 @@
 package ru.dark32.chat.chanels;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import ru.dark32.chat.Main;
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ichanels.ETypeChanel;
 import ru.dark32.chat.ichanels.IChanel;
+import ru.dark32.chat.ichanels.IItemChanel;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
@@ -47,8 +46,10 @@ public class ChanelRegister {
 			String _enable = "Chat." + name + ".enable";
 			String chanelType = Main.config.getString(_type, _type);
 			boolean chanelEnable = Main.config.getBoolean(_enable, false);
-			if (chanelType.equals("none") || !chanelEnable) continue;
-			listChat.add(registrChanel(ETypeChanel.get(chanelType), name));
+			if (chanelType.equals("none") || !chanelEnable) {
+				continue;
+			}
+			listChat.add(ChanelRegister.registrChanel(ETypeChanel.get(chanelType), name));
 		}
 	}
 
@@ -72,12 +73,26 @@ public class ChanelRegister {
 	}
 
 	public static IChanel getByIndex(int id ) {
-		if (id > listChat.size()) id = defaultChanel;
+		if (id > listChat.size()) {
+			id = defaultChanel;
+		}
 		return listChat.get(id);
 	}
 
 	public static int getIndexBySign(char sign ) {
 		return signes.indexOf(sign);
+	}
+
+	public static int getIndexByItem(ItemStack item ) {
+		for (IChanel chanel : listChat) {
+			if ((chanel.getType() == ETypeChanel.ITEM || chanel.getType() == ETypeChanel.RANGE_ITEM || chanel
+					.getType() == ETypeChanel.REQUISITE)
+					&& ((IItemChanel) chanel).equalItem(item)
+					&& !((IItemChanel) chanel).isRequestPprefix()) {
+				return chanel.getIndex();
+			}
+		}
+		return -1;
 	}
 
 	public static int getIndexByPrefix(char preffix ) {
@@ -88,7 +103,6 @@ public class ChanelRegister {
 		return ChatColor.translateAlternateColorCodes('&', string);
 	}
 
-
 	public static String getPreffix(String name ) {
 		if (!Util.usePEX) {
 			return "";
@@ -98,7 +112,7 @@ public class ChanelRegister {
 			return "";
 		}
 
-		return colorize(user.getPrefix());
+		return ChanelRegister.colorize(user.getPrefix());
 	}
 
 	public static String getSuffix(String name ) {
@@ -109,6 +123,9 @@ public class ChanelRegister {
 		if (user == null) {
 			return "";
 		}
-		return colorize(user.getSuffix());
+		return ChanelRegister.colorize(user.getSuffix());
+	}
+	public static int getChanels(){
+		return listChat.size();
 	}
 }

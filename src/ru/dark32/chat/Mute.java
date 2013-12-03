@@ -20,10 +20,10 @@ import ru.dark32.chat.chanels.ChanelRegister;
 public class Mute implements IMute {
 	private final SimpleDateFormat	SDF			= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	final private int				chaneles	= Chanel.getValues();
+	final private int				chaneles	= ChanelRegister.getChanels();
 
 	private String getPlayerMuteString(String playerName, int chanel ) {
-		return playerName + ".mute." + Chanel.getByIndex(chanel).getSign();
+		return playerName + ".mute." + ChanelRegister.getByIndex(chanel).getSign();
 	}
 
 	@Override
@@ -52,11 +52,11 @@ public class Mute implements IMute {
 		}
 		if (time > 5) {
 			sender.sendMessage(ChatColor.GRAY + "%" + name + " теперь молчит в "
-					+ (chanel >= 0 && chanel< Chanel.getValues() ? Chanel.getByIndex(chanel).getSign() : "a") + " на " + time
+					+ (chanel >= 0 && chanel< chaneles ? ChanelRegister.getByIndex(chanel).getInnerName() : "a") + " на " + time
 					+ " секунд");
 		} else {
 			sender.sendMessage(ChatColor.GRAY + "%" + name + " теперь может говорить в "
-					+ (chanel >= 0 && chanel< Chanel.getValues()? Chanel.getByIndex(chanel).getSign() : "a"));
+					+ (chanel >= 0 && chanel< chaneles? ChanelRegister.getByIndex(chanel).getInnerName() : "a"));
 		}
 		saveMute();
 
@@ -129,7 +129,7 @@ public class Mute implements IMute {
 						+ "%Сокращение канала не может быть длинее 1 символа: " + args[0]);
 				return;
 			}
-			int chanel = Chanel.getIndexBySign(args[1].charAt(0));
+			int chanel = ChanelRegister.getIndexBySign(args[1].charAt(0));
 			int time = 0;
 			try {
 				time = Integer.parseInt(args[2]);
@@ -234,7 +234,7 @@ public class Mute implements IMute {
 						+ "%"
 						+ name
 						+ " "
-						+ (Chanel.getByIndex(i).getSign())
+						+ (ChanelRegister.getByIndex(i).getInnerName())
 						+ (muted ? " молчит" : " молчал")
 						+ (muted ? (". Осталось " + time + " секунд. Причина: "
 								+ ChatColor.UNDERLINE + reason) : ""));

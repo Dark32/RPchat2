@@ -18,7 +18,7 @@ String:
 
   
 Chat: 
-   Chanse:
+   Chance:
       #$1 - Удачо/Неудачно
       format: "&5* %p %msg $1 *"
       # $1 - сколько выпало, из $2 скольки
@@ -27,16 +27,19 @@ Chat:
       unluck: "&a (неудачно) &d"
       default: 6
       min: 5
-      vaule: 50
+      chance: 50
       prefix: "*"
-      type: none
+      type: chance
       enable: true
       world: false
+      range: 200
+      sign: c
    Broad:
-      type: none
+      format: "%msg"
+      type: broad
       enable: true
       world: true
-      list:
+      pattern:
         - "&b[Broadcast]:"
         - "&b[INFO]:"
         - "&d[CONSOLE]:"
@@ -44,6 +47,8 @@ Chat:
       spy: "%p пытался использовать широкое вещание"
       consoleSpy: "%p использовал широкое вещание"
       prefix: "~"
+      tab: false
+      sign: b
    PM:
       type: pm
       enable: true
@@ -71,6 +76,7 @@ Chat:
       name: "глобальный чат"
       prefix: "$"
       sign: g
+      requestPrefix: false
    World:
       type: item
       enable: true
@@ -83,6 +89,7 @@ Chat:
       name: "мировой чат"
       prefix: ">"
       sign: w
+      requestPrefix: true
    Shout:
       type: range
       enable: true

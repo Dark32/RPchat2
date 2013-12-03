@@ -21,6 +21,7 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 	private int			id;
 	private int			subid;
 	private Material	material;
+	private boolean		requestPprefix;
 
 	@Override
 	@Deprecated
@@ -92,5 +93,16 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 				&& item.getDurability() == this.subid
 				&& (ValueStorage.experemental ? item.getType() == this.material
 						: item.getTypeId() == this.id);
+	}
+
+	@Override
+	public boolean isRequestPprefix() {
+		return requestPprefix;
+	}
+
+	@Override
+	public void setRequestPprefix(boolean need ) {
+		requestPprefix = need;
+
 	}
 }

@@ -4,11 +4,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.inventory.ItemStack;
 
 import ru.dark32.chat.Main;
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ValueStorage;
+import ru.dark32.chat.ichanels.IChanceChanel;
 import ru.dark32.chat.ichanels.IChanel;
 import ru.dark32.chat.ichanels.IItemChanel;
 import ru.dark32.chat.ichanels.IPersonalMessagesChanel;
@@ -17,7 +17,7 @@ import ru.dark32.chat.ichanels.IPersonalMessagesChanel;
  * @author Andrew
  * 
  */
-public class ChatListener2 implements Listener {
+public class ChatListener implements Listener {
 	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event ) {
 		// тот кто отправил сообщение
@@ -30,10 +30,16 @@ public class ChatListener2 implements Listener {
 		char prefix = message.charAt(0);
 		// ИД канала по префиксы, -1 - нет канала по префиксы
 		int prefixChanel = ChanelRegister.getIndexByPrefix(prefix);
+		// ИД канала по вещи в руках, -1 нет канала по вещи в руках
+		int itemChanel = ChanelRegister.getIndexByItem(sender.getItemInHand());
 		// ИД активного канала, не иницилизируем по умолчанию
 		int indexChanel = Util.getModeIndex(sender.getName());
 		// Сообщение длинее одного знака
 		if (message.length() > 1) {
+			if (itemChanel != -1) {
+				// меняем канаал на канал по вещи
+				indexChanel = itemChanel;
+			}
 			// ИД канала по префексу есть
 			if (prefixChanel != -1) {
 				// меняем канаал на канал по префексу
@@ -65,13 +71,12 @@ public class ChatListener2 implements Listener {
 				break;
 			}
 			case RANGE_ITEM:
+			case REQUISITE:
 			case ITEM: {
 				// может ли говорить без вещи
 				if (!Util.hasPermission(sender, "mcnw." + chanel.getInnerName() + ".no_item")) {
-					// Вещь в руках
-					ItemStack inHand = sender.getItemInHand();
-					// если вещь совпала
-					if (((IItemChanel) chanel).equalItem(inHand)) {
+					// если вещь в руках совпала
+					if (((IItemChanel) chanel).equalItem(sender.getItemInHand())) {
 						// теряем 1 вещь
 						((IItemChanel) chanel).loseItem(sender);
 					} else { // иначе
@@ -83,13 +88,19 @@ public class ChatListener2 implements Listener {
 				}
 				break;
 			}
+			case CHANCE: {
+				break;
+			}
 			case PM: {
-				((IPersonalMessagesChanel)chanel).sendMessage(sender, message);
+				// отправляем сообщение цели
+				((IPersonalMessagesChanel) chanel).sendMessage(sender, message);
 				break;
 			}
 			default:
 				break;
 		}
+		// обрабатываем сообение перед отправкой
+		message = chanel.preformat(message);
 		// чистим список получателей
 		event.getRecipients().clear();
 		// добавляем получателей согласно типу чата

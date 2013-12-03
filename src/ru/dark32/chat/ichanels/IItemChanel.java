@@ -5,12 +5,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * @author Andrew
- *  Интерфейс канала с требованием вещи
+ * @author Andrew Интерфейс канала с требованием вещи
  */
 public interface IItemChanel extends IChanel {
 	/**
-	 * @param id Ид вещи
+	 * @param id
+	 *            Ид вещи
 	 */
 	@Deprecated
 	public void setItemId(int id );
@@ -27,7 +27,8 @@ public interface IItemChanel extends IChanel {
 	public Material getMaterial();
 
 	/**
-	 * @param ma материал вещи
+	 * @param ma
+	 *            материал вещи
 	 */
 	public void setMaterial(Material ma );
 
@@ -37,18 +38,32 @@ public interface IItemChanel extends IChanel {
 	public int getSubId();
 
 	/**
-	 * @param sub метадата вещи
+	 * @param sub
+	 *            метадата вещи
 	 */
-	public void setSubId(int sub);
+	public void setSubId(int sub );
 
 	/**
 	 * @param player
 	 */
 	public void loseItem(Player player );
-	
+
 	/**
-	 * @param item вещь в руках
+	 * @param item
+	 *            вещь в руках
 	 * @return истина, если совпало с вещью канала
 	 */
-	public boolean equalItem(ItemStack item);
+	public boolean equalItem(ItemStack item );
+
+	/**
+	 * @return обязателен ли префикс (если нет, то достаточно вещи в руках
+	 * если да - то нужно и вещь в руках и префикс)
+	 */
+	public boolean isRequestPprefix();
+
+	/**
+	 * @param needобязателен ли префикс (если нет, то достаточно вещи в руках
+	 * если да - то нужно и вещь в руках и префикс)
+	 */
+	public void setRequestPprefix(boolean need );
 }

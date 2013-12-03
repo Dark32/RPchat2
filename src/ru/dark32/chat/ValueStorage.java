@@ -31,48 +31,48 @@ public class ValueStorage {
 	public static boolean			lister;
 	protected final static Pattern	nickForMute	= Pattern.compile("%([\\d\\w_]+)\\s(.+)");
 
-	public static Chanel			global;
-	public static Chanel			world;
-	public static Chanel			shout;
-	public static Chanel			local;
-	public static Chanel			whisper;
-	public static Chanel			pm;
-	public static Chanel			chance;
-	public static Chanel			broadcast;
-	private static int				русский;
+//	public static Chanel			global;
+//	public static Chanel			world;
+//	public static Chanel			shout;
+//	public static Chanel			local;
+//	public static Chanel			whisper;
+//	public static Chanel			pm;
+//	public static Chanel			chance;
+//	public static Chanel			broadcast;
 
+	
 	public static void init() {
 		experemental = Main.config.getBoolean("experemental", false);
 
-		global = new Chanel("Chat.Global.name", "Chat.Global.format", "Chat.Global.prefix", 'g');
-		global.setId("Chat.Global.Id", 260);
-		global.setSubId("Chat.Global.SubId", 0);
-		global.setMaterial("Chat.Global.Ma");
+//		global = new Chanel("Chat.Global.name", "Chat.Global.format", "Chat.Global.prefix", 'g');
+//		global.setId("Chat.Global.Id", 260);
+//		global.setSubId("Chat.Global.SubId", 0);
+//		global.setMaterial("Chat.Global.Ma");
 
-		world = new Chanel("Chat.World.name", "Chat.World.format", "Chat.Global.prefix", 'w');
-		world.setId("Chat.World.Id", 260);
-		world.setSubId("Chat.World.SubId", 0);
-		world.setMaterial("Chat.World.Ma");
+//		world = new Chanel("Chat.World.name", "Chat.World.format", "Chat.Global.prefix", 'w');
+//		world.setId("Chat.World.Id", 260);
+//		world.setSubId("Chat.World.SubId", 0);
+//		world.setMaterial("Chat.World.Ma");
 
-		shout = new Chanel("Chat.Shout.name", "Chat.Shout.format", "Chat.Shout.prefix", 's');
-		shout.setRange("Chat.Shout.range", 500d);
+//		shout = new Chanel("Chat.Shout.name", "Chat.Shout.format", "Chat.Shout.prefix", 's');
+//		shout.setRange("Chat.Shout.range", 500d);
 
-		local = new Chanel("Chat.Local.name", "Chat.Local.format", "Chat.Local.prefix", 'l');
-		local.setRange("Chat.Local.range", 250d);
+//		local = new Chanel("Chat.Local.name", "Chat.Local.format", "Chat.Local.prefix", 'l');
+//		local.setRange("Chat.Local.range", 250d);
 
-		whisper = new Chanel("Chat.Whisper.name", "Chat.Whisper.format", "Chat.Whisper.prefix", 'v');
-		whisper.setRange("Chat.Whisper.range", 20d);
+//		whisper = new Chanel("Chat.Whisper.name", "Chat.Whisper.format", "Chat.Whisper.prefix", 'v');
+//		whisper.setRange("Chat.Whisper.range", 20d);
 
-		pm = new Chanel("Chat.PM.name", "Chat.PM.formatTo", "Chat.PM.prefix", 'p');
-		pm.set("formatFrom", colorByString("Chat.PM.formatFrom"));
-		pm.set("NoinputMsg", colorByString("Chat.PM.noinputmsg"));
-		pm.set("PlayeNotFound", colorByString("Chat.PM.playeNotFound"));
-		PmSearchNickMode = Main.config.getInt("Chat.PM.PMSearchNickMode", 0);
+//		pm = new Chanel("Chat.PM.name", "Chat.PM.formatTo", "Chat.PM.prefix", 'p');
+//		pm.set("formatFrom", colorByString("Chat.PM.formatFrom"));
+//		pm.set("NoinputMsg", colorByString("Chat.PM.noinputmsg"));
+//		pm.set("PlayeNotFound", colorByString("Chat.PM.playeNotFound"));
+//		PmSearchNickMode = Main.config.getInt("Chat.PM.PMSearchNickMode", 0);
 
-		chance = new Chanel("Chat.Chance.name", "Chat.Chance.format", "Chat.Chance.prefix", 'c');
-		chance.set("RollFormat", "Chat.Chance.formatroll");
-		chance.set("Luck", "Chat.Chance.luck");
-		chance.set("Unluck", "Chat.Chance.unluck");
+//		chance = new Chanel("Chat.Chance.name", "Chat.Chance.format", "Chat.Chance.prefix", 'c');
+//		chance.set("RollFormat", "Chat.Chance.formatroll");
+//		chance.set("Luck", "Chat.Chance.luck");
+//		chance.set("Unluck", "Chat.Chance.unluck");
 		chanseDefaultRoll = Main.config.getInt("Chat.Chance.default", 5);
 		chanseVaule = Main.config.getInt("Chat.Chance.vaule", 50);
 		chanseMinRoll = Main.config.getInt("Chat.Chance.min", 5);
@@ -81,9 +81,9 @@ public class ValueStorage {
 		noPerm = colorByString("String.noPerm");
 		joinmsg = Main.config.getStringList("String.joinmsg");
 
-		broadcast = new Chanel("Chat.Broad.name", "Chat.Broad.format", "Chat.Broad.prefix", 'b');
-		broadcast.set("Spy", colorByString("Chat.Broad.spy"));
-		broadcast.set("ConsoleSpy", colorByString("Chat.Broad.consoleSpy"));
+//		broadcast = new Chanel("Chat.Broad.name", "Chat.Broad.format", "Chat.Broad.prefix", 'b');
+//		broadcast.set("Spy", colorByString("Chat.Broad.spy"));
+//		broadcast.set("ConsoleSpy", colorByString("Chat.Broad.consoleSpy"));
 		broadList = Main.config.getStringList("Chat.Broad.list");
 
 		muteMessage = colorByString("mute.message");
@@ -98,22 +98,18 @@ public class ValueStorage {
 		helpMute = Main.config.getString("help.mute");
 		helpChangeChanel = colorByString("help.changechanel");
 		helpBase = Main.config.getStringList("help.base");
-		List<String> _helpPrefix = Main.config.getStringList("help.prefix");
-		for (String s : _helpPrefix) {
-			helpPrefix.add(s.replace("$1", String.valueOf(global.getPrefix()))
-					.replace("$2", String.valueOf(world.getPrefix()))
-					.replace("$3", String.valueOf(shout.getPrefix()))
-					.replace("$4", String.valueOf(local.getPrefix()))
-					.replace("$5", String.valueOf(whisper.getPrefix()))
-					.replace("$6", String.valueOf(pm.getPrefix()))
-					.replace("$7", String.valueOf(chanseMinRoll)));
-		}
-		_helpPrefix.clear();
+		List<String> helpPrefix = Main.config.getStringList("help.prefix");
+//		for (String s : helpPrefix) {
+//			helpPrefix.add(s.replace("$1", String.valueOf(global.getPrefix()))
+//					.replace("$2", String.valueOf(world.getPrefix()))
+//					.replace("$3", String.valueOf(shout.getPrefix()))
+//					.replace("$4", String.valueOf(local.getPrefix()))
+//					.replace("$5", String.valueOf(whisper.getPrefix()))
+//					.replace("$6", String.valueOf(pm.getPrefix()))
+//					.replace("$7", String.valueOf(chanseMinRoll)));
+//		}
+//		_helpPrefix.clear();
 		helpChanelsSitch = Main.config.getStringList("help.chanelswitch");
-		/*** Не бери в серьёз ***/
-		русский = 4;
-		String $еуые = "Это сообщение неправильное.⁯‮  Даже не пытайся понять";
-		String $Это_вообще⁯⁯‮_как_работает = "Это уже ‮слишком";
 	}
 
 	private static String colorByString(String key ) {

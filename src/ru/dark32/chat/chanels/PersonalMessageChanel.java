@@ -3,10 +3,12 @@
  */
 package ru.dark32.chat.chanels;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import ru.dark32.chat.ChatListener;
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ValueStorage;
 import ru.dark32.chat.ichanels.IPersonalMessagesChanel;
@@ -85,11 +87,11 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 			return;
 		}
 		String messge = this.getMessage(raw, _ind); // извлекаем сообщение
-		 // отсылаем цели
+		// отсылаем цели
 		target.sendMessage(formatTo(sender, target, messge));
-		 // отсылаем себе
+		// отсылаем себе
 		responseSendMessage(target, formatFrom(sender, target, messge));
-		 // отсылаем прослушку
+		// отсылаем прослушку
 		sendSpyMessage(sender, target, formatSpy(sender, target, messge));
 	}
 
@@ -102,13 +104,19 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	@Override
 	public void sendSpyMessage(Player sender, Player target, String msg ) {
 		Bukkit.getConsoleSender().sendMessage(msg);
+
+	}
+
+	@Override
+	public List<Player> getRecipients(Player sender ) {
+		List<Player> recipients = new LinkedList<Player>();
 		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			if (Util.hasPermission(recipient, "mcnw." + this.getInnerName() + ".nospy")
-					&& !recipient.equals(target)) {
-				recipient.sendMessage(msg);
+					&& !recipient.equals(sender)) {
+				recipients.add(recipient);
 			}
 		}
-
+		return recipients;
 	}
 
 	@Override
