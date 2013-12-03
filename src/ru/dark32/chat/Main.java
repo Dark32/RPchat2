@@ -20,7 +20,7 @@ public class Main extends JavaPlugin {
 	public PluginManager			pm;
 	private static IMute			muteStorage;
 	private static IDeaf			deafStorage;
-	public static final String		version	= "RPchat v 1.6h-4t";
+	public static final String		version	= "RPchat v 2.0w-1u (singularity)";
 	public static FileConfiguration	config;
 	public static File yamlFile;
 	public static YamlConfiguration yaml;
