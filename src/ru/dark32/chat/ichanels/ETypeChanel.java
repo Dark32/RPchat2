@@ -58,6 +58,8 @@ public enum ETypeChanel {
 						+ name + ".formatFrom"));
 				((IPersonalMessagesChanel) chanel).setFormatSpy(Main.config.getString("Chat."
 						+ name + ".formatSpy"));
+				((IPersonalMessagesChanel) chanel).setPmSearchNickMode(Main.config.getInt("Chat."
+						+ name + ".PMSearchNickMode",0));
 				return chanel;
 			}
 		},

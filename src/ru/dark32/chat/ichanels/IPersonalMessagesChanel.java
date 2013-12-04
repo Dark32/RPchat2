@@ -143,4 +143,8 @@ public interface IPersonalMessagesChanel extends IChanel {
 	 */
 	public String formatSpy(Player sender, Player target, String msg );
 
+	int getPmSearchNickMode();
+
+	void setPmSearchNickMode(int pmSearchNickMode );
+
 }

@@ -20,11 +20,11 @@ public class Main extends JavaPlugin {
 	public PluginManager			pm;
 	private static IMute			muteStorage;
 	private static IDeaf			deafStorage;
-	public static final String		version	= "RPchat v 2.0w-1u (singularity)";
+	public static final String		version	= "RPchat v 2.0w-2u (singularity)";
 	public static FileConfiguration	config;
 	public static File yamlFile;
 	public static YamlConfiguration yaml;
-	public static final boolean		DEBUG_MODE	= true; // включить в релизе
+	public static final boolean		DEBUG_MODE	= true; // выключить в релизе
 	@Override
 	public void onEnable() {
 		pm = Bukkit.getPluginManager();
@@ -62,15 +62,13 @@ public class Main extends JavaPlugin {
 		Util.init(this);
 		ValueStorage.init();
 		ChanelRegister.init();
-		//System.out.println(ChanelRegister.listChat.size());
 		File file = new File(getDataFolder(), "storage.yml");
-		this.yamlFile =file;
-		if (this.yamlFile.exists()) {
-			yaml = YamlConfiguration.loadConfiguration(file);
+		Main.yamlFile =file;
+		if (Main.yamlFile.exists()) {
+			Main.yaml = YamlConfiguration.loadConfiguration(file);
 		} else {
-			yaml = new YamlConfiguration();
+			Main.yaml = new YamlConfiguration();
 		}
-		//getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		getServer().getPluginManager().registerEvents(new TabListener(), this);
 		getServer().getPluginManager().registerEvents(new JoinListener(), this);
 		Main.muteStorage = new Mute();

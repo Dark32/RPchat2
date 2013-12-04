@@ -22,6 +22,24 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	private String	formatTo;
 	private String	formatSpy;
 	private String	formatFrom;
+	private int		pmSearchNickMode;
+
+	/**
+	 * @return the pmSearchNickMode
+	 */
+	@Override
+	public int getPmSearchNickMode() {
+		return pmSearchNickMode;
+	}
+
+	/**
+	 * @param pmSearchNickMode
+	 *            the pmSearchNickMode to set
+	 */
+	@Override
+	public void setPmSearchNickMode(int pmSearchNickMode ) {
+		this.pmSearchNickMode = pmSearchNickMode;
+	}
 
 	@Override
 	public boolean hasNameTarget(String raw ) {
@@ -46,7 +64,7 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 
 	@Override
 	public Player getTargetByName(String name ) {
-		switch (ValueStorage.PmSearchNickMode) {
+		switch (pmSearchNickMode) {
 			case -1:
 				return Bukkit.getServer().getPlayerExact(name);
 			case 0:
@@ -111,7 +129,8 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	public List<Player> getRecipients(Player sender ) {
 		List<Player> recipients = new LinkedList<Player>();
 		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			if (Util.hasPermission(recipient, "mcnw." + this.getInnerName() + ".nospy")
+			if (!Util.hasPermission(recipient, "mcnw." + this.getInnerName() + ".nospy")
+					&& Util.hasPermission(sender, "mcnw." + this.getInnerName() + ".pmspy")
 					&& !recipient.equals(sender)) {
 				recipients.add(recipient);
 			}

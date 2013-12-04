@@ -1,6 +1,5 @@
 package ru.dark32.chat;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +14,35 @@ import ru.dark32.chat.chanels.ChanelRegister;
 
 public class Deaf implements IDeaf {
 	final private int	chaneles	= ChanelRegister.getChanels();
+	private String		canTHelp;
+	private String		canTSeeSelf;
+	private String		udeafSelf;
+	private String		canTSeeAllDeaf;
+	private String		canTSeeTargetDeaf;
+	private String		signMoreOne;
+	private String		canTUndeafSelf;
+	private String		canTUndeafTarget;
+	private String		canTDeafSelf;
+	private String		canTDeafTarget;
+	private String		deafMessage;
+	private String		noReason;
+	private String		undeafMessage;
+
+	public Deaf(){
+		canTHelp = ChatColor.GRAY + "%Вы не можете смотреть справку по глухоте";
+		canTSeeSelf = ChatColor.GRAY + "%Вы не можете смотреть свою глухоту";
+		udeafSelf = ChatColor.GRAY + "%Ваша глухота: ";
+		canTSeeAllDeaf = ChatColor.GRAY + "%Вы не можете смотреть все глухоты";
+		canTSeeTargetDeaf = ChatColor.GRAY + "%Вы не можете смотреть глухоту цели";
+		signMoreOne = ChatColor.GRAY + "%Сокращение канала не может быть длинее 1 символа: $1";
+		canTUndeafSelf = ChatColor.GRAY + "%Вы не можете снять глухоту с себя";
+		canTUndeafTarget = ChatColor.GRAY + "%Вы не можете снять глухоту с другово";
+		canTDeafSelf = ChatColor.GRAY + "%Вы не можете устанавливать глухоту себе";
+		canTDeafTarget = ChatColor.GRAY + "%Вы не можете устанавливать глухоту другим";
+		deafMessage = ChatColor.GRAY + "%%n не слушает %c. Причина: %r";
+		noReason = "не указана";
+		undeafMessage = ChatColor.GRAY + "%%n теперь слышит канал %c";
+	}
 
 	private String getPlayerDeafString(String playerName, int chanel ) {
 		return playerName + ".deaf." + ChanelRegister.getByIndex(chanel).getInnerName();
@@ -34,27 +62,27 @@ public class Deaf implements IDeaf {
 		boolean isSelf = sender.getName().equalsIgnoreCase(target);
 		if (args.length == 0) {
 			if (!hasHelp) {
-				sender.sendMessage(ChatColor.GRAY + "%Вы не можете смотреть справку по глухоте");
+				sender.sendMessage(canTHelp);
 				return;
 			}
 			deafHelp(sender);
 		} else if (args.length == 1) {
 			if (args[0].equalsIgnoreCase("see")) {
 				if (!hasSeeSelf) {
-					sender.sendMessage(ChatColor.GRAY + "%Вы не можете смотреть свою глухоту");
+					sender.sendMessage(canTSeeSelf);
 					return;
 				}
-				sender.sendMessage(ChatColor.GRAY + "%Ваша глухота: ");
+				sender.sendMessage(udeafSelf);
 				deafSeeSelf(sender);
 			} else if (args[0].equalsIgnoreCase("all")) {
 				if (!hasAll) {
-					sender.sendMessage(ChatColor.GRAY + "%Вы не можете смотреть все глухоты");
+					sender.sendMessage(canTSeeAllDeaf);
 					return;
 				}
 				deafSeeAll(sender);
 			} else {
 				if (!hasSee) {
-					sender.sendMessage(ChatColor.GRAY + "%Вы не можете смотреть глухоту цели");
+					sender.sendMessage(canTSeeTargetDeaf);
 					return;
 				}
 				sender.sendMessage(ChatColor.GRAY + "%" + target + " :");
@@ -62,22 +90,21 @@ public class Deaf implements IDeaf {
 			}
 		} else if (args.length > 1) {
 			if (args[1].length() != 1) {
-				sender.sendMessage(ChatColor.GRAY
-						+ "%Сокращение канала не может быть длинее 1 символа: " + args[0]);
+				sender.sendMessage(signMoreOne.replace("$1", args[0]));
 				return;
 			}
 			int chanel = ChanelRegister.getIndexBySign(args[1].charAt(0));
 			if (args.length > 2 && args[2].equals("undeaf")) {
 				if (isSelf) {
 					if (!hasUnDeafSelf) {
-						sender.sendMessage(ChatColor.GRAY + "%Вы не можете снять глухоту с себя");
+						sender.sendMessage(canTUndeafSelf);
 						return;
 					}
 					caseUnDeaf(sender, target, chanel);
 					return;
 				} else {
 					if (!hasUnDeaf) {
-						sender.sendMessage(ChatColor.GRAY + "%Вы не можете снять глухоту с другово");
+						sender.sendMessage(canTUndeafTarget);
 						return;
 					}
 					caseUnDeaf(sender, target, chanel);
@@ -85,18 +112,17 @@ public class Deaf implements IDeaf {
 				}
 			}
 			String reason = args.length >= 3 ? StringUtils.join(args, " ", 2, args.length)
-					: "не указана";
+					: noReason;
 			if (isSelf) {
 				if (!hasDeafSelf) {
-					sender.sendMessage(ChatColor.GRAY + "%Вы не можете устанавливать глухоту себе");
+					sender.sendMessage(canTDeafSelf);
 					return;
 				}
 				caseDeaf(sender, target, chanel, reason);
 				return;
 			} else {
 				if (!hasDeaf) {
-					sender.sendMessage(ChatColor.GRAY
-							+ "%Вы не можете устанавливать глухоту другим");
+					sender.sendMessage(canTDeafTarget);
 					return;
 				}
 				caseDeaf(sender, target, chanel, reason);;
@@ -130,9 +156,9 @@ public class Deaf implements IDeaf {
 			String reason = Main.yaml.getString(getPlayerDeafString(name, i) + "-reason");
 			boolean isDeaf = this.isDeaf(name, i);
 			if (isDeaf) {
-				sender.sendMessage(ChatColor.GRAY + "%" + name
-						+ (ChanelRegister.getByIndex(i).getInnerName()) + " не слушает. Причина: "
-						+ ChatColor.UNDERLINE + reason);
+				sender.sendMessage(deafMessage.replace("%n", name)
+						.replace("%c", ChanelRegister.getByIndex(i).getName())
+						.replace("%r", reason));
 			}
 		}
 
@@ -160,7 +186,7 @@ public class Deaf implements IDeaf {
 				+ name
 				+ " теперь не слушает канал "
 				+ (chanel >= 0 && chanel < this.chaneles ? ChanelRegister.getByIndex(chanel)
-						.getInnerName() : "a"));
+						.getName() : "a"));
 		saveDeaf();
 	}
 
@@ -172,12 +198,12 @@ public class Deaf implements IDeaf {
 				Main.yaml.set(getPlayerDeafString(name, i) + "-reason", null);
 			}
 		}
-		sender.sendMessage(ChatColor.GRAY
-				+ "%"
-				+ name
-				+ " теперь слышит канал "
-				+ (chanel >= 0 && chanel < chaneles ? ChanelRegister.getByIndex(chanel)
-						.getInnerName() : "a"));
+		sender.sendMessage(undeafMessage.replace("%n", name).replace(
+				"%c",
+				(chanel >= 0 && chanel < chaneles ? ChanelRegister.getByIndex(chanel).getName()
+						: "a"))
+
+		);
 	}
 
 	@Override

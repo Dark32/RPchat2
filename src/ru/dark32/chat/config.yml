@@ -13,10 +13,6 @@ String:
     - "Добро пожаовать на сервер"
     - "это тестово сообщение"
     - "ваше имя - %p"
-
-
-
-  
 Chat: 
    Chance:
       #$1 - Удачо/Неудачно
@@ -119,28 +115,7 @@ Chat:
       prefix: "#"
       sign: v
 help:
-  base:
-   - "&6?/. для справки режимов чата"
-   - "&6?/? для справки по переключению режимов чата"
   changechanel: "&6Режим изменён на $1"
-  prefix:
-   - "&6Префик необходим для сообщения в другой канал"
-   - "&6Для сообщения в теущий канал префикс не обязателен"
-   - "&6$1 для глобального чата"
-   - "&6$2 для мирового чата"
-   - "&6$3 для крика"
-   - "&6$4 для локального чата"
-   - "&6$5 для шепота"
-   - "&6$6<имя> сообщени для личного чата"
-   - "&6*<действие> для вероятного действия или *<целое число больше $7 для выброса случайного числа"
-  chanelswitch:
-    - "&6?/g - для выбора глобального режима"
-    - "&6?/w - для выбора мирового мирового"
-    - "&6?/s - для выбора режима крика"
-    - "&6?/v - для выбора режима шепота"
-    - "&6?/l - для выбора локального режима"
-    - "&6?/? - для вызоа этой справки"
-  mute: "&6?/m - для вызоа справки по молчанке"
 mute:
   message: "&o&7Вам велено заткнутся в этом чате и молчать ещё $1 секунд."
   help:
@@ -155,10 +130,6 @@ mute:
    - "&b/mute - для вызоа справки по молчанке"
    - "&b/unmute <nick> [sign] &6- для снятия молчанки"
    - "&6 время меньше 5 - для принудительносго снятия молчанки"
-  unknow: "&bНеизвестнй параметр "
-  see:
-   any:"&b%nick all &6- для просмотра молчанок"
-   self:"&b%ваш ник s[ee] &6- для просмотра своей молчанки"
 deaf:
   help:
    - "&b/deaf <nick> <sign> <reason> &6- для глухоты"
@@ -173,28 +144,26 @@ deaf:
    - "&b/unmdeaf<nick> [sign] &6- для снятия глухоты"
 #------------------------------------------
 # Permission
-#	mcnw.global
-#	mcnw.global.no_item
-#	mcnw.world
-#	mcnw.world.no_item
-#	mcnw.nospy
-#	mcnw.spy
-#	mcnw.pmspy
-#	mcnw.mute.help
-#	mcnw.mute.see
-#	mcnw.mute.see.self
-#	mcnw.mute.mute
-#	mcnw.mute.all
-#	mcnw.deaf.help"
-#	mcnw.deaf.see"
-#	mcnw.deaf.all
-#	mcnw.deaf.see.self
-#	mcnw.deaf.deaf
-#	mcnw.deaf.deaf.self
-#	mcnw.deaf.undeaf
-#	mcnw.deaf.undeaf.self
-#	mcnw.mute.unmute
-#	mcnw.broadcast
+#	<chat_inner_name> - внутренние имя канала. 
+#	mcnw.spy 											- право видить весь чат
+#	mcnw.<chat_inner_name>			 		- право говорить в <chat_inner_name>
+#	mcnw.<chat_inner_name>.no_item 		- право говорить в <chat_inner_name> игнорируя требования вещи
+#	mcnw.<chat_inner_name>.nospy  		- право на не прослушку <chat_inner_name> типа личных сообщений
+#	mcnw.<chat_inner_name>.pmspy 		- право на прослушку <chat_inner_name> типа личных сообщений
+#	mcnw.mute.help									- право на вызов справки по молчанке
+#	mcnw.mute.see									- право на просмотр молчанки
+#	mcnw.mute.see.self								- право на просмотр своей молчанке (низкий приоритет)
+#	mcnw.mute.mute									- право на наложение молчанку
+#	mcnw.mute.all										- право на просмотр списка молчащих
+#	mcnw.deaf.help									- право на вызов справки по глухоте
+#	mcnw.deaf.see										- право на просмотр глухоты 
+#	mcnw.deaf.all										- право на просмотр списка глухих
+#	mcnw.deaf.see.self								- право на просмотр своей глухоты (низкий приоритет)
+#	mcnw.deaf.deaf									- право на наложение глухоты
+#	mcnw.deaf.deaf.self								- право на наложение на себя глухоты (низкий приоритет)
+#	mcnw.deaf.undeaf								- право на снятие глухоты
+#	mcnw.deaf.undeaf.self							- право на снятие глухоты с себя (низкий приоритет)
+#	mcnw.mute.unmute								- право на снятие молчаки
 #http://jd.bukkit.org/rb/doxygen/d6/d0e/enumorg_1_1bukkit_1_1Material.html#pub-attribs
 #------------------------------------------
 #0x00	 &0  	BLACK
