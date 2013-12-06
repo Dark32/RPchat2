@@ -8,13 +8,34 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import ru.dark32.chat.chanels.ChanelRegister;
+import ru.dark32.chat.ichanels.IChanel;
 
 public class RPChatCommandExecutor implements CommandExecutor {
+	private String	chanelswitch;
+	private String	chanenotfound;
+	private String	chanesignmore1;
+
+	public RPChatCommandExecutor(){
+		chanelswitch = ChanelRegister.colorize(Main.config.getString("help.changechanel",
+				"Канал изменн на $1"));
+		chanenotfound = ChanelRegister.colorize(Main.config.getString("help.chanenotfound",
+				"Канал не найден"));
+		chanesignmore1 = ChanelRegister.colorize(Main.config.getString("help.chanesignmore1",
+				"Длина сигны больше 1 знака"));
+
+	}
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args ) {
 		if (cmd.getName().equalsIgnoreCase("rpchat")) {
-			getHelp(sender);
-			return true;
+			if (args.length == 0) {
+				getBase(sender);
+				return true;
+			} else if (args.length == 1) {
+				if (args[0].equalsIgnoreCase("help")) getHelp(sender);
+				if (args[0].equalsIgnoreCase("channle")) getChannel(sender);
+				return true;
+			}
 		}
 		if (cmd.getName().equalsIgnoreCase("mute")) {
 			Main.getBanStorage().mute(args, sender);
@@ -22,8 +43,8 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		}
 		if (cmd.getName().equalsIgnoreCase("unmute")) {
 			String[] _args = new String[3];
-			_args[0] = args.length>0? args[0]:"empty";
-			_args[1] = args.length>1? args[1]: "a";
+			_args[0] = args.length > 0 ? args[0] : "empty";
+			_args[1] = args.length > 1 ? args[1] : "a";
 			_args[2] = "1";
 			Main.getBanStorage().mute(_args, sender);
 			return true;
@@ -43,9 +64,54 @@ public class RPChatCommandExecutor implements CommandExecutor {
 			Main.getDeafStorage().deaf(_args, sender);
 			return true;
 		}
+		if (cmd.getName().equalsIgnoreCase("sw")) {
+			if (args.length == 1) {
+				if (args[0].length() == 1) {
+					char sign = args[0].charAt(0);
+					int _ind = ChanelRegister.getIndexBySign(sign);
+					if (_ind != -1) {
+						Util.setChatMode(sender.getName(), _ind);
+						sender.sendMessage(chanelswitch.replace("$1",
+								ChanelRegister.getByIndex(_ind).getName()));
+					} else {
+						sender.sendMessage(chanenotfound);
+					}
+				} else {
+					sender.sendMessage(chanesignmore1);
+				}
+			} else {
+				getChannel(sender);
+				return true;
+			}
+		}
 		return false;
 	}
-	public static void getHelp(CommandSender player ) {
+
+	private void getChannel(CommandSender sender ) {
+		List<String> msg = new ArrayList<String>();
+		msg.add("&b=============================================");
+		msg.addAll(ValueStorage.helpChannel);
+		for (IChanel chanel : ChanelRegister.listChat)
+			msg.add("&b" + chanel.getName() + " || " + chanel.getInnerName() + "||"
+					+ chanel.getSign());
+		msg.add("&b=============================================");
+		for (String s : msg) {
+			sender.sendMessage(ChanelRegister.colorize(s));
+		}
+
+	}
+
+	private void getHelp(CommandSender sender ) {
+		List<String> msg = new ArrayList<String>();
+		msg.add("&b=============================================");
+		msg.addAll(ValueStorage.helpHelp);
+		msg.add("&b=============================================");
+		for (String s : msg) {
+			sender.sendMessage(ChanelRegister.colorize(s));
+		}
+	}
+
+	public static void getBase(CommandSender player ) {
 		List<String> msg = new ArrayList<String>();
 		msg.add("&b=============================================");
 		msg.add("&6" + Main.version);

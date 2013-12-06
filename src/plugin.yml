@@ -17,3 +17,6 @@ commands:
    undeaf:
      description: 'undeaf'
      usage: '/<command> <nick> <sign>'
+   sw:
+     description: 'switch'
+     usage: '/<command> <sign>'

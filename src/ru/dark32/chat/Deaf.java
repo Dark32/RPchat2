@@ -29,19 +29,31 @@ public class Deaf implements IDeaf {
 	private String		undeafMessage;
 
 	public Deaf(){
-		canTHelp = ChatColor.GRAY + "%Вы не можете смотреть справку по глухоте";
-		canTSeeSelf = ChatColor.GRAY + "%Вы не можете смотреть свою глухоту";
-		udeafSelf = ChatColor.GRAY + "%Ваша глухота: ";
-		canTSeeAllDeaf = ChatColor.GRAY + "%Вы не можете смотреть все глухоты";
-		canTSeeTargetDeaf = ChatColor.GRAY + "%Вы не можете смотреть глухоту цели";
-		signMoreOne = ChatColor.GRAY + "%Сокращение канала не может быть длинее 1 символа: $1";
-		canTUndeafSelf = ChatColor.GRAY + "%Вы не можете снять глухоту с себя";
-		canTUndeafTarget = ChatColor.GRAY + "%Вы не можете снять глухоту с другово";
-		canTDeafSelf = ChatColor.GRAY + "%Вы не можете устанавливать глухоту себе";
-		canTDeafTarget = ChatColor.GRAY + "%Вы не можете устанавливать глухоту другим";
-		deafMessage = ChatColor.GRAY + "%%n не слушает %c. Причина: %r";
-		noReason = "не указана";
-		undeafMessage = ChatColor.GRAY + "%%n теперь слышит канал %c";
+		canTHelp = ChanelRegister.colorize(Main.config.getString("mute.canTHelp",
+				"&7%Вы не можете смотреть справку по глухоте"));
+		canTSeeSelf = ChanelRegister.colorize(Main.config.getString("mute.canTSeeSelf",
+				"&7%Вы не можете смотреть свою глухоту"));
+		udeafSelf = ChanelRegister.colorize(Main.config.getString("mute.udeafSelf",
+				"&7%Ваша глухота: "));
+		canTSeeAllDeaf = ChanelRegister.colorize(Main.config.getString("mute.canTSeeAllDeaf",
+				"&7%Вы не можете смотреть все глухоты"));
+		canTSeeTargetDeaf = ChanelRegister.colorize(Main.config.getString("mute.canTSeeTargetDeaf",
+				"&7%Вы не можете смотреть глухоту цели"));
+		signMoreOne = ChanelRegister.colorize(Main.config.getString("mute.signMoreOne",
+				"&7%Сокращение канала не может быть длинее 1 символа: $1"));
+		canTUndeafSelf = ChanelRegister.colorize(Main.config.getString("mute.canTUndeafSelf",
+				"&7%Вы не можете снять глухоту с себя"));
+		canTUndeafTarget = ChanelRegister.colorize(Main.config.getString("mute.canTUndeafTarget",
+				"&7%Вы не можете снять глухоту с другово"));
+		canTDeafSelf = ChanelRegister.colorize(Main.config.getString("mute.canTDeafSelf",
+				"&7%Вы не можете устанавливать глухоту себе"));
+		canTDeafTarget = ChanelRegister.colorize(Main.config.getString("mute.canTDeafTarget",
+				"&7%Вы не можете устанавливать глухоту другим"));
+		deafMessage = ChanelRegister.colorize(Main.config.getString("mute.deafMessage",
+				"&7%%n не слушает %c. Причина: %r"));
+		noReason = ChanelRegister.colorize(Main.config.getString("mute.noReason", "не указана"));
+		undeafMessage = ChanelRegister.colorize(Main.config.getString("mute.undeafMessage",
+				"&7%%n теперь слышит канал %c"));
 	}
 
 	private String getPlayerDeafString(String playerName, int chanel ) {

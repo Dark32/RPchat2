@@ -8,6 +8,8 @@ public class ValueStorage {
 	public static String		noPerm;
 	public static String		muteMessage;
 	public static List<String>	helpBase;
+	public static List<String>	helpHelp;
+	public static List<String>	helpChannel;
 	public static List<String>	joinmsg;
 	public static List<String>	muteHelp;
 	public static List<String>	deafHelp;
@@ -26,6 +28,8 @@ public class ValueStorage {
 		deafHelp = Main.config.getStringList("deaf.help");
 		lister = Main.config.getBoolean("liteners", true);
 		helpBase = Main.config.getStringList("help.base");
+		helpHelp = Main.config.getStringList("help.help");
+		helpChannel = Main.config.getStringList("help.channel");
 	}
 
 	private static String colorByString(String key ) {

@@ -20,7 +20,7 @@ public class Main extends JavaPlugin {
 	public PluginManager			pm;
 	private static IMute			muteStorage;
 	private static IDeaf			deafStorage;
-	public static final String		version	= "RPchat v 2.0w-2u (singularity)";
+	public static final String		version	= "RPchat v 2.0w-3u (singularity)";
 	public static FileConfiguration	config;
 	public static File yamlFile;
 	public static YamlConfiguration yaml;
@@ -79,6 +79,7 @@ public class Main extends JavaPlugin {
 		getCommand("unmute").setExecutor(executer);
 		getCommand("deaf").setExecutor(executer);
 		getCommand("undeaf").setExecutor(executer);
+		getCommand("sw").setExecutor(executer);
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		
 		}

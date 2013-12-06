@@ -37,22 +37,35 @@ public class Mute implements IMute {
 	private String					muteSee;
 
 	public Mute(){
-		needName = ChatColor.GRAY + "%Вы должны указать имя";
-		muteMessage = ChatColor.GRAY + "%%n теперь молчит в %c на %t секунд по причине %r";
-		unmuteMessage = ChatColor.GRAY + "%&n  теперь может говорить в 	 %c";
-		canTHelp = ChatColor.GRAY + "%Вы не можете смотреть справку по молчанке";
-		canTSeeSelf = ChatColor.GRAY + "%Вы не можете смотреть свою молчанку";
-		canTSeeAllMute = ChatColor.GRAY + "%Вы не можете смотреть все молчанки";
-		canTSeeTargetMute = ChatColor.GRAY + "%Вы не можете смотреть молчанку цели";
-		signMoreOne = ChatColor.GRAY + "%Сокращение канала не может быть длинее 1 символа: $1";
-		canTUnmute = ChatColor.GRAY + "%Вы не можете снять молчанку";
-		canTMute = ChatColor.GRAY + "%Вы не можете устанавливать молчанку";
-		noReason = "не указана";
-		timeNotNum = ChatColor.GRAY + "%Время должно быть числом: ";
-		subCMDErr = ChatColor.GRAY + "%Ошибка форматирования #2 [see|all]";
-		dataError = "%Что-то не так с форматом времени: ";
-		muteSee = ChatColor.GRAY + "%%n молчит в %c. Осталось " + "%t"
-				+ " секунд. Причина: " + ChatColor.UNDERLINE + "&r";
+		needName = ChanelRegister.colorize(Main.config.getString("mute.needName",
+				"&7%Вы должны указать имя"));
+		muteMessage = ChanelRegister.colorize(Main.config.getString("mute.muteMessage",
+				"&7%%n теперь молчит в %c на %t секунд по причине %r"));
+		unmuteMessage = ChanelRegister.colorize(Main.config.getString("mute.unmuteMessage",
+				"&7%&n  теперь может говорить в  %c"));
+		canTHelp = ChanelRegister.colorize(Main.config.getString("mute.canTHelp",
+				"&7%Вы не можете смотреть справку по молчанке"));
+		canTSeeSelf = ChanelRegister.colorize(Main.config.getString("mute.canTSeeSelf",
+				"&7%Вы не можете смотреть свою молчанку"));
+		canTSeeAllMute = ChanelRegister.colorize(Main.config.getString("mute.canTSeeAllMute",
+				"&7%Вы не можете смотреть все молчанки"));
+		canTSeeTargetMute = ChanelRegister.colorize(Main.config.getString("mute.canTSeeTargetMute",
+				"&7%Вы не можете смотреть молчанку цели"));
+		signMoreOne = ChanelRegister.colorize(Main.config.getString("mute.signMoreOne",
+				"&7%Сокращение канала не может быть длинее 1 символа: $1"));
+		canTUnmute = ChanelRegister.colorize(Main.config.getString("mute.canTUnmute",
+				"&7%Вы не можете снять молчанку"));
+		canTMute = ChanelRegister.colorize(Main.config.getString("mute.canTMute",
+				"&7%Вы не можете устанавливать молчанку"));
+		noReason = ChanelRegister.colorize(Main.config.getString("mute.noReason", "не указана"));
+		timeNotNum = ChanelRegister.colorize(Main.config.getString("mute.timeNotNum",
+				"&7%Время должно быть числом: "));
+		subCMDErr = ChanelRegister.colorize(Main.config.getString("mute.subCMDErr",
+				"&7%Ошибка форматирования #2 [see|all]"));
+		dataError = ChanelRegister.colorize(Main.config.getString("mute.dataError",
+				"&7%Что-то не так с форматом времени: "));
+		muteSee = ChanelRegister.colorize(Main.config.getString("mute.muteSee",
+				"&7%%n молчит в %c. Осталось %t секунд. Причина: &r"));
 
 	}
 
