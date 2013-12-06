@@ -16,21 +16,21 @@ import ru.dark32.chat.chanels.ChatListener;
 
 public class Main extends JavaPlugin {
 
-	public static final Logger		_log	= Logger.getLogger("Minecraft");
-	public PluginManager			pm;
+	public static final Logger		LOG	= Logger.getLogger("Minecraft");
+	public PluginManager			pluginManager;
 	private static IMute			muteStorage;
 	private static IDeaf			deafStorage;
-	public static final String		version	= "RPchat v 2.0w-3u (singularity)";
+	public static final String		VERSION	= "RPchat v 2.0w-3u (singularity)";
 	public static FileConfiguration	config;
 	public static File yamlFile;
 	public static YamlConfiguration yaml;
 	public static final boolean		DEBUG_MODE	= true; // выключить в релизе
 	@Override
 	public void onEnable() {
-		pm = Bukkit.getPluginManager();
-		if (pm.getPlugin("PermissionsEx") != null) {
+		pluginManager = Bukkit.getPluginManager();
+		if (pluginManager.getPlugin("PermissionsEx") != null) {
 			Util.usePEX = true;
-		} else if (pm.getPlugin("PermissionsBukkit") != null) {
+		} else if (pluginManager.getPlugin("PermissionsBukkit") != null) {
 			Util.usePB = true;
 		} else {
 			getLogger().warning("Permissions plugins not found!");

@@ -57,17 +57,18 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 		this.subid = sub;
 	}
 
+	@SuppressWarnings("deprecation" )
 	@Override
 	public void loseItem(Player player ) {
 		ItemStack inHand = player.getItemInHand();
-		int AmoutHand = inHand.getAmount() - 1;
+		int amoutHand = inHand.getAmount() - 1;
 		ItemStack inHandrem = null;
 		if (ValueStorage.experemental) {
 			inHandrem = new ItemStack(inHand.getType(), inHand.getAmount() - 1);
 		} else {
 			inHandrem = new ItemStack(inHand.getTypeId(), inHand.getAmount() - 1);
 		}
-		if (AmoutHand <= 0) {
+		if (amoutHand <= 0) {
 			inHandrem = null;
 		}
 		player.setItemInHand(inHandrem);
@@ -80,6 +81,7 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 				+ this.material.name();
 	}
 
+	@SuppressWarnings("deprecation" )
 	@Override
 	public boolean equalItem(ItemStack item ) {
 		if (Main.DEBUG_MODE) {

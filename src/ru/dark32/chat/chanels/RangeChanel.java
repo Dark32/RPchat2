@@ -30,7 +30,6 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 
 	@Override
 	public List<Player> getRecipients(Player sender ) {
-		Location playerLocation = sender.getLocation();
 		List<Player> recipients = new LinkedList<Player>();
 		if (Main.DEBUG_MODE) {
 			sender.sendMessage("debug:--------------------------------");

@@ -42,8 +42,8 @@ public class ChanelRegister {
 		}
 		Set<String> list = chtatList.getKeys(false);
 		for (String name : list) {
-			String _type = "Chat." + name + ".type";
-			String _enable = "Chat." + name + ".enable";
+			final String _type = "Chat." + name + ".type";
+			final String _enable = "Chat." + name + ".enable";
 			String chanelType = Main.config.getString(_type, _type);
 			boolean chanelEnable = Main.config.getBoolean(_enable, false);
 			if (chanelType.equals("none") || !chanelEnable) {

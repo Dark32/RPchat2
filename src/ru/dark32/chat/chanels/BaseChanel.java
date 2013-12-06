@@ -2,6 +2,7 @@ package ru.dark32.chat.chanels;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -21,10 +22,10 @@ public class BaseChanel implements IChanel {
 	private char		sign;
 	private ETypeChanel	type;
 	private String		innerName;
-	private boolean	tabes;
+	private boolean		tabes;
 
 	@Override
-	public boolean getEnable() {
+	public boolean isEnable() {
 		return enable;
 	}
 
@@ -50,10 +51,10 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public List<Player> getRecipients(Player sender ) {
-		List<Player> recipients = new LinkedList<Player>();
-		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
-			boolean isWorld = isWorldChat() && sender.getWorld() == recipient.getWorld();
+		final List<Player> recipients = new LinkedList<Player>();
+		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
+			final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
+			final boolean isWorld = isWorldChat() && sender.getWorld() == recipient.getWorld();
 			if (isDeaf) {
 				continue;
 			} else if (Util.hasPermission(recipient, "mcnw.spy")) {
@@ -72,10 +73,6 @@ public class BaseChanel implements IChanel {
 		return this.sign;
 	}
 
-	private String getString(String key ) {
-		return ChanelRegister.colorize(Main.config.getString(key, key));
-	}
-
 	@Override
 	public boolean isWorldChat() {
 		return this.isWorld;
@@ -88,12 +85,12 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public void setFormat(String key ) {
-		this.format = getString(key);
+		this.format = ChanelRegister.colorize(key);
 	}
 
 	@Override
-	final public void setIndex(int i ) {
-		this.index = i;
+	final public void setIndex(int indx ) {
+		this.index = indx;
 	}
 
 	@Override
@@ -103,7 +100,7 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public void setPrefix(String key ) {
-		this.prefix = getString(key).charAt(0);
+		this.prefix = key.charAt(0);
 	}
 
 	@Override
@@ -140,32 +137,32 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public void setInnerName(String name ) {
-		innerName = name.toLowerCase();
+	public void setInnerName(final String name ) {
+		innerName = name.toLowerCase(Locale.US);
 
 	}
 
 	@Override
-	public String format(Player p, String msg ) {
-		msg = msg.replace("%sf", ChanelRegister.getSuffix(p.getName()))
-				.replace("%pf", ChanelRegister.getPreffix(p.getName())).replace("%p", "%1$s")
+	public String format(final Player player,final String msg ) {
+		return msg.replace("%sf", ChanelRegister.getSuffix(player.getName()))
+				.replace("%pf", ChanelRegister.getPreffix(player.getName())).replace("%p", "%1$s")
 				.replace("%msg", "%2$s");
-		return msg;
 	}
 
 	@Override
-	public void setTabes(boolean tables ) {
+	public void setTabes(final boolean tables ) {
 		this.tabes = tables;
-		
+
 	}
 
 	@Override
-	public boolean getTabes() {
+	public boolean isTabes() {
 		return tabes;
 	}
-  // обычно не надо обрабатывать само сообщение
+
+	// обычно не надо обрабатывать само сообщение
 	@Override
-	public String preformat(String message ) {
+	public String preformat(Player sender,String message ) {
 		return message;
 	}
 }

@@ -1,7 +1,5 @@
 package ru.dark32.chat.ichanels;
 
-import org.bukkit.entity.Player;
-
 public interface IChanceChanel extends IRangeChanel {
 	/**
 	 * @param format

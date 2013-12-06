@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import ru.dark32.chat.Util;
-import ru.dark32.chat.ValueStorage;
 import ru.dark32.chat.ichanels.IPersonalMessagesChanel;
 
 /**

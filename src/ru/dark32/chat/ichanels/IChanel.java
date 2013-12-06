@@ -67,7 +67,7 @@ public interface IChanel {
 	/**
 	 * @return включен ли канал
 	 */
-	public boolean getEnable();
+	public boolean isEnable();
 
 	/**
 	 * @param enbl
@@ -93,7 +93,7 @@ public interface IChanel {
 	 */
 	public void setWorldChat(boolean isWorld );
 
-	/**
+	/** // NOPMD by ������������� on 06.12.13 15:21
 	 * @param type
 	 *            тип чата <br>
 	 *            base - базовый<br>
@@ -147,14 +147,17 @@ public interface IChanel {
 	/**
 	 * @return набаемо ли?
 	 */
-	public boolean getTabes();
+	public boolean isTabes();
 
 	/**
 	 * обработка сообщения, не формата
 	 * 
+	 * @param sender
+	 *            отсылающий сообщение
 	 * @param message
 	 *            сообщение
 	 * @return обработанное сообщение
 	 */
-	public String preformat(String message );
+
+	public String preformat(Player sender, String message );
 }

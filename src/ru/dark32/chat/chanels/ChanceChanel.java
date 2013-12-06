@@ -2,6 +2,8 @@ package ru.dark32.chat.chanels;
 
 import java.util.Random;
 
+import org.bukkit.entity.Player;
+
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ichanels.IChanceChanel;
 
@@ -58,7 +60,7 @@ public class ChanceChanel extends RangeChanel implements IChanceChanel {
 	private Random	rand	= new Random();
 
 	@Override
-	public String preformat(String message ) {
+	public String preformat(Player sender, String message ) {
 		int iChance = 0;
 		if (Util.isInteger(message)) {
 			iChance = message.length() < 5 ? Integer.parseInt(message) : 9999;

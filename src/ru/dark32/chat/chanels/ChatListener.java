@@ -8,7 +8,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import ru.dark32.chat.Main;
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ValueStorage;
-import ru.dark32.chat.ichanels.IChanceChanel;
 import ru.dark32.chat.ichanels.IChanel;
 import ru.dark32.chat.ichanels.IItemChanel;
 import ru.dark32.chat.ichanels.IPersonalMessagesChanel;
@@ -100,7 +99,7 @@ public class ChatListener implements Listener {
 				break;
 		}
 		// обрабатываем сообение перед отправкой
-		message = chanel.preformat(message);
+		message = chanel.preformat(sender, message);
 		// чистим список получателей
 		event.getRecipients().clear();
 		// добавляем получателей согласно типу чата

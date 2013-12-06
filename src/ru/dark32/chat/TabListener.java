@@ -20,7 +20,7 @@ public class TabListener implements Listener {
 		Collection<String> completions = e.getTabCompletions();
 		char firstChar = chatMessage.charAt(0);
 		int chanind = ChanelRegister.getIndexByPrefix(firstChar);
-		if (chanind != -1 && ChanelRegister.getByIndex(chanind).getTabes()) {
+		if (chanind != -1 && ChanelRegister.getByIndex(chanind).isTabes()) {
 			String _nick = chatMessage.length() > 1 ? chatMessage.substring(1) : "";
 			String _name = "";
 			for (Player player : Bukkit.getOnlinePlayers()) {

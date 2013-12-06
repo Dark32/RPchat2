@@ -22,9 +22,10 @@ import ru.dark32.chat.chanels.RangeRequisiteItemChanel;
  */
 public enum ETypeChanel {
 		BASE {
+			@Override
 			public IChanel setChanel(String name ) {
 				IChanel chanel = new BaseChanel();
-				chanel = setBase(chanel, name);
+				chanel = ETypeChanel.setBase(chanel, name);
 				return chanel;
 
 			}
@@ -33,7 +34,7 @@ public enum ETypeChanel {
 			@Override
 			public IChanel setChanel(String name ) {
 				IChanel chanel = new RangeChanel();
-				chanel = setBase(chanel, name);
+				chanel = ETypeChanel.setBase(chanel, name);
 				((IRangeChanel) chanel).setRange(Main.config.getInt("Chat." + name + ".range"));
 				return chanel;
 			}
@@ -42,8 +43,8 @@ public enum ETypeChanel {
 			@Override
 			public IChanel setChanel(String name ) {
 				IChanel chanel = new ItemChanel();
-				chanel = setBase(chanel, name);
-				chanel = setItem(chanel, name);
+				chanel = ETypeChanel.setBase(chanel, name);
+				chanel = ETypeChanel.setItem(chanel, name);
 				return chanel;
 			}
 		},
@@ -51,7 +52,7 @@ public enum ETypeChanel {
 			@Override
 			public IChanel setChanel(String name ) {
 				IChanel chanel = new PersonalMessageChanel();
-				chanel = setBase(chanel, name);
+				chanel = ETypeChanel.setBase(chanel, name);
 				((IPersonalMessagesChanel) chanel).setFormatTo(Main.config.getString("Chat." + name
 						+ ".formatTo"));
 				((IPersonalMessagesChanel) chanel).setFormatFrom(Main.config.getString("Chat."
@@ -59,7 +60,7 @@ public enum ETypeChanel {
 				((IPersonalMessagesChanel) chanel).setFormatSpy(Main.config.getString("Chat."
 						+ name + ".formatSpy"));
 				((IPersonalMessagesChanel) chanel).setPmSearchNickMode(Main.config.getInt("Chat."
-						+ name + ".PMSearchNickMode",0));
+						+ name + ".PMSearchNickMode", 0));
 				return chanel;
 			}
 		},
@@ -67,8 +68,8 @@ public enum ETypeChanel {
 			@Override
 			public IChanel setChanel(String name ) {
 				IChanel chanel = new RangeItemChanel();
-				chanel = setBase(chanel, name);
-				chanel = setItem(chanel, name);
+				chanel = ETypeChanel.setBase(chanel, name);
+				chanel = ETypeChanel.setItem(chanel, name);
 				((IRangeChanel) chanel).setRange(Main.config.getInt("Chat." + name + ".range"));
 
 				return chanel;
@@ -78,8 +79,9 @@ public enum ETypeChanel {
 			@Override
 			public IChanel setChanel(String name ) {
 				IChanel chanel = new RangeRequisiteItemChanel();
-				chanel = setBase(chanel, name);
-				chanel = setItem(chanel, name);
+				chanel = ETypeChanel.setBase(chanel, name);
+				chanel = ETypeChanel.setItem(chanel, name);
+				((IRangeChanel) chanel).setRange(Main.config.getInt("Chat." + name + ".range"));
 				return chanel;
 			}
 		},
@@ -88,7 +90,7 @@ public enum ETypeChanel {
 			@Override
 			public IChanel setChanel(String name ) {
 				IChanel chanel = new ChanceChanel();
-				chanel = setBase(chanel, name);
+				chanel = ETypeChanel.setBase(chanel, name);
 				((IChanceChanel) chanel).setRange(Main.config
 						.getInt("Chat." + name + ".range", 200));
 				((IChanceChanel) chanel).setChance(
@@ -107,7 +109,7 @@ public enum ETypeChanel {
 			@Override
 			public IChanel setChanel(String name ) {
 				IChanel chanel = new BroadChanel();
-				chanel = setBase(chanel, name);
+				chanel = ETypeChanel.setBase(chanel, name);
 				((IBroadChanel) chanel).setPattern(Main.config.getStringList("Chat." + name
 						+ ".pattern"));
 				return chanel;
@@ -120,15 +122,33 @@ public enum ETypeChanel {
 			}
 		};
 	public static ETypeChanel get(String type ) {
-		if (type.equalsIgnoreCase("BASE")) return BASE;
-		if (type.equalsIgnoreCase("RANGE")) return RANGE;
-		if (type.equalsIgnoreCase("ITEM")) return ITEM;
-		if (type.equalsIgnoreCase("PM")) return PM;
-		if (type.equalsIgnoreCase("RANGE_ITEM")) return RANGE_ITEM;
-		if (type.equalsIgnoreCase("REQUISITE")) return REQUISITE;
-		if (type.equalsIgnoreCase("CHANCE")) return CHANCE;
-		if (type.equalsIgnoreCase("BROAD")) return CHANCE;
-		if (type.equalsIgnoreCase("NONE")) return NONE;
+		if (type.equalsIgnoreCase("BASE")) {
+			return BASE;
+		}
+		if (type.equalsIgnoreCase("RANGE")) {
+			return RANGE;
+		}
+		if (type.equalsIgnoreCase("ITEM")) {
+			return ITEM;
+		}
+		if (type.equalsIgnoreCase("PM")) {
+			return PM;
+		}
+		if (type.equalsIgnoreCase("RANGE_ITEM")) {
+			return RANGE_ITEM;
+		}
+		if (type.equalsIgnoreCase("REQUISITE")) {
+			return REQUISITE;
+		}
+		if (type.equalsIgnoreCase("CHANCE")) {
+			return CHANCE;
+		}
+		if (type.equalsIgnoreCase("BROAD")) {
+			return CHANCE;
+		}
+		if (type.equalsIgnoreCase("NONE")) {
+			return NONE;
+		}
 		return NONE;
 	}
 
@@ -140,16 +160,17 @@ public enum ETypeChanel {
 	private static IChanel setBase(IChanel chanel, String name ) {
 		chanel.setIndex(ChanelRegister.getNextIndex());
 		chanel.setName(Main.config.getString("Chat." + name + ".name"));
-		chanel.setFormat("Chat." + name + ".format");
+		chanel.setFormat(Main.config.getString("Chat." + name + ".format"));
 		chanel.setEnable(Main.config.getBoolean("Chat." + name + ".enable", false));
 		chanel.setWorldChat(Main.config.getBoolean("Chat." + name + ".world", false));
 		chanel.setTabes(Main.config.getBoolean("Chat." + name + ".tab", true));
-		chanel.setPrefix("Chat." + name + ".prefix");
+		chanel.setPrefix(Main.config.getString("Chat." + name + ".prefix"));
 		chanel.setSign(Main.config.getString("Chat." + name + ".sign").charAt(0));
 		chanel.setInnerName(name);
 		return chanel;
 	}
 
+	@SuppressWarnings("deprecation" )
 	private static IChanel setItem(IChanel chanel, String name ) {
 		((IRangeChanel) chanel).setRange(Main.config.getInt("Chat." + name + ".range"));
 		((IItemChanel) chanel).setItemId(Main.config.getInt("Chat." + name + ".id", 0));

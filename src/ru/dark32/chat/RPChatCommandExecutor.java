@@ -114,7 +114,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 	public static void getBase(CommandSender player ) {
 		List<String> msg = new ArrayList<String>();
 		msg.add("&b=============================================");
-		msg.add("&6" + Main.version);
+		msg.add("&6" + Main.VERSION);
 		msg.add("&6Autors: ufatos, dark32");
 		msg.add("&6License: CC-BY-NC-ND");
 		msg.add("&6Link: http://goo.gl/KpvB7c");
