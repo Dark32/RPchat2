@@ -14,9 +14,9 @@ public class JoinListener implements Listener {
 		Player player = event.getPlayer();
 		for (String s : ValueStorage.joinmsg) {
 			player.sendMessage(ChanelRegister.colorize(s
-					.replace("%sf", ChanelRegister.getSuffix(player.getName()))
-					.replace("%pf", ChanelRegister.getPreffix(player.getName()))
-					.replace("%p", player.getName())));
+					.replace("$sf", ChanelRegister.getSuffix(player.getName()))
+					.replace("$pf", ChanelRegister.getPreffix(player.getName()))
+					.replace("$p", player.getName())));
 
 		}
 

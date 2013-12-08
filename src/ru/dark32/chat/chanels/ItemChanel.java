@@ -25,7 +25,7 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 
 	@Override
 	@Deprecated
-	public void setItemId(int id ) {
+	public void setItemId(final int id ) {
 		this.id = id;
 
 	}
@@ -42,7 +42,7 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 	}
 
 	@Override
-	public void setMaterial(Material ma ) {
+	public void setMaterial(final Material ma ) {
 		this.material = ma;
 
 	}
@@ -53,20 +53,20 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 	}
 
 	@Override
-	public void setSubId(int sub ) {
+	public void setSubId(final int sub ) {
 		this.subid = sub;
 	}
 
 	@SuppressWarnings("deprecation" )
 	@Override
 	public void loseItem(Player player ) {
-		ItemStack inHand = player.getItemInHand();
-		int amoutHand = inHand.getAmount() - 1;
+		final ItemStack inHand = player.getItemInHand();
+		final int amoutHand = inHand.getAmount() - 1;
 		ItemStack inHandrem = null;
 		if (ValueStorage.experemental) {
-			inHandrem = new ItemStack(inHand.getType(), inHand.getAmount() - 1);
+			inHandrem = new ItemStack(inHand.getType(), amoutHand);
 		} else {
-			inHandrem = new ItemStack(inHand.getTypeId(), inHand.getAmount() - 1);
+			inHandrem = new ItemStack(inHand.getTypeId(), amoutHand);
 		}
 		if (amoutHand <= 0) {
 			inHandrem = null;
@@ -83,7 +83,11 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 
 	@SuppressWarnings("deprecation" )
 	@Override
-	public boolean equalItem(ItemStack item ) {
+	public boolean equalItem(final ItemStack item ) {
+		if (item == null) {
+			return false;
+		}
+
 		if (Main.DEBUG_MODE) {
 			Bukkit.getConsoleSender().sendMessage(
 					"debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - "
@@ -91,10 +95,11 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 			Bukkit.getConsoleSender().sendMessage(
 					"debug need " + id + ":" + subid + " - " + material);
 		}
-		return item != null
-				&& item.getDurability() == this.subid
-				&& (ValueStorage.experemental ? item.getType() == this.material
-						: item.getTypeId() == this.id);
+
+		boolean isItem = item.getDurability() == this.subid
+				&& (ValueStorage.experemental && item.getType() == this.material)
+				|| item.getTypeId() == this.id;
+		return isItem;
 	}
 
 	@Override
@@ -103,7 +108,7 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 	}
 
 	@Override
-	public void setRequestPprefix(boolean need ) {
+	public void setRequestPprefix(final boolean need ) {
 		requestPprefix = need;
 
 	}

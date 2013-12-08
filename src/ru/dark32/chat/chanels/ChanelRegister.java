@@ -35,17 +35,17 @@ public class ChanelRegister {
 		listChat = new ArrayList<IChanel>();
 		signes = new ArrayList<Character>();
 		prefixes = new ArrayList<Character>();
-		ConfigurationSection chtatList = Main.config.getConfigurationSection("Chat");
+		final ConfigurationSection chtatList = Main.config.getConfigurationSection("Chat");
 		if (chtatList == null) {
 			Bukkit.getConsoleSender().sendMessage("Ошибка. Каналы чата не найдены в конфиге");
 			return;
 		}
-		Set<String> list = chtatList.getKeys(false);
+		final Set<String> list = chtatList.getKeys(false);
 		for (String name : list) {
 			final String _type = "Chat." + name + ".type";
 			final String _enable = "Chat." + name + ".enable";
-			String chanelType = Main.config.getString(_type, _type);
-			boolean chanelEnable = Main.config.getBoolean(_enable, false);
+			final String chanelType = Main.config.getString(_type, _type);
+			final boolean chanelEnable = Main.config.getBoolean(_enable, false);
 			if (chanelType.equals("none") || !chanelEnable) {
 				continue;
 			}
@@ -53,7 +53,7 @@ public class ChanelRegister {
 		}
 	}
 
-	private static IChanel registrChanel(ETypeChanel type, String name ) {
+	private static IChanel registrChanel(ETypeChanel type, final String name ) {
 		IChanel chanel = type.setChanel(name);
 		chanel.setType(type);
 		signes.add(chanel.getSign());
@@ -79,12 +79,12 @@ public class ChanelRegister {
 		return listChat.get(id);
 	}
 
-	public static int getIndexBySign(char sign ) {
+	public static int getIndexBySign(final char sign ) {
 		return signes.indexOf(sign);
 	}
 
-	public static int getIndexByItem(ItemStack item ) {
-		for (IChanel chanel : listChat) {
+	public static int getIndexByItem(final ItemStack item ) {
+		for (final IChanel chanel : listChat) {
 			if ((chanel.getType() == ETypeChanel.ITEM || chanel.getType() == ETypeChanel.RANGE_ITEM || chanel
 					.getType() == ETypeChanel.REQUISITE)
 					&& ((IItemChanel) chanel).equalItem(item)
@@ -95,15 +95,15 @@ public class ChanelRegister {
 		return -1;
 	}
 
-	public static int getIndexByPrefix(char preffix ) {
+	public static int getIndexByPrefix(final char preffix ) {
 		return prefixes.indexOf(preffix);
 	}
 
-	public static String colorize(String string ) {
+	public static String colorize(final String string ) {
 		return ChatColor.translateAlternateColorCodes('&', string);
 	}
 
-	public static String getPreffix(String name ) {
+	public static String getPreffix(final String name ) {
 		if (!Util.usePEX) {
 			return "";
 		}
@@ -115,7 +115,7 @@ public class ChanelRegister {
 		return ChanelRegister.colorize(user.getPrefix());
 	}
 
-	public static String getSuffix(String name ) {
+	public static String getSuffix(final String name ) {
 		if (!Util.usePEX) {
 			return "";
 		}
@@ -125,7 +125,8 @@ public class ChanelRegister {
 		}
 		return ChanelRegister.colorize(user.getSuffix());
 	}
-	public static int getChanels(){
+
+	public static int getChanels() {
 		return listChat.size();
 	}
 }

@@ -30,30 +30,30 @@ public class Deaf implements IDeaf {
 
 	public Deaf(){
 		canTHelp = ChanelRegister.colorize(Main.config.getString("mute.canTHelp",
-				"&7%Вы не можете смотреть справку по глухоте"));
+				"&7$Вы не можете смотреть справку по глухоте"));
 		canTSeeSelf = ChanelRegister.colorize(Main.config.getString("mute.canTSeeSelf",
-				"&7%Вы не можете смотреть свою глухоту"));
+				"&7$Вы не можете смотреть свою глухоту"));
 		udeafSelf = ChanelRegister.colorize(Main.config.getString("mute.udeafSelf",
-				"&7%Ваша глухота: "));
+				"&7$Ваша глухота: "));
 		canTSeeAllDeaf = ChanelRegister.colorize(Main.config.getString("mute.canTSeeAllDeaf",
-				"&7%Вы не можете смотреть все глухоты"));
+				"&7$Вы не можете смотреть все глухоты"));
 		canTSeeTargetDeaf = ChanelRegister.colorize(Main.config.getString("mute.canTSeeTargetDeaf",
-				"&7%Вы не можете смотреть глухоту цели"));
+				"&7$Вы не можете смотреть глухоту цели"));
 		signMoreOne = ChanelRegister.colorize(Main.config.getString("mute.signMoreOne",
-				"&7%Сокращение канала не может быть длинее 1 символа: $1"));
+				"&7$Сокращение канала не может быть длинее 1 символа: $1"));
 		canTUndeafSelf = ChanelRegister.colorize(Main.config.getString("mute.canTUndeafSelf",
-				"&7%Вы не можете снять глухоту с себя"));
+				"&7$Вы не можете снять глухоту с себя"));
 		canTUndeafTarget = ChanelRegister.colorize(Main.config.getString("mute.canTUndeafTarget",
-				"&7%Вы не можете снять глухоту с другово"));
+				"&7$Вы не можете снять глухоту с другово"));
 		canTDeafSelf = ChanelRegister.colorize(Main.config.getString("mute.canTDeafSelf",
-				"&7%Вы не можете устанавливать глухоту себе"));
+				"&7$Вы не можете устанавливать глухоту себе"));
 		canTDeafTarget = ChanelRegister.colorize(Main.config.getString("mute.canTDeafTarget",
-				"&7%Вы не можете устанавливать глухоту другим"));
+				"&7$Вы не можете устанавливать глухоту другим"));
 		deafMessage = ChanelRegister.colorize(Main.config.getString("mute.deafMessage",
-				"&7%%n не слушает %c. Причина: %r"));
+				"&7$$n не слушает $c. Причина: $r"));
 		noReason = ChanelRegister.colorize(Main.config.getString("mute.noReason", "не указана"));
 		undeafMessage = ChanelRegister.colorize(Main.config.getString("mute.undeafMessage",
-				"&7%%n теперь слышит канал %c"));
+				"&7$$n теперь слышит канал $c"));
 	}
 
 	private String getPlayerDeafString(String playerName, int chanel ) {
@@ -97,7 +97,7 @@ public class Deaf implements IDeaf {
 					sender.sendMessage(canTSeeTargetDeaf);
 					return;
 				}
-				sender.sendMessage(ChatColor.GRAY + "%" + target + " :");
+				sender.sendMessage(ChatColor.GRAY + "$" + target + " :");
 				deafSeeTarget(sender, target);
 			}
 		} else if (args.length > 1) {
@@ -146,7 +146,7 @@ public class Deaf implements IDeaf {
 	@Override
 	public void deafSeeAll(CommandSender sender ) {
 		ConfigurationSection cs = Main.yaml.getRoot();
-		sender.sendMessage(ChatColor.GRAY + "%===============all================");
+		sender.sendMessage(ChatColor.GRAY + "$===============all================");
 		if (cs == null) {
 			return;
 		}
@@ -168,9 +168,9 @@ public class Deaf implements IDeaf {
 			String reason = Main.yaml.getString(getPlayerDeafString(name, i) + "-reason");
 			boolean isDeaf = this.isDeaf(name, i);
 			if (isDeaf) {
-				sender.sendMessage(deafMessage.replace("%n", name)
-						.replace("%c", ChanelRegister.getByIndex(i).getName())
-						.replace("%r", reason));
+				sender.sendMessage(deafMessage.replace("$n", name)
+						.replace("$c", ChanelRegister.getByIndex(i).getName())
+						.replace("$r", reason));
 			}
 		}
 
@@ -194,7 +194,7 @@ public class Deaf implements IDeaf {
 			}
 		}
 		sender.sendMessage(ChatColor.GRAY
-				+ "%"
+				+ "$"
 				+ name
 				+ " теперь не слушает канал "
 				+ (chanel >= 0 && chanel < this.chaneles ? ChanelRegister.getByIndex(chanel)
@@ -210,8 +210,8 @@ public class Deaf implements IDeaf {
 				Main.yaml.set(getPlayerDeafString(name, i) + "-reason", null);
 			}
 		}
-		sender.sendMessage(undeafMessage.replace("%n", name).replace(
-				"%c",
+		sender.sendMessage(undeafMessage.replace("$n", name).replace(
+				"$c",
 				(chanel >= 0 && chanel < chaneles ? ChanelRegister.getByIndex(chanel).getName()
 						: "a"))
 

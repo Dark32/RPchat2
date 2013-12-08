@@ -2,6 +2,10 @@ package ru.dark32.chat.chanels;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.ietf.jgss.ChannelBinding;
+
 import ru.dark32.chat.ichanels.IBroadChanel;
 
 public class BroadChanel extends BaseChanel implements IBroadChanel {
@@ -14,9 +18,13 @@ public class BroadChanel extends BaseChanel implements IBroadChanel {
 	}
 
 	@Override
-	public void setPattern(List<String> list ) {
+	public void setPattern(final List<String> list ) {
 		paterns = list;
 
 	}
-
+	@Override
+	public String preformat(Player sender,String message ) {
+		Bukkit.getConsoleSender().sendMessage("BROAD: "+ sender.getName()+":"+message);
+		return ChanelRegister.colorize(message);
+	}
 }

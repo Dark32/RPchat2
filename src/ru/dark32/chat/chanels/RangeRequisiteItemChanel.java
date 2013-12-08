@@ -22,15 +22,16 @@ import ru.dark32.chat.ichanels.IRangeChanel;
 public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeChanel {
 	@Override
 	public List<Player> getRecipients(Player sender ) {
-		List<Player> recipients = new LinkedList<Player>();
-		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			boolean isWorld = isWorldChat() && sender.getWorld() == recipient.getWorld();
-			boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
-			int dist = getDist(sender.getLocation(), recipient.getLocation());
-			boolean isRange = (this.getRange() <= 0) || (dist < this.getRange());
-			boolean isTransceiver = Util.hasPermission(recipient, "mcnw." + getInnerName()
+		final List<Player> recipients = new LinkedList<Player>();
+		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
+			final boolean isWorld = !isWorldChat() || sender.getWorld() == recipient.getWorld();
+			final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
+			final int dist = getDist(sender.getLocation(), recipient.getLocation());
+			final boolean isRange = (this.getRange() <= 0) || (dist < this.getRange());
+			final boolean isTransceiver = Util.hasPermission(recipient, "mcnw." + getInnerName()
 					+ ".no_item")
 					|| hasItemInInvetery(recipient);
+			Bukkit.getConsoleSender().sendMessage(recipient.getName()+"-"+isWorld);
 			if (isDeaf) {
 				continue;
 			} else if (Util.hasPermission(recipient, "mcnw.spy")) {
@@ -57,14 +58,16 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeC
 	}
 
 	private boolean hasItemInInvetery(Player player ) {
-		PlayerInventory inventary = player.getInventory();
+		Bukkit.getConsoleSender().sendMessage("-"+player.getName());
+		final PlayerInventory inventary = player.getInventory();
 		boolean hasItem = false;
-		for (ItemStack item : inventary) {
+		for (final ItemStack item : inventary) {
 			hasItem = equalItem(item);
 			if (hasItem) {
 				return hasItem;
 			}
 		}
+		Bukkit.getConsoleSender().sendMessage("" + hasItem);
 		return hasItem;
 	}
 }

@@ -14,7 +14,7 @@ import ru.dark32.chat.ichanels.IChanel;
 
 public class BaseChanel implements IChanel {
 	private boolean		enable;
-	private String		format;
+	private String		formatString;
 	private int			index;
 	private boolean		isWorld;
 	private String		name;
@@ -31,7 +31,7 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public String getFormat() {
-		return this.format;
+		return this.formatString;
 	}
 
 	@Override
@@ -79,42 +79,42 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public void setEnable(boolean enbl ) {
+	public void setEnable(final boolean enbl ) {
 		this.enable = enbl;
 	}
 
 	@Override
-	public void setFormat(String key ) {
-		this.format = ChanelRegister.colorize(key);
+	public void setFormat(final String key ) {
+		this.formatString = ChanelRegister.colorize(key);
 	}
 
 	@Override
-	final public void setIndex(int indx ) {
+	final public void setIndex(final int indx ) {
 		this.index = indx;
 	}
 
 	@Override
-	public void setName(String name ) {
+	public void setName(final String name ) {
 		this.name = name;
 	}
 
 	@Override
-	public void setPrefix(String key ) {
+	public void setPrefix(final String key ) {
 		this.prefix = key.charAt(0);
 	}
 
 	@Override
-	public void setSign(char sign ) {
+	public void setSign(final char sign ) {
 		this.sign = sign;
 	}
 
 	@Override
-	public void setWorldChat(boolean isWorld ) {
+	public void setWorldChat(final boolean isWorld ) {
 		this.isWorld = isWorld;
 	}
 
 	@Override
-	public void setType(ETypeChanel type ) {
+	public void setType(final ETypeChanel type ) {
 		this.type = type;
 
 	}
@@ -144,9 +144,9 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public String format(final Player player,final String msg ) {
-		return msg.replace("%sf", ChanelRegister.getSuffix(player.getName()))
-				.replace("%pf", ChanelRegister.getPreffix(player.getName())).replace("%p", "%1$s")
-				.replace("%msg", "%2$s");
+		return msg.replace("$sf", ChanelRegister.getSuffix(player.getName()))
+				.replace("$pf", ChanelRegister.getPreffix(player.getName())).replace("$p", "%1$s")
+				.replace("$msg", "%2$s");
 	}
 
 	@Override

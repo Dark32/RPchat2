@@ -24,7 +24,7 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 	private int	range;
 
 	@Override
-	public void setRange(int range ) {
+	public void setRange(final int range ) {
 		this.range = range;
 	}
 
@@ -35,12 +35,12 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 
 	@Override
 	public List<Player> getRecipients(Player sender ) {
-		List<Player> recipients = new LinkedList<Player>();
-		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			boolean isWorld = isWorldChat() && sender.getWorld() == recipient.getWorld();
-			boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
-			int dist = getDist(sender.getLocation(), recipient.getLocation());
-			boolean isRange = dist < this.getRange();
+		final List<Player> recipients = new LinkedList<Player>();
+		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
+			final boolean isWorld = isWorldChat() && sender.getWorld() == recipient.getWorld();
+			final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
+			final int dist = getDist(sender.getLocation(), recipient.getLocation());
+			final boolean isRange = dist < this.getRange();
 			if (isDeaf) {
 				continue;
 			} else if (Util.hasPermission(recipient, "mcnw.spy")) {
@@ -58,10 +58,14 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 		return recipients;
 	}
 
-	protected int getDist(Location s, Location t ) {
-		return (int) (NumberConversions.square(s.getX() - t.getX())
-				+ NumberConversions.square(s.getY() - t.getY()) + NumberConversions.square(s.getZ()
-				- t.getZ()));
+	protected int getDist(Location sender, Location target ) {
+		int distX = (int) (sender.getX() - target.getX());
+		distX *= distX;
+		int distY = (int) (sender.getY() - target.getY());
+		distY *= distY;
+		int distZ = (int) (sender.getZ() - target.getZ());
+		distZ *= distZ;
+		return distX + distY + distZ;
 
 	}
 

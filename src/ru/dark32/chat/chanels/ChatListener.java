@@ -1,5 +1,6 @@
 package ru.dark32.chat.chanels;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,11 +27,11 @@ public class ChatListener implements Listener {
 		// формат
 		String format = "";
 		// префикс, первый символ
-		char prefix = message.charAt(0);
+		final char prefix = message.charAt(0);
 		// ИД канала по префиксы, -1 - нет канала по префиксы
-		int prefixChanel = ChanelRegister.getIndexByPrefix(prefix);
+		final int prefixChanel = ChanelRegister.getIndexByPrefix(prefix);
 		// ИД канала по вещи в руках, -1 нет канала по вещи в руках
-		int itemChanel = ChanelRegister.getIndexByItem(sender.getItemInHand());
+		final int itemChanel = ChanelRegister.getIndexByItem(sender.getItemInHand());
 		// ИД активного канала, не иницилизируем по умолчанию
 		int indexChanel = Util.getModeIndex(sender.getName());
 		// Сообщение длинее одного знака
@@ -78,7 +79,7 @@ public class ChatListener implements Listener {
 					if (((IItemChanel) chanel).equalItem(sender.getItemInHand())) {
 						// теряем 1 вещь
 						((IItemChanel) chanel).loseItem(sender);
-					} else { // иначе
+						} else { // иначе
 						// глаголим, что вещи нет
 						sender.sendMessage(ValueStorage.nei);
 						event.setCancelled(true);
@@ -113,10 +114,10 @@ public class ChatListener implements Listener {
 		event.setMessage(message);
 	}
 
-	private Boolean hasMute(Player player, int indexChanel ) {
+	private Boolean hasMute(Player player, final int indexChanel ) {
 		if (Main.getBanStorage().isMuted(player.getName(), indexChanel)) {
-			player.sendMessage(ValueStorage.muteMessage.replace("$1", ""
-					+ Main.getBanStorage().getTimeMute(player.getName(), indexChanel)));
+			player.sendMessage(ValueStorage.muteMessage.replace("$1",
+					String.valueOf(Main.getBanStorage().getTimeMute(player.getName(), indexChanel))));
 
 			return true;
 		}

@@ -30,15 +30,15 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 
 	@Override
 	public List<Player> getRecipients(Player sender ) {
-		List<Player> recipients = new LinkedList<Player>();
+		final  List<Player> recipients = new LinkedList<Player>();
 		if (Main.DEBUG_MODE) {
 			sender.sendMessage("debug:--------------------------------");
 		}
-		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			boolean isWorld = !isWorldChat() || sender.getWorld() == recipient.getWorld();
-			boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
-			int dist = getDist(sender.getLocation(), recipient.getLocation());
-			boolean isRange = dist < this.getRange() * this.getRange();
+		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
+			final boolean isWorld = !isWorldChat() || sender.getWorld() == recipient.getWorld();
+			final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
+			final int dist = getDist(sender.getLocation(), recipient.getLocation());
+			final boolean isRange = dist < this.getRange() * this.getRange();
 			if (Main.DEBUG_MODE) {
 				sender.sendMessage("debug: " + recipient.getName() + " | " + dist + "/"
 						+ this.range * this.range + "|" + isWorld);
@@ -78,14 +78,14 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 		return recipients;
 	}
 
-	private int getDist(Location s, Location t ) {
-		int dx = (int) (s.getX() - t.getX());
-		dx *= dx;
-		int dy = (int) (s.getY() - t.getY());
-		dy *= dy;
-		int dz = (int) (s.getZ() - t.getZ());
-		dz *= dz;
-		return dx + dy + dz;
+	private int getDist(Location sender, Location target ) {
+		int distX = (int) (sender.getX() - target.getX());
+		distX *= distX;
+		int distY = (int) (sender.getY() - target.getY());
+		distY *= distY;
+		int distZ = (int) (sender.getZ() - target.getZ());
+		distZ *= distZ;
+		return distX + distY + distZ;
 
 	}
 

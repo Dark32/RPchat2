@@ -34,11 +34,11 @@ public interface IPersonalMessagesChanel extends IChanel {
 	/**
 	 * @param raw
 	 *            сырая строка
-	 * @param _ind
+	 * @param ind
 	 *            индекс начала сообщения
 	 * @return сообщение
 	 */
-	public String getMessage(String raw, int _ind );
+	public String getMessage(String raw, int ind );
 
 	/**
 	 * @param name
@@ -52,7 +52,7 @@ public interface IPersonalMessagesChanel extends IChanel {
 	 *            цель или ничто
 	 * @return истина если цель не ничто
 	 */
-	public boolean hasTarget(Player target );
+	public boolean hasTarget(Player target ); 
 
 	public Player getTarget(String targetName );
 

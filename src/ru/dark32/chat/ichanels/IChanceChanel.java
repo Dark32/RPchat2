@@ -52,5 +52,8 @@ public interface IChanceChanel extends IRangeChanel {
 	 */
 	public int getChance();
 
-	
+	public String getFormatLuck();
+
+	public void setFormatLuck(String format );
+
 }

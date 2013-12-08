@@ -1,9 +1,9 @@
 experemental: false
 String:
 # не все заменители работают всюду
-# %p - имя игрока
-# %pf | %sf - зкуаашч/Suffix
-# %msg - сообщение
+# $p - имя игрока
+# $pf | $sf - зкуаашч/Suffix
+# $msg - сообщение
 # $1,$2,... - замена в зависимости от контекста
 
    nei: "&7У вас нет нужного предмета"
@@ -12,15 +12,16 @@ String:
    joinmsg: 
     - "Добро пожаовать на сервер"
     - "это тестово сообщение"
-    - "ваше имя - %p"
+    - "ваше имя - $p"
 Chat: 
    Chance:
       #$1 - Удачо/Неудачно
-      format: "&5* %p %msg $1 *"
+      format: "&5* $p $msg *"
       # $1 - сколько выпало, из $2 скольки
-      formatroll: "&d* %p &d* выбрасывает $1 из $2 *"
+      formatroll: "выбрасывает $1 из $2"
+      formatLuck: "$msg $1"
       luck: "&a (удачно) &d"
-      unluck: "&a (неудачно) &d"
+      unluck: "&c (неудачно) &d"
       default: 6
       min: 5
       chance: 50
@@ -31,7 +32,7 @@ Chat:
       range: 200
       sign: c
    Broad:
-      format: "%msg"
+      format: "$msg"
       type: broad
       enable: true
       world: true
@@ -40,8 +41,8 @@ Chat:
         - "&b[INFO]:"
         - "&d[CONSOLE]:"
       name: "широкое вещание"
-      spy: "%p пытался использовать широкое вещание"
-      consoleSpy: "%p использовал широкое вещание"
+      spy: "$p пытался использовать широкое вещание"
+      consoleSpy: "$p использовал широкое вещание"
       prefix: "~"
       tab: false
       sign: b
@@ -49,10 +50,11 @@ Chat:
       type: pm
       enable: true
       world: true
-      formatTo: "&7@%p:&5 %msg"
-      # %r - Кому ЛС
-      formatFrom: "&7@%p->%r:&5 %msg"
-      formatSpy: "&7@spy: %p->%r:&5 %msg"
+      formatTo: "&7@$p:&5 $msg"
+      # $r - Кому ЛС
+      formatFrom: "&7@$p->$r:&5 $msg"
+      formatSpy: "&7@spy: $p->$r:&5 $msg"
+      format: "&7@spy: $p->$msg"
       noinputmsg: "&7Сообщение не введено"
       #$1 имя игрока
       playeNotFound: "&o&7Игрока $1 нет в сети"
@@ -65,10 +67,10 @@ Chat:
       enable: true
       world: true
       #@Deprecated
-      Id: 264
+      id: 264
       Ma: DIAMOND
       SubId: 0
-      format: "%pf%p%sf всем:&e %msg "
+      format: "$pf$p$sf всем:&e $msg "
       name: "глобальный чат"
       prefix: "$"
       sign: g
@@ -78,28 +80,32 @@ Chat:
       enable: true
       world: true
      #@Deprecated
-      Id: 260
+      id: 260
       Ma: APPLE
       SubId: 0
-      format: "%pf%p%sf в мир:&6 %msg "
+      format: "$pf$p$sf в мир:&6 $msg "
       name: "мировой чат"
       prefix: ">"
       sign: w
       requestPrefix: true
    Shout:
-      type: range
+      type: REQUISITE
       enable: true
       world: false
-      format: "%pf%p%sf кричит:&c %msg"
+      format: "$pf$p$sf кричит:&c $msg"
       name: "крик"
       range: 500
       prefix: "!"
       sign: s
+      id: 339
+      Ma: PAPPER
+      SubId: 0
+      requestPrefix: false
    Local:
       type: range
       enable: true
       world: true
-      format: "%pf%p%sf:&f %msg"
+      format: "$pf$p$sf:&f $msg"
       name: "локальный чат"
       range: 250
       prefix: "-"
@@ -109,7 +115,7 @@ Chat:
       type: range
       enable: true
       world: true
-      format: "&7%p&7 шепчет: %msg"
+      format: "&7$p&7 шепчет: $msg"
       name: "шёпот"
       range: 20
       prefix: "#"
@@ -142,35 +148,35 @@ mute:
    - "&b/mute - для вызоа справки по молчанке"
    - "&b/unmute <nick> [sign] &6- для снятия молчанки"
    - "&6 время меньше 5 - для принудительносго снятия молчанки"
-  needName: "&7%Вы должны указать имя"
-  muteMessage: "&7%%n теперь молчит в %c на %t секунд по причине %r"
-  unmuteMessage: "&7%&n  теперь может говорить в 	 %c"
-  canTHelp: "&7%Вы не можете смотреть справку по молчанке"
-  canTSeeSelf: "&7%Вы не можете смотреть свою молчанку"
-  canTSeeAllMute: "&7%Вы не можете смотреть все молчанки"
-  canTSeeTargetMute: "&7%Вы не можете смотреть молчанку цели"
-  signMoreOne: "&7%Сокращение канала не может быть длинее 1 символа: $1"
-  canTUnmute: "&7%Вы не можете снять молчанку"
-  canTMute: "&7%Вы не можете устанавливать молчанку"
+  needName: "&7$Вы должны указать имя"
+  muteMessage: "&7$$n теперь молчит в $c на $t секунд по причине $r"
+  unmuteMessage: "&7$&n  теперь может говорить в $c"
+  canTHelp: "&7$Вы не можете смотреть справку по молчанке"
+  canTSeeSelf: "&7$Вы не можете смотреть свою молчанку"
+  canTSeeAllMute: "&7$Вы не можете смотреть все молчанки"
+  canTSeeTargetMute: "&7$Вы не можете смотреть молчанку цели"
+  signMoreOne: "&7$Сокращение канала не может быть длинее 1 символа: $1"
+  canTUnmute: "&7$Вы не можете снять молчанку"
+  canTMute: "&7$Вы не можете устанавливать молчанку"
   noReason: "не указана"
-  timeNotNum: "&7%Время должно быть числом: "
-  subCMDErr: "&7%Ошибка форматирования #2 [see|all]"
-  dataError: "&7%Что-то не так с форматом времени: "
-  muteSee: "&7%%n молчит в %c. Осталось %t секунд. Причина: &r"
+  timeNotNum: "&7$Время должно быть числом: "
+  subCMDErr: "&7$Ошибка форматирования #2 [see|all]"
+  dataError: "&7$Что-то не так с форматом времени: "
+  muteSee: "&7$$n молчит в $c. Осталось $t секунд. Причина: $r"
 deaf:
-  canTHelp: "&7%Вы не можете смотреть справку по глухоте" 
-  canTSeeSelf: "&7%Вы не можете смотреть свою глухоту" 
-  udeafSelf: "&7%Ваша глухота: " 
-  canTSeeAllDeaf: "&7%Вы не можете смотреть все глухоты" 
-  canTSeeTargetDeaf: "&7%Вы не можете смотреть глухоту цели" 
-  signMoreOne: "&7%Сокращение канала не может быть длинее 1 символа: $1" 
-  canTUndeafSelf: "&7%Вы не можете снять глухоту с себя" 
-  canTUndeafTarget: "&7%Вы не можете снять глухоту с другово" 
-  canTDeafSelf: "&7%Вы не можете устанавливать глухоту себе" 
-  canTDeafTarget: "&7%Вы не можете устанавливать глухоту другим" 
-  deafMessage: "&7%%n не слушает %c. Причина: %r" 
+  canTHelp: "&7$Вы не можете смотреть справку по глухоте" 
+  canTSeeSelf: "&7$Вы не можете смотреть свою глухоту" 
+  udeafSelf: "&7$Ваша глухота: " 
+  canTSeeAllDeaf: "&7$Вы не можете смотреть все глухоты" 
+  canTSeeTargetDeaf: "&7$Вы не можете смотреть глухоту цели" 
+  signMoreOne: "&7$Сокращение канала не может быть длинее 1 символа: $1" 
+  canTUndeafSelf: "&7$Вы не можете снять глухоту с себя" 
+  canTUndeafTarget: "&7$Вы не можете снять глухоту с другово" 
+  canTDeafSelf: "&7$Вы не можете устанавливать глухоту себе" 
+  canTDeafTarget: "&7$Вы не можете устанавливать глухоту другим" 
+  deafMessage: "&7$$n не слушает $c. Причина: $r" 
   noReason: "не указана" 
-  undeafMessage: "&7%%n теперь слышит канал %c" 
+  undeafMessage: "&7$$n теперь слышит канал $c" 
   help:
    - "&b/deaf <nick> <sign> <reason> &6- для глухоты"
    - "&bg &6- Глобалный  &bw&6 - мировой"

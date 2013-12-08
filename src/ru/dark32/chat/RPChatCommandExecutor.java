@@ -33,7 +33,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 				return true;
 			} else if (args.length == 1) {
 				if (args[0].equalsIgnoreCase("help")) getHelp(sender);
-				if (args[0].equalsIgnoreCase("channle")) getChannel(sender);
+				if (args[0].equalsIgnoreCase("channel")) getChannel(sender);
 				return true;
 			}
 		}
@@ -92,8 +92,8 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		msg.add("&b=============================================");
 		msg.addAll(ValueStorage.helpChannel);
 		for (IChanel chanel : ChanelRegister.listChat)
-			msg.add("&b" + chanel.getName() + " || " + chanel.getInnerName() + "||"
-					+ chanel.getSign());
+			msg.add("&b" + chanel.getName() + " || " + chanel.getInnerName() + " || "
+					+ chanel.getSign()+" || "+chanel.getPrefix() +" || "+ chanel.getType().toString() );
 		msg.add("&b=============================================");
 		for (String s : msg) {
 			sender.sendMessage(ChanelRegister.colorize(s));
