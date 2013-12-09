@@ -94,8 +94,6 @@ public interface IChanel {
 	public void setWorldChat(boolean isWorld );
 
 	/**
-	 * // NOPMD by ������������� on 06.12.13 15:21
-	 * 
 	 * @param type
 	 *            тип чата <br>
 	 *            base - базовый<br>
