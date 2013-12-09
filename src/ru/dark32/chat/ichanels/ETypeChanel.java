@@ -35,7 +35,7 @@ public enum ETypeChanel {
 			public IChanel setChanel(final String name ) {
 				IChanel chanel = new RangeChanel();
 				chanel = ETypeChanel.setBase(chanel, name);
-				((IRangeChanel) chanel).setRange(Main.config.getInt("Chat." + name + ".range"));
+				((IRangeChanel) chanel).setRange(Main.config.getInt("Chat." + name + ".range", 200));
 				return chanel;
 			}
 		},
@@ -53,14 +53,14 @@ public enum ETypeChanel {
 			public IChanel setChanel(String name ) {
 				IChanel chanel = new PersonalMessageChanel();
 				chanel = ETypeChanel.setBase(chanel, name);
-				((IPersonalMessagesChanel) chanel).setFormatTo(Main.config.getString("Chat." + name
-						+ ".formatTo", "Chat." + name + ".formatTo"));
-				((IPersonalMessagesChanel) chanel).setFormatFrom(Main.config.getString("Chat."
-						+ name + ".formatFrom", "Chat." + name + ".formatFrom"));
-				((IPersonalMessagesChanel) chanel).setFormatSpy(Main.config.getString("Chat."
-						+ name + ".formatSpy", "Chat." + name + ".formatSpy"));
-				((IPersonalMessagesChanel) chanel).setPmSearchNickMode(Main.config.getInt("Chat."
-						+ name + ".PMSearchNickMode", 0));
+				((IPersonalMessagesChanel) chanel).setFormatTo(Main.config.getString("Chat." + name + ".formatTo",
+						"Chat." + name + ".formatTo"));
+				((IPersonalMessagesChanel) chanel).setFormatFrom(Main.config.getString("Chat." + name + ".formatFrom",
+						"Chat." + name + ".formatFrom"));
+				((IPersonalMessagesChanel) chanel).setFormatSpy(Main.config.getString("Chat." + name + ".formatSpy",
+						"Chat." + name + ".formatSpy"));
+				((IPersonalMessagesChanel) chanel).setPmSearchNickMode(Main.config.getInt("Chat." + name
+						+ ".PMSearchNickMode", 0));
 				return chanel;
 			}
 		},
@@ -76,12 +76,22 @@ public enum ETypeChanel {
 			}
 		},
 		REQUISITE {
+			@SuppressWarnings("deprecation" )
 			@Override
 			public IChanel setChanel(final String name ) {
 				IChanel chanel = new RangeRequisiteItemChanel();
 				chanel = ETypeChanel.setBase(chanel, name);
 				chanel = ETypeChanel.setItem(chanel, name);
 				((IRangeChanel) chanel).setRange(Main.config.getInt("Chat." + name + ".range"));
+				((IRangeRequisiteItemChanel) chanel).setRequiseteItemId(Main.config.getInt("Chat." + name
+						+ ".requisete.id", ((IItemChanel) chanel).getItemId()));
+				((IRangeRequisiteItemChanel) chanel).setRequiseteItemSubId(Main.config.getInt("Chat." + name
+						+ ".requisete.subid", ((IItemChanel) chanel).getItemSubId()));
+				((IRangeRequisiteItemChanel) chanel).setRequiseteItemAmount(Main.config.getInt("Chat." + name
+						+ ".requisete.amount", 0));
+				((IRangeRequisiteItemChanel) chanel).setRequiseteItemMaterial(Material.getMaterial(Main.config
+						.getString("Chat." + name + ".requisete.material", ((IItemChanel) chanel).getItemMaterial()
+								.name())));
 				return chanel;
 			}
 		},
@@ -91,20 +101,16 @@ public enum ETypeChanel {
 			public IChanel setChanel(final String name ) {
 				IChanel chanel = new ChanceChanel();
 				chanel = ETypeChanel.setBase(chanel, name);
-				((IChanceChanel) chanel).setRange(Main.config
-						.getInt("Chat." + name + ".range", 200));
-				((IChanceChanel) chanel).setChance(
-						Main.config.getInt("Chat." + name + ".chance", 50),
+				((IChanceChanel) chanel).setRange(Main.config.getInt("Chat." + name + ".range", 200));
+				((IChanceChanel) chanel).setChance(Main.config.getInt("Chat." + name + ".chance", 50),
 						Main.config.getInt("Chat." + name + ".min", 5));
 				((IChanceChanel) chanel).setLuckUnLuck(
 						Main.config.getString("Chat." + name + ".luck", "Chat." + name + ".luck"),
-						Main.config.getString("Chat." + name + ".unluck", "Chat." + name
-								+ ".unluck"));
-				((IChanceChanel) chanel).setFormatRoll(Main.config.getString("Chat." + name
-						+ ".formatroll", "Chat." + name + ".formatroll"));
-				((IChanceChanel) chanel).setFormatLuck(Main.config.getString("Chat." + name
-						+ ".formatLuck", "Chat." + name + ".formatLuck"));
-				((IRangeChanel) chanel).setRange(Main.config.getInt("Chat." + name + ".range"));
+						Main.config.getString("Chat." + name + ".unluck", "Chat." + name + ".unluck"));
+				((IChanceChanel) chanel).setFormatRoll(Main.config.getString("Chat." + name + ".formatroll", "Chat."
+						+ name + ".formatroll"));
+				((IChanceChanel) chanel).setFormatLuck(Main.config.getString("Chat." + name + ".formatLuck", "Chat."
+						+ name + ".formatLuck"));
 				return chanel;
 			}
 		},
@@ -114,8 +120,7 @@ public enum ETypeChanel {
 			public IChanel setChanel(final String name ) {
 				IChanel chanel = new BroadChanel();
 				chanel = ETypeChanel.setBase(chanel, name);
-				((IBroadChanel) chanel).setPattern(Main.config.getStringList("Chat." + name
-						+ ".pattern"));
+				((IBroadChanel) chanel).setPattern(Main.config.getStringList("Chat." + name + ".pattern"));
 				return chanel;
 			}
 		},
@@ -164,27 +169,28 @@ public enum ETypeChanel {
 	private static IChanel setBase(IChanel chanel, final String name ) {
 		chanel.setIndex(ChanelRegister.getNextIndex());
 		chanel.setName(Main.config.getString("Chat." + name + ".name", "Chat." + name + ".name"));
-		chanel.setFormat(Main.config.getString("Chat." + name + ".format", "Chat." + name
-				+ ".format"));
+		chanel.setFormat(Main.config.getString("Chat." + name + ".format", "Chat." + name + ".format"));
 		chanel.setEnable(Main.config.getBoolean("Chat." + name + ".enable", false));
 		chanel.setWorldChat(Main.config.getBoolean("Chat." + name + ".world", false));
 		chanel.setTabes(Main.config.getBoolean("Chat." + name + ".tab", true));
-		chanel.setPrefix(Main.config.getString("Chat." + name + ".prefix", "Chat." + name
-				+ ".prefix"));
-		chanel.setSign(Main.config.getString("Chat." + name + ".sign", "Chat." + name + ".sign")
-				.charAt(0));
+		chanel.setPrefix(Main.config.getString("Chat." + name + ".prefix", "Chat." + name + ".prefix"));
+		chanel.setSign(Main.config.getString("Chat." + name + ".sign", "Chat." + name + ".sign").charAt(0));
+		chanel.setListenerMessage(
+				Main.config.getString("Chat." + name + ".listenerMessage", "Chat." + name + ".listenerMessage"),
+				Main.config.getString("Chat." + name + ".noListenerMessage", "Chat." + name + ".noListenerMessage"),
+				Main.config.getBoolean("Chat." + name + ".isListenerMessage", false));
 		chanel.setInnerName(name);
 		return chanel;
 	}
 
 	@SuppressWarnings("deprecation" )
 	private static IChanel setItem(IChanel chanel, final String name ) {
-		((IItemChanel) chanel).setItemId(Main.config.getInt("Chat." + name + ".id", 0));
-		((IItemChanel) chanel).setSubId(Main.config.getInt("Chat." + name + ".subid", 0));
-		((IItemChanel) chanel).setMaterial(Material.getMaterial(Main.config.getString("Chat."
-				+ name + ".Ma", "DIAMOND")));
-		((IItemChanel) chanel).setRequestPprefix(Main.config.getBoolean("Chat." + name
-				+ ".requestPrefix", true));
+		((IItemChanel) chanel).setItemId(Main.config.getInt("Chat." + name + ".item.id", 0));
+		((IItemChanel) chanel).setItemSubId(Main.config.getInt("Chat." + name + ".item.subid", 0));
+		((IItemChanel) chanel).setItemAmount(Main.config.getInt("Chat." + name + ".item.amount", 1));
+		((IItemChanel) chanel).setItemMaterial(Material.getMaterial(Main.config.getString("Chat." + name
+				+ ".item.material", "AIR")));
+		((IItemChanel) chanel).setRequestPprefix(Main.config.getBoolean("Chat." + name + ".requestPrefix", true));
 
 		return chanel;
 	}

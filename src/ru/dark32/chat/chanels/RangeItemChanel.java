@@ -9,7 +9,6 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.util.NumberConversions;
 
 import ru.dark32.chat.Main;
 import ru.dark32.chat.Util;
@@ -40,7 +39,7 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 			final boolean isWorld = isWorldChat() && sender.getWorld() == recipient.getWorld();
 			final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
 			final int dist = getDist(sender.getLocation(), recipient.getLocation());
-			final boolean isRange = dist < this.getRange();
+			final boolean isRange = (this.getRange() < 0) || (dist < this.getRange());
 			if (isDeaf) {
 				continue;
 			} else if (Util.hasPermission(recipient, "mcnw.spy")) {

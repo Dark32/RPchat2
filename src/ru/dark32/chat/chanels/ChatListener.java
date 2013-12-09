@@ -1,6 +1,5 @@
 package ru.dark32.chat.chanels;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,8 +9,6 @@ import ru.dark32.chat.Main;
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ValueStorage;
 import ru.dark32.chat.ichanels.IChanel;
-import ru.dark32.chat.ichanels.IItemChanel;
-import ru.dark32.chat.ichanels.IPersonalMessagesChanel;
 
 /**
  * @author Andrew
@@ -61,50 +58,19 @@ public class ChatListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		// Фильтруем каналы
-		switch (chanel.getType()) {
-		// Базовый
-			case BASE: {
-				break;
-			}
-			case RANGE: {
-				break;
-			}
-			case RANGE_ITEM:
-			case REQUISITE:
-			case ITEM: {
-				// может ли говорить без вещи
-				if (!Util.hasPermission(sender, "mcnw." + chanel.getInnerName() + ".no_item")) {
-					// если вещь в руках совпала
-					if (((IItemChanel) chanel).equalItem(sender.getItemInHand())) {
-						// теряем 1 вещь
-						((IItemChanel) chanel).loseItem(sender);
-						} else { // иначе
-						// глаголим, что вещи нет
-						sender.sendMessage(ValueStorage.nei);
-						event.setCancelled(true);
-						return;
-					}
-				}
-				break;
-			}
-			case CHANCE: {
-				break;
-			}
-			case PM: {
-				// отправляем сообщение цели
-				((IPersonalMessagesChanel) chanel).sendMessage(sender, message);
-				break;
-			}
-			default:
-				break;
+		// соблюдены ли иные условия отправки
+		if (!chanel.canSend(sender, message)) {
+			event.setCancelled(true);
+			return;
 		}
 		// обрабатываем сообение перед отправкой
-		message = chanel.preformat(sender, message);
+		message = chanel.preformatMessage(sender, message);
 		// чистим список получателей
 		event.getRecipients().clear();
 		// добавляем получателей согласно типу чата
 		event.getRecipients().addAll(chanel.getRecipients(sender));
+		// отправка пре сообщения
+		chanel.preSend(sender, message, event.getRecipients().size());
 		// System.out.println(event.getRecipients());
 		// получаем и обрабатываем формат
 		format = chanel.format(sender, chanel.getFormat());

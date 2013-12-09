@@ -27,33 +27,37 @@ public class Deaf implements IDeaf {
 	private String		deafMessage;
 	private String		noReason;
 	private String		undeafMessage;
+	private String		deafMessage2;
 
 	public Deaf(){
-		canTHelp = ChanelRegister.colorize(Main.config.getString("mute.canTHelp",
+		canTHelp = ChanelRegister.colorize(Main.config.getString("deaf.canTHelp",
 				"&7$Вы не можете смотреть справку по глухоте"));
-		canTSeeSelf = ChanelRegister.colorize(Main.config.getString("mute.canTSeeSelf",
+		canTSeeSelf = ChanelRegister.colorize(Main.config.getString("deaf.canTSeeSelf",
 				"&7$Вы не можете смотреть свою глухоту"));
-		udeafSelf = ChanelRegister.colorize(Main.config.getString("mute.udeafSelf",
+		udeafSelf = ChanelRegister.colorize(Main.config.getString("deaf.udeafSelf",
 				"&7$Ваша глухота: "));
-		canTSeeAllDeaf = ChanelRegister.colorize(Main.config.getString("mute.canTSeeAllDeaf",
+		canTSeeAllDeaf = ChanelRegister.colorize(Main.config.getString("deaf.canTSeeAllDeaf",
 				"&7$Вы не можете смотреть все глухоты"));
-		canTSeeTargetDeaf = ChanelRegister.colorize(Main.config.getString("mute.canTSeeTargetDeaf",
+		canTSeeTargetDeaf = ChanelRegister.colorize(Main.config.getString("deaf.canTSeeTargetDeaf",
 				"&7$Вы не можете смотреть глухоту цели"));
-		signMoreOne = ChanelRegister.colorize(Main.config.getString("mute.signMoreOne",
+		signMoreOne = ChanelRegister.colorize(Main.config.getString("deaf.signMoreOne",
 				"&7$Сокращение канала не может быть длинее 1 символа: $1"));
-		canTUndeafSelf = ChanelRegister.colorize(Main.config.getString("mute.canTUndeafSelf",
+		canTUndeafSelf = ChanelRegister.colorize(Main.config.getString("deaf.canTUndeafSelf",
 				"&7$Вы не можете снять глухоту с себя"));
-		canTUndeafTarget = ChanelRegister.colorize(Main.config.getString("mute.canTUndeafTarget",
+		canTUndeafTarget = ChanelRegister.colorize(Main.config.getString("deaf.canTUndeafTarget",
 				"&7$Вы не можете снять глухоту с другово"));
-		canTDeafSelf = ChanelRegister.colorize(Main.config.getString("mute.canTDeafSelf",
+		canTDeafSelf = ChanelRegister.colorize(Main.config.getString("deaf.canTDeafSelf",
 				"&7$Вы не можете устанавливать глухоту себе"));
-		canTDeafTarget = ChanelRegister.colorize(Main.config.getString("mute.canTDeafTarget",
+		canTDeafTarget = ChanelRegister.colorize(Main.config.getString("deaf.canTDeafTarget",
 				"&7$Вы не можете устанавливать глухоту другим"));
-		deafMessage = ChanelRegister.colorize(Main.config.getString("mute.deafMessage",
+		deafMessage = ChanelRegister.colorize(Main.config.getString("deaf.deafMessage",
 				"&7$$n не слушает $c. Причина: $r"));
-		noReason = ChanelRegister.colorize(Main.config.getString("mute.noReason", "не указана"));
-		undeafMessage = ChanelRegister.colorize(Main.config.getString("mute.undeafMessage",
+		noReason = ChanelRegister.colorize(Main.config.getString("deaf.noReason", "не указана"));
+		undeafMessage = ChanelRegister.colorize(Main.config.getString("deaf.undeafMessage",
 				"&7$$n теперь слышит канал $c"));
+		deafMessage2 = ChanelRegister.colorize(Main.config.getString("deaf.deafMessage2",
+				"&7$$n теперь не слушает $c. Причина: $r"));
+
 	}
 
 	private String getPlayerDeafString(String playerName, int chanel ) {
@@ -193,12 +197,13 @@ public class Deaf implements IDeaf {
 				Main.yaml.set(getPlayerDeafString(name, i) + "-reason", reason);
 			}
 		}
-		sender.sendMessage(ChatColor.GRAY
-				+ "$"
-				+ name
-				+ " теперь не слушает канал "
-				+ (chanel >= 0 && chanel < this.chaneles ? ChanelRegister.getByIndex(chanel)
-						.getName() : "a"));
+		sender.sendMessage(deafMessage2
+				.replace("$n", name)
+				.replace(
+						"$c",
+						(chanel >= 0 && chanel < this.chaneles ? ChanelRegister.getByIndex(chanel)
+								.getName() : "a")).replace("$r", reason));
+
 		saveDeaf();
 	}
 

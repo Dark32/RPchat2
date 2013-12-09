@@ -93,7 +93,9 @@ public interface IChanel {
 	 */
 	public void setWorldChat(boolean isWorld );
 
-	/** // NOPMD by ������������� on 06.12.13 15:21
+	/**
+	 * // NOPMD by ������������� on 06.12.13 15:21
+	 * 
 	 * @param type
 	 *            тип чата <br>
 	 *            base - базовый<br>
@@ -159,5 +161,53 @@ public interface IChanel {
 	 * @return обработанное сообщение
 	 */
 
-	public String preformat(Player sender, String message );
+	public String preformatMessage(Player sender, String message );
+
+	/**
+	 * можно ли отправить
+	 * 
+	 * @param sender
+	 *            Отправитель
+	 * @param message
+	 *            сообщение
+	 * @return истина, если можно отправить
+	 */
+	boolean canSend(Player sender, String message );
+
+	/**
+	 * событие до отправки сообщения
+	 * 
+	 * @param sender
+	 *            Отправитель
+	 * @param message
+	 *            сообщение
+	 * @param recipient
+	 *            число услышащих сообщение
+	 */
+	void preSend(Player sender, String message, int recipient );
+
+	/**
+	 * установка сообщения о числе услышавших
+	 * 
+	 * @param listenerMessage
+	 *            сообщение если услышали
+	 * @param noListenerMessage
+	 *            сообщение если не услышали
+	 * @param enable
+	 *            выводить ли
+	 */
+	void setListenerMessage(String listenerMessage, String noListenerMessage, boolean enable );
+
+	/**
+	 * @param count
+	 *            сколько услышат
+	 * 
+	 * @return сообщения о числе услышавших
+	 */
+	String getListenerMessage(int count );
+
+	/**
+	 * @return выводить ли сообщения о числе услышавших
+	 */
+	boolean isListenerMessage();
 }

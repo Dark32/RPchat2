@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import ru.dark32.chat.Main;
+import ru.dark32.chat.Util;
 import ru.dark32.chat.ValueStorage;
 import ru.dark32.chat.ichanels.IItemChanel;
 
@@ -18,50 +19,54 @@ import ru.dark32.chat.ichanels.IItemChanel;
  */
 public class ItemChanel extends BaseChanel implements IItemChanel {
 
-	private int			id;
-	private int			subid;
-	private Material	material;
+	private int			itemId;
+	private int			itemSubId;
+	private Material	itemMaterial;
 	private boolean		requestPprefix;
+	private int			itemAmount;
 
 	@Override
 	@Deprecated
 	public void setItemId(final int id ) {
-		this.id = id;
+		this.itemId = id;
 
 	}
 
 	@Override
 	@Deprecated
 	public int getItemId() {
-		return this.id;
+		return this.itemId;
 	}
 
 	@Override
-	public Material getMaterial() {
-		return material;
+	public Material getItemMaterial() {
+		return itemMaterial;
 	}
 
 	@Override
-	public void setMaterial(final Material ma ) {
-		this.material = ma;
+	public void setItemMaterial(final Material ma ) {
+		this.itemMaterial = ma;
 
 	}
 
 	@Override
-	public int getSubId() {
-		return this.subid;
+	public int getItemSubId() {
+		return this.itemSubId;
 	}
 
 	@Override
-	public void setSubId(final int sub ) {
-		this.subid = sub;
+	public void setItemSubId(final int sub ) {
+		this.itemSubId = sub;
 	}
 
 	@SuppressWarnings("deprecation" )
 	@Override
 	public void loseItem(Player player ) {
 		final ItemStack inHand = player.getItemInHand();
-		final int amoutHand = inHand.getAmount() - 1;
+		if (this.itemAmount == 0) {
+			return;
+		}
+		final int amoutHand = inHand.getAmount() - this.itemAmount;
 		ItemStack inHandrem = null;
 		if (ValueStorage.experemental) {
 			inHandrem = new ItemStack(inHand.getType(), amoutHand);
@@ -77,8 +82,8 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 
 	@Override
 	public String toString() {
-		return super.toString() + ", id =>" + this.id + ", subid=>" + this.subid + ", material =>"
-				+ this.material.name();
+		return super.toString() + ", id =>" + this.itemId + ", subid=>" + this.itemSubId + ", material =>"
+				+ this.itemMaterial.name() + ", count =>" + this.getItemAmount();
 	}
 
 	@SuppressWarnings("deprecation" )
@@ -90,15 +95,12 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 
 		if (Main.DEBUG_MODE) {
 			Bukkit.getConsoleSender().sendMessage(
-					"debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - "
-							+ item.getType());
-			Bukkit.getConsoleSender().sendMessage(
-					"debug need " + id + ":" + subid + " - " + material);
+					"debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - " + item.getType());
+			Bukkit.getConsoleSender().sendMessage("debug need " + itemId + ":" + itemSubId + " - " + itemMaterial);
 		}
 
-		boolean isItem = item.getDurability() == this.subid
-				&& (ValueStorage.experemental && item.getType() == this.material)
-				|| item.getTypeId() == this.id;
+		boolean isItem = item.getDurability() == this.itemSubId && item.getAmount() > this.itemAmount
+				&& ((ValueStorage.experemental && item.getType() == this.itemMaterial) || item.getTypeId() == this.itemId);
 		return isItem;
 	}
 
@@ -111,5 +113,33 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 	public void setRequestPprefix(final boolean need ) {
 		requestPprefix = need;
 
+	}
+
+	@Override
+	public void setItemAmount(int amount ) {
+		this.itemAmount = amount;
+
+	}
+
+	@Override
+	public int getItemAmount() {
+		return itemAmount;
+	}
+
+	@Override
+	public boolean canSend(Player sender, String message ) {
+		if (!Util.hasPermission(sender, "mcnw." + this.getInnerName() + ".no_item")) {
+			// если вещь в руках совпала
+			if (((IItemChanel) this).equalItem(sender.getItemInHand())) {
+				// теряем 1 вещь
+				((IItemChanel) this).loseItem(sender);
+				} else { // иначе
+				// глаголим, что вещи нет
+				sender.sendMessage(ValueStorage.nei);
+				//event.setCancelled(true);
+				return false;
+			}
+		}
+		return true;
 	}
 }

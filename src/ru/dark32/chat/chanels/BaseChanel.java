@@ -23,6 +23,9 @@ public class BaseChanel implements IChanel {
 	private ETypeChanel	type;
 	private String		innerName;
 	private boolean		tabes;
+	private String		listenerMessage;
+	private boolean		listenerMessageEnable;
+	private String		noListenerMessage;
 
 	@Override
 	public boolean isEnable() {
@@ -126,9 +129,8 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public String toString() {
-		return super.toString() + ", index =>" + this.index + ", isWorld =>" + this.isWorld
-				+ ", name =>" + this.name + ", prefix =>" + this.prefix + ", sign =>" + this.sign
-				+ ", type =>" + this.type;
+		return super.toString() + ", index =>" + this.index + ", isWorld =>" + this.isWorld + ", name =>" + this.name
+				+ ", prefix =>" + this.prefix + ", sign =>" + this.sign + ", type =>" + this.type;
 	}
 
 	@Override
@@ -143,7 +145,7 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public String format(final Player player,final String msg ) {
+	public String format(final Player player, final String msg ) {
 		return msg.replace("$sf", ChanelRegister.getSuffix(player.getName()))
 				.replace("$pf", ChanelRegister.getPreffix(player.getName())).replace("$p", "%1$s")
 				.replace("$msg", "%2$s");
@@ -162,7 +164,38 @@ public class BaseChanel implements IChanel {
 
 	// обычно не надо обрабатывать само сообщение
 	@Override
-	public String preformat(Player sender,String message ) {
+	public String preformatMessage(Player sender, String message ) {
 		return message;
+	}
+
+	@Override
+	public boolean canSend(Player sender, String message ) {
+		return true;
+	}
+
+	@Override
+	public void preSend(Player sender, String message, int recipient ) {
+		// отправляем число услышавших, если это включено
+		if (isListenerMessage()) {
+			sender.sendMessage(getListenerMessage(recipient - 1));
+		}
+	}
+
+	@Override
+	public void setListenerMessage(String listenerMessage, String noListenerMessage, boolean enable ) {
+		this.listenerMessage = ChanelRegister.colorize(listenerMessage);
+		this.noListenerMessage = ChanelRegister.colorize(noListenerMessage);
+		this.listenerMessageEnable = enable;
+
+	}
+
+	@Override
+	public String getListenerMessage(int count ) {
+		return (count > 0) ? listenerMessage.replace("$n", String.valueOf(count)) : noListenerMessage;
+	}
+
+	@Override
+	public boolean isListenerMessage() {
+		return listenerMessageEnable;
 	}
 }

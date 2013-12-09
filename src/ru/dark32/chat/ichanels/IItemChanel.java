@@ -24,24 +24,24 @@ public interface IItemChanel extends IChanel {
 	/**
 	 * @return материал вещи
 	 */
-	public Material getMaterial();
+	public Material getItemMaterial();
 
 	/**
 	 * @param ma
 	 *            материал вещи
 	 */
-	public void setMaterial(Material ma );
+	public void setItemMaterial(Material ma );
 
 	/**
 	 * @return метадата вещи
 	 */
-	public int getSubId();
+	public int getItemSubId();
 
 	/**
 	 * @param sub
 	 *            метадата вещи
 	 */
-	public void setSubId(int sub );
+	public void setItemSubId(int sub );
 
 	/**
 	 * @param player
@@ -56,14 +56,30 @@ public interface IItemChanel extends IChanel {
 	public boolean equalItem(ItemStack item );
 
 	/**
-	 * @return обязателен ли префикс (если нет, то достаточно вещи в руках
-	 * если да - то нужно и вещь в руках и префикс)
+	 * @return обязателен ли префикс (если нет, то достаточно вещи в руках если
+	 *         да - то нужно и вещь в руках и префикс)
 	 */
 	public boolean isRequestPprefix();
 
 	/**
-	 * @param needобязателен ли префикс (если нет, то достаточно вещи в руках
-	 * если да - то нужно и вещь в руках и префикс)
+	 * @param needобязателен
+	 *            ли префикс (если нет, то достаточно вещи в руках если да - то
+	 *            нужно и вещь в руках и префикс)
 	 */
 	public void setRequestPprefix(boolean need );
+
+	/**
+	 * установить
+	 * 
+	 * @param amount
+	 *            вещей тратится
+	 */
+	public void setItemAmount(int amount );
+
+	/**
+	 * получить
+	 * 
+	 * @return вещей тратится
+	 */
+	public int getItemAmount();
 }

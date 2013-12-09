@@ -61,7 +61,7 @@ public class ChanceChanel extends RangeChanel implements IChanceChanel {
 	private String			formatLuck;
 
 	@Override
-	public String preformat(Player sender, String message ) {
+	public String preformatMessage(Player sender, String message ) {
 		int iChance;
 		if (Util.isInteger(message)) {
 			iChance = message.length() < 5 ? Integer.parseInt(message) : 9999;

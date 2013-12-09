@@ -66,10 +66,12 @@ Chat:
       type: item
       enable: true
       world: true
-      #@Deprecated
-      id: 264
-      Ma: DIAMOND
-      SubId: 0
+      item:
+         #@Deprecated
+         id: 264
+         material: DIAMOND
+         subid: 0
+         amount: 1
       format: "$pf$p$sf всем:&e $msg "
       name: "глобальный чат"
       prefix: "$"
@@ -79,10 +81,12 @@ Chat:
       type: item
       enable: true
       world: true
-     #@Deprecated
-      id: 260
-      Ma: APPLE
-      SubId: 0
+      item:
+         #@Deprecated
+         id: 260
+         material: APPLE
+         subid: 0
+         amount: 1
       format: "$pf$p$sf в мир:&6 $msg "
       name: "мировой чат"
       prefix: ">"
@@ -97,9 +101,16 @@ Chat:
       range: 500
       prefix: "!"
       sign: s
-      id: 339
-      Ma: PAPPER
-      SubId: 0
+      item:
+         id: 339
+         material: PAPPER
+         subid: 0
+         amount: 0
+      requisete:
+         id: 340
+         material: BOOK
+         subid: 0
+         amount: 0
       requestPrefix: false
    Local:
       type: range
@@ -111,6 +122,9 @@ Chat:
       prefix: "-"
       sign: l
       default: true
+      listenerMessage: "&7вас услышало $n человек"
+      noListenerMessage: "&7вас не услышали"
+      isListenerMessage: true
    Whisper:
       type: range
       enable: true
@@ -175,6 +189,7 @@ deaf:
   canTDeafSelf: "&7$Вы не можете устанавливать глухоту себе" 
   canTDeafTarget: "&7$Вы не можете устанавливать глухоту другим" 
   deafMessage: "&7$$n не слушает $c. Причина: $r" 
+  deafMessage2: "&7$$n теперь не слушает $c. Причина: $r"
   noReason: "не указана" 
   undeafMessage: "&7$$n теперь слышит канал $c" 
   help:

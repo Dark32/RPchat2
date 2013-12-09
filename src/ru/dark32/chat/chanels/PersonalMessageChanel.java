@@ -158,8 +158,8 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 
 	@Override
 	public String formatFrom(Player sender, Player target, final String msg ) {
-		return format(sender, formatFromString).replace("$r", target.getName())
-				.replace("%2$s", msg).replace("%1$s", sender.getName());
+		return format(sender, formatFromString).replace("$r", target.getName()).replace("%2$s", msg)
+				.replace("%1$s", sender.getName());
 	}
 
 	@Override
@@ -170,7 +170,14 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 
 	@Override
 	public String formatSpy(Player sender, Player target, final String msg ) {
-		return format(sender, formatSpyString).replace("%1$s", sender.getName())
-				.replace("$r", target.getName()).replace("%2$s", msg);
+		return format(sender, formatSpyString).replace("%1$s", sender.getName()).replace("$r", target.getName())
+				.replace("%2$s", msg);
+	}
+
+	@Override
+	public void preSend(Player sender, String message, int recipient ) {
+		// отправляем сообщение цели
+		this.sendMessage(sender, message);
+
 	}
 }
