@@ -208,4 +208,13 @@ public interface IChanel {
 	 * @return выводить ли сообщения о числе услышавших
 	 */
 	boolean isListenerMessage();
+
+	/** нужен ли базовые права для канала
+	 * @param need нужны или нет
+	 */
+	void setNeedPerm(boolean need);
+	/**
+	 * @return нужны ли базовые права
+	 */
+	boolean isNeedPerm();
 }

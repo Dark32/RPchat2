@@ -32,6 +32,7 @@ Chat:
       world: false
       range: 200
       sign: c
+      needPerm: false
    Broad:
       format: "$msg"
       type: broad
@@ -47,6 +48,7 @@ Chat:
       prefix: "~"
       tab: false
       sign: b
+      needPerm: true
    PM:
       type: pm
       enable: true
@@ -63,6 +65,7 @@ Chat:
       PMSearchNickMode: 1
       prefix: "@"
       sign: p
+      needPerm: false
    Global:
       type: item
       enable: true
@@ -78,6 +81,7 @@ Chat:
       prefix: "$"
       sign: g
       requestPrefix: false
+      needPerm: true
    World:
       type: item
       enable: true
@@ -93,6 +97,7 @@ Chat:
       prefix: ">"
       sign: w
       requestPrefix: true
+      needPerm: true
    Shout:
       type: REQUISITE
       enable: true
@@ -113,6 +118,7 @@ Chat:
          subid: 0
          amount: 0
       requestPrefix: false
+      needPerm: false
    Local:
       type: range
       enable: true
@@ -126,6 +132,7 @@ Chat:
       listenerMessage: "&7вас услышало $n человек"
       noListenerMessage: "&7вас не услышали"
       isListenerMessage: true
+      needPerm: false
    Whisper:
       type: range
       enable: true
@@ -135,6 +142,7 @@ Chat:
       range: 20
       prefix: "#"
       sign: v
+      needPerm: false
 help:
   changechanel: "&6Режим изменён на $1"
   chanenotfound: "Канал не найден"

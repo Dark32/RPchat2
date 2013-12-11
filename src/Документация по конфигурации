@@ -25,7 +25,8 @@ BASE:
 		sign: 						| С																					/ подпись канала, имя канала сокращенное до 1 символа. Используется для молчанки и глухоты
 		listenerMessage:		| "Chat.<inner_name>.listenerMessage 								/ сообщение о числе услышавших вас
 		noListenerMessage	| "Chat.<inner_name>.noListenerMessage 							/ сообщение, если вас никто не услышал
-		isListenerMessage	| false 																					/ выводить ли сообщения о числе услышавших
+		isListenerMessage		| false 																				/ выводить ли сообщения о числе услышавших
+		needPerm					| false 																				/ нужен ли базовые права для канала
 																																
 RANGE:																													
 	описание: чат с ограничением по расстоянию														

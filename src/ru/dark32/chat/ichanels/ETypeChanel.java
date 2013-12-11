@@ -179,6 +179,7 @@ public enum ETypeChanel {
 				Main.config.getString("Chat." + name + ".listenerMessage", "Chat." + name + ".listenerMessage"),
 				Main.config.getString("Chat." + name + ".noListenerMessage", "Chat." + name + ".noListenerMessage"),
 				Main.config.getBoolean("Chat." + name + ".isListenerMessage", false));
+		chanel.setNeedPerm(Main.config.getBoolean("Chat." + name + ".needPerm", false));
 		chanel.setInnerName(name);
 		return chanel;
 	}

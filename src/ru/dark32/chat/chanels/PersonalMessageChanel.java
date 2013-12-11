@@ -82,8 +82,7 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 
 	@Override
 	public Player getTarget(final String targetName ) {
-		// TODO Auto-generated method stub
-		return null;
+		return getTargetByName(targetName);
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package ru.dark32.chat.chanels;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -26,6 +27,7 @@ public class BaseChanel implements IChanel {
 	private String		listenerMessage;
 	private boolean		listenerMessageEnable;
 	private String		noListenerMessage;
+	private boolean		needPerm;
 
 	@Override
 	public boolean isEnable() {
@@ -162,12 +164,11 @@ public class BaseChanel implements IChanel {
 		return tabes;
 	}
 
-	// обычно не надо обрабатывать само сообщение
 	@Override
 	public String preformatMessage(Player sender, String message ) {
 		return message;
 	}
-
+	
 	@Override
 	public boolean canSend(Player sender, String message ) {
 		return true;
@@ -197,5 +198,15 @@ public class BaseChanel implements IChanel {
 	@Override
 	public boolean isListenerMessage() {
 		return listenerMessageEnable;
+	}
+
+	@Override
+	public void setNeedPerm(boolean need ) {
+		needPerm = need;
+	}
+
+	@Override
+	public boolean isNeedPerm() {
+		return needPerm;
 	}
 }
