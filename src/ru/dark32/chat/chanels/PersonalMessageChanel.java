@@ -9,6 +9,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import ru.dark32.chat.Main;
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ichanels.IPersonalMessagesChanel;
 
@@ -126,10 +127,10 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	@Override
 	public List<Player> getRecipients(Player sender ) {
 		final List<Player> recipients = new LinkedList<Player>();
-		final String noSpy = "mcnw." + this.getInnerName() + ".nospy";
+		final String noSpy = Main.BASE_PERM+"." + this.getInnerName() + ".nospy";
 		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			if (!(Util.hasPermission(recipient, noSpy) || Util.hasPermission(sender, noSpy))
-					&& Util.hasPermission(recipient, "mcnw." + this.getInnerName() + ".pmspy")
+					&& Util.hasPermission(recipient, Main.BASE_PERM+"." + this.getInnerName() + ".pmspy")
 					&& !recipient.equals(sender)) {
 				recipients.add(recipient);
 				sender.sendMessage(recipient.getName());

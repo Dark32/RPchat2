@@ -32,7 +32,7 @@ public class ValueStorage {
 		helpChannel = Main.config.getStringList("help.channel");
 	}
 
-	private static String colorByString(String key ) {
+	private static String colorByString(final String key ) {
 		return ChanelRegister.colorize(Main.config.getString(key, key));
 	}
 }

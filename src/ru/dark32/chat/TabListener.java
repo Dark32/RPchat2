@@ -14,26 +14,25 @@ import ru.dark32.chat.ichanels.IBroadChanel;
 
 public class TabListener implements Listener {
 	@EventHandler
-	public void tabComplete(PlayerChatTabCompleteEvent e ) {
+	public void tabComplete(final PlayerChatTabCompleteEvent e ) {
 		e.getTabCompletions().clear();
-		String chatMessage = e.getChatMessage();
-		Collection<String> completions = e.getTabCompletions();
-		char firstChar = chatMessage.charAt(0);
-		int chanind = ChanelRegister.getIndexByPrefix(firstChar);
+		final String chatMessage = e.getChatMessage();
+		final Collection<String> completions = e.getTabCompletions();
+		final char firstChar = chatMessage.charAt(0);
+		final int chanind = ChanelRegister.getIndexByPrefix(firstChar);
 		if (chanind != -1 && ChanelRegister.getByIndex(chanind).isTabes()) {
-			String _nick = chatMessage.length() > 1 ? chatMessage.substring(1) : "";
+			final String _nick = chatMessage.length() > 1 ? chatMessage.substring(1) : "";
 			String _name = "";
-			for (Player player : Bukkit.getOnlinePlayers()) {
+			for (final Player player : Bukkit.getOnlinePlayers()) {
 				_name = player.getName();
 				if ((_nick.length() > 0 && _name.startsWith(_nick)) || _nick.isEmpty()) {
 					completions.add(firstChar + _name);
 				}
 			}
-		} else if (chanind != -1
-				&& ChanelRegister.getByIndex(chanind).getType() == ETypeChanel.BROAD) {
-			IBroadChanel ch = (IBroadChanel) ChanelRegister.getByIndex(chanind);
-			for (String pattern : ch.getPatterns()) {
-				String broad = chatMessage.length() > 1 ? chatMessage.substring(1) : "";
+		} else if (chanind != -1 && ChanelRegister.getByIndex(chanind).getType() == ETypeChanel.BROAD) {
+			final IBroadChanel ch = (IBroadChanel) ChanelRegister.getByIndex(chanind);
+			for (final String pattern : ch.getPatterns()) {
+				final String broad = chatMessage.length() > 1 ? chatMessage.substring(1) : "";
 				if ((broad.length() > 0 && pattern.startsWith(broad)) || broad.isEmpty()) {
 					completions.add(firstChar + pattern);
 				}

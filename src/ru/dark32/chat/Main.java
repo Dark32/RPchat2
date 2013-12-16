@@ -16,15 +16,18 @@ import ru.dark32.chat.chanels.ChatListener;
 
 public class Main extends JavaPlugin {
 
-	public static final Logger		LOG	= Logger.getLogger("Minecraft");
+	public static final Logger		LOG			= Logger.getLogger("Minecraft");
 	public PluginManager			pluginManager;
 	private static IMute			muteStorage;
 	private static IDeaf			deafStorage;
-	public static final String		VERSION	= "RPchat v 2.0.1w(3u1t1u) (singularity)";
+	public static final String		VERSION		= "RPchat v 2.0.1w(3u1t1u) (singularity)";
 	public static FileConfiguration	config;
-	public static File yamlFile;
-	public static YamlConfiguration yaml;
-	public static final boolean		DEBUG_MODE	= true; // выключить в релизе
+	public static File				yamlFile;
+	public static YamlConfiguration	yaml;
+	// выключить в релизе
+	public static final boolean		DEBUG_MODE	= true;
+	public static final String		BASE_PERM	= "mcnw";
+
 	@Override
 	public void onEnable() {
 		pluginManager = Bukkit.getPluginManager();
@@ -37,13 +40,12 @@ public class Main extends JavaPlugin {
 		}
 		// спасибо DmitriyMX за распаковку конфига. Туторы на его сайте
 		// DmitriyMX.ru
-		File fileConf = new File(getDataFolder(), "config.yml");
+		final File fileConf = new File(getDataFolder(), "config.yml");
 		if (!fileConf.exists()) {
-			InputStream resourceAsStream = Main.class
-					.getResourceAsStream("/ru/dark32/chat/config.yml");
+			final InputStream resourceAsStream = Main.class.getResourceAsStream("/ru/dark32/chat/config.yml");
 			getDataFolder().mkdirs();
 			try {
-				FileOutputStream fos = new FileOutputStream(fileConf);
+				final FileOutputStream fos = new FileOutputStream(fileConf);
 				byte[] buff = new byte[65536];
 				int n;
 				while ((n = resourceAsStream.read(buff)) > 0) {
@@ -62,8 +64,8 @@ public class Main extends JavaPlugin {
 		Util.init(this);
 		ValueStorage.init();
 		ChanelRegister.init();
-		File file = new File(getDataFolder(), "storage.yml");
-		Main.yamlFile =file;
+		final File file = new File(getDataFolder(), "storage.yml");
+		Main.yamlFile = file;
 		if (Main.yamlFile.exists()) {
 			Main.yaml = YamlConfiguration.loadConfiguration(file);
 		} else {
@@ -73,7 +75,7 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new JoinListener(), this);
 		Main.muteStorage = new Mute();
 		Main.deafStorage = new Deaf();
-		RPChatCommandExecutor executer = new RPChatCommandExecutor();
+		final RPChatCommandExecutor executer = new RPChatCommandExecutor();
 		getCommand("rpchat").setExecutor(executer);
 		getCommand("mute").setExecutor(executer);
 		getCommand("unmute").setExecutor(executer);
@@ -81,18 +83,19 @@ public class Main extends JavaPlugin {
 		getCommand("undeaf").setExecutor(executer);
 		getCommand("sw").setExecutor(executer);
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
-		
-		}
+
+	}
 
 	@Override
 	public void onDisable() {
 		muteStorage.saveMute();
-		//deafStorage.saveDeaf();
+		// deafStorage.saveDeaf();
 	}
 
 	public static IMute getBanStorage() {
 		return muteStorage;
 	}
+
 	public static IDeaf getDeafStorage() {
 		return deafStorage;
 	}

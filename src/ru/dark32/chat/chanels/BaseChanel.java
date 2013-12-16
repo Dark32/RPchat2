@@ -3,7 +3,6 @@ package ru.dark32.chat.chanels;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -62,7 +61,7 @@ public class BaseChanel implements IChanel {
 			final boolean isWorld = isWorldChat() && sender.getWorld() == recipient.getWorld();
 			if (isDeaf) {
 				continue;
-			} else if (Util.hasPermission(recipient, "mcnw.spy")) {
+			} else if (Util.hasPermission(recipient, Main.BASE_PERM+".spy")) {
 				recipients.add(recipient);
 			} else if (!isWorld) {
 				continue;

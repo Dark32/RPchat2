@@ -9,14 +9,12 @@ import ru.dark32.chat.chanels.ChanelRegister;
 
 public class JoinListener implements Listener {
 	@EventHandler
-	public void onJoin(PlayerJoinEvent event ) {
-		//event.setJoinMessage("");
-		Player player = event.getPlayer();
-		for (String s : ValueStorage.joinmsg) {
-			player.sendMessage(ChanelRegister.colorize(s
-					.replace("$sf", ChanelRegister.getSuffix(player.getName()))
-					.replace("$pf", ChanelRegister.getPreffix(player.getName()))
-					.replace("$p", player.getName())));
+	public void onJoin(final PlayerJoinEvent event ) {
+		// event.setJoinMessage("");
+		final Player player = event.getPlayer();
+		for (final String s : ValueStorage.joinmsg) {
+			player.sendMessage(ChanelRegister.colorize(s.replace("$sf", ChanelRegister.getSuffix(player.getName()))
+					.replace("$pf", ChanelRegister.getPreffix(player.getName())).replace("$p", player.getName())));
 
 		}
 

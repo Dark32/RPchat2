@@ -35,12 +35,12 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 			final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
 			final int dist = getDist(sender.getLocation(), recipient.getLocation());
 			final boolean isRange = (this.getRange() < 0) || (dist < this.getRange());
-			final boolean isTransceiver = Util.hasPermission(recipient, "mcnw." + getInnerName() + ".no_item")
+			final boolean isTransceiver = Util.hasPermission(recipient, Main.BASE_PERM+"." + getInnerName() + ".no_item")
 					|| hasItemInInvetery(recipient);
 			Bukkit.getConsoleSender().sendMessage(recipient.getName() + "-" + isWorld);
 			if (isDeaf) {
 				continue;
-			} else if (Util.hasPermission(recipient, "mcnw.spy")) {
+			} else if (Util.hasPermission(recipient, Main.BASE_PERM+".spy")) {
 				recipients.add(recipient);
 			} else if (isRange && isTransceiver) {
 				if (isWorld) {

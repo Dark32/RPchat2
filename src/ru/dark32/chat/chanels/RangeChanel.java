@@ -48,7 +48,7 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 					sender.sendMessage("debug: deaf - " + recipient.getName());
 				}
 				continue;
-			} else if (Util.hasPermission(recipient, "mcnw.spy")) {
+			} else if (Util.hasPermission(recipient, Main.BASE_PERM+".spy")) {
 				if (Main.DEBUG_MODE) {
 					sender.sendMessage("debug: spy - " + recipient.getName());
 				}

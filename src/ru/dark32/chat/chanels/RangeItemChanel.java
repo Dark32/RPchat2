@@ -42,7 +42,7 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 			final boolean isRange = (this.getRange() < 0) || (dist < this.getRange());
 			if (isDeaf) {
 				continue;
-			} else if (Util.hasPermission(recipient, "mcnw.spy")) {
+			} else if (Util.hasPermission(recipient, Main.BASE_PERM+".spy")) {
 				recipients.add(recipient);
 			} else if (isRange) {
 				if (isWorld) {

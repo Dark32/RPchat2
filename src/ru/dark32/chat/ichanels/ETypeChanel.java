@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ru.dark32.chat.ichanels;
 
 import org.bukkit.Material;
@@ -25,7 +22,7 @@ public enum ETypeChanel {
 			@Override
 			public IChanel setChanel(final String name ) {
 				IChanel chanel = new BaseChanel();
-				chanel = ETypeChanel.setBase(chanel, name);
+				ETypeChanel.setBase(chanel, name);
 				return chanel;
 
 			}
@@ -34,7 +31,7 @@ public enum ETypeChanel {
 			@Override
 			public IChanel setChanel(final String name ) {
 				IChanel chanel = new RangeChanel();
-				chanel = ETypeChanel.setBase(chanel, name);
+				ETypeChanel.setBase(chanel, name);
 				((IRangeChanel) chanel).setRange(Main.config.getInt("Chat." + name + ".range", 200));
 				return chanel;
 			}
@@ -43,8 +40,8 @@ public enum ETypeChanel {
 			@Override
 			public IChanel setChanel(final String name ) {
 				IChanel chanel = new ItemChanel();
-				chanel = ETypeChanel.setBase(chanel, name);
-				chanel = ETypeChanel.setItem(chanel, name);
+				ETypeChanel.setBase(chanel, name);
+				ETypeChanel.setItem(chanel, name);
 				return chanel;
 			}
 		},
@@ -52,7 +49,7 @@ public enum ETypeChanel {
 			@Override
 			public IChanel setChanel(String name ) {
 				IChanel chanel = new PersonalMessageChanel();
-				chanel = ETypeChanel.setBase(chanel, name);
+				ETypeChanel.setBase(chanel, name);
 				((IPersonalMessagesChanel) chanel).setFormatTo(Main.config.getString("Chat." + name + ".formatTo",
 						"Chat." + name + ".formatTo"));
 				((IPersonalMessagesChanel) chanel).setFormatFrom(Main.config.getString("Chat." + name + ".formatFrom",
@@ -68,8 +65,8 @@ public enum ETypeChanel {
 			@Override
 			public IChanel setChanel(final String name ) {
 				IChanel chanel = new RangeItemChanel();
-				chanel = ETypeChanel.setBase(chanel, name);
-				chanel = ETypeChanel.setItem(chanel, name);
+				ETypeChanel.setBase(chanel, name);
+				ETypeChanel.setItem(chanel, name);
 				((IRangeChanel) chanel).setRange(Main.config.getInt("Chat." + name + ".range"));
 
 				return chanel;
@@ -80,8 +77,8 @@ public enum ETypeChanel {
 			@Override
 			public IChanel setChanel(final String name ) {
 				IChanel chanel = new RangeRequisiteItemChanel();
-				chanel = ETypeChanel.setBase(chanel, name);
-				chanel = ETypeChanel.setItem(chanel, name);
+				ETypeChanel.setBase(chanel, name);
+				ETypeChanel.setItem(chanel, name);
 				((IRangeChanel) chanel).setRange(Main.config.getInt("Chat." + name + ".range"));
 				((IRangeRequisiteItemChanel) chanel).setRequiseteItemId(Main.config.getInt("Chat." + name
 						+ ".requisete.id", ((IItemChanel) chanel).getItemId()));
@@ -100,7 +97,7 @@ public enum ETypeChanel {
 			@Override
 			public IChanel setChanel(final String name ) {
 				IChanel chanel = new ChanceChanel();
-				chanel = ETypeChanel.setBase(chanel, name);
+				ETypeChanel.setBase(chanel, name);
 				((IChanceChanel) chanel).setRange(Main.config.getInt("Chat." + name + ".range", 200));
 				((IChanceChanel) chanel).setChance(Main.config.getInt("Chat." + name + ".chance", 50),
 						Main.config.getInt("Chat." + name + ".min", 5));
@@ -119,7 +116,7 @@ public enum ETypeChanel {
 			@Override
 			public IChanel setChanel(final String name ) {
 				IChanel chanel = new BroadChanel();
-				chanel = ETypeChanel.setBase(chanel, name);
+				ETypeChanel.setBase(chanel, name);
 				((IBroadChanel) chanel).setPattern(Main.config.getStringList("Chat." + name + ".pattern"));
 				return chanel;
 			}

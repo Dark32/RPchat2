@@ -16,24 +16,26 @@ public class RPChatCommandExecutor implements CommandExecutor {
 	private String	chanesignmore1;
 
 	public RPChatCommandExecutor(){
-		chanelswitch = ChanelRegister.colorize(Main.config.getString("help.changechanel",
-				"Канал изменн на $1"));
-		chanenotfound = ChanelRegister.colorize(Main.config.getString("help.chanenotfound",
-				"Канал не найден"));
+		chanelswitch = ChanelRegister.colorize(Main.config.getString("help.changechanel", "Канал изменн на $1"));
+		chanenotfound = ChanelRegister.colorize(Main.config.getString("help.chanenotfound", "Канал не найден"));
 		chanesignmore1 = ChanelRegister.colorize(Main.config.getString("help.chanesignmore1",
 				"Длина сигны больше 1 знака"));
 
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args ) {
+	public boolean onCommand(final CommandSender sender,final  Command cmd,final  String label,final  String[] args ) {
 		if (cmd.getName().equalsIgnoreCase("rpchat")) {
 			if (args.length == 0) {
 				getBase(sender);
 				return true;
 			} else if (args.length == 1) {
-				if (args[0].equalsIgnoreCase("help")) getHelp(sender);
-				if (args[0].equalsIgnoreCase("channel")) getChannel(sender);
+				if (args[0].equalsIgnoreCase("help")) {
+					getHelp(sender);
+				}
+				if (args[0].equalsIgnoreCase("channel")) {
+					getChannel(sender);
+				}
 				return true;
 			}
 		}
@@ -67,12 +69,11 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		if (cmd.getName().equalsIgnoreCase("sw")) {
 			if (args.length == 1) {
 				if (args[0].length() == 1) {
-					char sign = args[0].charAt(0);
-					int _ind = ChanelRegister.getIndexBySign(sign);
+					final char sign = args[0].charAt(0);
+					final	int _ind = ChanelRegister.getIndexBySign(sign);
 					if (_ind != -1) {
 						Util.setChatMode(sender.getName(), _ind);
-						sender.sendMessage(chanelswitch.replace("$1",
-								ChanelRegister.getByIndex(_ind).getName()));
+						sender.sendMessage(chanelswitch.replace("$1", ChanelRegister.getByIndex(_ind).getName()));
 					} else {
 						sender.sendMessage(chanenotfound);
 					}
@@ -87,32 +88,33 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		return false;
 	}
 
-	private void getChannel(CommandSender sender ) {
-		List<String> msg = new ArrayList<String>();
+	private void getChannel(final CommandSender sender ) {
+		final List<String> msg = new ArrayList<String>();
 		msg.add("&b=============================================");
 		msg.addAll(ValueStorage.helpChannel);
-		for (IChanel chanel : ChanelRegister.listChat)
-			msg.add("&b" + chanel.getName() + " || " + chanel.getInnerName() + " || "
-					+ chanel.getSign()+" || "+chanel.getPrefix() +" || "+ chanel.getType().toString() );
+		for (final IChanel chanel : ChanelRegister.listChat) {
+			msg.add("&b" + chanel.getName() + " || " + chanel.getInnerName() + " || " + chanel.getSign() + " || "
+					+ chanel.getPrefix() + " || " + chanel.getType().toString());
+		}
 		msg.add("&b=============================================");
-		for (String s : msg) {
+		for (final String s : msg) {
 			sender.sendMessage(ChanelRegister.colorize(s));
 		}
 
 	}
 
-	private void getHelp(CommandSender sender ) {
-		List<String> msg = new ArrayList<String>();
+	private void getHelp(final CommandSender sender ) {
+		final List<String> msg = new ArrayList<String>();
 		msg.add("&b=============================================");
 		msg.addAll(ValueStorage.helpHelp);
 		msg.add("&b=============================================");
-		for (String s : msg) {
+		for (final String s : msg) {
 			sender.sendMessage(ChanelRegister.colorize(s));
 		}
 	}
 
-	public static void getBase(CommandSender player ) {
-		List<String> msg = new ArrayList<String>();
+	public static void getBase(final CommandSender player ) {
+		final List<String> msg = new ArrayList<String>();
 		msg.add("&b=============================================");
 		msg.add("&6" + Main.VERSION);
 		msg.add("&6Autors: ufatos, dark32");
@@ -120,7 +122,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		msg.add("&6Link: http://goo.gl/KpvB7c");
 		msg.addAll(ValueStorage.helpBase);
 		msg.add("&b=============================================");
-		for (String s : msg) {
+		for (final String s : msg) {
 			player.sendMessage(ChanelRegister.colorize(s));
 		}
 	}
