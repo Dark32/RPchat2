@@ -41,7 +41,7 @@ public class ChanelRegister {
 			return;
 		}
 		final Set<String> list = chtatList.getKeys(false);
-		for (String name : list) {
+		for (final String name : list) {
 			final String _type = "Chat." + name + ".type";
 			final String _enable = "Chat." + name + ".enable";
 			final String chanelType = Main.config.getString(_type, _type);
@@ -53,8 +53,8 @@ public class ChanelRegister {
 		}
 	}
 
-	private static IChanel registrChanel(ETypeChanel type, final String name ) {
-		IChanel chanel = type.setChanel(name);
+	private static IChanel registrChanel(final ETypeChanel type, final String name ) {
+		final IChanel chanel = type.setChanel(name);
 		chanel.setType(type);
 		signes.add(chanel.getSign());
 		prefixes.add(chanel.getPrefix());
@@ -107,7 +107,7 @@ public class ChanelRegister {
 		if (!Util.usePEX) {
 			return "";
 		}
-		PermissionUser user = PermissionsEx.getPermissionManager().getUser(name);
+		final PermissionUser user = PermissionsEx.getPermissionManager().getUser(name);
 		if (user == null) {
 			return "";
 		}
@@ -119,7 +119,7 @@ public class ChanelRegister {
 		if (!Util.usePEX) {
 			return "";
 		}
-		PermissionUser user = PermissionsEx.getPermissionManager().getUser(name);
+		final PermissionUser user = PermissionsEx.getPermissionManager().getUser(name);
 		if (user == null) {
 			return "";
 		}

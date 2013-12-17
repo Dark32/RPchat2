@@ -33,7 +33,7 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 	}
 
 	@Override
-	public List<Player> getRecipients(Player sender ) {
+	public List<Player> getRecipients(final Player sender ) {
 		final List<Player> recipients = new LinkedList<Player>();
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			final boolean isWorld = isWorldChat() && sender.getWorld() == recipient.getWorld();
@@ -42,7 +42,7 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 			final boolean isRange = (this.getRange() < 0) || (dist < this.getRange());
 			if (isDeaf) {
 				continue;
-			} else if (Util.hasPermission(recipient, Main.BASE_PERM+".spy")) {
+			} else if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy")) {
 				recipients.add(recipient);
 			} else if (isRange) {
 				if (isWorld) {
@@ -57,7 +57,7 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 		return recipients;
 	}
 
-	protected int getDist(Location sender, Location target ) {
+	protected int getDist(final Location sender, final Location target ) {
 		int distX = (int) (sender.getX() - target.getX());
 		distX *= distX;
 		int distY = (int) (sender.getY() - target.getY());

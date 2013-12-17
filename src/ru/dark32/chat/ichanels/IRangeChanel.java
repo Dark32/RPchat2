@@ -8,10 +8,10 @@ public interface IRangeChanel extends IChanel {
 	/**
 	 * @param range расстояние
 	 */
-	public void setRange(int range );
+	void setRange(int range );
 
 	/**
 	 * @return расстояние
 	 */
-	public int getRange();
+	int getRange();
 }

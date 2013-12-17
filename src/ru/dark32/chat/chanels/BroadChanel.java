@@ -22,7 +22,7 @@ public class BroadChanel extends BaseChanel implements IBroadChanel {
 
 	}
 	@Override
-	public String preformatMessage(Player sender,String message ) {
+	public String preformatMessage(final Player sender,final String message ) {
 		Bukkit.getConsoleSender().sendMessage("BROAD: "+ sender.getName()+":"+message);
 		return ChanelRegister.colorize(message);
 	}

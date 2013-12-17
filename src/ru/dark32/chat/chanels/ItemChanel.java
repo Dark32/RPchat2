@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ru.dark32.chat.chanels;
 
 import org.bukkit.Bukkit;
@@ -61,7 +58,7 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 
 	@SuppressWarnings("deprecation" )
 	@Override
-	public void loseItem(Player player ) {
+	public void loseItem(final Player player ) {
 		final ItemStack inHand = player.getItemInHand();
 		if (this.itemAmount == 0) {
 			return;
@@ -99,7 +96,8 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 			Bukkit.getConsoleSender().sendMessage("debug need " + itemId + ":" + itemSubId + " - " + itemMaterial);
 		}
 
-		boolean isItem = item.getDurability() == this.itemSubId && item.getAmount() > this.itemAmount
+		final boolean isItem = item.getDurability() == this.itemSubId
+				&& item.getAmount() > this.itemAmount
 				&& ((ValueStorage.experemental && item.getType() == this.itemMaterial) || item.getTypeId() == this.itemId);
 		return isItem;
 	}
@@ -116,7 +114,7 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 	}
 
 	@Override
-	public void setItemAmount(int amount ) {
+	public void setItemAmount(final int amount ) {
 		this.itemAmount = amount;
 
 	}
@@ -127,16 +125,16 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 	}
 
 	@Override
-	public boolean canSend(Player sender, String message ) {
-		if (!Util.hasPermission(sender, Main.BASE_PERM+"." + this.getInnerName() + ".no_item")) {
+	public boolean canSend(final Player sender, final String message ) {
+		if (!Util.hasPermission(sender, Main.BASE_PERM + "." + this.getInnerName() + ".no_item")) {
 			// если вещь в руках совпала
 			if (((IItemChanel) this).equalItem(sender.getItemInHand())) {
 				// теряем 1 вещь
 				((IItemChanel) this).loseItem(sender);
-				} else { // иначе
+			} else { // иначе
 				// глаголим, что вещи нет
 				sender.sendMessage(ValueStorage.nei);
-				//event.setCancelled(true);
+				// event.setCancelled(true);
 				return false;
 			}
 		}

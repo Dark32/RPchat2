@@ -47,7 +47,7 @@ public enum ETypeChanel {
 		},
 		PM {
 			@Override
-			public IChanel setChanel(String name ) {
+			public IChanel setChanel(final String name ) {
 				IChanel chanel = new PersonalMessageChanel();
 				ETypeChanel.setBase(chanel, name);
 				((IPersonalMessagesChanel) chanel).setFormatTo(Main.config.getString("Chat." + name + ".formatTo",
@@ -163,7 +163,7 @@ public enum ETypeChanel {
 	 */
 	public abstract IChanel setChanel(final String name );
 
-	private static IChanel setBase(IChanel chanel, final String name ) {
+	private static IChanel setBase(final IChanel chanel, final String name ) {
 		chanel.setIndex(ChanelRegister.getNextIndex());
 		chanel.setName(Main.config.getString("Chat." + name + ".name", "Chat." + name + ".name"));
 		chanel.setFormat(Main.config.getString("Chat." + name + ".format", "Chat." + name + ".format"));
@@ -182,7 +182,7 @@ public enum ETypeChanel {
 	}
 
 	@SuppressWarnings("deprecation" )
-	private static IChanel setItem(IChanel chanel, final String name ) {
+	private static IChanel setItem(final IChanel chanel, final String name ) {
 		((IItemChanel) chanel).setItemId(Main.config.getInt("Chat." + name + ".item.id", 0));
 		((IItemChanel) chanel).setItemSubId(Main.config.getInt("Chat." + name + ".item.subid", 0));
 		((IItemChanel) chanel).setItemAmount(Main.config.getInt("Chat." + name + ".item.amount", 1));

@@ -16,9 +16,9 @@ import ru.dark32.chat.ichanels.IChanel;
  */
 public class ChatListener implements Listener {
 	@EventHandler
-	public void onPlayerChat(AsyncPlayerChatEvent event ) {
+	public void onPlayerChat(final AsyncPlayerChatEvent event ) {
 		// тот кто отправил сообщение
-		Player sender = event.getPlayer();
+		final Player sender = event.getPlayer();
 		// сообщение
 		String message = event.getMessage();
 		// формат
@@ -46,14 +46,14 @@ public class ChatListener implements Listener {
 			}
 		}
 		// получаем канал
-		IChanel chanel = ChanelRegister.getByIndex(indexChanel);
+		final IChanel chanel = ChanelRegister.getByIndex(indexChanel);
 		// может ли сендер вообще говорить в этот канал?
 		if (hasMute(sender, indexChanel)) {
 			event.setCancelled(true);
 			return;
 		}
 		// есть ли права говорить в этот чат
-		if (!chanel.isNeedPerm() || !Util.hasPermission(sender,  Main.BASE_PERM+"." + chanel.getInnerName())) {
+		if (!chanel.isNeedPerm() || !Util.hasPermission(sender, Main.BASE_PERM + "." + chanel.getInnerName())) {
 			sender.sendMessage(ValueStorage.noPerm.replace("$1", chanel.getName()));
 			event.setCancelled(true);
 			return;
@@ -80,7 +80,7 @@ public class ChatListener implements Listener {
 		event.setMessage(message);
 	}
 
-	private Boolean hasMute(Player player, final int indexChanel ) {
+	private Boolean hasMute(final Player player, final int indexChanel ) {
 		if (Main.getBanStorage().isMuted(player.getName(), indexChanel)) {
 			player.sendMessage(ValueStorage.muteMessage.replace("$1",
 					String.valueOf(Main.getBanStorage().getTimeMute(player.getName(), indexChanel))));

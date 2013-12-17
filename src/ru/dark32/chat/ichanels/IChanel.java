@@ -12,86 +12,86 @@ public interface IChanel {
 	/**
 	 * @return формат канала
 	 */
-	public String getFormat();
+	 String getFormat();
 
 	/**
 	 * @return индекс канала
 	 */
-	public int getIndex();
+	 int getIndex();
 
 	/**
 	 * @return имя канала
 	 */
-	public String getName();
+	 String getName();
 
 	/**
 	 * @return префикс канала
 	 */
-	public char getPrefix();
+	 char getPrefix();
 
 	/**
 	 * @return подпись канала
 	 */
-	public char getSign();
+	 char getSign();
 
 	/**
 	 * @param key
 	 *            фомат канала
 	 */
-	public void setFormat(String key );
+	 void setFormat(String key );
 
 	/**
 	 * @param i
 	 *            индекс канала на кайний случай
 	 */
-	public void setIndex(int i );
+	 void setIndex(int i );
 
 	/**
 	 * @param key
 	 *            имя канала
 	 */
-	public void setName(String key );
+	 void setName(String key );
 
 	/**
 	 * @param key
 	 *            префикс канала
 	 */
-	public void setPrefix(String key );
+	 void setPrefix(String key );
 
 	/**
 	 * @param sign
 	 *            подпись канала
 	 */
-	public void setSign(char sign );
+	 void setSign(char sign );
 
 	/**
 	 * @return включен ли канал
 	 */
-	public boolean isEnable();
+	 boolean isEnable();
 
 	/**
 	 * @param enbl
 	 *            управление включённостью канала
 	 */
-	public void setEnable(boolean enbl );
+	 void setEnable(boolean enbl );
 
 	/**
 	 * @param sender
 	 *            отправитель
 	 * @return слушатели
 	 */
-	public List<Player> getRecipients(Player sender );
+	 List<Player> getRecipients(Player sender );
 
 	/**
 	 * @return ограничен ли чат одним миром
 	 */
-	public boolean isWorldChat();
+	 boolean isWorldChat();
 
 	/**
 	 * @param isWorld
 	 *            ограничен ли чат одним миром
 	 */
-	public void setWorldChat(boolean isWorld );
+	 void setWorldChat(boolean isWorld );
 
 	/**
 	 * @param type
@@ -103,7 +103,7 @@ public interface IChanel {
 	 *            range-item - требует вещь, ограничен по радиусу<br>
 	 *            none - не канал
 	 */
-	public void setType(ETypeChanel type );
+	 void setType(ETypeChanel type );
 
 	/**
 	 * @return тип чата <br>
@@ -114,18 +114,18 @@ public interface IChanel {
 	 *         range-item - требует вещь, ограничен по радиусу<br>
 	 *         none - не канал
 	 */
-	public ETypeChanel getType();
+	 ETypeChanel getType();
 
 	/**
 	 * @return внутреннее имя
 	 */
-	public String getInnerName();
+	 String getInnerName();
 
 	/**
 	 * @param name
 	 *            внутреннее имя
 	 */
-	public void setInnerName(String name );
+	 void setInnerName(String name );
 
 	/**
 	 * форматировать сообщение
@@ -136,18 +136,18 @@ public interface IChanel {
 	 *            - сообщение
 	 * @return - отформатированное сообщение
 	 */
-	public String format(Player p, String msg );
+	 String format(Player p, String msg );
 
 	/**
 	 * @param tables
 	 *            Табаемо
 	 */
-	public void setTabes(boolean tables );
+	 void setTabes(boolean tables );
 
 	/**
 	 * @return набаемо ли?
 	 */
-	public boolean isTabes();
+	 boolean isTabes();
 
 	/**
 	 * обработка сообщения, не формата
@@ -159,7 +159,7 @@ public interface IChanel {
 	 * @return обработанное сообщение
 	 */
 
-	public String preformatMessage(Player sender, String message );
+	 String preformatMessage(Player sender, String message );
 
 	/**
 	 * можно ли отправить

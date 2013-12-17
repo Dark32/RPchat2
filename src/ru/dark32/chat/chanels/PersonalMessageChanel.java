@@ -77,7 +77,7 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	}
 
 	@Override
-	public boolean hasTarget(Player target ) {
+	public boolean hasTarget(final Player target ) {
 		return target != null;
 	}
 
@@ -87,13 +87,13 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	}
 
 	@Override
-	public void sendMessage(Player sender, String raw ) {
+	public void sendMessage(final Player sender, final String raw ) {
 		if (!this.hasNameTarget(raw)) {
 			sender.sendMessage("Имя цели не указанно");
 			return;
 		}
 		final String nameTarget = this.getNameTarget(raw);
-		Player target = this.getTargetByName(nameTarget);
+		final Player target = this.getTargetByName(nameTarget);
 		if (!this.hasTarget(target)) {
 			sender.sendMessage("Цель не найдена");
 			return;
@@ -113,24 +113,24 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	}
 
 	@Override
-	public void responseSendMessage(Player sender, final String msg ) {
+	public void responseSendMessage(final Player sender, final String msg ) {
 		sender.sendMessage(msg);
 
 	}
 
 	@Override
-	public void sendSpyMessage(Player sender, Player target, final String msg ) {
+	public void sendSpyMessage(final Player sender, final Player target, final String msg ) {
 		Bukkit.getConsoleSender().sendMessage(msg);
 
 	}
 
 	@Override
-	public List<Player> getRecipients(Player sender ) {
+	public List<Player> getRecipients(final Player sender ) {
 		final List<Player> recipients = new LinkedList<Player>();
-		final String noSpy = Main.BASE_PERM+"." + this.getInnerName() + ".nospy";
-		for (Player recipient : Bukkit.getServer().getOnlinePlayers()) {
+		final String noSpy = Main.BASE_PERM + "." + this.getInnerName() + ".nospy";
+		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			if (!(Util.hasPermission(recipient, noSpy) || Util.hasPermission(sender, noSpy))
-					&& Util.hasPermission(recipient, Main.BASE_PERM+"." + this.getInnerName() + ".pmspy")
+					&& Util.hasPermission(recipient, Main.BASE_PERM + "." + this.getInnerName() + ".pmspy")
 					&& !recipient.equals(sender)) {
 				recipients.add(recipient);
 				sender.sendMessage(recipient.getName());
@@ -146,7 +146,7 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	}
 
 	@Override
-	public String formatTo(Player sender, Player target, final String msg ) {
+	public String formatTo(final Player sender, final Player target, final String msg ) {
 		return format(sender, formatToSting).replace("%2$s", msg).replace("%1$s", sender.getName());
 	}
 
@@ -157,7 +157,7 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	}
 
 	@Override
-	public String formatFrom(Player sender, Player target, final String msg ) {
+	public String formatFrom(final Player sender,final  Player target, final String msg ) {
 		return format(sender, formatFromString).replace("$r", target.getName()).replace("%2$s", msg)
 				.replace("%1$s", sender.getName());
 	}
@@ -169,13 +169,13 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	}
 
 	@Override
-	public String formatSpy(Player sender, Player target, final String msg ) {
+	public String formatSpy(final Player sender, final Player target, final String msg ) {
 		return format(sender, formatSpyString).replace("%1$s", sender.getName()).replace("$r", target.getName())
 				.replace("%2$s", msg);
 	}
 
 	@Override
-	public void preSend(Player sender, String message, int recipient ) {
+	public void preSend(final Player sender, final String message, final int recipient ) {
 		// отправляем сообщение цели
 		this.sendMessage(sender, message);
 

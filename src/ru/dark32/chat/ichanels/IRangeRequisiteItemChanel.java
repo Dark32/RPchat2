@@ -4,63 +4,69 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public interface IRangeRequisiteItemChanel extends IRangeChanel,IItemChanel {
+public interface IRangeRequisiteItemChanel extends IRangeChanel, IItemChanel {
 	/**
-	 * @param id ид вещи
+	 * @param id
+	 *            ид вещи
 	 */
 	@Deprecated
-	public void setRequiseteItemId(int id );
+	void setRequiseteItemId(int id );
 
 	/**
-	 * @param id суб ид вещи
+	 * @param id
+	 *            суб ид вещи
 	 */
-	public void setRequiseteItemSubId(int id );
+	void setRequiseteItemSubId(int id );
 
 	/**
-	 * @param material материал
+	 * @param material
+	 *            материал
 	 */
-	public void setRequiseteItemMaterial(Material material);
-	
+	void setRequiseteItemMaterial(Material material );
+
 	/**
 	 * @return ид вещи
 	 */
 	@Deprecated
-	public int getRequiseteItemId();
+	int getRequiseteItemId();
 
 	/**
 	 * @return суб ид вещи
 	 */
-	public int getRequiseteItemSubId();
+	int getRequiseteItemSubId();
 
 	/**
 	 * @return материал вещи
 	 */
-	public Material getRequiseteItemMaterial();
-	
+	Material getRequiseteItemMaterial();
+
 	/**
 	 * установить
 	 * 
 	 * @param amount
 	 *            вещей тратится
 	 */
-	public void setRequiseteItemAmount(int amount );
+	void setRequiseteItemAmount(int amount );
 
 	/**
 	 * получить
 	 * 
 	 * @return вещей тратится
 	 */
-	public int getRequiseteItemAmount();
+	int getRequiseteItemAmount();
 
 	/**
-	 * @param item требуемая вещь
+	 * @param item
+	 *            требуемая вещь
 	 * @return если есть, то истена
 	 */
 	boolean equalRequiseteItem(ItemStack item );
 
 	/**
-	 * @param player игрок, слушатель
-	 * @param item проверяемая вещь
+	 * @param player
+	 *            игрок, слушатель
+	 * @param item
+	 *            проверяемая вещь
 	 */
-	void loseRequiseteItem(Player player , ItemStack item);
+	void loseRequiseteItem(Player player, ItemStack item );
 }

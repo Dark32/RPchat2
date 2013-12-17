@@ -19,7 +19,7 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 	private int	range;
 
 	@Override
-	public void setRange(int range ) {
+	public void setRange(final int range ) {
 		this.range = range;
 	}
 
@@ -29,7 +29,7 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 	}
 
 	@Override
-	public List<Player> getRecipients(Player sender ) {
+	public List<Player> getRecipients(final Player sender ) {
 		final  List<Player> recipients = new LinkedList<Player>();
 		if (Main.DEBUG_MODE) {
 			sender.sendMessage("debug:--------------------------------");
@@ -78,7 +78,7 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 		return recipients;
 	}
 
-	private int getDist(Location sender, Location target ) {
+	private int getDist(final Location sender,final  Location target ) {
 		int distX = (int) (sender.getX() - target.getX());
 		distX *= distX;
 		int distY = (int) (sender.getY() - target.getY());

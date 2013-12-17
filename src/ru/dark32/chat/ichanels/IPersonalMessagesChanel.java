@@ -15,21 +15,21 @@ public interface IPersonalMessagesChanel extends IChanel {
 	 *            сырая строка
 	 * @return есть ли имя
 	 */
-	public boolean hasNameTarget(String raw );
+	boolean hasNameTarget(String raw );
 
 	/**
 	 * @param raw
 	 *            сырая строка
 	 * @return имя цели
 	 */
-	public String getNameTarget(String raw );
+	String getNameTarget(String raw );
 
 	/**
 	 * @param raw
 	 *            сырая строка
 	 * @return если есть сообщение, то индекс начала сообщения, иначе -1
 	 */
-	public int hasMessage(String raw );
+	int hasMessage(String raw );
 
 	/**
 	 * @param raw
@@ -38,23 +38,23 @@ public interface IPersonalMessagesChanel extends IChanel {
 	 *            индекс начала сообщения
 	 * @return сообщение
 	 */
-	public String getMessage(String raw, int ind );
+	String getMessage(String raw, int ind );
 
 	/**
 	 * @param name
 	 *            имя цели
 	 * @return цель, либо ничто, если цель не найдена
 	 */
-	public Player getTargetByName(String name );
+	Player getTargetByName(String name );
 
 	/**
 	 * @param target
 	 *            цель или ничто
 	 * @return истина если цель не ничто
 	 */
-	public boolean hasTarget(Player target ); 
+	boolean hasTarget(Player target );
 
-	public Player getTarget(String targetName );
+	Player getTarget(String targetName );
 
 	/**
 	 * @param sender
@@ -62,7 +62,7 @@ public interface IPersonalMessagesChanel extends IChanel {
 	 * @param raw
 	 *            сырая строка
 	 */
-	public void sendMessage(Player sender, String raw );
+	void sendMessage(Player sender, String raw );
 
 	/**
 	 * отправить сообщение наблюдателям
@@ -72,7 +72,7 @@ public interface IPersonalMessagesChanel extends IChanel {
 	 * @param msg
 	 *            сообщение
 	 */
-	public void sendSpyMessage(Player sender, Player target,String msg );
+	void sendSpyMessage(Player sender, Player target, String msg );
 
 	/**
 	 * отклик, вывести себе сообщение
@@ -82,7 +82,7 @@ public interface IPersonalMessagesChanel extends IChanel {
 	 * @param msg
 	 *            - сообщение
 	 */
-	public void responseSendMessage(Player sender, String msg );
+	void responseSendMessage(Player sender, String msg );
 
 	/**
 	 * Формат сообщения для получаталя
@@ -90,7 +90,7 @@ public interface IPersonalMessagesChanel extends IChanel {
 	 * @param formatTo
 	 *            формат
 	 */
-	public void setFormatTo(String formatTo );
+	void setFormatTo(String formatTo );
 
 	/**
 	 * Форматировать сообщение цели
@@ -103,13 +103,13 @@ public interface IPersonalMessagesChanel extends IChanel {
 	 *            сообщение
 	 * @return отформатированное сообщение
 	 */
-	public String formatTo(Player sender, Player target, String msg );
+	String formatTo(Player sender, Player target, String msg );
 
 	/**
 	 * @param formatFrom
 	 *            формат сообщения ответа
 	 */
-	public void setFormatFrom(String formatFrom );
+	void setFormatFrom(String formatFrom );
 
 	/**
 	 * Форматировать сообщение отправителя
@@ -122,13 +122,13 @@ public interface IPersonalMessagesChanel extends IChanel {
 	 *            сообщение
 	 * @return отформатированное сообщение
 	 **/
-	public String formatFrom(Player sender, Player target, String msg );
+	String formatFrom(Player sender, Player target, String msg );
 
 	/**
 	 * @param formatSpy
 	 *            формат прослушки
 	 */
-	public void setFormatSpy(String formatSpy );
+	void setFormatSpy(String formatSpy );
 
 	/**
 	 * форматирование сообщения прослушки
@@ -141,7 +141,7 @@ public interface IPersonalMessagesChanel extends IChanel {
 	 *            сообщение
 	 * @return отформатированное сообщение
 	 */
-	public String formatSpy(Player sender, Player target, String msg );
+	String formatSpy(Player sender, Player target, String msg );
 
 	int getPmSearchNickMode();
 

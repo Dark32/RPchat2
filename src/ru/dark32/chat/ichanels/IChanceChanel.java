@@ -5,7 +5,7 @@ public interface IChanceChanel extends IRangeChanel {
 	 * @param format
 	 *            установить формат броска кубика
 	 */
-	public void setFormatRoll(String format );
+	void setFormatRoll(String format );
 
 	/**
 	 * формат
@@ -15,7 +15,7 @@ public interface IChanceChanel extends IRangeChanel {
 	 * @param unluck
 	 *            неудача
 	 */
-	public void setLuckUnLuck(String luck, String unluck );
+	void setLuckUnLuck(String luck, String unluck );
 
 	/**
 	 * шанс удачи и минимальный кубик
@@ -25,35 +25,35 @@ public interface IChanceChanel extends IRangeChanel {
 	 * @param min
 	 *            кубик
 	 */
-	public void setChance(int chance, int min );
+	void setChance(int chance, int min );
 
 	/**
 	 * @return формат броска кубика
 	 */
-	public String getFormatRoll();
+	String getFormatRoll();
 
 	/**
 	 * @return удача
 	 */
-	public String getLuck();
+	String getLuck();
 
 	/**
 	 * @return неудача
 	 */
-	public String getUnLuck();
+	String getUnLuck();
 
 	/**
 	 * @return минимальныый кубик
 	 */
-	public int getMinRoll();
+	int getMinRoll();
 
 	/**
 	 * @return шанс
 	 */
-	public int getChance();
+	int getChance();
 
-	public String getFormatLuck();
+	String getFormatLuck();
 
-	public void setFormatLuck(String format );
+	void setFormatLuck(String format );
 
 }

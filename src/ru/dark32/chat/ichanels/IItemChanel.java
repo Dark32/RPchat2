@@ -13,60 +13,60 @@ public interface IItemChanel extends IChanel {
 	 *            Ид вещи
 	 */
 	@Deprecated
-	public void setItemId(int id );
+	void setItemId(int id );
 
 	/**
 	 * @return ид вещи
 	 */
 	@Deprecated
-	public int getItemId();
+	int getItemId();
 
 	/**
 	 * @return материал вещи
 	 */
-	public Material getItemMaterial();
+	Material getItemMaterial();
 
 	/**
 	 * @param ma
 	 *            материал вещи
 	 */
-	public void setItemMaterial(Material ma );
+	void setItemMaterial(Material ma );
 
 	/**
 	 * @return метадата вещи
 	 */
-	public int getItemSubId();
+	int getItemSubId();
 
 	/**
 	 * @param sub
 	 *            метадата вещи
 	 */
-	public void setItemSubId(int sub );
+	void setItemSubId(int sub );
 
 	/**
 	 * @param player
 	 */
-	public void loseItem(Player player );
+	void loseItem(Player player );
 
 	/**
 	 * @param item
 	 *            вещь в руках
 	 * @return истина, если совпало с вещью канала
 	 */
-	public boolean equalItem(ItemStack item );
+	boolean equalItem(ItemStack item );
 
 	/**
 	 * @return обязателен ли префикс (если нет, то достаточно вещи в руках если
 	 *         да - то нужно и вещь в руках и префикс)
 	 */
-	public boolean isRequestPprefix();
+	boolean isRequestPprefix();
 
 	/**
 	 * @param needобязателен
 	 *            ли префикс (если нет, то достаточно вещи в руках если да - то
 	 *            нужно и вещь в руках и префикс)
 	 */
-	public void setRequestPprefix(boolean need );
+	void setRequestPprefix(boolean need );
 
 	/**
 	 * установить
@@ -74,12 +74,12 @@ public interface IItemChanel extends IChanel {
 	 * @param amount
 	 *            вещей тратится
 	 */
-	public void setItemAmount(int amount );
+	void setItemAmount(int amount );
 
 	/**
 	 * получить
 	 * 
 	 * @return вещей тратится
 	 */
-	public int getItemAmount();
+	int getItemAmount();
 }

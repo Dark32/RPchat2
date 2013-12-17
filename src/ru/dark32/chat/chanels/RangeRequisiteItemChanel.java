@@ -28,7 +28,7 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 	private Material	requisiteItemMaterial;
 
 	@Override
-	public List<Player> getRecipients(Player sender ) {
+	public List<Player> getRecipients(final Player sender ) {
 		final List<Player> recipients = new LinkedList<Player>();
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			final boolean isWorld = !isWorldChat() || sender.getWorld() == recipient.getWorld();
@@ -55,7 +55,7 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 		return recipients;
 	}
 
-	private boolean hasItemInInvetery(Player player ) {
+	private boolean hasItemInInvetery(final Player player ) {
 		Bukkit.getConsoleSender().sendMessage("-" + player.getName());
 		final PlayerInventory inventary = player.getInventory();
 		boolean hasItem = false;
@@ -72,19 +72,19 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 
 	@Deprecated
 	@Override
-	public void setRequiseteItemId(int id ) {
+	public void setRequiseteItemId(final int id ) {
 		this.requisiteItemId = id;
 
 	}
 
 	@Override
-	public void setRequiseteItemSubId(int subId ) {
+	public void setRequiseteItemSubId(final int subId ) {
 		this.requisiteItemSubId = subId;
 
 	}
 
 	@Override
-	public void setRequiseteItemMaterial(Material material ) {
+	public void setRequiseteItemMaterial(final Material material ) {
 		this.requisiteItemMaterial = material;
 
 	}
@@ -106,7 +106,7 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 	}
 
 	@Override
-	public void setRequiseteItemAmount(int amount ) {
+	public void setRequiseteItemAmount(final int amount ) {
 		this.requisiteItemAmount = amount;
 
 	}
@@ -130,7 +130,7 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 					"debug need " + requisiteItemId + ":" + requisiteItemSubId + " - " + requisiteItemMaterial);
 		}
 
-		boolean isItem = item.getDurability() == this.requisiteItemSubId
+		final boolean isItem = item.getDurability() == this.requisiteItemSubId
 				&& item.getAmount() > this.requisiteItemAmount
 				&& ((ValueStorage.experemental && item.getType() == this.requisiteItemMaterial) || item.getTypeId() == this.requisiteItemId);
 		return isItem;
@@ -138,7 +138,7 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 
 	@SuppressWarnings("deprecation" )
 	@Override
-	public void loseRequiseteItem(Player player, ItemStack item ) {
+	public void loseRequiseteItem(final Player player,final  ItemStack item ) {
 		if (this.requisiteItemAmount == 0) {
 			return;
 		}

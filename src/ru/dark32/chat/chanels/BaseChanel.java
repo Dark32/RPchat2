@@ -54,7 +54,7 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public List<Player> getRecipients(Player sender ) {
+	public List<Player> getRecipients(final Player sender ) {
 		final List<Player> recipients = new LinkedList<Player>();
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
@@ -164,17 +164,17 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public String preformatMessage(Player sender, String message ) {
+	public String preformatMessage(final Player sender, final String message ) {
 		return message;
 	}
 	
 	@Override
-	public boolean canSend(Player sender, String message ) {
+	public boolean canSend(final Player sender,final  String message ) {
 		return true;
 	}
 
 	@Override
-	public void preSend(Player sender, String message, int recipient ) {
+	public void preSend(final Player sender, final String message,final  int recipient ) {
 		// отправляем число услышавших, если это включено
 		if (isListenerMessage()) {
 			sender.sendMessage(getListenerMessage(recipient - 1));
@@ -182,7 +182,7 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public void setListenerMessage(String listenerMessage, String noListenerMessage, boolean enable ) {
+	public void setListenerMessage(final String listenerMessage,final  String noListenerMessage,final  boolean enable ) {
 		this.listenerMessage = ChanelRegister.colorize(listenerMessage);
 		this.noListenerMessage = ChanelRegister.colorize(noListenerMessage);
 		this.listenerMessageEnable = enable;
@@ -200,7 +200,7 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public void setNeedPerm(boolean need ) {
+	public void setNeedPerm(final boolean need ) {
 		needPerm = need;
 	}
 
