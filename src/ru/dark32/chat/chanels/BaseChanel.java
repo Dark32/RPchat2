@@ -3,8 +3,13 @@ package ru.dark32.chat.chanels;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Instrument;
+import org.bukkit.Note;
+import org.bukkit.Note.Tone;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import ru.dark32.chat.Main;
@@ -27,6 +32,9 @@ public class BaseChanel implements IChanel {
 	private boolean		listenerMessageEnable;
 	private String		noListenerMessage;
 	private boolean		needPerm;
+	private boolean		pimkEnable;
+	private Instrument	pimkInstrument;
+	private Note		pimkNote;
 
 	@Override
 	public boolean isEnable() {
@@ -61,7 +69,7 @@ public class BaseChanel implements IChanel {
 			final boolean isWorld = isWorldChat() && sender.getWorld() == recipient.getWorld();
 			if (isDeaf) {
 				continue;
-			} else if (Util.hasPermission(recipient, Main.BASE_PERM+".spy")) {
+			} else if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy")) {
 				recipients.add(recipient);
 			} else if (!isWorld) {
 				continue;
@@ -167,22 +175,30 @@ public class BaseChanel implements IChanel {
 	public String preformatMessage(final Player sender, final String message ) {
 		return message;
 	}
-	
+
 	@Override
-	public boolean canSend(final Player sender,final  String message ) {
+	public boolean canSend(final Player sender, final String message ) {
 		return true;
 	}
 
 	@Override
-	public void preSend(final Player sender, final String message,final  int recipient ) {
+	public void preSend(final Player sender, final String message, final Set<Player> recipient ) {
+		// pimk
+		if (isPimk()) {
+			for (final Player player : recipient) {
+				if (message.contains(player.getName().toLowerCase(Locale.US))) {
+					player.playNote(sender.getLocation(), getPimkInstrument(), getPimkNote());
+				}
+			}
+		}
 		// отправляем число услышавших, если это включено
 		if (isListenerMessage()) {
-			sender.sendMessage(getListenerMessage(recipient - 1));
+			sender.sendMessage(getListenerMessage(recipient.size() - 1));
 		}
 	}
 
 	@Override
-	public void setListenerMessage(final String listenerMessage,final  String noListenerMessage,final  boolean enable ) {
+	public void setListenerMessage(final String listenerMessage, final String noListenerMessage, final boolean enable ) {
 		this.listenerMessage = ChanelRegister.colorize(listenerMessage);
 		this.noListenerMessage = ChanelRegister.colorize(noListenerMessage);
 		this.listenerMessageEnable = enable;
@@ -207,5 +223,28 @@ public class BaseChanel implements IChanel {
 	@Override
 	public boolean isNeedPerm() {
 		return needPerm;
+	}
+
+	@Override
+	public void setPimk(final boolean enable, final Instrument instrument, final Note note ) {
+		pimkEnable = enable;
+		pimkInstrument = instrument;
+		pimkNote = note;
+
+	}
+
+	@Override
+	public boolean isPimk() {
+		return pimkEnable;
+	}
+
+	@Override
+	public Instrument getPimkInstrument() {
+		return pimkInstrument;
+	}
+
+	@Override
+	public Note getPimkNote() {
+		return pimkNote;
 	}
 }

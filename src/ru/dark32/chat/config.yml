@@ -33,6 +33,13 @@ Chat:
       range: 200
       sign: c
       needPerm: false
+      pimk:
+       enable: true
+       instrument: PIANO
+       note: 
+         tone: F
+         octava: 1
+         sharped: true
    Broad:
       format: "$msg"
       type: broad

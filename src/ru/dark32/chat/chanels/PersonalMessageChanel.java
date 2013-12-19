@@ -5,6 +5,7 @@ package ru.dark32.chat.chanels;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -175,8 +176,8 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	}
 
 	@Override
-	public void preSend(final Player sender, final String message, final int recipient ) {
-		// отправляем сообщение цели
+	public void preSend(final Player sender, final String message, final Set<Player>  recipient) {
+	// отправляем сообщение цели
 		this.sendMessage(sender, message);
 
 	}

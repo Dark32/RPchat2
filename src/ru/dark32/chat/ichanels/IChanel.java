@@ -1,7 +1,10 @@
 package ru.dark32.chat.ichanels;
 
 import java.util.List;
+import java.util.Set;
 
+import org.bukkit.Instrument;
+import org.bukkit.Note;
 import org.bukkit.entity.Player;
 
 /**
@@ -12,86 +15,86 @@ public interface IChanel {
 	/**
 	 * @return формат канала
 	 */
-	 String getFormat();
+	String getFormat();
 
 	/**
 	 * @return индекс канала
 	 */
-	 int getIndex();
+	int getIndex();
 
 	/**
 	 * @return имя канала
 	 */
-	 String getName();
+	String getName();
 
 	/**
 	 * @return префикс канала
 	 */
-	 char getPrefix();
+	char getPrefix();
 
 	/**
 	 * @return подпись канала
 	 */
-	 char getSign();
+	char getSign();
 
 	/**
 	 * @param key
 	 *            фомат канала
 	 */
-	 void setFormat(String key );
+	void setFormat(String key );
 
 	/**
 	 * @param i
 	 *            индекс канала на кайний случай
 	 */
-	 void setIndex(int i );
+	void setIndex(int i );
 
 	/**
 	 * @param key
 	 *            имя канала
 	 */
-	 void setName(String key );
+	void setName(String key );
 
 	/**
 	 * @param key
 	 *            префикс канала
 	 */
-	 void setPrefix(String key );
+	void setPrefix(String key );
 
 	/**
 	 * @param sign
 	 *            подпись канала
 	 */
-	 void setSign(char sign );
+	void setSign(char sign );
 
 	/**
 	 * @return включен ли канал
 	 */
-	 boolean isEnable();
+	boolean isEnable();
 
 	/**
 	 * @param enbl
 	 *            управление включённостью канала
 	 */
-	 void setEnable(boolean enbl );
+	void setEnable(boolean enbl );
 
 	/**
 	 * @param sender
 	 *            отправитель
 	 * @return слушатели
 	 */
-	 List<Player> getRecipients(Player sender );
+	List<Player> getRecipients(Player sender );
 
 	/**
 	 * @return ограничен ли чат одним миром
 	 */
-	 boolean isWorldChat();
+	boolean isWorldChat();
 
 	/**
 	 * @param isWorld
 	 *            ограничен ли чат одним миром
 	 */
-	 void setWorldChat(boolean isWorld );
+	void setWorldChat(boolean isWorld );
 
 	/**
 	 * @param type
@@ -103,7 +106,7 @@ public interface IChanel {
 	 *            range-item - требует вещь, ограничен по радиусу<br>
 	 *            none - не канал
 	 */
-	 void setType(ETypeChanel type );
+	void setType(ETypeChanel type );
 
 	/**
 	 * @return тип чата <br>
@@ -114,18 +117,18 @@ public interface IChanel {
 	 *         range-item - требует вещь, ограничен по радиусу<br>
 	 *         none - не канал
 	 */
-	 ETypeChanel getType();
+	ETypeChanel getType();
 
 	/**
 	 * @return внутреннее имя
 	 */
-	 String getInnerName();
+	String getInnerName();
 
 	/**
 	 * @param name
 	 *            внутреннее имя
 	 */
-	 void setInnerName(String name );
+	void setInnerName(String name );
 
 	/**
 	 * форматировать сообщение
@@ -136,18 +139,18 @@ public interface IChanel {
 	 *            - сообщение
 	 * @return - отформатированное сообщение
 	 */
-	 String format(Player p, String msg );
+	String format(Player p, String msg );
 
 	/**
 	 * @param tables
 	 *            Табаемо
 	 */
-	 void setTabes(boolean tables );
+	void setTabes(boolean tables );
 
 	/**
 	 * @return набаемо ли?
 	 */
-	 boolean isTabes();
+	boolean isTabes();
 
 	/**
 	 * обработка сообщения, не формата
@@ -159,7 +162,7 @@ public interface IChanel {
 	 * @return обработанное сообщение
 	 */
 
-	 String preformatMessage(Player sender, String message );
+	String preformatMessage(Player sender, String message );
 
 	/**
 	 * можно ли отправить
@@ -180,9 +183,9 @@ public interface IChanel {
 	 * @param message
 	 *            сообщение
 	 * @param recipient
-	 *            число услышащих сообщение
+	 *            услышавшие сообщение
 	 */
-	void preSend(Player sender, String message, int recipient );
+	void preSend(Player sender, String message, Set<Player> recipient );
 
 	/**
 	 * установка сообщения о числе услышавших
@@ -209,12 +212,41 @@ public interface IChanel {
 	 */
 	boolean isListenerMessage();
 
-	/** нужен ли базовые права для канала
-	 * @param need нужны или нет
+	/**
+	 * нужен ли базовые права для канала
+	 * 
+	 * @param need
+	 *            нужны или нет
 	 */
-	void setNeedPerm(boolean need);
+	void setNeedPerm(boolean need );
+
 	/**
 	 * @return нужны ли базовые права
 	 */
 	boolean isNeedPerm();
+
+	/**
+	 * @param enable
+	 *            включен ли
+	 * @param instrument
+	 *            инструмент
+	 * @param note
+	 *            нота
+	 */
+	void setPimk(boolean enable, Instrument instrument, Note note );
+
+	/**
+	 * @return включен ли пимк
+	 */
+	boolean isPimk();
+
+	/**
+	 * @return инструмент пимка
+	 */
+	Instrument getPimkInstrument();
+
+	/**
+	 * @return нота пимка
+	 */
+	Note getPimkNote();
 }

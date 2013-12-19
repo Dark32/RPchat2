@@ -70,7 +70,7 @@ public class ChatListener implements Listener {
 		// добавляем получателей согласно типу чата
 		event.getRecipients().addAll(chanel.getRecipients(sender));
 		// отправка пре сообщения
-		chanel.preSend(sender, message, event.getRecipients().size());
+		chanel.preSend(sender, message, event.getRecipients());
 		// System.out.println(event.getRecipients());
 		// получаем и обрабатываем формат
 		format = chanel.format(sender, chanel.getFormat());

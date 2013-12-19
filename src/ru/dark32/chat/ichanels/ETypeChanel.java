@@ -1,6 +1,8 @@
 package ru.dark32.chat.ichanels;
 
+import org.bukkit.Instrument;
 import org.bukkit.Material;
+import org.bukkit.Note;
 
 import ru.dark32.chat.Main;
 import ru.dark32.chat.chanels.BaseChanel;
@@ -177,6 +179,12 @@ public enum ETypeChanel {
 				Main.config.getString("Chat." + name + ".noListenerMessage", "Chat." + name + ".noListenerMessage"),
 				Main.config.getBoolean("Chat." + name + ".isListenerMessage", false));
 		chanel.setNeedPerm(Main.config.getBoolean("Chat." + name + ".needPerm", false));
+		chanel.setPimk(
+				Main.config.getBoolean("Chat." + name + ".pimk.enable", false),
+				Instrument.valueOf(Main.config.getString("Chat." + name + ".pimk.instrument", "PIANO")),
+				new Note(Main.config.getInt("Chat." + name + ".pimk.note.octava", 1), 
+						Note.Tone.valueOf(Main.config.getString("Chat." + name + ".pimk.note.tone", "F")),
+						Main.config.getBoolean("Chat." + name+ ".pimk.tone.sharped", false)));
 		chanel.setInnerName(name);
 		return chanel;
 	}
