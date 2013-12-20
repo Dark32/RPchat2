@@ -20,12 +20,12 @@ public class Main extends JavaPlugin {
 	public PluginManager			pluginManager;
 	private static IMute			muteStorage;
 	private static IDeaf			deafStorage;
-	public static final String		VERSION		= "RPchat v 2.0.1w(3u1t1u) (singularity)";
+	public static final String		VERSION		= "RPchat v 2.0.3w(3u1t3u) (singularity)";
 	public static FileConfiguration	config;
 	public static File				yamlFile;
 	public static YamlConfiguration	yaml;
 	// выключить в релизе
-	public static final boolean		DEBUG_MODE	= true;
+	public static final boolean		DEBUG_MODE	= !true;
 	public static final String		BASE_PERM	= "mcnw";
 
 	@Override

@@ -119,7 +119,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		msg.add("&6" + Main.VERSION);
 		msg.add("&6Autors: ufatos, dark32");
 		msg.add("&6License: CC-BY-NC-ND");
-		msg.add("&6Link: http://goo.gl/KpvB7c");
+		//msg.add("&6Link: http://goo.gl/KpvB7c");
 		msg.addAll(ValueStorage.helpBase);
 		msg.add("&b=============================================");
 		for (final String s : msg) {
