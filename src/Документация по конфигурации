@@ -29,9 +29,8 @@
  needPerm| `false` |  нужен ли базовые права для канала
  pimk.enable |`false` | включен ли пимк (звук если вас упомянули в чате)
  pimk.instrument | `PIANO` | инструмент пимка (PIANO, BASS_DRUM,SNARE_DRUM,STICKS,BASS_GUITAR)
- pimk.note.tone | `F` | тон пимка (G,A,B,C,D,E,F)
- pimk.note.octava | `1` | октава 0-2
- pimk.note.sharped | `false` | шарп? 
+ pimk.note | `1F#` | тон пимка (0-2)(G,A,B,C,D,E,F)(#?)
+
 
 # RANGE:
 описание: чат с ограничением по расстоянию

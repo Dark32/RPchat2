@@ -179,12 +179,19 @@ public enum ETypeChanel {
 				Main.config.getString("Chat." + name + ".noListenerMessage", "Chat." + name + ".noListenerMessage"),
 				Main.config.getBoolean("Chat." + name + ".isListenerMessage", false));
 		chanel.setNeedPerm(Main.config.getBoolean("Chat." + name + ".needPerm", false));
-		chanel.setPimk(
-				Main.config.getBoolean("Chat." + name + ".pimk.enable", false),
-				Instrument.valueOf(Main.config.getString("Chat." + name + ".pimk.instrument", "PIANO")),
-				new Note(Main.config.getInt("Chat." + name + ".pimk.note.octava", 1), 
-						Note.Tone.valueOf(Main.config.getString("Chat." + name + ".pimk.note.tone", "F")),
-						Main.config.getBoolean("Chat." + name+ ".pimk.tone.sharped", false)));
+		String note = Main.config.getString("Chat." + name + ".pimk.note", "1F#");
+		int octava = note.charAt(0);
+		Note.Tone tone = Note.Tone.F;
+		boolean sharped = false;
+		if (note.length() >= 2 && note.length() <= 3) {
+			char char0 = note.charAt(0);
+			char char1 = note.charAt(1);
+			octava = (char0 == '2') ? 2 : (char0 == '0' ? 0 : char0 == '1' ? 1 : 1);
+			tone = ('A' <= char1 && 'F' >= char1) ? Note.Tone.valueOf(String.valueOf(char1)) : Note.Tone.F;
+			sharped = (note.length() == 3 && note.charAt(1) == '#');
+		}
+		chanel.setPimk(Main.config.getBoolean("Chat." + name + ".pimk.enable", false), Instrument.valueOf(Main.config
+				.getString("Chat." + name + ".pimk.instrument", "PIANO")), new Note(octava, tone, sharped));
 		chanel.setInnerName(name);
 		return chanel;
 	}

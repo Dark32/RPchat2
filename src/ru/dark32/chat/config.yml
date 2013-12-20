@@ -36,10 +36,10 @@ Chat:
       pimk:
        enable: true
        instrument: PIANO
-       note: 
-         tone: F
-         octava: 1
-         sharped: true
+       note: 1F#
+#         tone: F
+#         octava: 1
+#         sharped: true
    Broad:
       format: "$msg"
       type: broad
