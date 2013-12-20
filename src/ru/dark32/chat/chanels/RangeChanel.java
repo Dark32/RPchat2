@@ -30,7 +30,7 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 
 	@Override
 	public List<Player> getRecipients(final Player sender ) {
-		final  List<Player> recipients = new LinkedList<Player>();
+		final List<Player> recipients = new LinkedList<Player>();
 		if (Main.DEBUG_MODE) {
 			sender.sendMessage("debug:--------------------------------");
 		}
@@ -39,16 +39,21 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 			final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
 			final int dist = getDist(sender.getLocation(), recipient.getLocation());
 			final boolean isRange = dist < this.getRange() * this.getRange();
-			if (Main.DEBUG_MODE) {
-				sender.sendMessage("debug: " + recipient.getName() + " | " + dist + "/"
-						+ this.range * this.range + "|" + isWorld);
+			final boolean isHear = !isNeedPerm()
+					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
+					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
+		if (Main.DEBUG_MODE) {
+				sender.sendMessage("debug: " + recipient.getName() + " | " + dist + "/" + this.range * this.range + "|"
+						+ isWorld);
 			}
-			if (isDeaf) {
+			if (!isHear) {
+				continue;
+			} else if (isDeaf) {
 				if (Main.DEBUG_MODE) {
 					sender.sendMessage("debug: deaf - " + recipient.getName());
 				}
 				continue;
-			} else if (Util.hasPermission(recipient, Main.BASE_PERM+".spy")) {
+			} else if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy")) {
 				if (Main.DEBUG_MODE) {
 					sender.sendMessage("debug: spy - " + recipient.getName());
 				}
@@ -78,7 +83,7 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 		return recipients;
 	}
 
-	private int getDist(final Location sender,final  Location target ) {
+	private int getDist(final Location sender, final Location target ) {
 		int distX = (int) (sender.getX() - target.getX());
 		distX *= distX;
 		int distY = (int) (sender.getY() - target.getY());

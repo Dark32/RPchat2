@@ -35,12 +35,18 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 			final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
 			final int dist = getDist(sender.getLocation(), recipient.getLocation());
 			final boolean isRange = (this.getRange() < 0) || (dist < this.getRange());
-			final boolean isTransceiver = Util.hasPermission(recipient, Main.BASE_PERM+"." + getInnerName() + ".no_item")
+			final boolean isTransceiver = Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName()
+					+ ".no_item")
 					|| hasItemInInvetery(recipient);
+			final boolean isHear = !isNeedPerm()
+					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
+					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
 			Bukkit.getConsoleSender().sendMessage(recipient.getName() + "-" + isWorld);
-			if (isDeaf) {
+			if (!isHear) {
 				continue;
-			} else if (Util.hasPermission(recipient, Main.BASE_PERM+".spy")) {
+			} else if (isDeaf) {
+				continue;
+			} else if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy")) {
 				recipients.add(recipient);
 			} else if (isRange && isTransceiver) {
 				if (isWorld) {
@@ -138,7 +144,7 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 
 	@SuppressWarnings("deprecation" )
 	@Override
-	public void loseRequiseteItem(final Player player,final  ItemStack item ) {
+	public void loseRequiseteItem(final Player player, final ItemStack item ) {
 		if (this.requisiteItemAmount == 0) {
 			return;
 		}

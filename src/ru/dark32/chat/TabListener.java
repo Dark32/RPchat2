@@ -14,12 +14,12 @@ import ru.dark32.chat.ichanels.IBroadChanel;
 
 public class TabListener implements Listener {
 	@EventHandler
-	public void tabComplete(final PlayerChatTabCompleteEvent e ) {
-		e.getTabCompletions().clear();
-		final String chatMessage = e.getChatMessage();
-		final Collection<String> completions = e.getTabCompletions();
+	public void tabComplete(final PlayerChatTabCompleteEvent event ) {
+		event.getTabCompletions().clear();
+		final String chatMessage = event.getChatMessage();
+		final Collection<String> completions = event.getTabCompletions();
 		final char firstChar = chatMessage.charAt(0);
-		final int chanind = ChanelRegister.getIndexByPrefix(firstChar);
+		final int chanind = ChanelRegister.getIndexByPrefix(event.getPlayer(), firstChar);
 		if (chanind != -1 && ChanelRegister.getByIndex(chanind).isTabes()) {
 			final String _nick = chatMessage.length() > 1 ? chatMessage.substring(1) : "";
 			String _name = "";

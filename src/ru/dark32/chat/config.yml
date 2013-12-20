@@ -221,9 +221,10 @@ deaf:
    - "&b/unmdeaf<nick> [sign] &6- для снятия глухоты"
 #------------------------------------------
 # Permission
-#	<chat_inner_name> - внутренние имя канала. 
+#	<chat_inner_name>								- внутренние имя канала. 
 #	mcnw.spy 											- право видить весь чат
-#	mcnw.<chat_inner_name>			 		- право говорить в <chat_inner_name>
+#	mcnw.<chat_inner_name>.say		 		- право говорить в <chat_inner_name>
+#	mcnw.<chat_inner_name>.hear	 		- право слышать <chat_inner_name> // перекрывается mcnw.<chat_inner_name>.say
 #	mcnw.<chat_inner_name>.no_item 		- право говорить в <chat_inner_name> игнорируя требования вещи
 #	mcnw.<chat_inner_name>.nospy  		- право на не прослушку <chat_inner_name> типа личных сообщений
 #	mcnw.<chat_inner_name>.pmspy 		- право на прослушку <chat_inner_name> типа личных сообщений

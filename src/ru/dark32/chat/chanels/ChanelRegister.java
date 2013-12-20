@@ -7,6 +7,7 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import ru.dark32.chat.Main;
@@ -25,16 +26,12 @@ public class ChanelRegister {
 	/**
 	 * иницилизируем каналы
 	 */
-	public static int				intex	= 0;
-	public static List<IChanel>		listChat;
-	public static List<Character>	signes;
-	public static List<Character>	prefixes;
-	public static int				defaultChanel;
+	public static int			intex	= 0;
+	public static List<IChanel>	listChat;
+	public static int			defaultChanel;
 
 	public static void init() {
 		listChat = new ArrayList<IChanel>();
-		signes = new ArrayList<Character>();
-		prefixes = new ArrayList<Character>();
 		final ConfigurationSection chtatList = Main.config.getConfigurationSection("Chat");
 		if (chtatList == null) {
 			Bukkit.getConsoleSender().sendMessage("Ошибка. Каналы чата не найдены в конфиге");
@@ -56,8 +53,6 @@ public class ChanelRegister {
 	private static IChanel registrChanel(final ETypeChanel type, final String name ) {
 		final IChanel chanel = type.setChanel(name);
 		chanel.setType(type);
-		signes.add(chanel.getSign());
-		prefixes.add(chanel.getPrefix());
 		if (Main.config.getBoolean("Chat." + name + ".default", false)) {
 			defaultChanel = chanel.getIndex();
 		}
@@ -80,23 +75,33 @@ public class ChanelRegister {
 	}
 
 	public static int getIndexBySign(final char sign ) {
-		return signes.indexOf(sign);
-	}
-
-	public static int getIndexByItem(final ItemStack item ) {
 		for (final IChanel chanel : listChat) {
-			if ((chanel.getType() == ETypeChanel.ITEM || chanel.getType() == ETypeChanel.RANGE_ITEM || chanel
-					.getType() == ETypeChanel.REQUISITE)
-					&& ((IItemChanel) chanel).equalItem(item)
-					&& !((IItemChanel) chanel).isRequestPprefix()) {
+			if (chanel.getSign() == sign) {
 				return chanel.getIndex();
 			}
 		}
 		return -1;
 	}
 
-	public static int getIndexByPrefix(final char preffix ) {
-		return prefixes.indexOf(preffix);
+	public static int getIndexByItem(final ItemStack item ) {
+		for (final IChanel chanel : listChat) {
+			if ((chanel.getType() == ETypeChanel.ITEM || chanel.getType() == ETypeChanel.RANGE_ITEM || chanel.getType() == ETypeChanel.REQUISITE)
+					&& ((IItemChanel) chanel).equalItem(item) && !((IItemChanel) chanel).isRequestPprefix()) {
+				return chanel.getIndex();
+			}
+		}
+		return -1;
+	}
+
+	public static int getIndexByPrefix(final Player sender, final char preffix ) {
+		for (final IChanel chanel : listChat) {
+			if ((chanel.getPrefix() == preffix)
+					&& (!chanel.isNeedPerm() || Util.hasPermission(sender, "mcnw.spy") || Util.hasPermission(sender,
+							Main.BASE_PERM + "." + chanel.getInnerName() + ".say"))) {
+				return chanel.getIndex();
+			}
+		}
+		return -1;
 	}
 
 	public static String colorize(final String string ) {

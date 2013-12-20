@@ -8,8 +8,6 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Instrument;
 import org.bukkit.Note;
-import org.bukkit.Note.Tone;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import ru.dark32.chat.Main;
@@ -67,7 +65,12 @@ public class BaseChanel implements IChanel {
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
 			final boolean isWorld = isWorldChat() && sender.getWorld() == recipient.getWorld();
-			if (isDeaf) {
+			final boolean isHear = !isNeedPerm()
+					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
+					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
+			if (!isHear) {
+				continue;
+			} else if (isDeaf) {
 				continue;
 			} else if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy")) {
 				recipients.add(recipient);

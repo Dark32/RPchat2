@@ -26,7 +26,7 @@ public class ChatListener implements Listener {
 		// префикс, первый символ
 		final char prefix = message.charAt(0);
 		// ИД канала по префиксы, -1 - нет канала по префиксы
-		final int prefixChanel = ChanelRegister.getIndexByPrefix(prefix);
+		final int prefixChanel = ChanelRegister.getIndexByPrefix(sender, prefix);
 		// ИД канала по вещи в руках, -1 нет канала по вещи в руках
 		final int itemChanel = ChanelRegister.getIndexByItem(sender.getItemInHand());
 		// ИД активного канала, не иницилизируем по умолчанию
@@ -53,7 +53,7 @@ public class ChatListener implements Listener {
 			return;
 		}
 		// есть ли права говорить в этот чат
-		if (!chanel.isNeedPerm() || !Util.hasPermission(sender, Main.BASE_PERM + "." + chanel.getInnerName())) {
+		if (!chanel.isNeedPerm() || !Util.hasPermission(sender, Main.BASE_PERM + "." + chanel.getInnerName() + ".say")) {
 			sender.sendMessage(ValueStorage.noPerm.replace("$1", chanel.getName()));
 			event.setCancelled(true);
 			return;

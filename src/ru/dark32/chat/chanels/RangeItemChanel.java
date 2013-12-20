@@ -40,7 +40,12 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 			final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
 			final int dist = getDist(sender.getLocation(), recipient.getLocation());
 			final boolean isRange = (this.getRange() < 0) || (dist < this.getRange());
-			if (isDeaf) {
+			final boolean isHear = !isNeedPerm()
+					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
+					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
+		if (!isHear) {
+				continue;
+			} else if (isDeaf) {
 				continue;
 			} else if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy")) {
 				recipients.add(recipient);
