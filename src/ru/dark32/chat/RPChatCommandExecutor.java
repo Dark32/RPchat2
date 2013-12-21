@@ -16,15 +16,18 @@ public class RPChatCommandExecutor implements CommandExecutor {
 	private String	chanesignmore1;
 
 	public RPChatCommandExecutor(){
-		chanelswitch = ChanelRegister.colorize(Main.config.getString("help.changechanel", "Канал изменн на $1"));
-		chanenotfound = ChanelRegister.colorize(Main.config.getString("help.chanenotfound", "Канал не найден"));
+		chanelswitch = ChanelRegister.colorize(Main.config.getString("help.changechanel",
+				"Канал изменн на $1"));
+		chanenotfound = ChanelRegister.colorize(Main.config.getString("help.chanenotfound",
+				"Канал не найден"));
 		chanesignmore1 = ChanelRegister.colorize(Main.config.getString("help.chanesignmore1",
 				"Длина сигны больше 1 знака"));
 
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender,final  Command cmd,final  String label,final  String[] args ) {
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label,
+			final String[] args ) {
 		if (cmd.getName().equalsIgnoreCase("rpchat")) {
 			if (args.length == 0) {
 				getBase(sender);
@@ -70,10 +73,11 @@ public class RPChatCommandExecutor implements CommandExecutor {
 			if (args.length == 1) {
 				if (args[0].length() == 1) {
 					final char sign = args[0].charAt(0);
-					final	int _ind = ChanelRegister.getIndexBySign(sign);
+					final int _ind = ChanelRegister.getIndexBySign(sign);
 					if (_ind != -1) {
 						Util.setChatMode(sender.getName(), _ind);
-						sender.sendMessage(chanelswitch.replace("$1", ChanelRegister.getByIndex(_ind).getName()));
+						sender.sendMessage(chanelswitch.replace("$1",
+								ChanelRegister.getByIndex(_ind).getName()));
 					} else {
 						sender.sendMessage(chanenotfound);
 					}
@@ -82,8 +86,8 @@ public class RPChatCommandExecutor implements CommandExecutor {
 				}
 			} else {
 				getChannel(sender);
-				return true;
 			}
+			return true;
 		}
 		return false;
 	}
@@ -93,8 +97,9 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		msg.add("&b=============================================");
 		msg.addAll(ValueStorage.helpChannel);
 		for (final IChanel chanel : ChanelRegister.listChat) {
-			msg.add("&b" + chanel.getName() + " || " + chanel.getInnerName() + " || " + chanel.getSign() + " || "
-					+ chanel.getPrefix() + " || " + chanel.getType().toString());
+			msg.add("&b" + chanel.getName() + " || " + chanel.getInnerName() + " || "
+					+ chanel.getSign() + " || " + chanel.getPrefix() + " || "
+					+ chanel.getType().toString());
 		}
 		msg.add("&b=============================================");
 		for (final String s : msg) {
@@ -119,7 +124,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		msg.add("&6" + Main.VERSION);
 		msg.add("&6Autors: ufatos, dark32");
 		msg.add("&6License: CC-BY-NC-ND");
-		//msg.add("&6Link: http://goo.gl/KpvB7c");
+		// msg.add("&6Link: http://goo.gl/KpvB7c");
 		msg.addAll(ValueStorage.helpBase);
 		msg.add("&b=============================================");
 		for (final String s : msg) {

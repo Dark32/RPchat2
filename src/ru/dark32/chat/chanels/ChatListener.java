@@ -1,5 +1,6 @@
 package ru.dark32.chat.chanels;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,11 +33,11 @@ public class ChatListener implements Listener {
 		// ИД активного канала, не иницилизируем по умолчанию
 		int indexChanel = Util.getModeIndex(sender.getName());
 		// Сообщение длинее одного знака
+		if (itemChanel != -1) {
+			// меняем канаал на канал по вещи
+			indexChanel = itemChanel;
+		}
 		if (message.length() > 1) {
-			if (itemChanel != -1) {
-				// меняем канаал на канал по вещи
-				indexChanel = itemChanel;
-			}
 			// ИД канала по префексу есть
 			if (prefixChanel != -1) {
 				// меняем канаал на канал по префексу
@@ -53,7 +54,9 @@ public class ChatListener implements Listener {
 			return;
 		}
 		// есть ли права говорить в этот чат
-		if (!chanel.isNeedPerm() || !Util.hasPermission(sender, Main.BASE_PERM + "." + chanel.getInnerName() + ".say")) {
+		if (chanel.isNeedPerm()
+				&& !Util.hasPermission(sender, Main.BASE_PERM + "." + chanel.getInnerName()
+						+ ".say")) {
 			sender.sendMessage(ValueStorage.noPerm.replace("$1", chanel.getName()));
 			event.setCancelled(true);
 			return;

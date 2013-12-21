@@ -42,7 +42,7 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 
 	@Override
 	public void setItemMaterial(final Material ma ) {
-		this.itemMaterial = ma;
+		this.itemMaterial = ma != null ? ma : Material.AIR;
 
 	}
 
@@ -79,8 +79,8 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 
 	@Override
 	public String toString() {
-		return super.toString() + ", id =>" + this.itemId + ", subid=>" + this.itemSubId + ", material =>"
-				+ this.itemMaterial.name() + ", count =>" + this.getItemAmount();
+		return super.toString() + ", id =>" + this.itemId + ", subid=>" + this.itemSubId
+				+ ", material =>" + this.itemMaterial.name() + ", count =>" + this.getItemAmount();
 	}
 
 	@SuppressWarnings("deprecation" )
@@ -92,13 +92,16 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 
 		if (Main.DEBUG_MODE) {
 			Bukkit.getConsoleSender().sendMessage(
-					"debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - " + item.getType());
-			Bukkit.getConsoleSender().sendMessage("debug need " + itemId + ":" + itemSubId + " - " + itemMaterial);
+					"debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - "
+							+ item.getType());
+			Bukkit.getConsoleSender().sendMessage(
+					"debug need " + itemId + ":" + itemSubId + " - " + itemMaterial);
 		}
 
 		final boolean isItem = item.getDurability() == this.itemSubId
-				&& item.getAmount() > this.itemAmount
-				&& ((ValueStorage.experemental && item.getType() == this.itemMaterial) || item.getTypeId() == this.itemId);
+				&& item.getAmount() >= this.itemAmount
+				&& ((ValueStorage.experemental && item.getType() == this.itemMaterial) || item
+						.getTypeId() == this.itemId);
 		return isItem;
 	}
 

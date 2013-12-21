@@ -33,13 +33,6 @@ Chat:
       range: 200
       sign: c
       needPerm: false
-      pimk:
-       enable: true
-       instrument: PIANO
-       note: 1F#
-#         tone: F
-#         octava: 1
-#         sharped: true
    Broad:
       format: "$msg"
       type: broad
@@ -89,6 +82,10 @@ Chat:
       sign: g
       requestPrefix: false
       needPerm: true
+      pimk:
+       enable: true
+       instrument: PIANO
+       note: 1F#
    World:
       type: item
       enable: true
@@ -105,6 +102,22 @@ Chat:
       sign: w
       requestPrefix: true
       needPerm: true
+   World2:
+      type: item
+      enable: true
+      world: true
+      item:
+         #@Deprecated
+         id: 260
+         material: APPLE
+         subid: 0
+         amount: 1
+      format: "$pf$p$sf в мир2:&6 $msg "
+      name: "мировой чат2"
+      prefix: ">"
+      sign: q
+      requestPrefix: true
+      needPerm: true
    Shout:
       type: REQUISITE
       enable: true
@@ -116,14 +129,14 @@ Chat:
       sign: s
       item:
          id: 339
-         material: PAPPER
+         material: PAPER
          subid: 0
-         amount: 0
+         amount: 1
       requisete:
          id: 340
          material: BOOK
          subid: 0
-         amount: 0
+         amount: 1
       requestPrefix: false
       needPerm: false
    Local:

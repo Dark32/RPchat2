@@ -8,6 +8,8 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Instrument;
 import org.bukkit.Note;
+import org.bukkit.Note.Tone;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import ru.dark32.chat.Main;
@@ -190,7 +192,8 @@ public class BaseChanel implements IChanel {
 		if (isPimk()) {
 			for (final Player player : recipient) {
 				if (message.contains(player.getName().toLowerCase(Locale.US))) {
-					player.playNote(sender.getLocation(), getPimkInstrument(), getPimkNote());
+				//fix it to do
+				player.playSound(player.getLocation(), Sound.valueOf("NOTE_"+getPimkInstrument()) , 3f , getPimkNote().getId());
 				}
 			}
 		}

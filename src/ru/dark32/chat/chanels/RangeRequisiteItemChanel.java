@@ -35,13 +35,13 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 			final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
 			final int dist = getDist(sender.getLocation(), recipient.getLocation());
 			final boolean isRange = (this.getRange() < 0) || (dist < this.getRange());
-			final boolean isTransceiver = Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName()
-					+ ".no_item")
-					|| hasItemInInvetery(recipient);
+			final boolean isTransceiver = Util.hasPermission(recipient, Main.BASE_PERM + "."
+					+ getInnerName() + ".no_item")
+					|| recipient == sender || hasItemInInvetery(recipient);
 			final boolean isHear = !isNeedPerm()
 					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
-					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
-			Bukkit.getConsoleSender().sendMessage(recipient.getName() + "-" + isWorld);
+					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName()
+							+ ".hear");
 			if (!isHear) {
 				continue;
 			} else if (isDeaf) {
@@ -62,7 +62,6 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 	}
 
 	private boolean hasItemInInvetery(final Player player ) {
-		Bukkit.getConsoleSender().sendMessage("-" + player.getName());
 		final PlayerInventory inventary = player.getInventory();
 		boolean hasItem = false;
 		for (final ItemStack item : inventary) {
@@ -72,7 +71,6 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 				return hasItem;
 			}
 		}
-		Bukkit.getConsoleSender().sendMessage("" + hasItem);
 		return hasItem;
 	}
 
@@ -128,17 +126,18 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 		if (item == null) {
 			return false;
 		}
-
 		if (Main.DEBUG_MODE) {
 			Bukkit.getConsoleSender().sendMessage(
-					"debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - " + item.getType());
+					"debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - "
+							+ item.getType());
 			Bukkit.getConsoleSender().sendMessage(
-					"debug need " + requisiteItemId + ":" + requisiteItemSubId + " - " + requisiteItemMaterial);
+					"debug need " + requisiteItemId + ":" + requisiteItemSubId + " - "
+							+ requisiteItemMaterial);
 		}
-
 		final boolean isItem = item.getDurability() == this.requisiteItemSubId
-				&& item.getAmount() > this.requisiteItemAmount
-				&& ((ValueStorage.experemental && item.getType() == this.requisiteItemMaterial) || item.getTypeId() == this.requisiteItemId);
+				&& item.getAmount() >= this.requisiteItemAmount
+				&& ((ValueStorage.experemental && item.getType() == this.requisiteItemMaterial) || item
+						.getTypeId() == this.requisiteItemId);
 		return isItem;
 	}
 
@@ -148,17 +147,13 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 		if (this.requisiteItemAmount == 0) {
 			return;
 		}
-		final int amoutHand = item.getAmount() - this.requisiteItemAmount;
-		ItemStack inHandrem = null;
+		ItemStack loseItem = null;
 		if (ValueStorage.experemental) {
-			inHandrem = new ItemStack(item.getType(), amoutHand);
+			loseItem = new ItemStack(item.getType(), this.requisiteItemAmount);
 		} else {
-			inHandrem = new ItemStack(item.getTypeId(), amoutHand);
+			loseItem = new ItemStack(item.getTypeId(), this.requisiteItemAmount);
 		}
-		if (amoutHand <= 0) {
-			inHandrem = null;
-		}
-		player.setItemInHand(inHandrem);
+		player.getInventory().removeItem(loseItem);
 		return;
 	}
 }
