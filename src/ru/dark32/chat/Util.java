@@ -3,6 +3,9 @@ package ru.dark32.chat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -91,6 +94,17 @@ public class Util {
 			modes2.remove(player);
 		}
 		modes2.put(player, cm);
+	}
+
+	static Pattern				rollPatern	= Pattern.compile("\\*(.+?)\\*");
+	final private static Random	rand		= new Random();
+
+	public static String randomRoll(String message ) {
+		Matcher mt = rollPatern.matcher(message);
+		while (mt.find())
+			message = message.replaceFirst("\\*(.+?)\\*", "$1" + (rand.nextInt(100) > 50 ? "(удачно)" : "(не удачно)"));
+		message = message.replaceAll("\\*(.+?)\\Z", "$1" + (rand.nextInt(100) > 50 ? "(удачно)" : "(не удачно)"));
+		return message;
 	}
 
 }

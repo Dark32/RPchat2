@@ -1,8 +1,6 @@
 package ru.dark32.chat;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -44,28 +42,7 @@ public class Main extends JavaPlugin {
 		} else {
 			getLogger().warning("Permissions plugins not found!");
 		}
-		// спасибо DmitriyMX за распаковку конфига. Туторы на его сайте
-		// DmitriyMX.ru
-		/*final File fileConf = new File(getDataFolder(), "config.yml");
-		if (!fileConf.exists()) {
-			final InputStream resourceAsStream = Main.class.getResourceAsStream("./config.yml");
-			getDataFolder().mkdirs();
-			try {
-				final FileOutputStream fos = new FileOutputStream(fileConf);
-				byte[] buff = new byte[65536];
-				int n;
-				while ((n = resourceAsStream.read(buff)) > 0) {
-					fos.write(buff, 0, n);
-					fos.flush();
-				}
-				fos.close();
-				buff = null;
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			getLogger().info("Сonfig loaded");
-		}*/
+
 		config = this.getConfig();
 		Util.init(this);
 		ValueStorage.init();

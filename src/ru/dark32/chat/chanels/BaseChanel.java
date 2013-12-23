@@ -8,7 +8,6 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Instrument;
 import org.bukkit.Note;
-import org.bukkit.Note.Tone;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
@@ -178,7 +177,7 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public String preformatMessage(final Player sender, final String message ) {
-		return message;
+		return Util.randomRoll(message);
 	}
 
 	@Override
