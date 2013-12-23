@@ -42,11 +42,14 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 			final boolean isHear = !isNeedPerm()
 					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
 					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
-		if (Main.DEBUG_MODE) {
+			if (Main.DEBUG_MODE) {
 				sender.sendMessage("debug: " + recipient.getName() + " | " + dist + "/" + this.range * this.range + "|"
 						+ isWorld);
 			}
-			if (!isHear) {
+			final boolean isSelf = sender == recipient && isListenerMessage() == COUNT_INCLUDE;
+			if (isSelf) {
+				continue;
+			} else if (!isHear) {
 				continue;
 			} else if (isDeaf) {
 				if (Main.DEBUG_MODE) {

@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -16,9 +17,11 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class Util {
 	public static Map<String, Integer>	modes2;
-
 	static boolean						usePB;
 	public static boolean				usePEX;
+	private static String				luck;
+	private static String				unluck;
+	private static int					chance;
 
 	public static int getModeIndex(final String name ) {
 		if (!modes2.containsKey(name)) {
@@ -65,6 +68,9 @@ public class Util {
 
 	public static void init(final Main main ) {
 		modes2 = new HashMap<String, Integer>();
+		luck = ChanelRegister.colorize(Main.localeConfig.getString("String.chance.luck", "(luck)"));
+		unluck = ChanelRegister.colorize(Main.localeConfig.getString("String.chance.unluck", "(unluck)"));
+		chance = Main.config.getInt("chance", 50);
 	}
 
 	public static boolean isInteger(final String string ) {
@@ -96,14 +102,15 @@ public class Util {
 		modes2.put(player, cm);
 	}
 
-	static Pattern				rollPatern	= Pattern.compile("\\*(.+?)\\*");
-	final private static Random	rand		= new Random();
+	final private static Pattern	rollPatern	= Pattern.compile("\\*(.+?)\\*");
+	final private static Random		rand		= new Random();
 
 	public static String randomRoll(String message ) {
 		Matcher mt = rollPatern.matcher(message);
+		ChatColor.getLastColors(message);
 		while (mt.find())
-			message = message.replaceFirst("\\*(.+?)\\*", "$1" + (rand.nextInt(100) > 50 ? "(удачно)" : "(не удачно)"));
-		message = message.replaceAll("\\*(.+?)\\Z", "$1" + (rand.nextInt(100) > 50 ? "(удачно)" : "(не удачно)"));
+			message = message.replaceFirst("\\*(.+?)\\*", "$1 " + (rand.nextInt(100) > chance ? luck : unluck));
+		message = message.replaceAll("\\*(.+?)\\Z", "$1 " + (rand.nextInt(100) > chance ? luck : unluck));
 		return message;
 	}
 

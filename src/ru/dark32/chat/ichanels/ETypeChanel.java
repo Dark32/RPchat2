@@ -21,6 +21,7 @@ import ru.dark32.chat.chanels.RangeRequisiteItemChanel;
  * @author Andrew
  * 
  */
+
 public enum ETypeChanel {
 		BASE {
 			@Override
@@ -98,7 +99,7 @@ public enum ETypeChanel {
 		},
 		CHANCE {
 
-			@Override
+			@Override@SuppressWarnings("deprecation" )
 			public IChanel setChanel(final String name ) {
 				IChanel chanel = new ChanceChanel();
 				ETypeChanel.setBase(chanel, name);
@@ -153,7 +154,7 @@ public enum ETypeChanel {
 		chanel.setListenerMessage(
 				Main.chatConfig.getString("Chat." + name + ".listenerMessage", "Chat." + name + ".listenerMessage"),
 				Main.chatConfig.getString("Chat." + name + ".noListenerMessage", "Chat." + name + ".noListenerMessage"),
-				Main.chatConfig.getBoolean("Chat." + name + ".isListenerMessage", false));
+				Main.chatConfig.getInt("Chat." + name + ".isListenerMessage", 0));
 		chanel.setNeedPerm(Main.chatConfig.getBoolean("Chat." + name + ".needPerm", false));
 		String note = Main.chatConfig.getString("Chat." + name + ".pimk.note", "1F#");
 		int octava = note.charAt(0);
@@ -166,8 +167,10 @@ public enum ETypeChanel {
 			tone = ('A' <= char1 && 'F' >= char1) ? Note.Tone.valueOf(String.valueOf(char1)) : Note.Tone.F;
 			sharped = (note.length() == 3 && note.charAt(1) == '#');
 		}
-		chanel.setPimk(Main.chatConfig.getBoolean("Chat." + name + ".pimk.enable", false), Instrument.valueOf(Main.chatConfig
-				.getString("Chat." + name + ".pimk.instrument", "PIANO")), new Note(octava, tone, sharped));
+		chanel.setPimk(Main.chatConfig.getBoolean("Chat." + name + ".pimk.enable", false),
+				Instrument.valueOf(Main.chatConfig.getString("Chat." + name + ".pimk.instrument", "PIANO")),
+				new Note(octava, tone, sharped),
+				Main.chatConfig.getString("Chat." + name + ".pimk.colorize", "@"));
 		chanel.setInnerName(name);
 		return chanel;
 	}

@@ -197,7 +197,7 @@ public interface IChanel {
 	 * @param enable
 	 *            выводить ли
 	 */
-	void setListenerMessage(String listenerMessage, String noListenerMessage, boolean enable );
+	void setListenerMessage(String listenerMessage, String noListenerMessage, int type );
 
 	/**
 	 * @param count
@@ -209,8 +209,11 @@ public interface IChanel {
 
 	/**
 	 * @return выводить ли сообщения о числе услышавших
+	 * 0 - выключено
+	 * -1 в сообщение
+	 * 1 - отдельно
 	 */
-	boolean isListenerMessage();
+	int isListenerMessage();
 
 	/**
 	 * нужен ли базовые права для канала
@@ -233,7 +236,7 @@ public interface IChanel {
 	 * @param note
 	 *            нота
 	 */
-	void setPimk(boolean enable, Instrument instrument, Note note );
+	void setPimk(boolean enable, Instrument instrument, Note note , String colorize);
 
 	/**
 	 * @return включен ли пимк
@@ -249,4 +252,9 @@ public interface IChanel {
 	 * @return нота пимка
 	 */
 	Note getPimkNote();
+	
+	/**
+	 * @return nickname selecter
+	 */
+	String getColorize();
 }

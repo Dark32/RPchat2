@@ -42,7 +42,10 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
 					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName()
 							+ ".hear");
-			if (!isHear) {
+			final boolean isSelf = sender == recipient && isListenerMessage() == COUNT_INCLUDE;
+			if (isSelf) {
+				continue;
+			} else if (!isHear) {
 				continue;
 			} else if (isDeaf) {
 				continue;

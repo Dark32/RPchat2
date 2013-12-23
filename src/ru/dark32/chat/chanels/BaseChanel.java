@@ -1,11 +1,13 @@
 package ru.dark32.chat.chanels;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Instrument;
 import org.bukkit.Note;
 import org.bukkit.Sound;
@@ -28,12 +30,17 @@ public class BaseChanel implements IChanel {
 	private String		innerName;
 	private boolean		tabes;
 	private String		listenerMessage;
-	private boolean		listenerMessageEnable;
+	private int			listenerMessageEnable;
 	private String		noListenerMessage;
 	private boolean		needPerm;
 	private boolean		pimkEnable;
 	private Instrument	pimkInstrument;
 	private Note		pimkNote;
+
+	protected final int	COUNT_INCLUDE	= -1;
+	protected final int	COUNT_EXCLUDE	= 1;
+	protected final int	COUNT_OFF		= 0;
+	private String		colorize;
 
 	@Override
 	public boolean isEnable() {
@@ -69,7 +76,10 @@ public class BaseChanel implements IChanel {
 			final boolean isHear = !isNeedPerm()
 					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
 					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
-			if (!isHear) {
+			final boolean isSelf = sender == recipient && isListenerMessage() == COUNT_INCLUDE;
+			if (isSelf) {
+				continue;
+			} else if (!isHear) {
 				continue;
 			} else if (isDeaf) {
 				continue;
@@ -159,8 +169,8 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public String format(final Player player, final String msg ) {
-		return msg.replace("$sf", ChanelRegister.getSuffix(player.getName()))
-				.replace("$pf", ChanelRegister.getPreffix(player.getName())).replace("$p", "%1$s")
+		return msg.replace("$suffix", ChanelRegister.getSuffix(player.getName()))
+				.replace("$prefix", ChanelRegister.getPreffix(player.getName())).replace("$p", "%1$s")
 				.replace("$msg", "%2$s");
 	}
 
@@ -185,25 +195,40 @@ public class BaseChanel implements IChanel {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation" )
 	@Override
 	public void preSend(final Player sender, final String message, final Set<Player> recipient ) {
 		// pimk
 		if (isPimk()) {
-			for (final Player player : recipient) {
-				if (message.contains(player.getName().toLowerCase(Locale.US))) {
-				//fix it to do
-				player.playSound(player.getLocation(), Sound.valueOf("NOTE_"+getPimkInstrument()) , 3f , getPimkNote().getId());
+			// FIX TO DO IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			final String[] messageArr = message.replace(",", "").replace(".", "").replace(":", "").replace(";", "")
+					.replace("?", "").replace("!", "").replace("@", "").split(" ");
+			for (final Iterator<Player> iterator = recipient.iterator(); iterator.hasNext();) {
+				final Player player = (Player) iterator.next();
+				final String name = player.getName();
+				final String match = findMatch(name, messageArr);
+				if (match != null) {
+					player.playSound(player.getLocation(), Sound.valueOf("NOTE_" + getPimkInstrument()), 3f,
+							getPimkNote().getId());
+					sender.sendMessage(getListenerMessage(recipient.size())
+							+ format(sender, getFormat()).replace("%2$s", message.replace(match, name))
+									.replace("%1$s", sender.getName())
+									.replace(match, getColorize() + match + ChatColor.getLastColors(message)));
 				}
+
 			}
 		}
 		// отправляем число услышавших, если это включено
-		if (isListenerMessage()) {
+		if (isListenerMessage() == COUNT_EXCLUDE) {
 			sender.sendMessage(getListenerMessage(recipient.size() - 1));
+		} else if (isListenerMessage() == COUNT_INCLUDE) {
+			sender.sendMessage(getListenerMessage(recipient.size())
+					+ format(sender, getFormat()).replace("%2$s", message).replace("%1$s", sender.getName()));
 		}
 	}
 
 	@Override
-	public void setListenerMessage(final String listenerMessage, final String noListenerMessage, final boolean enable ) {
+	public void setListenerMessage(final String listenerMessage, final String noListenerMessage, final int enable ) {
 		this.listenerMessage = ChanelRegister.colorize(listenerMessage);
 		this.noListenerMessage = ChanelRegister.colorize(noListenerMessage);
 		this.listenerMessageEnable = enable;
@@ -216,7 +241,7 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public boolean isListenerMessage() {
+	public int isListenerMessage() {
 		return listenerMessageEnable;
 	}
 
@@ -231,10 +256,11 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public void setPimk(final boolean enable, final Instrument instrument, final Note note ) {
+	public void setPimk(final boolean enable, final Instrument instrument, final Note note, String colorize ) {
 		pimkEnable = enable;
 		pimkInstrument = instrument;
 		pimkNote = note;
+		this.colorize = colorize;
 
 	}
 
@@ -251,5 +277,19 @@ public class BaseChanel implements IChanel {
 	@Override
 	public Note getPimkNote() {
 		return pimkNote;
+	}
+
+	private String findMatch(String name, String[] message ) {
+		for (String s : message) {
+			if (name.startsWith(s)) {
+				return s;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public String getColorize() {
+		return colorize;
 	}
 }

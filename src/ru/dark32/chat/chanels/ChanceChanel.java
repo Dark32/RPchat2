@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ichanels.IChanceChanel;
-
+@Deprecated
 public class ChanceChanel extends RangeChanel implements IChanceChanel {
 
 	private String	formatRoll;

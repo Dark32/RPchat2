@@ -30,6 +30,7 @@
  pimk.enable |`false` | включен ли пимк (звук если вас упомянули в чате)
  pimk.instrument | `PIANO` | инструмент пимка (PIANO, BASS_DRUM,SNARE_DRUM,STICKS,BASS_GUITAR)
  pimk.note | `1F#` | тон пимка (0-2)(G,A,B,C,D,E,F)(#?)
+ pimk.colorize | `"@"` | выделение ника
 
 
 # RANGE:

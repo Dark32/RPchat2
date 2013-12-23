@@ -66,7 +66,7 @@ Chat:
          material: DIAMOND
          subid: 0
          amount: 1
-      format: "$pf$p$sf (Всем):&e $msg "
+      format: "$prefix$p$suffix (Всем):&e $msg "
       name: "Глобальный чат"
       prefix: "$"
       sign: g
@@ -75,6 +75,7 @@ Chat:
       pimk:
        enable: true
        instrument: PIANO
+       colorize: "&c@"
        note: 1F#
    World:
       type: item
@@ -86,7 +87,7 @@ Chat:
          material: APPLE
          subid: 0
          amount: 1
-      format: "$pf$p$sf (В мир):&6 $msg "
+      format: "$prefix$p$suffix (В мир):&6 $msg "
       name: "Мировой чат"
       prefix: ">"
       sign: w
@@ -102,7 +103,7 @@ Chat:
          material: APPLE
          subid: 0
          amount: 1
-      format: "$pf$p$sf (В мир 2):&6 $msg "
+      format: "$prefix$p$suffix (В мир 2):&6 $msg "
       name: "Мировой чат 2"
       prefix: ">"
       sign: q
@@ -112,7 +113,7 @@ Chat:
       type: REQUISITE
       enable: true
       world: false
-      format: "$pf$p$sf (Кричит):&c $msg"
+      format: "$prefix$p$suffix (Кричит):&c $msg"
       name: "Крик"
       range: 500
       prefix: "!"
@@ -133,7 +134,7 @@ Chat:
       type: range
       enable: true
       world: true
-      format: "$pf$p$sf:&f $msg"
+      format: "$prefix$p$suffix:&f $msg"
       name: "Локальный чат"
       range: 250
       prefix: "-"
@@ -141,7 +142,10 @@ Chat:
       default: true
       listenerMessage: "&7вас услышало $n человек"
       noListenerMessage: "&7вас не услышали"
-      isListenerMessage: true
+      # 0 - выключено
+      # -1 в сообщение
+      # 1 - отдельно
+      isListenerMessage: -1
       needPerm: false
    Whisper:
       type: range
