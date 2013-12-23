@@ -20,10 +20,16 @@ public class Main extends JavaPlugin {
 	public PluginManager			pluginManager;
 	private static IMute			muteStorage;
 	private static IDeaf			deafStorage;
-	public static final String		VERSION		= "RPchat v 2.0.4h";
+	public static final String		VERSION		= "RPchat v 2.0.5w 1u";
 	public static FileConfiguration	config;
-	public static File				yamlFile;
-	public static YamlConfiguration	yaml;
+	public static File				storageFile;
+	public static YamlConfiguration	storage;
+	
+	public static File				chatConfigFile;
+	public static YamlConfiguration	chatConfig;
+	
+	public static File				localeConfigFile;
+	public static YamlConfiguration	localeConfig;
 	// выключить в релизе
 	public static final boolean		DEBUG_MODE	= !true;
 	public static final String		BASE_PERM	= "mcnw";
@@ -40,9 +46,9 @@ public class Main extends JavaPlugin {
 		}
 		// спасибо DmitriyMX за распаковку конфига. Туторы на его сайте
 		// DmitriyMX.ru
-		final File fileConf = new File(getDataFolder(), "config.yml");
+		/*final File fileConf = new File(getDataFolder(), "config.yml");
 		if (!fileConf.exists()) {
-			final InputStream resourceAsStream = Main.class.getResourceAsStream("/ru/dark32/chat/config.yml");
+			final InputStream resourceAsStream = Main.class.getResourceAsStream("./config.yml");
 			getDataFolder().mkdirs();
 			try {
 				final FileOutputStream fos = new FileOutputStream(fileConf);
@@ -59,18 +65,35 @@ public class Main extends JavaPlugin {
 				e.printStackTrace();
 			}
 			getLogger().info("Сonfig loaded");
-		}
+		}*/
 		config = this.getConfig();
 		Util.init(this);
 		ValueStorage.init();
 		ChanelRegister.init();
-		final File file = new File(getDataFolder(), "storage.yml");
-		Main.yamlFile = file;
-		if (Main.yamlFile.exists()) {
-			Main.yaml = YamlConfiguration.loadConfiguration(file);
+		
+		Main.storageFile =  new File(getDataFolder(), "storage.yml");
+		if (Main.storageFile.exists()) {
+			Main.storage = YamlConfiguration.loadConfiguration(storageFile);
 		} else {
-			Main.yaml = new YamlConfiguration();
+			Main.storage = new YamlConfiguration();
 		}
+		
+		String chat = config.getString("chat","chat");
+		Main.chatConfigFile =  new File(getDataFolder(), chat+".yml");
+		if (Main.chatConfigFile.exists()) {
+			Main.chatConfig = YamlConfiguration.loadConfiguration(chatConfigFile);
+		} else {
+			getLogger().warning("chat.yml not found");
+		}
+		
+		String locale = config.getString("locale","locale");
+		Main.localeConfigFile =  new File(getDataFolder(), locale+".yml");
+		if (Main.localeConfigFile.exists()) {
+			Main.localeConfig = YamlConfiguration.loadConfiguration(chatConfigFile);
+		} else {
+			getLogger().warning("chat.yml not found");
+		}
+		
 		getServer().getPluginManager().registerEvents(new TabListener(), this);
 		getServer().getPluginManager().registerEvents(new JoinListener(), this);
 		Main.muteStorage = new Mute();

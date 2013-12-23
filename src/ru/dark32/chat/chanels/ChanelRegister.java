@@ -32,7 +32,7 @@ public class ChanelRegister {
 
 	public static void init() {
 		listChat = new ArrayList<IChanel>();
-		final ConfigurationSection chtatList = Main.config.getConfigurationSection("Chat");
+		final ConfigurationSection chtatList = Main.chatConfig.getConfigurationSection("Chat");
 		if (chtatList == null) {
 			Bukkit.getConsoleSender().sendMessage("Ошибка. Каналы чата не найдены в конфиге");
 			return;
@@ -41,8 +41,8 @@ public class ChanelRegister {
 		for (final String name : list) {
 			final String _type = "Chat." + name + ".type";
 			final String _enable = "Chat." + name + ".enable";
-			final String chanelType = Main.config.getString(_type, _type);
-			final boolean chanelEnable = Main.config.getBoolean(_enable, false);
+			final String chanelType = Main.chatConfig.getString(_type, _type);
+			final boolean chanelEnable = Main.chatConfig.getBoolean(_enable, false);
 			if (chanelType.equals("none") || !chanelEnable) {
 				continue;
 			}
@@ -53,7 +53,7 @@ public class ChanelRegister {
 	private static IChanel registrChanel(final ETypeChanel type, final String name ) {
 		final IChanel chanel = type.setChanel(name);
 		chanel.setType(type);
-		if (Main.config.getBoolean("Chat." + name + ".default", false)) {
+		if (Main.chatConfig.getBoolean("Chat." + name + ".default", false)) {
 			defaultChanel = chanel.getIndex();
 		}
 		return chanel;

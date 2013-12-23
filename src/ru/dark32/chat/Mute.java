@@ -37,32 +37,32 @@ public class Mute implements IMute {
 	final private String					muteSee;
 
 	public Mute(){
-		needName = ChanelRegister.colorize(Main.config.getString("mute.needName", "&7$Вы должны указать имя"));
-		muteMessage = ChanelRegister.colorize(Main.config.getString("mute.muteMessage",
+		needName = ChanelRegister.colorize(Main.localeConfig.getString("mute.needName", "&7$Вы должны указать имя"));
+		muteMessage = ChanelRegister.colorize(Main.localeConfig.getString("mute.muteMessage",
 				"&7$$n теперь молчит в $c на $t секунд по причине $r"));
-		unmuteMessage = ChanelRegister.colorize(Main.config.getString("mute.unmuteMessage",
+		unmuteMessage = ChanelRegister.colorize(Main.localeConfig.getString("mute.unmuteMessage",
 				"&7$&n  теперь может говорить в  $c"));
-		canTHelp = ChanelRegister.colorize(Main.config.getString("mute.canTHelp",
+		canTHelp = ChanelRegister.colorize(Main.localeConfig.getString("mute.canTHelp",
 				"&7$Вы не можете смотреть справку по молчанке"));
-		canTSeeSelf = ChanelRegister.colorize(Main.config.getString("mute.canTSeeSelf",
+		canTSeeSelf = ChanelRegister.colorize(Main.localeConfig.getString("mute.canTSeeSelf",
 				"&7$Вы не можете смотреть свою молчанку"));
-		canTSeeAllMute = ChanelRegister.colorize(Main.config.getString("mute.canTSeeAllMute",
+		canTSeeAllMute = ChanelRegister.colorize(Main.localeConfig.getString("mute.canTSeeAllMute",
 				"&7$Вы не можете смотреть все молчанки"));
-		canTSeeTargetMute = ChanelRegister.colorize(Main.config.getString("mute.canTSeeTargetMute",
+		canTSeeTargetMute = ChanelRegister.colorize(Main.localeConfig.getString("mute.canTSeeTargetMute",
 				"&7$Вы не можете смотреть молчанку цели"));
-		signMoreOne = ChanelRegister.colorize(Main.config.getString("mute.signMoreOne",
+		signMoreOne = ChanelRegister.colorize(Main.localeConfig.getString("mute.signMoreOne",
 				"&7$Сокращение канала не может быть длинее 1 символа: $1"));
 		canTUnmute = ChanelRegister
-				.colorize(Main.config.getString("mute.canTUnmute", "&7$Вы не можете снять молчанку"));
-		canTMute = ChanelRegister.colorize(Main.config.getString("mute.canTMute",
+				.colorize(Main.localeConfig.getString("mute.canTUnmute", "&7$Вы не можете снять молчанку"));
+		canTMute = ChanelRegister.colorize(Main.localeConfig.getString("mute.canTMute",
 				"&7$Вы не можете устанавливать молчанку"));
-		noReason = ChanelRegister.colorize(Main.config.getString("mute.noReason", "не указана"));
-		timeNotNum = ChanelRegister.colorize(Main.config.getString("mute.timeNotNum", "&7$Время должно быть числом: "));
-		subCMDErr = ChanelRegister.colorize(Main.config.getString("mute.subCMDErr",
+		noReason = ChanelRegister.colorize(Main.localeConfig.getString("mute.noReason", "не указана"));
+		timeNotNum = ChanelRegister.colorize(Main.localeConfig.getString("mute.timeNotNum", "&7$Время должно быть числом: "));
+		subCMDErr = ChanelRegister.colorize(Main.localeConfig.getString("mute.subCMDErr",
 				"&7$Ошибка форматирования #2 [see|all]"));
-		dataError = ChanelRegister.colorize(Main.config.getString("mute.dataError",
+		dataError = ChanelRegister.colorize(Main.localeConfig.getString("mute.dataError",
 				"&7$Что-то не так с форматом времени: "));
-		muteSee = ChanelRegister.colorize(Main.config.getString("mute.muteSee",
+		muteSee = ChanelRegister.colorize(Main.localeConfig.getString("mute.muteSee",
 				"&7$$n молчит в $c. Осталось $t секунд. Причина: &r"));
 
 	}
@@ -91,8 +91,8 @@ public class Mute implements IMute {
 			if (chanel == i || chanel == -1) {
 				final Calendar cal = Calendar.getInstance();
 				cal.add(Calendar.SECOND, time);
-				Main.yaml.set(getPlayerMuteString(name, i), SDF.format(cal.getTime()));
-				Main.yaml.set(getPlayerMuteString(name, i) + "-reason", reason);
+				Main.storage.set(getPlayerMuteString(name, i), SDF.format(cal.getTime()));
+				Main.storage.set(getPlayerMuteString(name, i) + "-reason", reason);
 			}
 		}
 		final String _chanelName = (chanel >= 0 && chanel < chaneles ? ChanelRegister.getByIndex(chanel).getName() : "a");
@@ -193,7 +193,7 @@ public class Mute implements IMute {
 	@Override
 	public void saveMute() {
 		Set<String> list;
-		final ConfigurationSection cs = Main.yaml.getRoot();
+		final ConfigurationSection cs = Main.storage.getRoot();
 		if (cs != null) {
 			list = cs.getKeys(false);
 			for (final String name : list) {
@@ -203,7 +203,7 @@ public class Mute implements IMute {
 			}
 		}
 		try {
-			Main.yaml.save(Main.yamlFile);
+			Main.storage.save(Main.storageFile);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -214,8 +214,8 @@ public class Mute implements IMute {
 	public void unmute(final String playerName,final  int chanel ) {
 		for (int i = 0; i < chaneles; i++) {
 			if (chanel == i || chanel == -1) {
-				Main.yaml.set(getPlayerMuteString(playerName, i), null);
-				Main.yaml.set(getPlayerMuteString(playerName, i) + "-reason", null);
+				Main.storage.set(getPlayerMuteString(playerName, i), null);
+				Main.storage.set(getPlayerMuteString(playerName, i) + "-reason", null);
 			}
 		}
 
@@ -223,7 +223,7 @@ public class Mute implements IMute {
 
 	@Override
 	public long getTimeMute(final String playerName,final  int chanel ) {
-		final String dateStr = Main.yaml.getString(getPlayerMuteString(playerName, chanel));
+		final String dateStr = Main.storage.getString(getPlayerMuteString(playerName, chanel));
 		if (dateStr != null) {
 			try {
 				final Date date = SDF.parse(dateStr);
@@ -248,7 +248,7 @@ public class Mute implements IMute {
 
 	@Override
 	public void muteSeeAll(final CommandSender sender ) {
-		final ConfigurationSection cs = Main.yaml.getRoot();
+		final ConfigurationSection cs = Main.storage.getRoot();
 		sender.sendMessage(ChatColor.GRAY + "$===============all================");
 		if (cs == null) return;
 		final Set<String> list = cs.getKeys(false);
@@ -267,7 +267,7 @@ public class Mute implements IMute {
 	public void muteSeeTarget(final CommandSender sender,final  String name ) {
 		for (int i = 0; i < chaneles; i++) {
 			final long time = getTimeMute(name, i);
-			final String reason = Main.yaml.getString(getPlayerMuteString(name, i) + "-reason");
+			final String reason = Main.storage.getString(getPlayerMuteString(name, i) + "-reason");
 			if (time > -1) {
 				sender.sendMessage(muteSee.replace("$n", name)
 						.replace("$c", ChanelRegister.getByIndex(i).getInnerName()).replace("$r", reason)

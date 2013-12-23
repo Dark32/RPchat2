@@ -30,32 +30,32 @@ public class Deaf implements IDeaf {
 	final private String		deafMessage2;
 
 	public Deaf(){
-		canTHelp = ChanelRegister.colorize(Main.config.getString("deaf.canTHelp",
+		canTHelp = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTHelp",
 				"&7$Вы не можете смотреть справку по глухоте"));
-		canTSeeSelf = ChanelRegister.colorize(Main.config.getString("deaf.canTSeeSelf",
+		canTSeeSelf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTSeeSelf",
 				"&7$Вы не можете смотреть свою глухоту"));
-		udeafSelf = ChanelRegister.colorize(Main.config.getString("deaf.udeafSelf",
+		udeafSelf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.udeafSelf",
 				"&7$Ваша глухота: "));
-		canTSeeAllDeaf = ChanelRegister.colorize(Main.config.getString("deaf.canTSeeAllDeaf",
+		canTSeeAllDeaf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTSeeAllDeaf",
 				"&7$Вы не можете смотреть все глухоты"));
-		canTSeeTargetDeaf = ChanelRegister.colorize(Main.config.getString("deaf.canTSeeTargetDeaf",
+		canTSeeTargetDeaf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTSeeTargetDeaf",
 				"&7$Вы не можете смотреть глухоту цели"));
-		signMoreOne = ChanelRegister.colorize(Main.config.getString("deaf.signMoreOne",
+		signMoreOne = ChanelRegister.colorize(Main.localeConfig.getString("deaf.signMoreOne",
 				"&7$Сокращение канала не может быть длинее 1 символа: $1"));
-		canTUndeafSelf = ChanelRegister.colorize(Main.config.getString("deaf.canTUndeafSelf",
+		canTUndeafSelf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTUndeafSelf",
 				"&7$Вы не можете снять глухоту с себя"));
-		canTUndeafTarget = ChanelRegister.colorize(Main.config.getString("deaf.canTUndeafTarget",
+		canTUndeafTarget = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTUndeafTarget",
 				"&7$Вы не можете снять глухоту с другово"));
-		canTDeafSelf = ChanelRegister.colorize(Main.config.getString("deaf.canTDeafSelf",
+		canTDeafSelf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTDeafSelf",
 				"&7$Вы не можете устанавливать глухоту себе"));
-		canTDeafTarget = ChanelRegister.colorize(Main.config.getString("deaf.canTDeafTarget",
+		canTDeafTarget = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTDeafTarget",
 				"&7$Вы не можете устанавливать глухоту другим"));
-		deafMessage = ChanelRegister.colorize(Main.config.getString("deaf.deafMessage",
+		deafMessage = ChanelRegister.colorize(Main.localeConfig.getString("deaf.deafMessage",
 				"&7$$n не слушает $c. Причина: $r"));
-		noReason = ChanelRegister.colorize(Main.config.getString("deaf.noReason", "не указана"));
-		undeafMessage = ChanelRegister.colorize(Main.config.getString("deaf.undeafMessage",
+		noReason = ChanelRegister.colorize(Main.localeConfig.getString("deaf.noReason", "не указана"));
+		undeafMessage = ChanelRegister.colorize(Main.localeConfig.getString("deaf.undeafMessage",
 				"&7$$n теперь слышит канал $c"));
-		deafMessage2 = ChanelRegister.colorize(Main.config.getString("deaf.deafMessage2",
+		deafMessage2 = ChanelRegister.colorize(Main.localeConfig.getString("deaf.deafMessage2",
 				"&7$$n теперь не слушает $c. Причина: $r"));
 
 	}
@@ -149,7 +149,7 @@ public class Deaf implements IDeaf {
 
 	@Override
 	public void deafSeeAll(final CommandSender sender ) {
-		final ConfigurationSection cs = Main.yaml.getRoot();
+		final ConfigurationSection cs = Main.storage.getRoot();
 		sender.sendMessage(ChatColor.GRAY + "$===============all================");
 		if (cs == null) {
 			return;
@@ -169,7 +169,7 @@ public class Deaf implements IDeaf {
 	@Override
 	public void deafSeeTarget(final CommandSender sender, final String name ) {
 		for (int i = 0; i < chaneles; i++) {
-			final String reason = Main.yaml.getString(getPlayerDeafString(name, i) + "-reason","");
+			final String reason = Main.storage.getString(getPlayerDeafString(name, i) + "-reason","");
 			final boolean isDeaf = this.isDeaf(name, i);
 			if (isDeaf) {
 				sender.sendMessage(deafMessage.replace("$n", name)
@@ -193,8 +193,8 @@ public class Deaf implements IDeaf {
 	public void caseDeaf(final CommandSender sender, final String name, final int chanel, final String reason ) {
 		for (int i = 0; i < chaneles; i++) {
 			if (chanel == i || chanel == -1) {
-				Main.yaml.set(getPlayerDeafString(name, i), true);
-				Main.yaml.set(getPlayerDeafString(name, i) + "-reason", reason);
+				Main.storage.set(getPlayerDeafString(name, i), true);
+				Main.storage.set(getPlayerDeafString(name, i) + "-reason", reason);
 			}
 		}
 		sender.sendMessage(deafMessage2
@@ -211,8 +211,8 @@ public class Deaf implements IDeaf {
 	public void caseUnDeaf(final CommandSender sender,final  String name,final  int chanel ) {
 		for (int i = 0; i < chaneles; i++) {
 			if (chanel == i || chanel == -1) {
-				Main.yaml.set(getPlayerDeafString(name, i), false);
-				Main.yaml.set(getPlayerDeafString(name, i) + "-reason", null);
+				Main.storage.set(getPlayerDeafString(name, i), false);
+				Main.storage.set(getPlayerDeafString(name, i) + "-reason", null);
 			}
 		}
 		sender.sendMessage(undeafMessage.replace("$n", name).replace(
@@ -224,13 +224,13 @@ public class Deaf implements IDeaf {
 
 	@Override
 	public boolean isDeaf(final String name,final  int chanel ) {
-		return Main.yaml.getBoolean(getPlayerDeafString(name, chanel));
+		return Main.storage.getBoolean(getPlayerDeafString(name, chanel));
 	}
 
 	@Override
 	public void saveDeaf() {
 		try {
-			Main.yaml.save(Main.yamlFile);
+			Main.storage.save(Main.storageFile);
 		}
 		catch (IOException e) {
 			e.printStackTrace();

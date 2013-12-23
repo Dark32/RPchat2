@@ -46,6 +46,10 @@
                 <exclude name="**/*.java"/>
             </fileset>
         </jar>
+    	<zip destfile="${target}/${ant.project.name}.zip">
+    		<zipfileset dir="${target}/" includes="*.jar"/>
+    		<zipfileset dir="${src}/" includes="**/*.yml" prefix="${ant.project.name}/" excludes="plugin.yml"/>
+    		</zip>
     </target>
 
 </project>

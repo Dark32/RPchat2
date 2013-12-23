@@ -15,21 +15,19 @@ public class ValueStorage {
 	public static List<String>	deafHelp;
 
 	public static boolean		experemental;
-	public static boolean		lister;
 
 	public static void init() {
 		experemental = Main.config.getBoolean("experemental", false);
 
 		nei = colorByString("String.nei");
 		noPerm = colorByString("String.noPerm");
-		joinmsg = Main.config.getStringList("String.joinmsg");
+		joinmsg = Main.localeConfig.getStringList("String.joinmsg");
 		muteMessage = colorByString("mute.message");
-		muteHelp = Main.config.getStringList("mute.help");
-		deafHelp = Main.config.getStringList("deaf.help");
-		lister = Main.config.getBoolean("liteners", true);
-		helpBase = Main.config.getStringList("help.base");
-		helpHelp = Main.config.getStringList("help.help");
-		helpChannel = Main.config.getStringList("help.channel");
+		muteHelp = Main.localeConfig.getStringList("mute.help");
+		deafHelp = Main.localeConfig.getStringList("deaf.help");
+		helpBase = Main.localeConfig.getStringList("help.base");
+		helpHelp = Main.localeConfig.getStringList("help.help");
+		helpChannel = Main.localeConfig.getStringList("help.channel");
 	}
 
 	private static String colorByString(final String key ) {
