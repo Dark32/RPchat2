@@ -47,7 +47,10 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 						+ isWorld);
 			}
 			final boolean isSelf = sender == recipient && isListenerMessage() == COUNT_INCLUDE;
-			if (isSelf) {
+			final boolean isInChanel = isOverAll() && Util.getModeIndex(recipient.getName()) == getIndex();
+			if (!isInChanel) {
+				continue;
+			} else if (isSelf) {
 				continue;
 			} else if (!isHear) {
 				continue;

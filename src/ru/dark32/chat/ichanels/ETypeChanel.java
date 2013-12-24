@@ -171,6 +171,7 @@ public enum ETypeChanel {
 				Instrument.valueOf(Main.chatConfig.getString("Chat." + name + ".pimk.instrument", "PIANO")),
 				new Note(octava, tone, sharped),
 				Main.chatConfig.getString("Chat." + name + ".pimk.colorize", "@"));
+		chanel.setOverAll(Main.chatConfig.getBoolean("Chat." + name + ".overAll", true));
 		chanel.setInnerName(name);
 		return chanel;
 	}

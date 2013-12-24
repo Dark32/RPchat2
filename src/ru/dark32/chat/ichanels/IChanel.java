@@ -257,4 +257,14 @@ public interface IChanel {
 	 * @return nickname selecter
 	 */
 	String getColorize();
+	
+	/** виден ли канал всегда или только когда ты в нём
+	 * @param over истина - виден, ложь - не виден
+	 */
+	void setOverAll(boolean over);
+	/**
+	 * @return виден ли канал всегда
+	 */
+	boolean isOverAll();
+	
 }

@@ -157,3 +157,4 @@ Chat:
       prefix: "#"
       sign: v
       needPerm: false
+      overAll: falsr

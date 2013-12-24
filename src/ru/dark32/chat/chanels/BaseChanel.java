@@ -41,6 +41,7 @@ public class BaseChanel implements IChanel {
 	protected final int	COUNT_EXCLUDE	= 1;
 	protected final int	COUNT_OFF		= 0;
 	private String		colorize;
+	private boolean		overAll;
 
 	@Override
 	public boolean isEnable() {
@@ -77,7 +78,10 @@ public class BaseChanel implements IChanel {
 					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
 					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
 			final boolean isSelf = sender == recipient && isListenerMessage() == COUNT_INCLUDE;
-			if (isSelf) {
+			final boolean isInChanel = isOverAll() && Util.getModeIndex(recipient.getName()) == getIndex();
+			if (!isInChanel) {
+				continue;
+			} else if (isSelf) {
 				continue;
 			} else if (!isHear) {
 				continue;
@@ -171,7 +175,7 @@ public class BaseChanel implements IChanel {
 	public String format(final Player player, final String msg ) {
 		return msg.replace("$suffix", ChanelRegister.getSuffix(player.getName()))
 				.replace("$prefix", ChanelRegister.getPreffix(player.getName())).replace("$p", "%1$s")
-				.replace("$msg", "%2$s");
+				.replace("$msg", "%2$s").replace("$id", Integer.toString(player.getEntityId()));
 	}
 
 	@Override
@@ -214,6 +218,7 @@ public class BaseChanel implements IChanel {
 							+ format(sender, getFormat()).replace("%2$s", message.replace(match, name))
 									.replace("%1$s", sender.getName())
 									.replace(match, getColorize() + match + ChatColor.getLastColors(message)));
+					iterator.remove();
 				}
 
 			}
@@ -291,5 +296,16 @@ public class BaseChanel implements IChanel {
 	@Override
 	public String getColorize() {
 		return colorize;
+	}
+
+	@Override
+	public void setOverAll(boolean over ) {
+		overAll = over;
+
+	}
+
+	@Override
+	public boolean isOverAll() {
+		return overAll;
 	}
 }

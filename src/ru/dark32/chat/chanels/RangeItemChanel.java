@@ -44,7 +44,10 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
 					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
 			final boolean isSelf = sender == recipient && isListenerMessage() == COUNT_INCLUDE;
-			if (isSelf) {
+			final boolean isInChanel = isOverAll() && Util.getModeIndex(recipient.getName()) == getIndex();
+			if (!isInChanel) {
+				continue;
+			} else if (isSelf) {
 				continue;
 			} else if (!isHear) {
 				continue;
