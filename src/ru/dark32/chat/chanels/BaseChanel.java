@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Instrument;
 import org.bukkit.Note;
 import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import ru.dark32.chat.Main;
@@ -21,7 +22,7 @@ import ru.dark32.chat.ichanels.IChanel;
 public class BaseChanel implements IChanel {
 	private boolean		enable;
 	private String		formatString;
-	private int			index;
+	private final int	index;
 	private boolean		isWorld;
 	private String		name;
 	private char		prefix;
@@ -42,6 +43,38 @@ public class BaseChanel implements IChanel {
 	protected final int	COUNT_OFF		= 0;
 	private String		colorize;
 	private boolean		overAll;
+
+	public BaseChanel(String name ){
+		this.index = ChanelRegister.getNextIndex();
+		this.setName(Main.chatConfig.getString("Chat." + name + ".name", "Chat." + name + ".name"));
+		this.setFormat(Main.chatConfig.getString("Chat." + name + ".format", "Chat." + name + ".format"));
+		this.setEnable(Main.chatConfig.getBoolean("Chat." + name + ".enable", false));
+		this.setWorldChat(Main.chatConfig.getBoolean("Chat." + name + ".world", false));
+		this.setTabes(Main.chatConfig.getBoolean("Chat." + name + ".tab", true));
+		this.setPrefix(Main.chatConfig.getString("Chat." + name + ".prefix", "Chat." + name + ".prefix"));
+		this.setSign(Main.chatConfig.getString("Chat." + name + ".sign", "Chat." + name + ".sign").charAt(0));
+		this.setListenerMessage(
+				Main.chatConfig.getString("Chat." + name + ".listenerMessage", "Chat." + name + ".listenerMessage"),
+				Main.chatConfig.getString("Chat." + name + ".noListenerMessage", "Chat." + name + ".noListenerMessage"),
+				Main.chatConfig.getInt("Chat." + name + ".isListenerMessage", 0));
+		this.setNeedPerm(Main.chatConfig.getBoolean("Chat." + name + ".needPerm", false));
+		String note = Main.chatConfig.getString("Chat." + name + ".pimk.note", "1F#");
+		int octava = note.charAt(0);
+		Note.Tone tone = Note.Tone.F;
+		boolean sharped = false;
+		if (note.length() >= 2 && note.length() <= 3) {
+			char char0 = note.charAt(0);
+			char char1 = note.charAt(1);
+			octava = (char0 == '2') ? 2 : (char0 == '0' ? 0 : char0 == '1' ? 1 : 1);
+			tone = ('A' <= char1 && 'F' >= char1) ? Note.Tone.valueOf(String.valueOf(char1)) : Note.Tone.F;
+			sharped = (note.length() == 3 && note.charAt(1) == '#');
+		}
+		this.setPimk(Main.chatConfig.getBoolean("Chat." + name + ".pimk.enable", false), Instrument
+				.valueOf(Main.chatConfig.getString("Chat." + name + ".pimk.instrument", "PIANO")), new Note(octava,
+				tone, sharped), Main.chatConfig.getString("Chat." + name + ".pimk.colorize", "@"));
+		this.setOverAll(Main.chatConfig.getBoolean("Chat." + name + ".overAll", true));
+		this.setInnerName(name);
+	}
 
 	@Override
 	public boolean isEnable() {
@@ -68,16 +101,18 @@ public class BaseChanel implements IChanel {
 		return this.prefix;
 	}
 
-	void DEBUG(String message, Player sender ) {
+	void DEBUG(String message, CommandSender sender ) {
 		if (Main.DEBUG_MODE) {
 			sender.sendMessage(message);
 		};
 	}
+
 	void DEBUG(String message ) {
 		if (Main.DEBUG_MODE) {
-			Bukkit.getConsoleSender().sendMessage(message);;
+			DEBUG(message, Bukkit.getConsoleSender());
 		};
 	}
+
 	/**
 	 * 
 	 * @param sender
@@ -126,11 +161,6 @@ public class BaseChanel implements IChanel {
 	@Override
 	public void setFormat(final String key ) {
 		this.formatString = ChanelRegister.colorize(key);
-	}
-
-	@Override
-	final public void setIndex(final int indx ) {
-		this.index = indx;
 	}
 
 	@Override

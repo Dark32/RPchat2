@@ -22,6 +22,11 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 
 	private int	range;
 
+	public RangeItemChanel(String name ){
+		super(name);
+		this.setRange(Main.chatConfig.getInt("Chat." + name + ".range"));
+	}
+
 	@Override
 	public void setRange(final int range ) {
 		this.range = range;

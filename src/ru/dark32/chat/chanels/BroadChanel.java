@@ -5,10 +5,16 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import ru.dark32.chat.Main;
 import ru.dark32.chat.ichanels.IBroadChanel;
 
 public class BroadChanel extends BaseChanel implements IBroadChanel {
 
+	public BroadChanel(String name ){
+		super(name);
+		this.setPattern(Main.chatConfig.getStringList("Chat." + name + ".pattern"));
+		
+	}
 	private List<String>	paterns;
 
 	@Override

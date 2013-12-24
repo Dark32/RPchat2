@@ -27,6 +27,17 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 	private int			requisiteItemSubId;
 	private Material	requisiteItemMaterial;
 
+	@SuppressWarnings("deprecation" )
+	public RangeRequisiteItemChanel(String name ){
+		super(name);
+		this.setRange(Main.chatConfig.getInt("Chat." + name + ".range"));
+		this.setRequiseteItemId(Main.chatConfig.getInt("Chat." + name + ".requisete.id", this.getItemId()));
+		this.setRequiseteItemSubId(Main.chatConfig.getInt("Chat." + name + ".requisete.subid", this.getItemSubId()));
+		this.setRequiseteItemAmount(Main.chatConfig.getInt("Chat." + name + ".requisete.amount", 0));
+		this.setRequiseteItemMaterial(Material.getMaterial(Main.chatConfig.getString("Chat." + name
+				+ ".requisete.material", this.getItemMaterial().name())));
+	}
+
 	@Override
 	public List<Player> getRecipients(final Player sender ) {
 		final List<Player> recipients = new LinkedList<Player>();

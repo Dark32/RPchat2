@@ -21,6 +21,15 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 	private boolean		requestPprefix;
 	private int			itemAmount;
 
+	public ItemChanel(String name ){
+		super(name);
+		this.setItemId(Main.chatConfig.getInt("Chat." + name + ".item.id", 0));
+		this.setItemSubId(Main.chatConfig.getInt("Chat." + name + ".item.subid", 0));
+		this.setItemAmount(Main.chatConfig.getInt("Chat." + name + ".item.amount", 1));
+		this.setItemMaterial(Material.getMaterial(Main.chatConfig.getString("Chat." + name + ".item.material", "AIR")));
+		this.setRequestPprefix(Main.chatConfig.getBoolean("Chat." + name + ".requestPrefix", true));
+	}
+
 	@Override
 	@Deprecated
 	public void setItemId(final int id ) {

@@ -18,6 +18,12 @@ import ru.dark32.chat.ichanels.IRangeChanel;
 public class RangeChanel extends BaseChanel implements IRangeChanel {
 	private int	range;
 
+	public RangeChanel(String name ){
+		super(name);
+		this.setRange(Main.chatConfig.getInt("Chat." + name + ".range", 200));
+		
+	}
+
 	@Override
 	public void setRange(final int range ) {
 		this.range = range;

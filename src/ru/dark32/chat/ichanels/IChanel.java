@@ -44,12 +44,6 @@ public interface IChanel {
 	void setFormat(String key );
 
 	/**
-	 * @param i
-	 *            индекс канала на кайний случай
-	 */
-	void setIndex(int i );
-
-	/**
 	 * @param key
 	 *            имя канала
 	 */

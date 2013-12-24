@@ -25,6 +25,15 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	private String	formatFromString;
 	private int		pmSearchNickMode;
 
+	public PersonalMessageChanel(String name ){
+		super(name);
+		this.setFormatTo(Main.chatConfig.getString("Chat." + name + ".formatTo", "Chat." + name + ".formatTo"));
+		this.setFormatFrom(Main.chatConfig.getString("Chat." + name + ".formatFrom", "Chat." + name + ".formatFrom"));
+		this.setFormatSpy(Main.chatConfig.getString("Chat." + name + ".formatSpy", "Chat." + name + ".formatSpy"));
+		this.setPmSearchNickMode(Main.chatConfig.getInt("Chat." + name + ".PMSearchNickMode", 0));
+
+	}
+
 	/**
 	 * @return the pmSearchNickMode
 	 */
@@ -158,7 +167,7 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	}
 
 	@Override
-	public String formatFrom(final Player sender,final  Player target, final String msg ) {
+	public String formatFrom(final Player sender, final Player target, final String msg ) {
 		return format(sender, formatFromString).replace("$r", target.getName()).replace("%2$s", msg)
 				.replace("%1$s", sender.getName());
 	}
@@ -176,8 +185,8 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	}
 
 	@Override
-	public void preSend(final Player sender, final String message, final Set<Player>  recipient) {
-	// отправляем сообщение цели
+	public void preSend(final Player sender, final String message, final Set<Player> recipient ) {
+		// отправляем сообщение цели
 		this.sendMessage(sender, message);
 
 	}

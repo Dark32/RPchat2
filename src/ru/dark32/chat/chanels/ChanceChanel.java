@@ -4,10 +4,23 @@ import java.util.Random;
 
 import org.bukkit.entity.Player;
 
+import ru.dark32.chat.Main;
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ichanels.IChanceChanel;
+
 @Deprecated
 public class ChanceChanel extends RangeChanel implements IChanceChanel {
+
+	public ChanceChanel(String name ){
+		super(name);
+		this.setRange(Main.chatConfig.getInt("Chat." + name + ".range", 200));
+		this.setChance(Main.chatConfig.getInt("Chat." + name + ".chance", 50),
+				Main.chatConfig.getInt("Chat." + name + ".min", 5));
+		this.setLuckUnLuck(Main.chatConfig.getString("Chat." + name + ".luck", "Chat." + name + ".luck"),
+				Main.chatConfig.getString("Chat." + name + ".unluck", "Chat." + name + ".unluck"));
+		this.setFormatRoll(Main.chatConfig.getString("Chat." + name + ".formatroll", "Chat." + name + ".formatroll"));
+		this.setFormatLuck(Main.chatConfig.getString("Chat." + name + ".formatLuck", "Chat." + name + ".formatLuck"));
+	}
 
 	private String	formatRoll;
 	private String	luck;
@@ -67,15 +80,13 @@ public class ChanceChanel extends RangeChanel implements IChanceChanel {
 			iChance = message.length() < 5 ? Integer.parseInt(message) : 9999;
 			iChance = iChance > getMinRoll() ? iChance : getMinRoll();
 			final int iRoll = rand.nextInt(iChance) + 1;
-			message = getFormatRoll().replace("$1", String.valueOf(iRoll)).replace("$2",
-					String.valueOf(iChance));
+			message = getFormatRoll().replace("$1", String.valueOf(iRoll)).replace("$2", String.valueOf(iChance));
 
 		} else {
 			message = ChanelRegister.colorize("&5" + message);
 			final int chance = rand.nextInt(100);
 			message = ChanelRegister.colorize(
-					getFormatLuck().replace("$1",
-							(chance > getChance()) ? getLuck() : getUnLuck())).replace("$msg",
+					getFormatLuck().replace("$1", (chance > getChance()) ? getLuck() : getUnLuck())).replace("$msg",
 					message);
 		}
 		return message;

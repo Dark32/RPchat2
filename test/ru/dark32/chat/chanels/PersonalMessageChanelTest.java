@@ -13,7 +13,7 @@ import org.junit.Test;
  *
  */
 public class PersonalMessageChanelTest {
-	PersonalMessageChanel chanel = new PersonalMessageChanel();
+	PersonalMessageChanel chanel = new PersonalMessageChanel("PM");
 	/**
 	 * @throws java.lang.Exception
 	 */
