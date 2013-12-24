@@ -31,58 +31,28 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 	@Override
 	public List<Player> getRecipients(final Player sender ) {
 		final List<Player> recipients = new LinkedList<Player>();
-		if (Main.DEBUG_MODE) {
-			sender.sendMessage("debug:--------------------------------");
-		}
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			final boolean isWorld = !isWorldChat() || sender.getWorld() == recipient.getWorld();
-			final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
 			final int dist = getDist(sender.getLocation(), recipient.getLocation());
 			final boolean isRange = dist < this.getRange() * this.getRange();
-			final boolean isHear = !isNeedPerm()
-					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
-					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
-			if (Main.DEBUG_MODE) {
-				sender.sendMessage("debug: " + recipient.getName() + " | " + dist + "/" + this.range * this.range + "|"
-						+ isWorld);
-			}
-			final boolean isSelf = sender == recipient && isListenerMessage() == COUNT_INCLUDE;
-			final boolean isInChanel = isOverAll() && Util.getModeIndex(recipient.getName()) == getIndex();
-			if (!isInChanel) {
-				continue;
-			} else if (isSelf) {
-				continue;
-			} else if (!isHear) {
-				continue;
-			} else if (isDeaf) {
-				if (Main.DEBUG_MODE) {
-					sender.sendMessage("debug: deaf - " + recipient.getName());
-				}
+			DEBUG("debug: " + recipient.getName() + " | " + dist + "/" + this.range * this.range + "|" + isWorld,
+					sender);
+			if (isRecipient(sender, recipient)) {
 				continue;
 			} else if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy")) {
-				if (Main.DEBUG_MODE) {
-					sender.sendMessage("debug: spy - " + recipient.getName());
-				}
+				DEBUG("debug: spy - " + recipient.getName(), sender);
 				recipients.add(recipient);
 			} else if (isRange) {
-				if (Main.DEBUG_MODE) {
-					sender.sendMessage("debug: in range - " + recipient.getName());
-				}
+				DEBUG("debug: in range - " + recipient.getName(), sender);
 				if (isWorld) {
-					if (Main.DEBUG_MODE) {
-						sender.sendMessage("debug: in world - " + recipient.getName());
-					}
+					DEBUG("debug: in world - " + recipient.getName(), sender);
 					recipients.add(recipient);
 				} else {
-					if (Main.DEBUG_MODE) {
-						sender.sendMessage("debug: out of world - " + recipient.getName());
-					}
+					DEBUG("debug: out of world - " + recipient.getName(), sender);
 					continue;
 				}
 			} else {
-				if (Main.DEBUG_MODE) {
-					sender.sendMessage("debug: out of range - " + recipient.getName());
-				}
+				DEBUG("debug: out of range - " + recipient.getName(), sender);
 				continue;
 			}
 		}

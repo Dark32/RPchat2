@@ -1,0 +1,176 @@
+Chat: 
+  Chance:
+    format: "&5*$p $msg"
+    # $msg будет заменено на одно из сообщений ниже.
+    # Выбор случайного значения:
+    formatroll: "выбрасывает $1 из $2."
+    # $1 - случайно выпавшее значение из некоторого диапозона, выбранного игроком. $2 - верхняя граница этого диапозона.
+    # Шанс выполнения действия:
+    formatLuck: "$msg $1"
+    luck: "&a (Удачно) &d"
+    unluck: "&c (Неудачно) &d"
+    default: 6
+    min: 5
+    chance: 50
+    prefix: "*"
+    type: chance
+    enable: true
+    world: false
+    range: 200
+    sign: c
+    needPerm: false
+  Broad:
+    format: "$msg"
+    type: broad
+    enable: true
+    world: true
+    pattern:
+      - "&b[Broadcast]:"
+      - "&b[INFO]:"
+      - "&d[CONSOLE]:"
+    name: "Глобальные объявления"
+    spy: "$p попытался отправить глобальное объявление."
+    consoleSpy: "$p отправил глобальное объявление."
+    prefix: "~"
+    tab: false
+    sign: b
+    needPerm: true
+  PM:
+    type: pm
+    enable: true
+    world: true
+    formatTo: "&7@$p:&5 $msg"
+    # $r - получатель сообщения.
+    formatFrom: "&7(От $p)&5 $msg"
+    formatSpy: "&7(ЛС от $p для $r)&5 $msg"
+    format: "&7(ЛС от $p) $msg"
+    noinputmsg: "&7Невозможно отправить пустое сообщение."
+    # /23 Необходимо добавить сообщение об ошибке, при которой пользователь не увидит полученное ЛС, так как ему запрещен просмотр этого канала.
+    # $1 - имя игрока
+    playeNotFound: "&o&7Игрок $1 сейчас не в сети."
+    # Режим поиска игрока по никнейму: -1 - строгий, 0 - стандартный, 1 - упрощенный.
+    # -1 - Should add description!
+    # 0  - Don't forget to add description!
+    # 1  - Никнейм адресата можно записать c помощью всего трех последовательно расположенных букв.
+    PMSearchNickMode: 1
+    prefix: "@"
+    sign: p
+    needPerm: false
+  Global:
+    type: item
+    enable: true
+    world: true
+    item:
+      #@Deprecated
+      id: 264
+      material: DIAMOND
+      subid: 0
+      amount: 1
+    format: "$prefix$p$suffix (Всем):&e $msg "
+    name: "Глобальный чат"
+    prefix: "$"
+    sign: g
+    requestPrefix: false
+    needPerm: true
+    pimk:
+     enable: true
+     instrument: PIANO
+     colorize: "&c@"
+     note: 1F#
+  World:
+    type: item
+    enable: true
+    world: true
+    item:
+      #@Deprecated
+      id: 260
+      material: APPLE
+      subid: 0
+      amount: 1
+    format: "$prefix$p$suffix (В мир):&6 $msg "
+    name: "Мировой чат"
+    prefix: ">"
+    sign: w
+    requestPrefix: true
+    needPerm: true
+  World2:
+    type: item
+    enable: true
+    world: true
+    item:
+      #@Deprecated
+      id: 260
+      material: APPLE
+      subid: 0
+      amount: 1
+    format: "$prefix$p$suffix (В мир 2):&6 $msg "
+    name: "Мировой чат 2"
+    prefix: ">"
+    sign: q
+    requestPrefix: true
+    needPerm: true
+  Shout:
+    type: REQUISITE
+    enable: true
+    world: false
+    format: "$prefix$p$suffix (Кричит):&c $msg"
+    name: "Крик"
+    range: 500
+    prefix: "!"
+    sign: s
+    item:
+      id: 339
+      material: PAPER
+      subid: 0
+      amount: 1
+    requisete:
+      id: 340
+      material: BOOK
+      subid: 0
+      amount: 1
+    requestPrefix: false
+    needPerm: false
+  Local:
+    type: range
+    enable: true
+    world: true
+    format: "$prefix$p$suffix:&f $msg"
+    name: "Локальный чат"
+    range: 250
+    prefix: "-"
+    sign: l
+    default: true
+    listenerMessage: "&7вас услышало $n человек"
+    noListenerMessage: "&7вас не услышали"
+    # 0 - выключено
+    # -1 в сообщение
+    # 1 - отдельно
+    isListenerMessage: -1
+    needPerm: false
+  Whisper:
+    type: range
+    enable: true
+    world: true
+    format: "&7$p&7 (Шепчет): $msg"
+    name: "Шёпот"
+    range: 20
+    prefix: "#"
+    sign: v
+    needPerm: false
+    overAll: falsr
+  Public:
+    type: BASE
+    enable: true
+    name: "публичный чат"
+    format: "&7(П)&r$prefix$p$suffix&r:&7 $msg "
+    prefix: "^"
+    sign: P
+    overAll: false
+    Anonym:
+     type: BASE
+     enable: true
+     name: "анонимный чат"
+     format: "&7(A)[$id]:&7&o $msg "
+     prefix: "^"
+     sign: n
+     overAll: false

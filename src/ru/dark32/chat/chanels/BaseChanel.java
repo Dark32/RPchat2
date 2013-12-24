@@ -68,28 +68,38 @@ public class BaseChanel implements IChanel {
 		return this.prefix;
 	}
 
+	void DEBUG(String message, Player sender ) {
+		if (Main.DEBUG_MODE) {
+			sender.sendMessage(message);
+		};
+	}
+	void DEBUG(String message ) {
+		if (Main.DEBUG_MODE) {
+			Bukkit.getConsoleSender().sendMessage(message);;
+		};
+	}
+	/**
+	 * 
+	 * @param sender
+	 * @param recipient
+	 * @return Глухота, Слышит, Сам, В канале <br>
+	 *         !isInChanel || isSelf || !isHear || isDeaf
+	 */
+	protected boolean isRecipient(final Player sender, final Player recipient ) {
+		final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
+		final boolean isHear = !isNeedPerm()
+				|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
+				|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
+		final boolean isSelf = sender == recipient && isListenerMessage() == COUNT_INCLUDE;
+		final boolean isInChanel = isOverAll() && Util.getModeIndex(recipient.getName()) == getIndex();
+		return !(!isInChanel || isSelf || !isHear || isDeaf);
+	}
+
 	@Override
 	public List<Player> getRecipients(final Player sender ) {
 		final List<Player> recipients = new LinkedList<Player>();
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
-			final boolean isWorld = isWorldChat() && sender.getWorld() == recipient.getWorld();
-			final boolean isHear = !isNeedPerm()
-					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
-					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
-			final boolean isSelf = sender == recipient && isListenerMessage() == COUNT_INCLUDE;
-			final boolean isInChanel = isOverAll() && Util.getModeIndex(recipient.getName()) == getIndex();
-			if (!isInChanel) {
-				continue;
-			} else if (isSelf) {
-				continue;
-			} else if (!isHear) {
-				continue;
-			} else if (isDeaf) {
-				continue;
-			} else if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy")) {
-				recipients.add(recipient);
-			} else if (!isWorld) {
+			if (isRecipient(sender, recipient)) {
 				continue;
 			} else {
 				recipients.add(recipient);
@@ -173,9 +183,10 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public String format(final Player player, final String msg ) {
+		String iden = Integer.toHexString(player.getTicksLived() + player.getEntityId());
 		return msg.replace("$suffix", ChanelRegister.getSuffix(player.getName()))
 				.replace("$prefix", ChanelRegister.getPreffix(player.getName())).replace("$p", "%1$s")
-				.replace("$msg", "%2$s").replace("$id", Integer.toString(player.getEntityId()));
+				.replace("$msg", "%2$s").replace("$id", iden);
 	}
 
 	@Override

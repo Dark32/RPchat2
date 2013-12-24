@@ -32,35 +32,28 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 		final List<Player> recipients = new LinkedList<Player>();
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			final boolean isWorld = !isWorldChat() || sender.getWorld() == recipient.getWorld();
-			final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
 			final int dist = getDist(sender.getLocation(), recipient.getLocation());
-			final boolean isRange = (this.getRange() < 0) || (dist < this.getRange());
-			final boolean isTransceiver = Util.hasPermission(recipient, Main.BASE_PERM + "."
-					+ getInnerName() + ".no_item")
+			final boolean isRange = (this.getRange() == 0) || (dist < this.getRange());
+			final boolean isTransceiver = Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName()
+					+ ".no_item")
 					|| recipient == sender || hasItemInInvetery(recipient);
-			final boolean isHear = !isNeedPerm()
-					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
-					|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName()
-							+ ".hear");
-			final boolean isSelf = sender == recipient && isListenerMessage() == COUNT_INCLUDE;
-			final boolean isInChanel = isOverAll() && Util.getModeIndex(recipient.getName()) == getIndex();
-			if (!isInChanel) {
-				continue;
-			} else if (isSelf) {
-				continue;
-			} else if (!isHear) {
-				continue;
-			} else if (isDeaf) {
+			DEBUG("debug: " + recipient.getName() + " | " + dist + "/" + this.getRange() * this.getRange() + "|"
+					+ isWorld, sender);
+			if (isRecipient(sender, recipient)) {
 				continue;
 			} else if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy")) {
+				DEBUG("debug: spy - " + recipient.getName(), sender);
 				recipients.add(recipient);
 			} else if (isRange && isTransceiver) {
 				if (isWorld) {
+					DEBUG("debug: in world - " + recipient.getName(), sender);
 					recipients.add(recipient);
 				} else {
+					DEBUG("debug: out of world - " + recipient.getName(), sender);
 					continue;
 				}
 			} else {
+				DEBUG("debug: out of range - " + recipient.getName(), sender);
 				continue;
 			}
 		}
@@ -132,18 +125,11 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 		if (item == null) {
 			return false;
 		}
-		if (Main.DEBUG_MODE) {
-			Bukkit.getConsoleSender().sendMessage(
-					"debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - "
-							+ item.getType());
-			Bukkit.getConsoleSender().sendMessage(
-					"debug need " + requisiteItemId + ":" + requisiteItemSubId + " - "
-							+ requisiteItemMaterial);
-		}
+		DEBUG("debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - " + item.getType());
+		DEBUG("debug need " + requisiteItemId + ":" + requisiteItemSubId + " - " + requisiteItemMaterial);
 		final boolean isItem = item.getDurability() == this.requisiteItemSubId
 				&& item.getAmount() >= this.requisiteItemAmount
-				&& ((ValueStorage.experemental && item.getType() == this.requisiteItemMaterial) || item
-						.getTypeId() == this.requisiteItemId);
+				&& ((ValueStorage.experemental && item.getType() == this.requisiteItemMaterial) || item.getTypeId() == this.requisiteItemId);
 		return isItem;
 	}
 

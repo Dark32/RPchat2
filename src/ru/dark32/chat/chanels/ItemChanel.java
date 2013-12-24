@@ -1,6 +1,5 @@
 package ru.dark32.chat.chanels;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -79,8 +78,8 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 
 	@Override
 	public String toString() {
-		return super.toString() + ", id =>" + this.itemId + ", subid=>" + this.itemSubId
-				+ ", material =>" + this.itemMaterial.name() + ", count =>" + this.getItemAmount();
+		return super.toString() + ", id =>" + this.itemId + ", subid=>" + this.itemSubId + ", material =>"
+				+ this.itemMaterial.name() + ", count =>" + this.getItemAmount();
 	}
 
 	@SuppressWarnings("deprecation" )
@@ -90,18 +89,12 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 			return false;
 		}
 
-		if (Main.DEBUG_MODE) {
-			Bukkit.getConsoleSender().sendMessage(
-					"debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - "
-							+ item.getType());
-			Bukkit.getConsoleSender().sendMessage(
-					"debug need " + itemId + ":" + itemSubId + " - " + itemMaterial);
-		}
+		DEBUG("debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - " + item.getType());
+		DEBUG("debug need " + itemId + ":" + itemSubId + " - " + itemMaterial);
 
 		final boolean isItem = item.getDurability() == this.itemSubId
 				&& item.getAmount() >= this.itemAmount
-				&& ((ValueStorage.experemental && item.getType() == this.itemMaterial) || item
-						.getTypeId() == this.itemId);
+				&& ((ValueStorage.experemental && item.getType() == this.itemMaterial) || item.getTypeId() == this.itemId);
 		return isItem;
 	}
 

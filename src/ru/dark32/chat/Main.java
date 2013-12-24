@@ -54,7 +54,6 @@ public class Main extends JavaPlugin {
 		} else {
 			Main.storage = new YamlConfiguration();
 		}
-		
 		String chat = config.getString("chat","chat");
 		Main.chatConfigFile =  new File(getDataFolder(), chat+".yml");
 		if (Main.chatConfigFile.exists()) {
@@ -70,7 +69,6 @@ public class Main extends JavaPlugin {
 		} else {
 			getLogger().warning("chat.yml not found");
 		}
-		
 		getServer().getPluginManager().registerEvents(new TabListener(), this);
 		getServer().getPluginManager().registerEvents(new JoinListener(), this);
 		Main.muteStorage = new Mute();
