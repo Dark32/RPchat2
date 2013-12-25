@@ -22,20 +22,37 @@ import ru.dark32.chat.ichanels.IRangeRequisiteItemChanel;
  * 
  */
 public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeRequisiteItemChanel {
-	private int			requisiteItemId;
 	private int			requisiteItemAmount;
-	private int			requisiteItemSubId;
+	private int			requisiteItemId;
 	private Material	requisiteItemMaterial;
+	private int			requisiteItemSubId;
 
 	@SuppressWarnings("deprecation" )
 	public RangeRequisiteItemChanel(String name ){
 		super(name);
-		this.setRange(Main.chatConfig.getInt("Chat." + name + ".range"));
-		this.setRequiseteItemId(Main.chatConfig.getInt("Chat." + name + ".requisete.id", this.getItemId()));
-		this.setRequiseteItemSubId(Main.chatConfig.getInt("Chat." + name + ".requisete.subid", this.getItemSubId()));
-		this.setRequiseteItemAmount(Main.chatConfig.getInt("Chat." + name + ".requisete.amount", 0));
-		this.setRequiseteItemMaterial(Material.getMaterial(Main.chatConfig.getString("Chat." + name
-				+ ".requisete.material", this.getItemMaterial().name())));
+		final String path_reqId = "Chat." + name + ".requisete.id";
+		final String path_reqSubId = "Chat." + name + ".requisete.subid";
+		final String path_reqAmount = "Chat." + name + ".requisete.amount";
+		final String path_reqMaterial = "Chat." + name + ".requisete.material";
+		this.requisiteItemId = Main.chatConfig.getInt(path_reqId, this.getItemId());
+		this.requisiteItemSubId = Main.chatConfig.getInt(path_reqSubId, this.getItemSubId());
+		this.requisiteItemAmount = Main.chatConfig.getInt(path_reqAmount, 0);
+		this.requisiteItemMaterial = Material.getMaterial(Main.chatConfig.getString(path_reqMaterial, this
+				.getItemMaterial().name()));
+	}
+
+	@SuppressWarnings("deprecation" )
+	@Override
+	public boolean equalRequiseteItem(final ItemStack item ) {
+		if (item == null) {
+			return false;
+		}
+		DEBUG("debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - " + item.getType());
+		DEBUG("debug need " + requisiteItemId + ":" + requisiteItemSubId + " - " + requisiteItemMaterial);
+		final boolean isItem = item.getDurability() == this.requisiteItemSubId
+				&& item.getAmount() >= this.requisiteItemAmount
+				&& ((ValueStorage.experemental && item.getType() == this.requisiteItemMaterial) || item.getTypeId() == this.requisiteItemId);
+		return isItem;
 	}
 
 	@Override
@@ -71,6 +88,27 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 		return recipients;
 	}
 
+	@Override
+	public int getRequiseteItemAmount() {
+		return this.requisiteItemAmount;
+	}
+
+	@Deprecated
+	@Override
+	public int getRequiseteItemId() {
+		return requisiteItemId;
+	}
+
+	@Override
+	public Material getRequiseteItemMaterial() {
+		return requisiteItemMaterial;
+	}
+
+	@Override
+	public int getRequiseteItemSubId() {
+		return requisiteItemSubId;
+	}
+
 	private boolean hasItemInInvetery(final Player player ) {
 		final PlayerInventory inventary = player.getInventory();
 		boolean hasItem = false;
@@ -82,66 +120,6 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 			}
 		}
 		return hasItem;
-	}
-
-	@Deprecated
-	@Override
-	public void setRequiseteItemId(final int id ) {
-		this.requisiteItemId = id;
-
-	}
-
-	@Override
-	public void setRequiseteItemSubId(final int subId ) {
-		this.requisiteItemSubId = subId;
-
-	}
-
-	@Override
-	public void setRequiseteItemMaterial(final Material material ) {
-		this.requisiteItemMaterial = material;
-
-	}
-
-	@Deprecated
-	@Override
-	public int getRequiseteItemId() {
-		return requisiteItemId;
-	}
-
-	@Override
-	public int getRequiseteItemSubId() {
-		return requisiteItemSubId;
-	}
-
-	@Override
-	public Material getRequiseteItemMaterial() {
-		return requisiteItemMaterial;
-	}
-
-	@Override
-	public void setRequiseteItemAmount(final int amount ) {
-		this.requisiteItemAmount = amount;
-
-	}
-
-	@Override
-	public int getRequiseteItemAmount() {
-		return this.requisiteItemAmount;
-	}
-
-	@SuppressWarnings("deprecation" )
-	@Override
-	public boolean equalRequiseteItem(final ItemStack item ) {
-		if (item == null) {
-			return false;
-		}
-		DEBUG("debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - " + item.getType());
-		DEBUG("debug need " + requisiteItemId + ":" + requisiteItemSubId + " - " + requisiteItemMaterial);
-		final boolean isItem = item.getDurability() == this.requisiteItemSubId
-				&& item.getAmount() >= this.requisiteItemAmount
-				&& ((ValueStorage.experemental && item.getType() == this.requisiteItemMaterial) || item.getTypeId() == this.requisiteItemId);
-		return isItem;
 	}
 
 	@SuppressWarnings("deprecation" )

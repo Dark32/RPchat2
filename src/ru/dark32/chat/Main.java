@@ -22,10 +22,10 @@ public class Main extends JavaPlugin {
 	public static FileConfiguration	config;
 	public static File				storageFile;
 	public static YamlConfiguration	storage;
-	
+
 	public static File				chatConfigFile;
 	public static YamlConfiguration	chatConfig;
-	
+
 	public static File				localeConfigFile;
 	public static YamlConfiguration	localeConfig;
 	// выключить в релизе
@@ -47,23 +47,23 @@ public class Main extends JavaPlugin {
 		Util.init(this);
 		ValueStorage.init();
 		ChanelRegister.init();
-		
-		Main.storageFile =  new File(getDataFolder(), "storage.yml");
+
+		Main.storageFile = new File(getDataFolder(), "storage.yml");
 		if (Main.storageFile.exists()) {
 			Main.storage = YamlConfiguration.loadConfiguration(storageFile);
 		} else {
 			Main.storage = new YamlConfiguration();
 		}
-		String chat = config.getString("chat","chat");
-		Main.chatConfigFile =  new File(getDataFolder(), chat+".yml");
+		String chat = config.getString("chat", "chat");
+		Main.chatConfigFile = new File(getDataFolder(), chat + ".yml");
 		if (Main.chatConfigFile.exists()) {
 			Main.chatConfig = YamlConfiguration.loadConfiguration(chatConfigFile);
 		} else {
 			getLogger().warning("chat.yml not found");
 		}
-		
-		String locale = config.getString("locale","locale");
-		Main.localeConfigFile =  new File(getDataFolder(), locale+".yml");
+
+		String locale = config.getString("locale", "locale");
+		Main.localeConfigFile = new File(getDataFolder(), locale + ".yml");
 		if (Main.localeConfigFile.exists()) {
 			Main.localeConfig = YamlConfiguration.loadConfiguration(chatConfigFile);
 		} else {

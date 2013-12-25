@@ -54,8 +54,6 @@ public interface IPersonalMessagesChanel extends IChanel {
 	 */
 	boolean hasTarget(Player target );
 
-	Player getTarget(String targetName );
-
 	/**
 	 * @param sender
 	 *            отправитель
@@ -85,14 +83,6 @@ public interface IPersonalMessagesChanel extends IChanel {
 	void responseSendMessage(Player sender, String msg );
 
 	/**
-	 * Формат сообщения для получаталя
-	 * 
-	 * @param formatTo
-	 *            формат
-	 */
-	void setFormatTo(String formatTo );
-
-	/**
 	 * Форматировать сообщение цели
 	 * 
 	 * @param sender
@@ -104,12 +94,6 @@ public interface IPersonalMessagesChanel extends IChanel {
 	 * @return отформатированное сообщение
 	 */
 	String formatTo(Player sender, Player target, String msg );
-
-	/**
-	 * @param formatFrom
-	 *            формат сообщения ответа
-	 */
-	void setFormatFrom(String formatFrom );
 
 	/**
 	 * Форматировать сообщение отправителя
@@ -125,12 +109,6 @@ public interface IPersonalMessagesChanel extends IChanel {
 	String formatFrom(Player sender, Player target, String msg );
 
 	/**
-	 * @param formatSpy
-	 *            формат прослушки
-	 */
-	void setFormatSpy(String formatSpy );
-
-	/**
 	 * форматирование сообщения прослушки
 	 * 
 	 * @param sender
@@ -144,7 +122,5 @@ public interface IPersonalMessagesChanel extends IChanel {
 	String formatSpy(Player sender, Player target, String msg );
 
 	int getPmSearchNickMode();
-
-	void setPmSearchNickMode(int pmSearchNickMode );
 
 }

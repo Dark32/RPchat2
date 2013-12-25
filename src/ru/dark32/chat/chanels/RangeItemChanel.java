@@ -24,12 +24,19 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 
 	public RangeItemChanel(String name ){
 		super(name);
-		this.setRange(Main.chatConfig.getInt("Chat." + name + ".range"));
+		final String path_range = "Chat." + name + ".range";
+		this.range = Main.chatConfig.getInt(path_range);
 	}
 
-	@Override
-	public void setRange(final int range ) {
-		this.range = range;
+	protected int getDist(final Location sender, final Location target ) {
+		int distX = (int) (sender.getX() - target.getX());
+		distX *= distX;
+		int distY = (int) (sender.getY() - target.getY());
+		distY *= distY;
+		int distZ = (int) (sender.getZ() - target.getZ());
+		distZ *= distZ;
+		return distX + distY + distZ;
+
 	}
 
 	@Override
@@ -65,17 +72,6 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 			}
 		}
 		return recipients;
-	}
-
-	protected int getDist(final Location sender, final Location target ) {
-		int distX = (int) (sender.getX() - target.getX());
-		distX *= distX;
-		int distY = (int) (sender.getY() - target.getY());
-		distY *= distY;
-		int distZ = (int) (sender.getZ() - target.getZ());
-		distZ *= distZ;
-		return distX + distY + distZ;
-
 	}
 
 	@Override

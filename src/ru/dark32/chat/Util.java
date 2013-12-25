@@ -108,8 +108,9 @@ public class Util {
 	public static String randomRoll(String message ) {
 		Matcher mt = rollPatern.matcher(message);
 		ChatColor.getLastColors(message);
-		while (mt.find())
+		while (mt.find()) {
 			message = message.replaceFirst("\\*(.+?)\\*", "$1 " + (rand.nextInt(100) > chance ? luck : unluck));
+		}
 		message = message.replaceAll("\\*(.+?)\\Z", "$1 " + (rand.nextInt(100) > chance ? luck : unluck));
 		return message;
 	}

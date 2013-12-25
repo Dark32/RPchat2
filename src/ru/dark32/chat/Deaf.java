@@ -34,8 +34,7 @@ public class Deaf implements IDeaf {
 				"&7$Вы не можете смотреть справку по глухоте"));
 		canTSeeSelf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTSeeSelf",
 				"&7$Вы не можете смотреть свою глухоту"));
-		udeafSelf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.udeafSelf",
-				"&7$Ваша глухота: "));
+		udeafSelf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.udeafSelf", "&7$Ваша глухота: "));
 		canTSeeAllDeaf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTSeeAllDeaf",
 				"&7$Вы не можете смотреть все глухоты"));
 		canTSeeTargetDeaf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTSeeTargetDeaf",
@@ -66,14 +65,14 @@ public class Deaf implements IDeaf {
 
 	@Override
 	public void deaf(final String[] args, final CommandSender sender ) {
-		final 	boolean hasHelp = Util.hasPermission(sender,  Main.BASE_PERM+".deaf.help");
-		final boolean hasSee = Util.hasPermission(sender,  Main.BASE_PERM+".deaf.see");
-		final boolean hasAll = Util.hasPermission(sender,  Main.BASE_PERM+".deaf.all");
-		final boolean hasSeeSelf = Util.hasPermission(sender,  Main.BASE_PERM+".deaf.see.self") || hasSee;
-		final boolean hasDeaf = Util.hasPermission(sender,  Main.BASE_PERM+".deaf.deaf");
-		final boolean hasDeafSelf = Util.hasPermission(sender,  Main.BASE_PERM+".deaf.deaf.self") || hasDeaf;
-		final boolean hasUnDeaf = Util.hasPermission(sender,  Main.BASE_PERM+".deaf.undeaf");
-		final 	boolean hasUnDeafSelf = Util.hasPermission(sender,  Main.BASE_PERM+".deaf.undeaf.self") || hasUnDeaf;
+		final boolean hasHelp = Util.hasPermission(sender, Main.BASE_PERM + ".deaf.help");
+		final boolean hasSee = Util.hasPermission(sender, Main.BASE_PERM + ".deaf.see");
+		final boolean hasAll = Util.hasPermission(sender, Main.BASE_PERM + ".deaf.all");
+		final boolean hasSeeSelf = Util.hasPermission(sender, Main.BASE_PERM + ".deaf.see.self") || hasSee;
+		final boolean hasDeaf = Util.hasPermission(sender, Main.BASE_PERM + ".deaf.deaf");
+		final boolean hasDeafSelf = Util.hasPermission(sender, Main.BASE_PERM + ".deaf.deaf.self") || hasDeaf;
+		final boolean hasUnDeaf = Util.hasPermission(sender, Main.BASE_PERM + ".deaf.undeaf");
+		final boolean hasUnDeafSelf = Util.hasPermission(sender, Main.BASE_PERM + ".deaf.undeaf.self") || hasUnDeaf;
 		final String target = args.length > 0 ? args[0] : sender.getName();
 		final boolean isSelf = sender.getName().equalsIgnoreCase(target);
 		if (args.length == 0) {
@@ -127,8 +126,7 @@ public class Deaf implements IDeaf {
 					return;
 				}
 			}
-			final String reason = args.length >= 3 ? StringUtils.join(args, " ", 2, args.length)
-					: noReason;
+			final String reason = args.length >= 3 ? StringUtils.join(args, " ", 2, args.length) : noReason;
 			if (isSelf) {
 				if (!hasDeafSelf) {
 					sender.sendMessage(canTDeafSelf);
@@ -169,12 +167,11 @@ public class Deaf implements IDeaf {
 	@Override
 	public void deafSeeTarget(final CommandSender sender, final String name ) {
 		for (int i = 0; i < chaneles; i++) {
-			final String reason = Main.storage.getString(getPlayerDeafString(name, i) + "-reason","");
+			final String reason = Main.storage.getString(getPlayerDeafString(name, i) + "-reason", "");
 			final boolean isDeaf = this.isDeaf(name, i);
 			if (isDeaf) {
 				sender.sendMessage(deafMessage.replace("$n", name)
-						.replace("$c", ChanelRegister.getByIndex(i).getName())
-						.replace("$r", reason));
+						.replace("$c", ChanelRegister.getByIndex(i).getName()).replace("$r", reason));
 			}
 		}
 
@@ -199,31 +196,29 @@ public class Deaf implements IDeaf {
 		}
 		sender.sendMessage(deafMessage2
 				.replace("$n", name)
-				.replace(
-						"$c",
-						(chanel >= 0 && chanel < this.chaneles ? ChanelRegister.getByIndex(chanel)
-								.getName() : "a")).replace("$r", reason));
+				.replace("$c",
+						(chanel >= 0 && chanel < this.chaneles ? ChanelRegister.getByIndex(chanel).getName() : "a"))
+				.replace("$r", reason));
 
 		saveDeaf();
 	}
 
 	@Override
-	public void caseUnDeaf(final CommandSender sender,final  String name,final  int chanel ) {
+	public void caseUnDeaf(final CommandSender sender, final String name, final int chanel ) {
 		for (int i = 0; i < chaneles; i++) {
 			if (chanel == i || chanel == -1) {
 				Main.storage.set(getPlayerDeafString(name, i), false);
 				Main.storage.set(getPlayerDeafString(name, i) + "-reason", null);
 			}
 		}
-		sender.sendMessage(undeafMessage.replace("$n", name).replace(
-				"$c",
+		sender.sendMessage(undeafMessage.replace("$n", name).replace("$c",
 				(chanel >= 0 && chanel < chaneles ? ChanelRegister.getByIndex(chanel).getName() : "a"))
 
 		);
 	}
 
 	@Override
-	public boolean isDeaf(final String name,final  int chanel ) {
+	public boolean isDeaf(final String name, final int chanel ) {
 		return Main.storage.getBoolean(getPlayerDeafString(name, chanel));
 	}
 

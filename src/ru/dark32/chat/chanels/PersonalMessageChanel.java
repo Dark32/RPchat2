@@ -27,11 +27,14 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 
 	public PersonalMessageChanel(String name ){
 		super(name);
-		this.setFormatTo(Main.chatConfig.getString("Chat." + name + ".formatTo", "Chat." + name + ".formatTo"));
-		this.setFormatFrom(Main.chatConfig.getString("Chat." + name + ".formatFrom", "Chat." + name + ".formatFrom"));
-		this.setFormatSpy(Main.chatConfig.getString("Chat." + name + ".formatSpy", "Chat." + name + ".formatSpy"));
-		this.setPmSearchNickMode(Main.chatConfig.getInt("Chat." + name + ".PMSearchNickMode", 0));
-
+		final String path_formatTo = "Chat." + name + ".formatTo";
+		final String path_fotmatFrom = "Chat." + name + ".formatFrom";
+		final String path_formatSpy = "Chat." + name + ".formatSpy";
+		final String path_PMSNM = "Chat." + name + ".PMSearchNickMode";
+		this.formatToSting = ChanelRegister.colorize(Main.chatConfig.getString(path_formatTo, path_formatTo));
+		this.formatFromString = ChanelRegister.colorize(Main.chatConfig.getString(path_fotmatFrom, path_fotmatFrom));
+		this.formatSpyString = ChanelRegister.colorize(Main.chatConfig.getString(path_formatSpy, path_formatSpy));
+		this.pmSearchNickMode = Main.chatConfig.getInt(path_PMSNM, 0);
 	}
 
 	/**
@@ -40,15 +43,6 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	@Override
 	public int getPmSearchNickMode() {
 		return pmSearchNickMode;
-	}
-
-	/**
-	 * @param pmSearchNickMode
-	 *            the pmSearchNickMode to set
-	 */
-	@Override
-	public void setPmSearchNickMode(final int pmSearchNickMode ) {
-		this.pmSearchNickMode = pmSearchNickMode;
 	}
 
 	@Override
@@ -89,11 +83,6 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	@Override
 	public boolean hasTarget(final Player target ) {
 		return target != null;
-	}
-
-	@Override
-	public Player getTarget(final String targetName ) {
-		return getTargetByName(targetName);
 	}
 
 	@Override
@@ -150,32 +139,14 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	}
 
 	@Override
-	public void setFormatTo(final String formatTo ) {
-		this.formatToSting = ChanelRegister.colorize(formatTo);
-
-	}
-
-	@Override
 	public String formatTo(final Player sender, final Player target, final String msg ) {
 		return format(sender, formatToSting).replace("%2$s", msg).replace("%1$s", sender.getName());
-	}
-
-	@Override
-	public void setFormatFrom(final String formatFrom ) {
-		this.formatFromString = ChanelRegister.colorize(formatFrom);
-
 	}
 
 	@Override
 	public String formatFrom(final Player sender, final Player target, final String msg ) {
 		return format(sender, formatFromString).replace("$r", target.getName()).replace("%2$s", msg)
 				.replace("%1$s", sender.getName());
-	}
-
-	@Override
-	public void setFormatSpy(final String formatSpy ) {
-		this.formatSpyString = ChanelRegister.colorize(formatSpy);
-
 	}
 
 	@Override

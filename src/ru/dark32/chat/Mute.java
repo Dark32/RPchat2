@@ -20,21 +20,21 @@ import ru.dark32.chat.chanels.ChanelRegister;
 public class Mute implements IMute {
 	private final SimpleDateFormat	SDF			= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	final private int				chaneles	= ChanelRegister.getChanels();
-	final private String					needName;
-	final private String					muteMessage;
-	final private String					unmuteMessage;
-	final private String					canTHelp;
-	final private String					canTSeeSelf;
-	final private String					canTSeeAllMute;
-	final private String					canTSeeTargetMute;
-	final private String					signMoreOne;
-	final private String					canTUnmute;
-	final private String					canTMute;
-	final private String					noReason;
-	final private String					timeNotNum;
-	final private String					subCMDErr;
-	final private String					dataError;
-	final private String					muteSee;
+	final private String			needName;
+	final private String			muteMessage;
+	final private String			unmuteMessage;
+	final private String			canTHelp;
+	final private String			canTSeeSelf;
+	final private String			canTSeeAllMute;
+	final private String			canTSeeTargetMute;
+	final private String			signMoreOne;
+	final private String			canTUnmute;
+	final private String			canTMute;
+	final private String			noReason;
+	final private String			timeNotNum;
+	final private String			subCMDErr;
+	final private String			dataError;
+	final private String			muteSee;
 
 	public Mute(){
 		needName = ChanelRegister.colorize(Main.localeConfig.getString("mute.needName", "&7$Вы должны указать имя"));
@@ -52,12 +52,13 @@ public class Mute implements IMute {
 				"&7$Вы не можете смотреть молчанку цели"));
 		signMoreOne = ChanelRegister.colorize(Main.localeConfig.getString("mute.signMoreOne",
 				"&7$Сокращение канала не может быть длинее 1 символа: $1"));
-		canTUnmute = ChanelRegister
-				.colorize(Main.localeConfig.getString("mute.canTUnmute", "&7$Вы не можете снять молчанку"));
+		canTUnmute = ChanelRegister.colorize(Main.localeConfig.getString("mute.canTUnmute",
+				"&7$Вы не можете снять молчанку"));
 		canTMute = ChanelRegister.colorize(Main.localeConfig.getString("mute.canTMute",
 				"&7$Вы не можете устанавливать молчанку"));
 		noReason = ChanelRegister.colorize(Main.localeConfig.getString("mute.noReason", "не указана"));
-		timeNotNum = ChanelRegister.colorize(Main.localeConfig.getString("mute.timeNotNum", "&7$Время должно быть числом: "));
+		timeNotNum = ChanelRegister.colorize(Main.localeConfig.getString("mute.timeNotNum",
+				"&7$Время должно быть числом: "));
 		subCMDErr = ChanelRegister.colorize(Main.localeConfig.getString("mute.subCMDErr",
 				"&7$Ошибка форматирования #2 [see|all]"));
 		dataError = ChanelRegister.colorize(Main.localeConfig.getString("mute.dataError",
@@ -67,12 +68,12 @@ public class Mute implements IMute {
 
 	}
 
-	private String getPlayerMuteString(final String playerName,final  int chanel ) {
+	private String getPlayerMuteString(final String playerName, final int chanel ) {
 		return playerName + ".mute." + ChanelRegister.getByIndex(chanel).getInnerName();
 	}
 
 	@Override
-	public boolean isMuted(final String playerName,final  int chanel ) {
+	public boolean isMuted(final String playerName, final int chanel ) {
 		if (getTimeMute(playerName, chanel) > 0) {
 			return true;
 		} else {
@@ -82,7 +83,8 @@ public class Mute implements IMute {
 	}
 
 	@Override
-	public void caseMute(final CommandSender sender,final  String name,final  int chanel,final  int time,final  String reason ) {
+	public void caseMute(final CommandSender sender, final String name, final int chanel, final int time,
+			final String reason ) {
 		if ("empty".equals(name)) {
 			sender.sendMessage(needName);
 			return;
@@ -95,7 +97,8 @@ public class Mute implements IMute {
 				Main.storage.set(getPlayerMuteString(name, i) + "-reason", reason);
 			}
 		}
-		final String _chanelName = (chanel >= 0 && chanel < chaneles ? ChanelRegister.getByIndex(chanel).getName() : "a");
+		final String _chanelName = (chanel >= 0 && chanel < chaneles ? ChanelRegister.getByIndex(chanel).getName()
+				: "a");
 		if (time > 5) {
 			sender.sendMessage(muteMessage.replace("$n", name).replace("$c", _chanelName)
 					.replace("$t", String.valueOf(time)).replace("$r", reason));
@@ -211,7 +214,7 @@ public class Mute implements IMute {
 	}
 
 	@Override
-	public void unmute(final String playerName,final  int chanel ) {
+	public void unmute(final String playerName, final int chanel ) {
 		for (int i = 0; i < chaneles; i++) {
 			if (chanel == i || chanel == -1) {
 				Main.storage.set(getPlayerMuteString(playerName, i), null);
@@ -222,7 +225,7 @@ public class Mute implements IMute {
 	}
 
 	@Override
-	public long getTimeMute(final String playerName,final  int chanel ) {
+	public long getTimeMute(final String playerName, final int chanel ) {
 		final String dateStr = Main.storage.getString(getPlayerMuteString(playerName, chanel));
 		if (dateStr != null) {
 			try {
@@ -250,7 +253,9 @@ public class Mute implements IMute {
 	public void muteSeeAll(final CommandSender sender ) {
 		final ConfigurationSection cs = Main.storage.getRoot();
 		sender.sendMessage(ChatColor.GRAY + "$===============all================");
-		if (cs == null) return;
+		if (cs == null) {
+			return;
+		}
 		final Set<String> list = cs.getKeys(false);
 		for (final String name : list) {
 			muteSeeTarget(sender, name);
@@ -264,7 +269,7 @@ public class Mute implements IMute {
 	}
 
 	@Override
-	public void muteSeeTarget(final CommandSender sender,final  String name ) {
+	public void muteSeeTarget(final CommandSender sender, final String name ) {
 		for (int i = 0; i < chaneles; i++) {
 			final long time = getTimeMute(name, i);
 			final String reason = Main.storage.getString(getPlayerMuteString(name, i) + "-reason");

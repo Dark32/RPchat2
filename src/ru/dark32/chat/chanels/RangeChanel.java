@@ -20,13 +20,9 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 
 	public RangeChanel(String name ){
 		super(name);
-		this.setRange(Main.chatConfig.getInt("Chat." + name + ".range", 200));
-		
-	}
+		final String path_range = "Chat." + name + ".range";
+		this.range = Main.chatConfig.getInt(path_range, 200);
 
-	@Override
-	public void setRange(final int range ) {
-		this.range = range;
 	}
 
 	@Override

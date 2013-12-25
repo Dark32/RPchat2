@@ -7,10 +7,4 @@ public interface IBroadChanel extends IChanel {
 	 * @return получаем лист шаблонов
 	 */
 	List<String> getPatterns();
-
-	/**
-	 * @param list
-	 *            устанавливаем лист шаблонов
-	 */
-	void setPattern(List<String> list );
 }

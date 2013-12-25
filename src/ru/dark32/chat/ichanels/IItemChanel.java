@@ -9,11 +9,18 @@ import org.bukkit.inventory.ItemStack;
  */
 public interface IItemChanel extends IChanel {
 	/**
-	 * @param id
-	 *            Ид вещи
+	 * @param item
+	 *            вещь в руках
+	 * @return истина, если совпало с вещью канала
 	 */
-	@Deprecated
-	void setItemId(int id );
+	boolean equalItem(ItemStack item );
+
+	/**
+	 * получить
+	 * 
+	 * @return вещей тратится
+	 */
+	int getItemAmount();
 
 	/**
 	 * @return ид вещи
@@ -27,33 +34,9 @@ public interface IItemChanel extends IChanel {
 	Material getItemMaterial();
 
 	/**
-	 * @param ma
-	 *            материал вещи
-	 */
-	void setItemMaterial(Material ma );
-
-	/**
 	 * @return метадата вещи
 	 */
 	int getItemSubId();
-
-	/**
-	 * @param sub
-	 *            метадата вещи
-	 */
-	void setItemSubId(int sub );
-
-	/**
-	 * @param player
-	 */
-	void loseItem(Player player );
-
-	/**
-	 * @param item
-	 *            вещь в руках
-	 * @return истина, если совпало с вещью канала
-	 */
-	boolean equalItem(ItemStack item );
 
 	/**
 	 * @return обязателен ли префикс (если нет, то достаточно вещи в руках если
@@ -62,24 +45,7 @@ public interface IItemChanel extends IChanel {
 	boolean isRequestPprefix();
 
 	/**
-	 * @param needобязателен
-	 *            ли префикс (если нет, то достаточно вещи в руках если да - то
-	 *            нужно и вещь в руках и префикс)
+	 * @param player
 	 */
-	void setRequestPprefix(boolean need );
-
-	/**
-	 * установить
-	 * 
-	 * @param amount
-	 *            вещей тратится
-	 */
-	void setItemAmount(int amount );
-
-	/**
-	 * получить
-	 * 
-	 * @return вещей тратится
-	 */
-	int getItemAmount();
+	void loseItem(Player player );
 }

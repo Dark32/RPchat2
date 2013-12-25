@@ -53,9 +53,7 @@ public class ChatListener implements Listener {
 			return;
 		}
 		// есть ли права говорить в этот чат
-		if (chanel.isNeedPerm()
-				&& !Util.hasPermission(sender, Main.BASE_PERM + "." + chanel.getInnerName()
-						+ ".say")) {
+		if (chanel.isNeedPerm() && !Util.hasPermission(sender, Main.BASE_PERM + "." + chanel.getInnerName() + ".say")) {
 			sender.sendMessage(ValueStorage.noPerm.replace("$1", chanel.getName()));
 			event.setCancelled(true);
 			return;

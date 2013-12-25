@@ -9,13 +9,13 @@ import ru.dark32.chat.Main;
 import ru.dark32.chat.ichanels.IBroadChanel;
 
 public class BroadChanel extends BaseChanel implements IBroadChanel {
+	private List<String>	paterns;
 
 	public BroadChanel(String name ){
 		super(name);
-		this.setPattern(Main.chatConfig.getStringList("Chat." + name + ".pattern"));
-		
+		final String path_pattern = "Chat." + name + ".pattern";
+		this.paterns = Main.chatConfig.getStringList(path_pattern);
 	}
-	private List<String>	paterns;
 
 	@Override
 	public List<String> getPatterns() {
@@ -23,13 +23,8 @@ public class BroadChanel extends BaseChanel implements IBroadChanel {
 	}
 
 	@Override
-	public void setPattern(final List<String> list ) {
-		paterns = list;
-
-	}
-	@Override
-	public String preformatMessage(final Player sender,final String message ) {
-		Bukkit.getConsoleSender().sendMessage("BROAD: "+ sender.getName()+":"+message);
+	public String preformatMessage(final Player sender, final String message ) {
+		Bukkit.getConsoleSender().sendMessage("BROAD: " + sender.getName() + ":" + message);
 		return ChanelRegister.colorize(message);
 	}
 }

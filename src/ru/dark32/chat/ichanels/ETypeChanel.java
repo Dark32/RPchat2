@@ -1,6 +1,7 @@
 package ru.dark32.chat.ichanels;
 
 import java.util.Locale;
+
 import ru.dark32.chat.chanels.BaseChanel;
 import ru.dark32.chat.chanels.BroadChanel;
 import ru.dark32.chat.chanels.ChanceChanel;

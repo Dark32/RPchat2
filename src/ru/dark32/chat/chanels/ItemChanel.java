@@ -15,26 +15,61 @@ import ru.dark32.chat.ichanels.IItemChanel;
  */
 public class ItemChanel extends BaseChanel implements IItemChanel {
 
-	private int			itemId;
-	private int			itemSubId;
-	private Material	itemMaterial;
-	private boolean		requestPprefix;
 	private int			itemAmount;
+	private int			itemId;
+	private Material	itemMaterial;
+	private int			itemSubId;
+	private boolean		requestPprefix;
 
 	public ItemChanel(String name ){
 		super(name);
-		this.setItemId(Main.chatConfig.getInt("Chat." + name + ".item.id", 0));
-		this.setItemSubId(Main.chatConfig.getInt("Chat." + name + ".item.subid", 0));
-		this.setItemAmount(Main.chatConfig.getInt("Chat." + name + ".item.amount", 1));
-		this.setItemMaterial(Material.getMaterial(Main.chatConfig.getString("Chat." + name + ".item.material", "AIR")));
-		this.setRequestPprefix(Main.chatConfig.getBoolean("Chat." + name + ".requestPrefix", true));
+		final String path_item_id = "Chat." + name + ".item.id";
+		final String path_item_subId = "Chat." + name + ".item.subid";
+		final String path_item_amount = "Chat." + name + ".item.amount";
+		final String path_item_material = "Chat." + name + ".item.material";
+		final String path_requestPrefix = "Chat." + name + ".requestPrefix";
+		this.itemId = Main.chatConfig.getInt(path_item_id, 0);
+		this.itemSubId = Main.chatConfig.getInt(path_item_subId, 0);
+		this.itemAmount = Main.chatConfig.getInt(path_item_amount, 1);
+		Material ma = Material.getMaterial(Main.chatConfig.getString(path_item_material));
+		this.itemMaterial = ma != null ? ma : Material.AIR;
+		this.requestPprefix = Main.chatConfig.getBoolean(path_requestPrefix, true);
 	}
 
 	@Override
-	@Deprecated
-	public void setItemId(final int id ) {
-		this.itemId = id;
+	public boolean canSend(final Player sender, final String message ) {
+		if (!Util.hasPermission(sender, Main.BASE_PERM + "." + this.getInnerName() + ".no_item")) {
+			// если вещь в руках совпала
+			if (((IItemChanel) this).equalItem(sender.getItemInHand())) {
+				// теряем 1 вещь
+				((IItemChanel) this).loseItem(sender);
+			} else { // иначе
+				// глаголим, что вещи нет
+				sender.sendMessage(ValueStorage.nei);
+				// event.setCancelled(true);
+				return false;
+			}
+		}
+		return true;
+	}
 
+	@SuppressWarnings("deprecation" )
+	@Override
+	public boolean equalItem(final ItemStack item ) {
+		if (item == null) {
+			return false;
+		}
+		DEBUG("debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - " + item.getType());
+		DEBUG("debug need " + itemId + ":" + itemSubId + " - " + itemMaterial);
+		final boolean isItem = item.getDurability() == this.itemSubId
+				&& item.getAmount() >= this.itemAmount
+				&& ((ValueStorage.experemental && item.getType() == this.itemMaterial) || item.getTypeId() == this.itemId);
+		return isItem;
+	}
+
+	@Override
+	public int getItemAmount() {
+		return itemAmount;
 	}
 
 	@Override
@@ -49,19 +84,13 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 	}
 
 	@Override
-	public void setItemMaterial(final Material ma ) {
-		this.itemMaterial = ma != null ? ma : Material.AIR;
-
-	}
-
-	@Override
 	public int getItemSubId() {
 		return this.itemSubId;
 	}
 
 	@Override
-	public void setItemSubId(final int sub ) {
-		this.itemSubId = sub;
+	public boolean isRequestPprefix() {
+		return requestPprefix;
 	}
 
 	@SuppressWarnings("deprecation" )
@@ -89,60 +118,5 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 	public String toString() {
 		return super.toString() + ", id =>" + this.itemId + ", subid=>" + this.itemSubId + ", material =>"
 				+ this.itemMaterial.name() + ", count =>" + this.getItemAmount();
-	}
-
-	@SuppressWarnings("deprecation" )
-	@Override
-	public boolean equalItem(final ItemStack item ) {
-		if (item == null) {
-			return false;
-		}
-
-		DEBUG("debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - " + item.getType());
-		DEBUG("debug need " + itemId + ":" + itemSubId + " - " + itemMaterial);
-
-		final boolean isItem = item.getDurability() == this.itemSubId
-				&& item.getAmount() >= this.itemAmount
-				&& ((ValueStorage.experemental && item.getType() == this.itemMaterial) || item.getTypeId() == this.itemId);
-		return isItem;
-	}
-
-	@Override
-	public boolean isRequestPprefix() {
-		return requestPprefix;
-	}
-
-	@Override
-	public void setRequestPprefix(final boolean need ) {
-		requestPprefix = need;
-
-	}
-
-	@Override
-	public void setItemAmount(final int amount ) {
-		this.itemAmount = amount;
-
-	}
-
-	@Override
-	public int getItemAmount() {
-		return itemAmount;
-	}
-
-	@Override
-	public boolean canSend(final Player sender, final String message ) {
-		if (!Util.hasPermission(sender, Main.BASE_PERM + "." + this.getInnerName() + ".no_item")) {
-			// если вещь в руках совпала
-			if (((IItemChanel) this).equalItem(sender.getItemInHand())) {
-				// теряем 1 вещь
-				((IItemChanel) this).loseItem(sender);
-			} else { // иначе
-				// глаголим, что вещи нет
-				sender.sendMessage(ValueStorage.nei);
-				// event.setCancelled(true);
-				return false;
-			}
-		}
-		return true;
 	}
 }

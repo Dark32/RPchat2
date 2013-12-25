@@ -1,6 +1,7 @@
 package ru.dark32.chat;
 
 import java.util.List;
+
 import ru.dark32.chat.chanels.ChanelRegister;
 
 public class ValueStorage {
@@ -19,10 +20,10 @@ public class ValueStorage {
 	public static void init() {
 		experemental = Main.config.getBoolean("experemental", false);
 
-		nei = colorByString("String.nei");
-		noPerm = colorByString("String.noPerm");
+		nei = ValueStorage.colorByString("String.nei");
+		noPerm = ValueStorage.colorByString("String.noPerm");
 		joinmsg = Main.localeConfig.getStringList("String.joinmsg");
-		muteMessage = colorByString("mute.message");
+		muteMessage = ValueStorage.colorByString("mute.message");
 		muteHelp = Main.localeConfig.getStringList("mute.help");
 		deafHelp = Main.localeConfig.getStringList("deaf.help");
 		helpBase = Main.localeConfig.getStringList("help.base");

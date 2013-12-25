@@ -5,24 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public interface IRangeRequisiteItemChanel extends IRangeChanel, IItemChanel {
-	/**
-	 * @param id
-	 *            ид вещи
-	 */
-	@Deprecated
-	void setRequiseteItemId(int id );
-
-	/**
-	 * @param id
-	 *            суб ид вещи
-	 */
-	void setRequiseteItemSubId(int id );
-
-	/**
-	 * @param material
-	 *            материал
-	 */
-	void setRequiseteItemMaterial(Material material );
 
 	/**
 	 * @return ид вещи
@@ -39,14 +21,6 @@ public interface IRangeRequisiteItemChanel extends IRangeChanel, IItemChanel {
 	 * @return материал вещи
 	 */
 	Material getRequiseteItemMaterial();
-
-	/**
-	 * установить
-	 * 
-	 * @param amount
-	 *            вещей тратится
-	 */
-	void setRequiseteItemAmount(int amount );
 
 	/**
 	 * получить
