@@ -30,33 +30,33 @@ public class Deaf implements IDeaf {
 	final private String		deafMessage2;
 
 	public Deaf(){
-		canTHelp = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTHelp",
-				"&7$Вы не можете смотреть справку по глухоте"));
-		canTSeeSelf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTSeeSelf",
-				"&7$Вы не можете смотреть свою глухоту"));
-		udeafSelf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.udeafSelf", "&7$Ваша глухота: "));
-		canTSeeAllDeaf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTSeeAllDeaf",
-				"&7$Вы не можете смотреть все глухоты"));
-		canTSeeTargetDeaf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTSeeTargetDeaf",
-				"&7$Вы не можете смотреть глухоту цели"));
-		signMoreOne = ChanelRegister.colorize(Main.localeConfig.getString("deaf.signMoreOne",
-				"&7$Сокращение канала не может быть длинее 1 символа: $1"));
-		canTUndeafSelf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTUndeafSelf",
-				"&7$Вы не можете снять глухоту с себя"));
-		canTUndeafTarget = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTUndeafTarget",
-				"&7$Вы не можете снять глухоту с другово"));
-		canTDeafSelf = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTDeafSelf",
-				"&7$Вы не можете устанавливать глухоту себе"));
-		canTDeafTarget = ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTDeafTarget",
-				"&7$Вы не можете устанавливать глухоту другим"));
-		deafMessage = ChanelRegister.colorize(Main.localeConfig.getString("deaf.deafMessage",
-				"&7$$n не слушает $c. Причина: $r"));
-		noReason = ChanelRegister.colorize(Main.localeConfig.getString("deaf.noReason", "не указана"));
-		undeafMessage = ChanelRegister.colorize(Main.localeConfig.getString("deaf.undeafMessage",
-				"&7$$n теперь слышит канал $c"));
-		deafMessage2 = ChanelRegister.colorize(Main.localeConfig.getString("deaf.deafMessage2",
-				"&7$$n теперь не слушает $c. Причина: $r"));
-
+		canTHelp = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTHelp", "deaf.canTHelp")));
+		canTSeeSelf = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTSeeSelf",
+				"deaf.canTSeeSelf")));
+		udeafSelf = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.udeafSelf",
+				"deaf.udeafSelf")));
+		canTSeeAllDeaf = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTSeeAllDeaf",
+				"deaf.canTSeeAllDeaf")));
+		canTSeeTargetDeaf = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString(
+				"deaf.canTSeeTargetDeaf", "deaf.canTSeeTargetDeaf")));
+		signMoreOne = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.signMoreOne",
+				"deaf.signMoreOne")));
+		canTUndeafSelf = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTUndeafSelf",
+				"deaf.canTUndeafSelf")));
+		canTUndeafTarget = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTUndeafTarget",
+				"deaf.canTUndeafTarget")));
+		canTDeafSelf = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTDeafSelf",
+				"deaf.canTDeafSelf")));
+		canTDeafTarget = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTDeafTarget",
+				"deaf.canTDeafTarget")));
+		deafMessage = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.deafMessage",
+				"deaf.deafMessage")));
+		noReason = Util
+				.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.noReason", "deaf.noReason")));
+		undeafMessage = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.undeafMessage",
+				"deaf.undeafMessage")));
+		deafMessage2 = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.deafMessage2",
+				"deaf.deafMessage2")));
 	}
 
 	private String getPlayerDeafString(final String playerName, final int chanel ) {

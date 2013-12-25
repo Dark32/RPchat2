@@ -37,34 +37,35 @@ public class Mute implements IMute {
 	final private String			muteSee;
 
 	public Mute(){
-		needName = ChanelRegister.colorize(Main.localeConfig.getString("mute.needName", "&7$Вы должны указать имя"));
-		muteMessage = ChanelRegister.colorize(Main.localeConfig.getString("mute.muteMessage",
-				"&7$$n теперь молчит в $c на $t секунд по причине $r"));
-		unmuteMessage = ChanelRegister.colorize(Main.localeConfig.getString("mute.unmuteMessage",
-				"&7$&n  теперь может говорить в  $c"));
-		canTHelp = ChanelRegister.colorize(Main.localeConfig.getString("mute.canTHelp",
-				"&7$Вы не можете смотреть справку по молчанке"));
-		canTSeeSelf = ChanelRegister.colorize(Main.localeConfig.getString("mute.canTSeeSelf",
-				"&7$Вы не можете смотреть свою молчанку"));
+		needName = Util
+				.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.needName", "mute.needName")));
+		muteMessage = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.muteMessage",
+				"mute.muteMessage")));
+		unmuteMessage = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.unmuteMessage",
+				"mute.unmuteMessage")));
+		canTHelp = Util
+				.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.canTHelp", "mute.canTHelp")));
+		canTSeeSelf = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.canTSeeSelf",
+				"mute.canTSeeSelf")));
 		canTSeeAllMute = ChanelRegister.colorize(Main.localeConfig.getString("mute.canTSeeAllMute",
-				"&7$Вы не можете смотреть все молчанки"));
+				"mute.canTSeeAllMute"));
 		canTSeeTargetMute = ChanelRegister.colorize(Main.localeConfig.getString("mute.canTSeeTargetMute",
-				"&7$Вы не можете смотреть молчанку цели"));
-		signMoreOne = ChanelRegister.colorize(Main.localeConfig.getString("mute.signMoreOne",
-				"&7$Сокращение канала не может быть длинее 1 символа: $1"));
-		canTUnmute = ChanelRegister.colorize(Main.localeConfig.getString("mute.canTUnmute",
-				"&7$Вы не можете снять молчанку"));
-		canTMute = ChanelRegister.colorize(Main.localeConfig.getString("mute.canTMute",
-				"&7$Вы не можете устанавливать молчанку"));
-		noReason = ChanelRegister.colorize(Main.localeConfig.getString("mute.noReason", "не указана"));
-		timeNotNum = ChanelRegister.colorize(Main.localeConfig.getString("mute.timeNotNum",
-				"&7$Время должно быть числом: "));
-		subCMDErr = ChanelRegister.colorize(Main.localeConfig.getString("mute.subCMDErr",
-				"&7$Ошибка форматирования #2 [see|all]"));
-		dataError = ChanelRegister.colorize(Main.localeConfig.getString("mute.dataError",
-				"&7$Что-то не так с форматом времени: "));
-		muteSee = ChanelRegister.colorize(Main.localeConfig.getString("mute.muteSee",
-				"&7$$n молчит в $c. Осталось $t секунд. Причина: &r"));
+				"mute.canTSeeTargetMute"));
+		signMoreOne = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.signMoreOne",
+				"mute.signMoreOne")));
+		canTUnmute = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.canTUnmute",
+				"mute.canTUnmute")));
+		canTMute = Util
+				.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.canTMute", "mute.canTMute")));
+		noReason = Util
+				.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.noReason", "mute.noReason")));
+		timeNotNum = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.timeNotNum",
+				"mute.timeNotNum")));
+		subCMDErr = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.subCMDErr",
+				"mute.subCMDErr")));
+		dataError = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.dataError",
+				"mute.dataError")));
+		muteSee = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.muteSee", "mute.muteSee")));
 
 	}
 

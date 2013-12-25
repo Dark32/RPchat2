@@ -69,12 +69,13 @@ public class BaseChanel implements IChanel {
 		this.isWorld = Main.chatConfig.getBoolean(path_world, false);
 		this.prefix = Main.chatConfig.getString(path_prefix, path_prefix).charAt(0);
 		this.sign = Main.chatConfig.getString(path_sign, path_sign).charAt(0);
-		this.formatString = ChanelRegister.colorize(Main.chatConfig.getString(path_format, path_format));
+		this.formatString = Util
+				.parseUTF8(ChanelRegister.colorize(Main.chatConfig.getString(path_format, path_format)));
 		this.tabes = Main.chatConfig.getBoolean(path_tab, true);
-		this.listenerMessage = ChanelRegister.colorize(Main.chatConfig.getString(path_listenerMessage,
-				path_listenerMessage));
-		this.noListenerMessage = ChanelRegister.colorize(Main.chatConfig.getString(path_noListenerMessage,
-				path_noListenerMessage));
+		this.listenerMessage = Util.parseUTF8(ChanelRegister.colorize(Main.chatConfig.getString(path_listenerMessage,
+				path_listenerMessage)));
+		this.noListenerMessage = Util.parseUTF8(ChanelRegister.colorize(Main.chatConfig.getString(
+				path_noListenerMessage, path_noListenerMessage)));
 		this.listenerMessageEnable = Main.chatConfig.getInt(path_isListenerMessage, 0);
 		this.needPerm = Main.chatConfig.getBoolean(path_needPerm, false);
 		// PIMK -->

@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import ru.dark32.chat.Main;
+import ru.dark32.chat.Util;
 import ru.dark32.chat.ichanels.IBroadChanel;
 
 public class BroadChanel extends BaseChanel implements IBroadChanel {
@@ -25,6 +26,6 @@ public class BroadChanel extends BaseChanel implements IBroadChanel {
 	@Override
 	public String preformatMessage(final Player sender, final String message ) {
 		Bukkit.getConsoleSender().sendMessage("BROAD: " + sender.getName() + ":" + message);
-		return ChanelRegister.colorize(message);
+		return Util.parseUTF8(ChanelRegister.colorize(message));
 	}
 }

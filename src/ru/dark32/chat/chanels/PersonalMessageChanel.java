@@ -31,9 +31,12 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 		final String path_fotmatFrom = "Chat." + name + ".formatFrom";
 		final String path_formatSpy = "Chat." + name + ".formatSpy";
 		final String path_PMSNM = "Chat." + name + ".PMSearchNickMode";
-		this.formatToSting = ChanelRegister.colorize(Main.chatConfig.getString(path_formatTo, path_formatTo));
-		this.formatFromString = ChanelRegister.colorize(Main.chatConfig.getString(path_fotmatFrom, path_fotmatFrom));
-		this.formatSpyString = ChanelRegister.colorize(Main.chatConfig.getString(path_formatSpy, path_formatSpy));
+		this.formatToSting = Util.parseUTF8(ChanelRegister.colorize(Main.chatConfig.getString(path_formatTo,
+				path_formatTo)));
+		this.formatFromString = Util.parseUTF8(ChanelRegister.colorize(Main.chatConfig.getString(path_fotmatFrom,
+				path_fotmatFrom)));
+		this.formatSpyString = Util.parseUTF8(ChanelRegister.colorize(Main.chatConfig.getString(path_formatSpy,
+				path_formatSpy)));
 		this.pmSearchNickMode = Main.chatConfig.getInt(path_PMSNM, 0);
 	}
 
