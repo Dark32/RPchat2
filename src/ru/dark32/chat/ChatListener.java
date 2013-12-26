@@ -1,13 +1,10 @@
-package ru.dark32.chat.chanels;
+package ru.dark32.chat;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import ru.dark32.chat.Main;
-import ru.dark32.chat.Util;
-import ru.dark32.chat.ValueStorage;
 import ru.dark32.chat.ichanels.IChanel;
 
 /**

@@ -14,6 +14,7 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import ru.dark32.chat.ChanelRegister;
 import ru.dark32.chat.Main;
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ichanels.ETypeChanel;
@@ -69,18 +70,17 @@ public class BaseChanel implements IChanel {
 		this.isWorld = Main.chatConfig.getBoolean(path_world, false);
 		this.prefix = Main.chatConfig.getString(path_prefix, path_prefix).charAt(0);
 		this.sign = Main.chatConfig.getString(path_sign, path_sign).charAt(0);
-		this.formatString = Util
-				.parseUTF8(ChanelRegister.colorize(Main.chatConfig.getString(path_format, path_format)));
+		this.formatString = ChanelRegister.colorUTF8(Main.chatConfig.getString(path_format, path_format), 3);
 		this.tabes = Main.chatConfig.getBoolean(path_tab, true);
-		this.listenerMessage = Util.parseUTF8(ChanelRegister.colorize(Main.chatConfig.getString(path_listenerMessage,
-				path_listenerMessage)));
-		this.noListenerMessage = Util.parseUTF8(ChanelRegister.colorize(Main.chatConfig.getString(
-				path_noListenerMessage, path_noListenerMessage)));
+		this.listenerMessage = ChanelRegister.colorUTF8(
+				Main.chatConfig.getString(path_listenerMessage, path_listenerMessage), 3);
+		this.noListenerMessage = ChanelRegister.colorUTF8(
+				Main.chatConfig.getString(path_noListenerMessage, path_noListenerMessage), 3);
 		this.listenerMessageEnable = Main.chatConfig.getInt(path_isListenerMessage, 0);
 		this.needPerm = Main.chatConfig.getBoolean(path_needPerm, false);
 		// PIMK -->
 		String note = Main.chatConfig.getString(path_pimk_note, "1F#");
-		int octava = note.charAt(0);
+		int octava = note.length() > 0 ? note.charAt(0) : 1;
 		Note.Tone tone = Note.Tone.F;
 		boolean sharped = false;
 		if (note.length() >= 2 && note.length() <= 3) {
@@ -286,7 +286,7 @@ public class BaseChanel implements IChanel {
 			sender.sendMessage(getListenerMessage(recipient.size() - 1));
 		} else if (isListenerMessage() == COUNT_INCLUDE) {
 			sender.sendMessage(getListenerMessage(recipient.size())
-					+ format(sender, getFormat()).replace("%2$s", message).replace("%1$s", sender.getName()));
+					+ String.format(format(sender, getFormat()), sender.getName(), message));
 		}
 	}
 

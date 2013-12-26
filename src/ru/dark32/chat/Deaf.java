@@ -10,8 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
-import ru.dark32.chat.chanels.ChanelRegister;
-
 public class Deaf implements IDeaf {
 	final transient private int	chaneles	= ChanelRegister.getChanels();
 	final private String		canTHelp;
@@ -30,33 +28,25 @@ public class Deaf implements IDeaf {
 	final private String		deafMessage2;
 
 	public Deaf(){
-		canTHelp = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTHelp", "deaf.canTHelp")));
-		canTSeeSelf = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTSeeSelf",
-				"deaf.canTSeeSelf")));
-		udeafSelf = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.udeafSelf",
-				"deaf.udeafSelf")));
-		canTSeeAllDeaf = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTSeeAllDeaf",
-				"deaf.canTSeeAllDeaf")));
-		canTSeeTargetDeaf = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString(
-				"deaf.canTSeeTargetDeaf", "deaf.canTSeeTargetDeaf")));
-		signMoreOne = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.signMoreOne",
-				"deaf.signMoreOne")));
-		canTUndeafSelf = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTUndeafSelf",
-				"deaf.canTUndeafSelf")));
-		canTUndeafTarget = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTUndeafTarget",
-				"deaf.canTUndeafTarget")));
-		canTDeafSelf = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTDeafSelf",
-				"deaf.canTDeafSelf")));
-		canTDeafTarget = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.canTDeafTarget",
-				"deaf.canTDeafTarget")));
-		deafMessage = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.deafMessage",
-				"deaf.deafMessage")));
-		noReason = Util
-				.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.noReason", "deaf.noReason")));
-		undeafMessage = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.undeafMessage",
-				"deaf.undeafMessage")));
-		deafMessage2 = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("deaf.deafMessage2",
-				"deaf.deafMessage2")));
+		canTHelp = getLoc("deaf.canTHelp");
+		canTSeeSelf = getLoc("deaf.canTSeeSelf");
+		udeafSelf = getLoc("deaf.udeafSelf");
+		canTSeeAllDeaf = getLoc("deaf.canTSeeAllDeaf");
+		canTSeeTargetDeaf = getLoc("deaf.canTSeeTargetDeaf");
+		signMoreOne = getLoc("deaf.signMoreOne");
+		canTUndeafSelf = getLoc("deaf.canTUndeafSelf");
+		canTUndeafTarget = getLoc("deaf.canTUndeafTarget");
+		canTDeafSelf = getLoc("deaf.canTDeafSelf");
+		canTDeafTarget = getLoc("deaf.canTDeafTarget");
+		deafMessage = getLoc("deaf.deafMessage");
+		noReason = getLoc("deaf.noReason");
+		undeafMessage = getLoc("deaf.undeafMessage");
+		deafMessage2 = getLoc("deaf.deafMessage2");
+	}
+
+	private String getLoc(final String key ) {
+		return ChanelRegister.colorUTF8(Main.localeConfig.getString(key, key), 3);
+
 	}
 
 	private String getPlayerDeafString(final String playerName, final int chanel ) {

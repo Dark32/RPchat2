@@ -2,8 +2,6 @@ package ru.dark32.chat;
 
 import java.util.List;
 
-import ru.dark32.chat.chanels.ChanelRegister;
-
 public class ValueStorage {
 	public static String		nei;
 	public static String		noPerm;
@@ -32,6 +30,6 @@ public class ValueStorage {
 	}
 
 	private static String colorByString(final String key ) {
-		return ChanelRegister.colorize(Main.config.getString(key, key));
+		return ChanelRegister.colorUTF8(Main.config.getString(key, key), 3);
 	}
 }

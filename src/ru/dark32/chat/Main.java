@@ -9,9 +9,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import ru.dark32.chat.chanels.ChanelRegister;
-import ru.dark32.chat.chanels.ChatListener;
-
 public class Main extends JavaPlugin {
 
 	public static final Logger		LOG			= Logger.getLogger("Minecraft");

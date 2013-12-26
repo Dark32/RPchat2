@@ -15,8 +15,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
-import ru.dark32.chat.chanels.ChanelRegister;
-
 public class Mute implements IMute {
 	private final SimpleDateFormat	SDF			= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	final private int				chaneles	= ChanelRegister.getChanels();
@@ -37,36 +35,25 @@ public class Mute implements IMute {
 	final private String			muteSee;
 
 	public Mute(){
-		needName = Util
-				.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.needName", "mute.needName")));
-		muteMessage = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.muteMessage",
-				"mute.muteMessage")));
-		unmuteMessage = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.unmuteMessage",
-				"mute.unmuteMessage")));
-		canTHelp = Util
-				.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.canTHelp", "mute.canTHelp")));
-		canTSeeSelf = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.canTSeeSelf",
-				"mute.canTSeeSelf")));
-		canTSeeAllMute = ChanelRegister.colorize(Main.localeConfig.getString("mute.canTSeeAllMute",
-				"mute.canTSeeAllMute"));
-		canTSeeTargetMute = ChanelRegister.colorize(Main.localeConfig.getString("mute.canTSeeTargetMute",
-				"mute.canTSeeTargetMute"));
-		signMoreOne = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.signMoreOne",
-				"mute.signMoreOne")));
-		canTUnmute = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.canTUnmute",
-				"mute.canTUnmute")));
-		canTMute = Util
-				.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.canTMute", "mute.canTMute")));
-		noReason = Util
-				.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.noReason", "mute.noReason")));
-		timeNotNum = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.timeNotNum",
-				"mute.timeNotNum")));
-		subCMDErr = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.subCMDErr",
-				"mute.subCMDErr")));
-		dataError = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.dataError",
-				"mute.dataError")));
-		muteSee = Util.parseUTF8(ChanelRegister.colorize(Main.localeConfig.getString("mute.muteSee", "mute.muteSee")));
+		needName = getLoc("mute.needName");
+		muteMessage = getLoc("mute.muteMessage");
+		unmuteMessage = getLoc("mute.unmuteMessage");
+		canTHelp = getLoc("mute.canTHelp");
+		canTSeeSelf = getLoc("mute.canTSeeSelf");
+		canTSeeAllMute = getLoc("mute.canTSeeAllMute");
+		canTSeeTargetMute = getLoc("mute.canTSeeTargetMute");
+		signMoreOne = getLoc("mute.signMoreOne");
+		canTUnmute = getLoc("mute.canTUnmute");
+		canTMute = getLoc("mute.canTMute");
+		noReason = getLoc("mute.noReason");
+		timeNotNum = getLoc("mute.timeNotNum");
+		subCMDErr = getLoc("mute.subCMDErr");
+		dataError = getLoc("mute.dataError");
+		muteSee = getLoc("mute.muteSee");
+	}
 
+	private String getLoc(final String key ) {
+		return ChanelRegister.colorUTF8(Main.localeConfig.getString(key, key), 3);
 	}
 
 	private String getPlayerMuteString(final String playerName, final int chanel ) {

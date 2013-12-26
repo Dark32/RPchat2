@@ -12,7 +12,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import ru.dark32.chat.chanels.ChanelRegister;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class Util {

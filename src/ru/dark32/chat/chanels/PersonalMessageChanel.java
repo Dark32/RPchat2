@@ -10,6 +10,7 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import ru.dark32.chat.ChanelRegister;
 import ru.dark32.chat.Main;
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ichanels.IPersonalMessagesChanel;
@@ -31,12 +32,10 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 		final String path_fotmatFrom = "Chat." + name + ".formatFrom";
 		final String path_formatSpy = "Chat." + name + ".formatSpy";
 		final String path_PMSNM = "Chat." + name + ".PMSearchNickMode";
-		this.formatToSting = Util.parseUTF8(ChanelRegister.colorize(Main.chatConfig.getString(path_formatTo,
-				path_formatTo)));
-		this.formatFromString = Util.parseUTF8(ChanelRegister.colorize(Main.chatConfig.getString(path_fotmatFrom,
-				path_fotmatFrom)));
-		this.formatSpyString = Util.parseUTF8(ChanelRegister.colorize(Main.chatConfig.getString(path_formatSpy,
-				path_formatSpy)));
+		this.formatToSting = ChanelRegister.colorUTF8(Main.chatConfig.getString(path_formatTo, path_formatTo), 3);
+		this.formatFromString = ChanelRegister
+				.colorUTF8(Main.chatConfig.getString(path_fotmatFrom, path_fotmatFrom), 3);
+		this.formatSpyString = ChanelRegister.colorUTF8(Main.chatConfig.getString(path_formatSpy, path_formatSpy), 3);
 		this.pmSearchNickMode = Main.chatConfig.getInt(path_PMSNM, 0);
 	}
 

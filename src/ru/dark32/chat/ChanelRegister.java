@@ -1,4 +1,4 @@
-package ru.dark32.chat.chanels;
+package ru.dark32.chat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import ru.dark32.chat.Main;
-import ru.dark32.chat.Util;
 import ru.dark32.chat.ichanels.ETypeChanel;
 import ru.dark32.chat.ichanels.IChanel;
 import ru.dark32.chat.ichanels.IItemChanel;
@@ -26,7 +24,7 @@ public class ChanelRegister {
 	/**
 	 * иницилизируем каналы
 	 */
-	public static int			intex	= 0;
+	private static int			index	= 0;
 	public static List<IChanel>	listChat;
 	public static int			defaultChanel;
 
@@ -60,11 +58,11 @@ public class ChanelRegister {
 	}
 
 	public static int getNextIndex() {
-		return intex++;
+		return index++;
 	}
 
 	public static int getIndex() {
-		return intex;
+		return index;
 	}
 
 	public static IChanel getByIndex(int id ) {
@@ -108,6 +106,26 @@ public class ChanelRegister {
 		return ChatColor.translateAlternateColorCodes('&', string);
 	}
 
+	/**
+	 * форматируем строку
+	 * 
+	 * @param string
+	 *            исходная строка
+	 * @param flag
+	 *            0x01 - цвет, 0x02- UTF8
+	 * @return обработанная строка
+	 */
+	public static String colorUTF8(String string, final int flag ) {
+		if ((flag & 0x01) == 0x01) {
+			string = colorize(string);
+		}
+		if ((flag & 0x02) == 0x02) {
+			string = Util.parseUTF8(string);
+		}
+		return string;
+
+	}
+
 	public static String getPreffix(final String name ) {
 		if (!Util.usePEX) {
 			return "";
@@ -116,8 +134,7 @@ public class ChanelRegister {
 		if (user == null) {
 			return "";
 		}
-
-		return ChanelRegister.colorize(user.getPrefix());
+		return colorUTF8(user.getPrefix(), 3);
 	}
 
 	public static String getSuffix(final String name ) {
@@ -128,7 +145,7 @@ public class ChanelRegister {
 		if (user == null) {
 			return "";
 		}
-		return ChanelRegister.colorize(user.getSuffix());
+		return colorUTF8(user.getSuffix(), 3);
 	}
 
 	public static int getChanels() {

@@ -5,8 +5,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import ru.dark32.chat.chanels.ChanelRegister;
-
 public class JoinListener implements Listener {
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent event ) {

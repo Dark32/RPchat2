@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.bukkit.entity.Player;
 
+import ru.dark32.chat.ChanelRegister;
 import ru.dark32.chat.Main;
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ichanels.IChanceChanel;
