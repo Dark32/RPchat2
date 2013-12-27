@@ -15,10 +15,12 @@ public class RPChatCommandExecutor implements CommandExecutor {
 	private String	chanesignmore1;
 
 	public RPChatCommandExecutor(){
-		chanelswitch = ChanelRegister.colorize(Main.localeConfig.getString("help.changechanel", "Канал изменн на $1"));
-		chanenotfound = ChanelRegister.colorize(Main.localeConfig.getString("help.chanenotfound", "Канал не найден"));
-		chanesignmore1 = ChanelRegister.colorize(Main.localeConfig.getString("help.chanesignmore1",
-				"Длина сигны больше 1 знака"));
+		chanelswitch = ChanelRegister.colorUTF8(Main.localeConfig.getString("help.changechanel", "help.changechanel"),
+				3);
+		chanenotfound = ChanelRegister.colorUTF8(
+				Main.localeConfig.getString("help.chanenotfound", "help.chanenotfound"), 3);
+		chanesignmore1 = ChanelRegister.colorUTF8(
+				Main.localeConfig.getString("help.chanesignmore1", "help.chanesignmore1"), 3);
 
 	}
 
@@ -82,6 +84,9 @@ public class RPChatCommandExecutor implements CommandExecutor {
 			} else {
 				getChannel(sender);
 			}
+			return true;
+		}
+		if (cmd.getName().equalsIgnoreCase("ignore")) {
 			return true;
 		}
 		return false;

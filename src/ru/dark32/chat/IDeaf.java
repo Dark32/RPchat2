@@ -7,13 +7,13 @@ public interface IDeaf {
 
 	boolean isDeaf(String name, int chanel );
 
-	void saveDeaf();
+	void save();
 
-	void deafSeeAll(CommandSender sender );
+	void seeAll(CommandSender sender );
 
-	void deafSeeSelf(CommandSender sender );
+	void seeSelf(CommandSender sender );
 
-	void deafSeeTarget(CommandSender sender, String name );
+	void seeTarget(CommandSender sender, String name );
 
 	void caseDeaf(CommandSender sender, String name, int chanel, String reason );
 

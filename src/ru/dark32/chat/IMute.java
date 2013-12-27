@@ -7,17 +7,17 @@ public interface IMute {
 
 	void unmute(String playerName, int chanel );
 
-	void saveMute();
+	void save();
 
 	long getTimeMute(String playerName, int chanel );
 
 	void mute(String[] args, CommandSender sender );
 
-	void muteSeeAll(CommandSender sender );
+	void seeAll(CommandSender sender );
 
-	void muteSeeSelf(CommandSender sender );
+	void seeSelf(CommandSender sender );
 
-	void muteSeeTarget(CommandSender sender, String name );
+	void seeTarget(CommandSender sender, String name );
 
 	void caseMute(CommandSender sender, String name, int chanel, int time, String reason );
 

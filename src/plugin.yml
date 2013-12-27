@@ -20,3 +20,6 @@ commands:
    sw:
      description: 'switch'
      usage: '/<command> <sign>'
+   ignore:
+     description: 'ignore'
+     usage: '/<command> <sign> <sign> <reason>'

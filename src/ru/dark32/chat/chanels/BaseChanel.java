@@ -229,8 +229,8 @@ public class BaseChanel implements IChanel {
 	 * 
 	 * @param sender
 	 * @param recipient
-	 * @return Глухота, Слышит, Сам, В канале <br>
-	 *         !isInChanel || isSelf || !isHear || isDeaf
+	 * @return Глухота, Слышит, Сам, В канале , Игнорируем<br>
+	 *         !isInChanel || isSelf || !isHear || isDeaf || hasIgnore
 	 */
 	protected boolean isRecipient(final Player sender, final Player recipient ) {
 		final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
@@ -238,8 +238,9 @@ public class BaseChanel implements IChanel {
 				|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
 				|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
 		final boolean isSelf = sender == recipient && isListenerMessage() == COUNT_INCLUDE;
-		final boolean isInChanel = isOverAll() && Util.getModeIndex(recipient.getName()) == getIndex();
-		return !(!isInChanel || isSelf || !isHear || isDeaf);
+		final boolean isntInChanel =!(isOverAll() && Util.getModeIndex(recipient.getName()) == getIndex());
+		final boolean hasIgnore = Main.getIgnoreStorage().hasIgnore(sender, recipient.getName(), this.getIndex());
+		return !(isntInChanel || isSelf || !isHear || isDeaf || hasIgnore);
 	}
 
 	@Override

@@ -88,12 +88,12 @@ public class Mute implements IMute {
 		final String _chanelName = (chanel >= 0 && chanel < chaneles ? ChanelRegister.getByIndex(chanel).getName()
 				: "a");
 		if (time > 5) {
-			sender.sendMessage(muteMessage.replace("$n", name).replace("$c", _chanelName)
-					.replace("$t", String.valueOf(time)).replace("$r", reason));
+			sender.sendMessage(muteMessage.replace("$name", name).replace("$channel", _chanelName)
+					.replace("$time", String.valueOf(time)).replace("$reason", reason));
 		} else {
-			sender.sendMessage(unmuteMessage.replace("$n", name).replace("$c", _chanelName));
+			sender.sendMessage(unmuteMessage.replace("$name", name).replace("$channel", _chanelName));
 		}
-		saveMute();
+		save();
 
 	}
 
@@ -118,20 +118,20 @@ public class Mute implements IMute {
 					sender.sendMessage(canTSeeSelf);
 					return;
 				}
-				muteSeeSelf(sender);
+				seeSelf(sender);
 			} else if ("all".equals(par)) {
 				if (!hasAll) {
 					sender.sendMessage(canTSeeAllMute);
 					return;
 				}
-				muteSeeAll(sender);
+				seeAll(sender);
 			} else {
 				if (!hasSee) {
 					sender.sendMessage(canTSeeTargetMute);
 					return;
 				}
 				sender.sendMessage(ChatColor.GRAY + "$" + par + " :");
-				muteSeeTarget(sender, par);
+				seeTarget(sender, par);
 			}
 		} else if (args.length == 2) {
 			final String nick = args[0];
@@ -141,13 +141,13 @@ public class Mute implements IMute {
 						sender.sendMessage(canTSeeSelf);
 						return;
 					}
-					muteSeeSelf(sender);
+					seeSelf(sender);
 				} else {
 					if (!hasSee) {
 						sender.sendMessage(canTSeeTargetMute);
 						return;
 					}
-					muteSeeTarget(sender, nick);
+					seeTarget(sender, nick);
 				}
 			} else {
 				sender.sendMessage(subCMDErr);
@@ -158,7 +158,7 @@ public class Mute implements IMute {
 				return;
 			}
 			if (args[1].length() != 1) {
-				sender.sendMessage(signMoreOne.replace("$1", args[1]));
+				sender.sendMessage(signMoreOne.replace("$sign", args[1]));
 				return;
 			}
 			int time = 0;
@@ -182,7 +182,7 @@ public class Mute implements IMute {
 	}
 
 	@Override
-	public void saveMute() {
+	public void save() {
 		Set<String> list;
 		final ConfigurationSection cs = Main.storage.getRoot();
 		if (cs != null) {
@@ -238,7 +238,7 @@ public class Mute implements IMute {
 	}
 
 	@Override
-	public void muteSeeAll(final CommandSender sender ) {
+	public void seeAll(final CommandSender sender ) {
 		final ConfigurationSection cs = Main.storage.getRoot();
 		sender.sendMessage(ChatColor.GRAY + "$===============all================");
 		if (cs == null) {
@@ -246,25 +246,25 @@ public class Mute implements IMute {
 		}
 		final Set<String> list = cs.getKeys(false);
 		for (final String name : list) {
-			muteSeeTarget(sender, name);
+			seeTarget(sender, name);
 		}
 
 	}
 
 	@Override
-	public void muteSeeSelf(final CommandSender sender ) {
-		muteSeeTarget(sender, sender.getName());
+	public void seeSelf(final CommandSender sender ) {
+		seeTarget(sender, sender.getName());
 	}
 
 	@Override
-	public void muteSeeTarget(final CommandSender sender, final String name ) {
+	public void seeTarget(final CommandSender sender, final String name ) {
 		for (int i = 0; i < chaneles; i++) {
 			final long time = getTimeMute(name, i);
 			final String reason = Main.storage.getString(getPlayerMuteString(name, i) + "-reason");
 			if (time > -1) {
 				sender.sendMessage(muteSee.replace("$n", name)
-						.replace("$c", ChanelRegister.getByIndex(i).getInnerName()).replace("$r", reason)
-						.replace("$t", String.valueOf(time)));
+						.replace("$channel", ChanelRegister.getByIndex(i).getInnerName()).replace("$reason", reason)
+						.replace("$time", String.valueOf(time)));
 			}
 		}
 

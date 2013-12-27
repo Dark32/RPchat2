@@ -64,7 +64,12 @@ public class Util {
 			return player.isOp();
 		}
 	}
-
+	public static boolean hasPermission(final String player, final String permission ) {
+		if (usePEX) {
+			return PermissionsEx.getUser(player).has(permission);
+		}
+		return false; 
+	}
 	public static void init(final Main main ) {
 		modes2 = new HashMap<String, Integer>();
 		luck = ChanelRegister.colorize(Main.localeConfig.getString("String.chance.luck", "(luck)"));

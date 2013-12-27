@@ -46,7 +46,6 @@ public class Deaf implements IDeaf {
 
 	private String getLoc(final String key ) {
 		return ChanelRegister.colorUTF8(Main.localeConfig.getString(key, key), 3);
-
 	}
 
 	private String getPlayerDeafString(final String playerName, final int chanel ) {
@@ -78,24 +77,24 @@ public class Deaf implements IDeaf {
 					return;
 				}
 				sender.sendMessage(udeafSelf);
-				deafSeeSelf(sender);
+				seeSelf(sender);
 			} else if (args[0].equalsIgnoreCase("all")) {
 				if (!hasAll) {
 					sender.sendMessage(canTSeeAllDeaf);
 					return;
 				}
-				deafSeeAll(sender);
+				seeAll(sender);
 			} else {
 				if (!hasSee) {
 					sender.sendMessage(canTSeeTargetDeaf);
 					return;
 				}
 				sender.sendMessage(ChatColor.GRAY + "$" + target + " :");
-				deafSeeTarget(sender, target);
+				seeTarget(sender, target);
 			}
 		} else if (args.length > 1) {
 			if (args[1].length() != 1) {
-				sender.sendMessage(signMoreOne.replace("$1", args[0]));
+				sender.sendMessage(signMoreOne.replace("$sign", args[0]));
 				return;
 			}
 			final int chanel = ChanelRegister.getIndexBySign(args[1].charAt(0));
@@ -136,7 +135,7 @@ public class Deaf implements IDeaf {
 	}
 
 	@Override
-	public void deafSeeAll(final CommandSender sender ) {
+	public void seeAll(final CommandSender sender ) {
 		final ConfigurationSection cs = Main.storage.getRoot();
 		sender.sendMessage(ChatColor.GRAY + "$===============all================");
 		if (cs == null) {
@@ -144,24 +143,24 @@ public class Deaf implements IDeaf {
 		}
 		final Set<String> list = cs.getKeys(false);
 		for (final String name : list) {
-			deafSeeTarget(sender, name);
+			seeTarget(sender, name);
 		}
 	}
 
 	@Override
-	public void deafSeeSelf(final CommandSender sender ) {
-		deafSeeTarget(sender, sender.getName());
+	public void seeSelf(final CommandSender sender ) {
+		seeTarget(sender, sender.getName());
 
 	}
 
 	@Override
-	public void deafSeeTarget(final CommandSender sender, final String name ) {
+	public void seeTarget(final CommandSender sender, final String name ) {
 		for (int i = 0; i < chaneles; i++) {
 			final String reason = Main.storage.getString(getPlayerDeafString(name, i) + "-reason", "");
 			final boolean isDeaf = this.isDeaf(name, i);
 			if (isDeaf) {
-				sender.sendMessage(deafMessage.replace("$n", name)
-						.replace("$c", ChanelRegister.getByIndex(i).getName()).replace("$r", reason));
+				sender.sendMessage(deafMessage.replace("$name", name)
+						.replace("$channel", ChanelRegister.getByIndex(i).getName()).replace("$reason", reason));
 			}
 		}
 
@@ -185,12 +184,12 @@ public class Deaf implements IDeaf {
 			}
 		}
 		sender.sendMessage(deafMessage2
-				.replace("$n", name)
-				.replace("$c",
+				.replace("$name", name)
+				.replace("$channel",
 						(chanel >= 0 && chanel < this.chaneles ? ChanelRegister.getByIndex(chanel).getName() : "a"))
-				.replace("$r", reason));
+				.replace("$reason", reason));
 
-		saveDeaf();
+		save();
 	}
 
 	@Override
@@ -201,7 +200,7 @@ public class Deaf implements IDeaf {
 				Main.storage.set(getPlayerDeafString(name, i) + "-reason", null);
 			}
 		}
-		sender.sendMessage(undeafMessage.replace("$n", name).replace("$c",
+		sender.sendMessage(undeafMessage.replace("$name", name).replace("$channel",
 				(chanel >= 0 && chanel < chaneles ? ChanelRegister.getByIndex(chanel).getName() : "a"))
 
 		);
@@ -213,7 +212,7 @@ public class Deaf implements IDeaf {
 	}
 
 	@Override
-	public void saveDeaf() {
+	public void save() {
 		try {
 			Main.storage.save(Main.storageFile);
 		}

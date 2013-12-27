@@ -15,6 +15,7 @@ public class Main extends JavaPlugin {
 	public PluginManager			pluginManager;
 	private static IMute			muteStorage;
 	private static IDeaf			deafStorage;
+	private static IIgnore			ignorStorage;
 	public static final String		VERSION		= "RPchat v 2.0.5w (2u)";
 	public static FileConfiguration	config;
 	public static File				storageFile;
@@ -70,6 +71,8 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new JoinListener(), this);
 		Main.muteStorage = new Mute();
 		Main.deafStorage = new Deaf();
+		Main.ignorStorage = new Ignore();
+
 		final RPChatCommandExecutor executer = new RPChatCommandExecutor();
 		getCommand("rpchat").setExecutor(executer);
 		getCommand("mute").setExecutor(executer);
@@ -77,13 +80,14 @@ public class Main extends JavaPlugin {
 		getCommand("deaf").setExecutor(executer);
 		getCommand("undeaf").setExecutor(executer);
 		getCommand("sw").setExecutor(executer);
+		getCommand("ignore").setExecutor(executer);
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 
 	}
 
 	@Override
 	public void onDisable() {
-		muteStorage.saveMute();
+		muteStorage.save();
 		// deafStorage.saveDeaf();
 	}
 
@@ -93,5 +97,9 @@ public class Main extends JavaPlugin {
 
 	public static IDeaf getDeafStorage() {
 		return deafStorage;
+	}
+	
+	public static IIgnore getIgnoreStorage() {
+		return ignorStorage;
 	}
 }
