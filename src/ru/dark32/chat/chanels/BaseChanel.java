@@ -70,7 +70,8 @@ public class BaseChanel implements IChanel {
 		this.isWorld = Main.chatConfig.getBoolean(path_world, false);
 		this.prefix = Main.chatConfig.getString(path_prefix, path_prefix).charAt(0);
 		this.sign = Main.chatConfig.getString(path_sign, path_sign).charAt(0);
-		this.formatString = ChanelRegister.colorUTF8(Main.chatConfig.getString(path_format, path_format), 3);
+		this.formatString = ChanelRegister.colorUTF8(
+				Main.chatConfig.getString(path_format, path_format), 3);
 		this.tabes = Main.chatConfig.getBoolean(path_tab, true);
 		this.listenerMessage = ChanelRegister.colorUTF8(
 				Main.chatConfig.getString(path_listenerMessage, path_listenerMessage), 3);
@@ -87,12 +88,14 @@ public class BaseChanel implements IChanel {
 			char char0 = note.charAt(0);
 			char char1 = note.charAt(1);
 			octava = (char0 == '2') ? 2 : (char0 == '0' ? 0 : char0 == '1' ? 1 : 1);
-			tone = ('A' <= char1 && 'F' >= char1) ? Note.Tone.valueOf(String.valueOf(char1)) : Note.Tone.F;
+			tone = ('A' <= char1 && 'F' >= char1) ? Note.Tone.valueOf(String.valueOf(char1))
+					: Note.Tone.F;
 			sharped = (note.length() == 3 && note.charAt(1) == '#');
 		}
 		// <-- PIMK
 		this.pimkEnable = Main.chatConfig.getBoolean(path_pimk_enable, false);
-		this.pimkInstrument = Instrument.valueOf(Main.chatConfig.getString(path_pimk_instrument, "PIANO"));
+		this.pimkInstrument = Instrument.valueOf(Main.chatConfig.getString(path_pimk_instrument,
+				"PIANO"));
 		this.pimkNote = new Note(octava, tone, sharped);
 		this.colorize = Main.chatConfig.getString(path_pimk_colorize, "@");
 		this.overAll = Main.chatConfig.getBoolean(path_overAll, true);
@@ -128,8 +131,8 @@ public class BaseChanel implements IChanel {
 	public String format(final Player player, final String msg ) {
 		String iden = Integer.toHexString(player.getTicksLived() + player.getEntityId());
 		return msg.replace("$suffix", ChanelRegister.getSuffix(player.getName()))
-				.replace("$prefix", ChanelRegister.getPreffix(player.getName())).replace("$p", "%1$s")
-				.replace("$msg", "%2$s").replace("$id", iden);
+				.replace("$prefix", ChanelRegister.getPreffix(player.getName()))
+				.replace("$p", "%1$s").replace("$msg", "%2$s").replace("$id", iden);
 	}
 
 	@Override
@@ -154,7 +157,8 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public String getListenerMessage(int count ) {
-		return (count > 0) ? listenerMessage.replace("$n", String.valueOf(count)) : noListenerMessage;
+		return (count > 0) ? listenerMessage.replace("$n", String.valueOf(count))
+				: noListenerMessage;
 	}
 
 	@Override
@@ -181,7 +185,12 @@ public class BaseChanel implements IChanel {
 	public List<Player> getRecipients(final Player sender ) {
 		final List<Player> recipients = new LinkedList<Player>();
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			if (isRecipient(sender, recipient)) {
+			if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy") && sender!=recipient) {
+				DEBUG("debug: spy - " + recipient.getName(), sender);
+				recipients.add(recipient);
+				continue;
+			} else if (isRecipient(sender, recipient)) {
+				DEBUG("debug: isn't Recipient - " + recipient.getName(), sender);
 				continue;
 			} else {
 				recipients.add(recipient);
@@ -233,14 +242,20 @@ public class BaseChanel implements IChanel {
 	 *         !isInChanel || isSelf || !isHear || isDeaf || hasIgnore
 	 */
 	protected boolean isRecipient(final Player sender, final Player recipient ) {
-		final boolean isDeaf = Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
+		final boolean isDeaf = !Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
 		final boolean isHear = !isNeedPerm()
 				|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
 				|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
-		final boolean isSelf = sender == recipient && isListenerMessage() == COUNT_INCLUDE;
-		final boolean isntInChanel =!(isOverAll() && Util.getModeIndex(recipient.getName()) == getIndex());
-		final boolean hasIgnore = Main.getIgnoreStorage().hasIgnore(sender, recipient.getName(), this.getIndex());
-		return !(isntInChanel || isSelf || !isHear || isDeaf || hasIgnore);
+		final boolean isSelf = (sender == recipient && isListenerMessage() == COUNT_INCLUDE); 
+		final boolean isInChanel = isOverAll()
+				|| Util.getModeIndex(recipient.getName()) == getIndex();
+		final boolean hasIgnore = Main.getIgnoreStorage().hasIgnore(sender, recipient.getName(),
+				this.getIndex());
+		final boolean allCond = isInChanel && !isSelf && isHear && isDeaf && !hasIgnore;
+		DEBUG(recipient.getName() + " isInChanel " + isInChanel + " isn'tSelf " + !isSelf
+				+ " isHear " + isHear + " hasDeaf " + isDeaf + " hasn'tIgnore " + !hasIgnore
+				+ " all " + allCond);
+		return !allCond;
 	}
 
 	@Override
@@ -264,19 +279,23 @@ public class BaseChanel implements IChanel {
 		// pimk
 		if (isPimk()) {
 			// FIX TO DO IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			final String[] messageArr = message.replace(",", "").replace(".", "").replace(":", "").replace(";", "")
-					.replace("?", "").replace("!", "").replace("@", "").split(" ");
+			final String[] messageArr = message.replace(",", "").replace(".", "").replace(":", "")
+					.replace(";", "").replace("?", "").replace("!", "").replace("@", "").split(" ");
 			for (final Iterator<Player> iterator = recipient.iterator(); iterator.hasNext();) {
 				final Player player = iterator.next();
 				final String name = player.getName();
 				final String match = findMatch(name, messageArr);
 				if (match != null) {
-					player.playSound(player.getLocation(), Sound.valueOf("NOTE_" + getPimkInstrument()), 3f,
-							getPimkNote().getId());
+					player.playSound(player.getLocation(),
+							Sound.valueOf("NOTE_" + getPimkInstrument()), 3f, getPimkNote().getId());
 					sender.sendMessage(getListenerMessage(recipient.size())
-							+ format(sender, getFormat()).replace("%2$s", message.replace(match, name))
+							+ format(sender, getFormat())
+									.replace("%2$s", message.replace(match, name))
 									.replace("%1$s", sender.getName())
-									.replace(match, getColorize() + match + ChatColor.getLastColors(message)));
+									.replace(
+											match,
+											getColorize() + match
+													+ ChatColor.getLastColors(message)));
 					iterator.remove();
 				}
 
@@ -299,7 +318,8 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public String toString() {
-		return super.toString() + ", index =>" + this.index + ", isWorld =>" + this.isWorld + ", name =>" + this.name
-				+ ", prefix =>" + this.prefix + ", sign =>" + this.sign + ", type =>" + this.type;
+		return super.toString() + ", index =>" + this.index + ", isWorld =>" + this.isWorld
+				+ ", name =>" + this.name + ", prefix =>" + this.prefix + ", sign =>" + this.sign
+				+ ", type =>" + this.type;
 	}
 }

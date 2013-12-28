@@ -145,7 +145,7 @@ Chat:
     # 0 - выключено
     # -1 в сообщение
     # 1 - отдельно
-    isListenerMessage: -1
+    isListenerMessage: 1
     needPerm: false
   Whisper:
     type: range

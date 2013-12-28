@@ -30,6 +30,6 @@ public class ValueStorage {
 	}
 
 	private static String colorByString(final String key ) {
-		return ChanelRegister.colorUTF8(Main.config.getString(key, key), 3);
+		return ChanelRegister.colorUTF8(Main.localeConfig.getString(key, key), 3);
 	}
 }

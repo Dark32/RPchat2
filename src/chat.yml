@@ -49,7 +49,7 @@ Chat:
      world: true
      format: "$prefix$p$suffix:&f $msg"
      name: "локальный чат"
-     range: 250
+     range: 50
      prefix: "-"
      sign: l
      listenerMessage: "&7<$n>&r"

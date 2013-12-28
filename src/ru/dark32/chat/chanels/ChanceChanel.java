@@ -78,9 +78,4 @@ public class ChanceChanel extends RangeChanel implements IChanceChanel {
 	public String getFormatLuck() {
 		return formatLuck;
 	}
-
-	@Override
-	public String format(final Player player, final String msg ) {
-		return super.format(player, msg);
-	}
 }

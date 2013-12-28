@@ -16,7 +16,7 @@ public class Main extends JavaPlugin {
 	private static IMute			muteStorage;
 	private static IDeaf			deafStorage;
 	private static IIgnore			ignorStorage;
-	public static final String		VERSION		= "RPchat v 2.0.5w (2u)";
+	public static final String		VERSION		= "RPchat v 2.0.5h (2u1t)";
 	public static FileConfiguration	config;
 	public static File				storageFile;
 	public static YamlConfiguration	storage;
@@ -40,18 +40,15 @@ public class Main extends JavaPlugin {
 		} else {
 			getLogger().warning("Permissions plugins not found!");
 		}
-
 		config = this.getConfig();
-		Util.init(this);
-		ValueStorage.init();
-		ChanelRegister.init();
-
+		
 		Main.storageFile = new File(getDataFolder(), "storage.yml");
 		if (Main.storageFile.exists()) {
 			Main.storage = YamlConfiguration.loadConfiguration(storageFile);
 		} else {
 			Main.storage = new YamlConfiguration();
 		}
+		
 		String chat = config.getString("chat", "chat");
 		Main.chatConfigFile = new File(getDataFolder(), chat + ".yml");
 		if (Main.chatConfigFile.exists()) {
@@ -59,14 +56,19 @@ public class Main extends JavaPlugin {
 		} else {
 			getLogger().warning("chat.yml not found");
 		}
-
+		
 		String locale = config.getString("locale", "locale");
 		Main.localeConfigFile = new File(getDataFolder(), locale + ".yml");
 		if (Main.localeConfigFile.exists()) {
-			Main.localeConfig = YamlConfiguration.loadConfiguration(chatConfigFile);
+			Main.localeConfig = YamlConfiguration.loadConfiguration(localeConfigFile);
 		} else {
-			getLogger().warning("chat.yml not found");
+			getLogger().warning(locale + ".yml not found");
 		}
+		
+		Util.init(this);
+		ValueStorage.init();
+		ChanelRegister.init();
+		
 		getServer().getPluginManager().registerEvents(new TabListener(), this);
 		getServer().getPluginManager().registerEvents(new JoinListener(), this);
 		Main.muteStorage = new Mute();

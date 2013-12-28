@@ -91,6 +91,7 @@ public class Mute implements IMute {
 			sender.sendMessage(muteMessage.replace("$name", name).replace("$channel", _chanelName)
 					.replace("$time", String.valueOf(time)).replace("$reason", reason));
 		} else {
+			System.out.println(name);
 			sender.sendMessage(unmuteMessage.replace("$name", name).replace("$channel", _chanelName));
 		}
 		save();
@@ -262,7 +263,7 @@ public class Mute implements IMute {
 			final long time = getTimeMute(name, i);
 			final String reason = Main.storage.getString(getPlayerMuteString(name, i) + "-reason");
 			if (time > -1) {
-				sender.sendMessage(muteSee.replace("$n", name)
+				sender.sendMessage(muteSee.replace("$name", name)
 						.replace("$channel", ChanelRegister.getByIndex(i).getInnerName()).replace("$reason", reason)
 						.replace("$time", String.valueOf(time)));
 			}

@@ -36,15 +36,17 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			final boolean isWorld = !isWorldChat() || sender.getWorld() == recipient.getWorld();
 			final int dist = getDist(sender.getLocation(), recipient.getLocation());
-			final boolean isRange = dist < this.getRange() * this.getRange();
-			DEBUG("debug: " + recipient.getName() + " | " + dist + "/" + this.range * this.range + "|" + isWorld,
+			final boolean isRange = dist < this.getRange();
+			DEBUG("debug: " + recipient.getName() + " | " + dist + "/" + this.range + "|" + isWorld,
 					sender);
-			if (isRecipient(sender, recipient)) {
-				continue;
-			} else if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy")) {
+			if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy") && sender!=recipient) {
 				DEBUG("debug: spy - " + recipient.getName(), sender);
 				recipients.add(recipient);
-			} else if (isRange) {
+				continue;
+			} else if (isRecipient(sender, recipient)) {
+				DEBUG("debug: isn't Recipient - " + recipient.getName(), sender);
+				continue;
+			} else  if (isRange) {
 				DEBUG("debug: in range - " + recipient.getName(), sender);
 				if (isWorld) {
 					DEBUG("debug: in world - " + recipient.getName(), sender);
@@ -68,7 +70,7 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 		distY *= distY;
 		int distZ = (int) (sender.getZ() - target.getZ());
 		distZ *= distZ;
-		return distX + distY + distZ;
+		return (int)Math.sqrt( distX + distY + distZ);
 
 	}
 

@@ -67,7 +67,12 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 					|| recipient == sender || hasItemInInvetery(recipient);
 			DEBUG("debug: " + recipient.getName() + " | " + dist + "/" + this.getRange() * this.getRange() + "|"
 					+ isWorld, sender);
-			if (isRecipient(sender, recipient)) {
+			if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy") && sender!=recipient) {
+				DEBUG("debug: spy - " + recipient.getName(), sender);
+				recipients.add(recipient);
+				continue;
+			} else if (isRecipient(sender, recipient)) {
+				DEBUG("debug: isn't Recipient - " + recipient.getName(), sender);
 				continue;
 			} else if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy")) {
 				DEBUG("debug: spy - " + recipient.getName(), sender);
