@@ -22,4 +22,8 @@ commands:
      usage: '/<command> <sign>'
    ignore:
      description: 'ignore'
-     usage: '/<command> <sign> <sign> <reason>'
+     usage: '/<command> <nick> <sign> <reason>'
+   unignore:
+     description: 'unignore'
+     usage: '/<command> <nick>'
+     

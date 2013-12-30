@@ -87,6 +87,18 @@ public class RPChatCommandExecutor implements CommandExecutor {
 			return true;
 		}
 		if (cmd.getName().equalsIgnoreCase("ignore")) {
+			Main.getDeafStorage().deaf(args, sender);
+			return true;
+		}
+		if (cmd.getName().equalsIgnoreCase("unignore")) {
+			if (args.length != 2) {
+				return false;
+			}
+			String[] _args = new String[3];
+			_args[0] = args[0];
+			_args[1] = args[1];
+			_args[2] = "undeaf";
+			Main.getDeafStorage().deaf(_args, sender);
 			return true;
 		}
 		return false;

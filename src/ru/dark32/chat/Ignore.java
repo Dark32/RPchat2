@@ -1,7 +1,10 @@
 package ru.dark32.chat;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -12,12 +15,30 @@ public class Ignore implements IIgnore {
 	private String		cantIgnorable;
 	private String		message;
 	private String		unIgnore;
+	private String		canTHelp;
+	private String		canTSeeSelf;
+	private String		canTSeeAll;
+	private String		signMoreOne;
+	private String		canTSeeTarget;
+	private String		canTUnIgnoreTarget;
+	private String		canTIgnore;
+	private String		noReason;
+	private String		canTIgnoreunIgnorable;
 
 	public Ignore(){
+		canTHelp = getLoc("ignore.canTHelp");
 		message2 = getLoc("ignore.Message2");
 		message = getLoc("ignore.Message");
 		cantIgnorable = getLoc("ignore.cantIgnorable");
-		unIgnore =  getLoc("ignore.unIgnore");
+		unIgnore = getLoc("ignore.unIgnore");
+		canTSeeAll = getLoc("ignore.canTSeeAll");
+		canTSeeSelf = getLoc("ignore.canTSeeSelf");
+		canTIgnore = getLoc("ignore.canTIgnore");
+		signMoreOne = getLoc("ignore.signMoreOne");
+		canTSeeTarget = getLoc("ignore.canTSeeTarget");
+		canTUnIgnoreTarget = getLoc("ignore.canTUnIgnoreTarget");
+		noReason = getLoc("ignore.noReason");
+		canTIgnoreunIgnorable = getLoc("ignore.canTIgnoreunIgnorable");
 	}
 
 	private String getLoc(final String key ) {
@@ -50,9 +71,81 @@ public class Ignore implements IIgnore {
 				.replace("$reason", reason).replace("$ignore", target));
 	}
 
+	private void help(final CommandSender sender ) {
+		final List<String> msg = new ArrayList<String>();
+		msg.addAll(ValueStorage.deafHelp);
+		for (final String string : msg) {
+			sender.sendMessage(ChanelRegister.colorize(string));
+		}
+
+	}
+
 	@Override
-	public void ignore(CommandSender sender, String raw ) {
-		// TODO Auto-generated method stub
+	public void ignore(final String[] args, CommandSender sender ) {
+		final boolean hasHelp = Util.hasPermission(sender, Main.BASE_PERM + ".ignore.help");
+		final boolean hasSee = Util.hasPermission(sender, Main.BASE_PERM + ".ignore.see");
+		final boolean hasAll = Util.hasPermission(sender, Main.BASE_PERM + ".ignore.all");
+		final boolean hasSeeSelf = Util.hasPermission(sender, Main.BASE_PERM + ".ignore.see.self") || hasSee;
+		final boolean hasIgnore = Util.hasPermission(sender, Main.BASE_PERM + ".ignore.ignore");
+		final boolean hasUnIgnore = Util.hasPermission(sender, Main.BASE_PERM + ".ignore.unignore");
+		if (args.length == 0) {
+			if (!hasHelp) {
+				sender.sendMessage(canTHelp);
+				return;
+			}
+			help(sender);
+		} else if (args.length == 1) {
+			if (args[0].equalsIgnoreCase("see")) {
+				if (!hasSeeSelf) {
+					sender.sendMessage(canTSeeSelf);
+					return;
+				}
+				seeSelf(sender);
+			} else if (args[0].equalsIgnoreCase("all")) {
+				if (!hasAll) {
+					sender.sendMessage(canTSeeAll);
+					return;
+				}
+				seeAll(sender);
+			} else {
+				if (!hasSee) {
+					sender.sendMessage(canTSeeTarget);
+					return;
+				}
+				final String target = args[0];
+				sender.sendMessage(ChatColor.GRAY + "$" + target + " :");
+				seeTarget(sender, target);
+			}
+		} else if (args.length > 1) {
+			if (args[1].length() != 1) {
+				sender.sendMessage(signMoreOne.replace("$sign", args[0]));
+				return;
+			}
+			final int chanel = ChanelRegister.getIndexBySign(args[1].charAt(0));
+			if (args.length > 2 && args[2].equals("unignore")) {
+				if (!hasUnIgnore) {
+					sender.sendMessage(canTUnIgnoreTarget);
+					return;
+				}
+				final String target = args[0];
+				if (hasntIgnorable(target)) {
+					sender.sendMessage(canTIgnoreunIgnorable);
+					return;
+				}
+				caseUnIgnore(sender, target, chanel);
+				return;
+
+			}
+			final String reason = args.length >= 3 ? StringUtils.join(args, " ", 2, args.length) : noReason;
+			if (!hasIgnore) {
+				sender.sendMessage(canTIgnore);
+				return;
+			}
+			final String target = args[0];
+			caseIgnore(sender, target, chanel, reason);;
+			return;
+
+		}
 
 	}
 
@@ -110,8 +203,8 @@ public class Ignore implements IIgnore {
 	}
 
 	@Override
-	public boolean hasntIgnorable(String sender ) {
-		return Util.hasPermission(sender, Main.BASE_PERM + ".ignore.non");
+	public boolean hasntIgnorable(String target ) {
+		return Util.hasPermission(target, Main.BASE_PERM + ".ignore.non");
 	}
 
 }

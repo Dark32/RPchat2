@@ -12,7 +12,8 @@ public class ValueStorage {
 	public static List<String>	joinmsg;
 	public static List<String>	muteHelp;
 	public static List<String>	deafHelp;
-
+	public static List<String>	ignoreHelp;
+	
 	public static boolean		experemental;
 
 	public static void init() {
@@ -24,6 +25,7 @@ public class ValueStorage {
 		muteMessage = ValueStorage.colorByString("mute.message");
 		muteHelp = Main.localeConfig.getStringList("mute.help");
 		deafHelp = Main.localeConfig.getStringList("deaf.help");
+		ignoreHelp = Main.localeConfig.getStringList("ignore.help");
 		helpBase = Main.localeConfig.getStringList("help.base");
 		helpHelp = Main.localeConfig.getStringList("help.help");
 		helpChannel = Main.localeConfig.getStringList("help.channel");
