@@ -3,9 +3,11 @@ package ru.dark32.chat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import ru.dark32.chat.ichanels.IChanel;
 
@@ -101,6 +103,13 @@ public class RPChatCommandExecutor implements CommandExecutor {
 			Main.getDeafStorage().deaf(_args, sender);
 			return true;
 		}
+		if (cmd.getName().equalsIgnoreCase("chatinfo")) {
+			if (args.length != 1 || Util.hasPermission(sender, Main.BASE_PERM + "chatinfo")) {
+				return false;
+			}
+			chatInfo(sender, args[0]);
+			return true;
+		}
 		return false;
 	}
 
@@ -141,5 +150,26 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		for (final String s : msg) {
 			player.sendMessage(ChanelRegister.colorize(s));
 		}
+	}
+
+	public void chatInfo(CommandSender sender, String name ) {
+		IChanel chanel = ChanelRegister.getByIndex(Util.getModeIndex(name));
+		Player player = Bukkit.getPlayer(name);
+		final List<String> msg = new ArrayList<String>();
+		msg.add("&b=============================================");
+		msg.add("&bINFO: "+name);
+		msg.add("Channel: "+chanel.getName()+"  "+chanel.getPrefix());
+		if (player!=null){
+			msg.add("Name "+player.getName());
+			msg.add("Display Name "+player.getDisplayName());
+			msg.add("Entity Id "+player.getEntityId());
+			msg.add("Ticks Lived "+player.getTicksLived());
+			msg.add("Anonym ID "+ Integer.toHexString(player.getTicksLived() + player.getEntityId()));
+		}
+		msg.add("&b=============================================");
+		for (final String s : msg) {
+			sender.sendMessage(ChanelRegister.colorUTF8(s,3));
+		}
+		
 	}
 }

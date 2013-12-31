@@ -26,4 +26,6 @@ commands:
    unignore:
      description: 'unignore'
      usage: '/<command> <nick>'
-     
+   chatinfo:
+     description: 'chatinfo'
+     usage: '/<command> <nick>'

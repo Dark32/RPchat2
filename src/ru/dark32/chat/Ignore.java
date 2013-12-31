@@ -77,7 +77,6 @@ public class Ignore implements IIgnore {
 		for (final String string : msg) {
 			sender.sendMessage(ChanelRegister.colorize(string));
 		}
-
 	}
 
 	@Override

@@ -82,6 +82,7 @@ public class Main extends JavaPlugin {
 		getCommand("sw").setExecutor(executer);
 		getCommand("ignore").setExecutor(executer);
 		getCommand("unignore").setExecutor(executer);
+		getCommand("chatinfo").setExecutor(executer);
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 	}
 
