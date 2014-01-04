@@ -178,5 +178,8 @@ public interface IChanel {
 	 *            none - не канал
 	 */
 	void setType(ETypeChanel type );
-
+	/**
+	 * @return клановый ли чат
+	 */
+	boolean getClan();
 }

@@ -9,11 +9,13 @@ public class JoinListener implements Listener {
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent event ) {
 		// event.setJoinMessage("");
-		final Player player = event.getPlayer();
-		for (final String s : ValueStorage.joinmsg) {
-			player.sendMessage(ChanelRegister.colorize(s.replace("$suffix", ChanelRegister.getSuffix(player.getName()))
-					.replace("$prefix", ChanelRegister.getPreffix(player.getName())).replace("$p", player.getName())));
+		if (ValueStorage.motd) {
+			final Player player = event.getPlayer();
+			for (final String s : ValueStorage.joinmsg) {
+				player.sendMessage(ChanelRegister.colorUTF8(s.replace("$suffix", PEXHook.getSuffix(player.getName()))
+						.replace("$prefix", PEXHook.getPreffix(player.getName())).replace("$p", player.getName()), 3));
 
+			}
 		}
 
 	}

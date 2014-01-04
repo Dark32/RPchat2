@@ -102,10 +102,6 @@ public class ChanelRegister {
 		return -1;
 	}
 
-	public static String colorize(final String string ) {
-		return ChatColor.translateAlternateColorCodes('&', string);
-	}
-
 	/**
 	 * форматируем строку
 	 * 
@@ -117,35 +113,13 @@ public class ChanelRegister {
 	 */
 	public static String colorUTF8(String string, final int flag ) {
 		if ((flag & 0x01) == 0x01) {
-			string = colorize(string);
+			string =  ChatColor.translateAlternateColorCodes('&', string);
 		}
 		if ((flag & 0x02) == 0x02) {
 			string = Util.parseUTF8(string);
 		}
 		return string;
 
-	}
-
-	public static String getPreffix(final String name ) {
-		if (!Util.usePEX) {
-			return "";
-		}
-		final PermissionUser user = PermissionsEx.getPermissionManager().getUser(name);
-		if (user == null) {
-			return "";
-		}
-		return colorUTF8(user.getPrefix(), 3);
-	}
-
-	public static String getSuffix(final String name ) {
-		if (!Util.usePEX) {
-			return "";
-		}
-		final PermissionUser user = PermissionsEx.getPermissionManager().getUser(name);
-		if (user == null) {
-			return "";
-		}
-		return colorUTF8(user.getSuffix(), 3);
 	}
 
 	public static int getChanels() {

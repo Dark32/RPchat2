@@ -93,10 +93,11 @@ Chat:
     sign: w
     requestPrefix: true
     needPerm: true
-  World2:
+  Clan:
     type: item
     enable: true
     world: true
+    clan: true
     item:
       #@Deprecated
       id: 260

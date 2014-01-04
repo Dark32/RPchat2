@@ -2,3 +2,4 @@ experemental: false
 locale: locale
 chat: chat
 chance: 50
+motd: true

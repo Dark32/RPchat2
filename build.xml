@@ -13,6 +13,7 @@
         <mkdir dir="${lib}"/>
         <get dest="${lib}/bukkit.jar" src="http://repo.bukkit.org/content/repositories/public/org/bukkit/bukkit/1.6.4-R1.0/bukkit-1.6.4-R1.0.jar"/>
         <get dest="${lib}/PermissionsEx.jar" src="http://dev.bukkit.org/media/files/742/103/PermissionsEx.jar"/>
+    	 <get dest="${lib}/SimpleClansAPI.jar" src="http://repo.greatmancode.com/content/repositories/snapshots/com/p000ison/dev/simpleclans2/SimpleClansAPI/1.0-SNAPSHOT/SimpleClansAPI-1.0-20130109.205709-1.jar"/>
     </target>
 
     <target name="compile">

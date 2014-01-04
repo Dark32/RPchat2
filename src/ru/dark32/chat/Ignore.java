@@ -75,7 +75,7 @@ public class Ignore implements IIgnore {
 		final List<String> msg = new ArrayList<String>();
 		msg.addAll(ValueStorage.deafHelp);
 		for (final String string : msg) {
-			sender.sendMessage(ChanelRegister.colorize(string));
+			sender.sendMessage(ChanelRegister.colorUTF8(string,3));
 		}
 	}
 

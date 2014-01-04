@@ -13,14 +13,16 @@ public class ValueStorage {
 	public static List<String>	muteHelp;
 	public static List<String>	deafHelp;
 	public static List<String>	ignoreHelp;
-	
+
 	public static boolean		experemental;
+	public static boolean		motd;
 
 	public static void init() {
 		experemental = Main.config.getBoolean("experemental", false);
 
 		nei = ValueStorage.colorByString("String.nei");
 		noPerm = ValueStorage.colorByString("String.noPerm");
+		motd = Main.config.getBoolean("motd", false);
 		joinmsg = Main.localeConfig.getStringList("String.joinmsg");
 		muteMessage = ValueStorage.colorByString("mute.message");
 		muteHelp = Main.localeConfig.getStringList("mute.help");

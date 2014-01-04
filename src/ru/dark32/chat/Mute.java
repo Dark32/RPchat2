@@ -234,7 +234,7 @@ public class Mute implements IMute {
 		final List<String> msg = new ArrayList<String>();
 		msg.addAll(ValueStorage.muteHelp);
 		for (final String s : msg) {
-			sender.sendMessage(ChanelRegister.colorize(s));
+			sender.sendMessage(ChanelRegister.colorUTF8(s,3));
 		}
 	}
 

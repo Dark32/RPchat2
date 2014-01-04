@@ -64,16 +64,18 @@ public class Util {
 			return player.isOp();
 		}
 	}
+
 	public static boolean hasPermission(final String player, final String permission ) {
 		if (usePEX) {
 			return PermissionsEx.getUser(player).has(permission);
 		}
-		return false; 
+		return false;
 	}
+
 	public static void init(final Main main ) {
 		modes2 = new HashMap<String, Integer>();
-		luck = ChanelRegister.colorize(Main.localeConfig.getString("String.chance.luck", "(luck)"));
-		unluck = ChanelRegister.colorize(Main.localeConfig.getString("String.chance.unluck", "(unluck)"));
+		luck = ChanelRegister.colorUTF8(Main.localeConfig.getString("String.chance.luck", "(luck)"), 3);
+		unluck = ChanelRegister.colorUTF8(Main.localeConfig.getString("String.chance.unluck", "(unluck)"), 3);
 		chance = Main.config.getInt("chance", 50);
 	}
 

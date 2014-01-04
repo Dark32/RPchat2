@@ -123,7 +123,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		}
 		msg.add("&b=============================================");
 		for (final String s : msg) {
-			sender.sendMessage(ChanelRegister.colorize(s));
+			sender.sendMessage(ChanelRegister.colorUTF8(s,3));
 		}
 
 	}
@@ -134,7 +134,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		msg.addAll(ValueStorage.helpHelp);
 		msg.add("&b=============================================");
 		for (final String s : msg) {
-			sender.sendMessage(ChanelRegister.colorize(s));
+			sender.sendMessage(ChanelRegister.colorUTF8(s,3));
 		}
 	}
 
@@ -148,7 +148,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		msg.addAll(ValueStorage.helpBase);
 		msg.add("&b=============================================");
 		for (final String s : msg) {
-			player.sendMessage(ChanelRegister.colorize(s));
+			player.sendMessage(ChanelRegister.colorUTF8(s,3));
 		}
 	}
 

@@ -6,9 +6,13 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.p000ison.dev.simpleclans2.api.SCCore;
+import com.p000ison.dev.simpleclans2.api.clan.ClanManager;
+import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayerManager;
 public class Main extends JavaPlugin {
 
 	public static final Logger		LOG			= Logger.getLogger("Minecraft");
@@ -16,7 +20,7 @@ public class Main extends JavaPlugin {
 	private static IMute			muteStorage;
 	private static IDeaf			deafStorage;
 	private static IIgnore			ignorStorage;
-	public static final String		VERSION		= "RPchat v 2.0.6w (1u)";
+	public static final String		VERSION		= "RPchat v 2.0.7w (2u)";
 	public static FileConfiguration	config;
 	public static File				storageFile;
 	public static YamlConfiguration	storage;
@@ -27,7 +31,10 @@ public class Main extends JavaPlugin {
 	// выключить в релизе
 	public static final boolean		DEBUG_MODE	= !true;
 	public static final String		BASE_PERM	= "mcnw";
-
+	
+	private static SCCore core;
+	public static boolean SCenable = false;
+	
 	@Override
 	public void onEnable() {
 		pluginManager = Bukkit.getPluginManager();
@@ -36,7 +43,7 @@ public class Main extends JavaPlugin {
 		} else if (pluginManager.getPlugin("PermissionsBukkit") != null) {
 			Util.usePB = true;
 		} else {
-			getLogger().warning("Permissions plugins not found!");
+			getLogger().warning("[RPChat] Permissions plugins not found!");
 		}
 		config = this.getConfig();
 
@@ -52,7 +59,7 @@ public class Main extends JavaPlugin {
 		if (Main.chatConfigFile.exists()) {
 			Main.chatConfig = YamlConfiguration.loadConfiguration(chatConfigFile);
 		} else {
-			getLogger().warning("chat.yml not found");
+			getLogger().warning("[RPChat] "+chat+".yml not found");
 		}
 
 		String locale = config.getString("locale", "locale");
@@ -60,9 +67,12 @@ public class Main extends JavaPlugin {
 		if (Main.localeConfigFile.exists()) {
 			Main.localeConfig = YamlConfiguration.loadConfiguration(localeConfigFile);
 		} else {
-			getLogger().warning(locale + ".yml not found");
+			getLogger().warning("[RPChat] "+locale + ".yml not found");
 		}
-
+		if (hookSimpleClans()) {
+			Bukkit.getConsoleSender().sendMessage("[RPChat] Simple clans was hooked");
+			SCenable = true;
+				}
 		Util.init(this);
 		ValueStorage.init();
 		ChanelRegister.init();
@@ -102,5 +112,29 @@ public class Main extends JavaPlugin {
 
 	public static IIgnore getIgnoreStorage() {
 		return ignorStorage;
+	}
+
+	private boolean hookSimpleClans() {
+		try {
+			for (Plugin plugin : getServer().getPluginManager().getPlugins()) {
+				if (plugin instanceof SCCore) {
+					core = (SCCore) plugin;
+					return true;
+				}
+			}
+		}
+		catch (NoClassDefFoundError e) {
+			return false;
+		}
+
+		return false;
+	}
+
+	public static ClanPlayerManager getClanPlayerManager() {
+		return core.getClanPlayerManager();
+	}
+
+	public static ClanManager getClanManager() {
+		return core.getClanManager();
 	}
 }
