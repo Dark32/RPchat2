@@ -24,9 +24,9 @@
  tab: | `true` | подставлять ли ник при нажатие ТАБ
  prefix: | `С` | префикс для отправки сообщения в канал
  sign: | `С` | подпись канала, имя канала сокращенное до 1 символа. Используется для молчанки и глухоты
- listenerMessage: | `"Chat.<inner_name>.listenerMessage` | сообщение о числе услышавших вас
- noListenerMessage | `"Chat.<inner_name>.noListenerMessage` | сообщение, если вас никто не услышал
- isListenerMessage | `false` | выводить ли сообщения о числе услышавших
+ listenerMessage: | `""` | сообщение о числе услышавших вас
+ noListenerMessage | `"` | сообщение, если вас никто не услышал
+ isListenerMessage | `0` | выводить ли сообщения о числе услышавших
  needPerm| `false` |  нужен ли базовые права для канала
  pimk.enable |`false` | включен ли пимк (звук если вас упомянули в чате)
  pimk.instrument | `PIANO` | инструмент пимка (PIANO, BASS_DRUM,SNARE_DRUM,STICKS,BASS_GUITAR)

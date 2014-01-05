@@ -139,4 +139,5 @@ public class Main extends JavaPlugin {
 	public static ClanManager getClanManager() {
 		return core.getClanManager();
 	}
+
 }

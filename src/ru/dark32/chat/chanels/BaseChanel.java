@@ -76,10 +76,8 @@ public class BaseChanel implements IChanel {
 		this.sign = Main.chatConfig.getString(path_sign, path_sign).charAt(0);
 		this.formatString = ChanelRegister.colorUTF8(Main.chatConfig.getString(path_format, path_format), 3);
 		this.tabes = Main.chatConfig.getBoolean(path_tab, true);
-		this.listenerMessage = ChanelRegister.colorUTF8(
-				Main.chatConfig.getString(path_listenerMessage, path_listenerMessage), 3);
-		this.noListenerMessage = ChanelRegister.colorUTF8(
-				Main.chatConfig.getString(path_noListenerMessage, path_noListenerMessage), 3);
+		this.listenerMessage = ChanelRegister.colorUTF8(Main.chatConfig.getString(path_listenerMessage, ""), 3);
+		this.noListenerMessage = ChanelRegister.colorUTF8(Main.chatConfig.getString(path_noListenerMessage, ""), 3);
 		this.listenerMessageEnable = Main.chatConfig.getInt(path_isListenerMessage, 0);
 		this.needPerm = Main.chatConfig.getBoolean(path_needPerm, false);
 		// PIMK -->
@@ -111,13 +109,13 @@ public class BaseChanel implements IChanel {
 	void DEBUG(String message ) {
 		if (Main.DEBUG_MODE) {
 			DEBUG(message, Bukkit.getConsoleSender());
-		};
+		}
 	}
 
 	void DEBUG(String message, CommandSender sender ) {
 		if (Main.DEBUG_MODE) {
 			sender.sendMessage(message);
-		};
+		}
 	}
 
 	private String findMatch(String name, String[] message ) {
@@ -176,7 +174,16 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public String getListenerMessage(int count ) {
-		return (count > 0) ? listenerMessage.replace("$n", String.valueOf(count)) : noListenerMessage;
+		if (count > 0) {
+			if (listenerMessage.length() > 0 && listenerMessage.contains("$n")) {
+				return listenerMessage.replace("$n", String.valueOf(count));
+			}
+		} else {
+			if (listenerMessage.length() > 0) {
+				return noListenerMessage;
+			}
+		}
+		return "";
 	}
 
 	@Override
@@ -312,12 +319,14 @@ public class BaseChanel implements IChanel {
 									.replace(match, getColorize() + match + ChatColor.getLastColors(message)));
 					iterator.remove();
 				}
-
 			}
 		}
 		// отправляем число услышавших, если это включено
 		if (isListenerMessage() == COUNT_EXCLUDE) {
-			sender.sendMessage(getListenerMessage(recipient.size() - 1));
+			String str = getListenerMessage(recipient.size() - 1);
+			if (str.length() > 0) {
+				sender.sendMessage(str);
+			}
 		} else if (isListenerMessage() == COUNT_INCLUDE) {
 			sender.sendMessage(getListenerMessage(recipient.size())
 					+ String.format(format(sender, getFormat()), sender.getName(), message));
