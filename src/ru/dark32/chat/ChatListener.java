@@ -68,6 +68,8 @@ public class ChatListener implements Listener {
 		event.getRecipients().addAll(chanel.getRecipients(sender));
 		// отправка пре сообщения
 		chanel.preSend(sender, message, event.getRecipients());
+		//добавляем получателей согласно договору о промышленном шпонаже
+		event.getRecipients().addAll(chanel.getSpyRecipients(sender));
 		// System.out.println(event.getRecipients());
 		// получаем и обрабатываем формат
 		format = chanel.format(sender, chanel.getFormat());

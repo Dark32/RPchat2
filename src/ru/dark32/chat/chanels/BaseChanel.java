@@ -1,10 +1,12 @@
 package ru.dark32.chat.chanels;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -207,14 +209,15 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public List<Player> getRecipients(final Player sender ) {
-		final List<Player> recipients = new LinkedList<Player>();
+	public Set<Player> getRecipients(final Player sender ) {
+		final Set<Player> recipients = new TreeSet<Player>();
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy") && sender != recipient) {
+			/*if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy") && sender != recipient) {
 				DEBUG("debug: spy - " + recipient.getName(), sender);
 				recipients.add(recipient);
 				continue;
-			} else if (!getClan() || !SimpleClanHook.equalClan(sender, recipient)) {
+			} else */
+			if (!getClan() || !SimpleClanHook.equalClan(sender, recipient)) {
 				DEBUG("debug: hasn't in clan - " + recipient.getName(), sender);
 				continue;
 			} else if (isRecipient(sender, recipient)) {
@@ -348,5 +351,18 @@ public class BaseChanel implements IChanel {
 	@Override
 	public boolean getClan() {
 		return clanOnly && Main.SCenable;
+	}
+
+	@Override
+	public Set<Player> getSpyRecipients(Player sender ) {
+		final Set<Player> recipients = new TreeSet<Player>();
+		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
+			if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy") && sender != recipient) {
+				DEBUG("debug: spy - " + recipient.getName(), sender);
+				recipients.add(recipient);
+				continue;
+			}
+		}
+		return recipients;
 	}
 }

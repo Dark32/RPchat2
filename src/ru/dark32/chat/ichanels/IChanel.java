@@ -87,7 +87,7 @@ public interface IChanel {
 	 *            отправитель
 	 * @return слушатели
 	 */
-	List<Player> getRecipients(Player sender );
+	Set<Player> getRecipients(Player sender );
 
 	/**
 	 * @return подпись канала
@@ -182,4 +182,12 @@ public interface IChanel {
 	 * @return клановый ли чат
 	 */
 	boolean getClan();
+
+	/**
+	 * @param sender
+	 *            отправитель
+	 * @return слушатели шпионы
+	 */
+	Set<Player> getSpyRecipients(Player sender );
+
 }

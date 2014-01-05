@@ -6,6 +6,7 @@ package ru.dark32.chat.chanels;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -126,8 +127,8 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	}
 
 	@Override
-	public List<Player> getRecipients(final Player sender ) {
-		final List<Player> recipients = new LinkedList<Player>();
+	public Set<Player> getRecipients(final Player sender ) {
+		final Set<Player> recipients = new TreeSet<Player>();
 		final String noSpy = Main.BASE_PERM + "." + this.getInnerName() + ".nospy";
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			if (!(Util.hasPermission(recipient, noSpy) || Util.hasPermission(sender, noSpy))
@@ -162,5 +163,9 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 		// отправляем сообщение цели
 		this.sendMessage(sender, message);
 
+	}
+	@Override
+	public Set<Player> getSpyRecipients(Player sender ) {
+		return null;
 	}
 }

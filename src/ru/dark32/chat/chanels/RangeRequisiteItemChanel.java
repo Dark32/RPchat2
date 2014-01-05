@@ -5,6 +5,8 @@ package ru.dark32.chat.chanels;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -56,8 +58,8 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 	}
 
 	@Override
-	public List<Player> getRecipients(final Player sender ) {
-		final List<Player> recipients = new LinkedList<Player>();
+	public Set<Player> getRecipients(final Player sender ) {
+		final Set<Player> recipients = new TreeSet<Player>();
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			final boolean isWorld = !isWorldChat() || sender.getWorld() == recipient.getWorld();
 			final int dist = getDist(sender.getLocation(), recipient.getLocation());
@@ -67,11 +69,12 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 					|| recipient == sender || hasItemInInvetery(recipient);
 			DEBUG("debug: " + recipient.getName() + " | " + dist + "/" + this.getRange() * this.getRange() + "|"
 					+ isWorld, sender);
-			if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy") && sender!=recipient) {
+			/*if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy") && sender!=recipient) {
 				DEBUG("debug: spy - " + recipient.getName(), sender);
 				recipients.add(recipient);
 				continue;
-			} else if (isRecipient(sender, recipient)) {
+			} else */
+			if (isRecipient(sender, recipient)) {
 				DEBUG("debug: isn't Recipient - " + recipient.getName(), sender);
 				continue;
 			} else if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy")) {
