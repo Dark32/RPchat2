@@ -2,6 +2,7 @@ package ru.dark32.chat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -46,7 +47,7 @@ public class Ignore implements IIgnore {
 	}
 
 	private String getPlayerDeafString(final String playerName, final String targetName, final int chanel ) {
-		return playerName + ".ignore." + ChanelRegister.getByIndex(chanel).getInnerName() + "." + targetName;
+		return playerName.toLowerCase(Locale.US) + ".ignore." + ChanelRegister.getByIndex(chanel).getInnerName() + "." + targetName;
 	}
 
 	@Override

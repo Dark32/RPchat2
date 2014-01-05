@@ -3,6 +3,7 @@ package ru.dark32.chat;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -49,7 +50,7 @@ public class Deaf implements IDeaf {
 	}
 
 	private String getPlayerDeafString(final String playerName, final int chanel ) {
-		return playerName + ".deaf." + ChanelRegister.getByIndex(chanel).getInnerName();
+		return playerName.toLowerCase(Locale.US) + ".deaf." + ChanelRegister.getByIndex(chanel).getInnerName();
 	}
 
 	@Override

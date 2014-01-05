@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -57,7 +58,7 @@ public class Mute implements IMute {
 	}
 
 	private String getPlayerMuteString(final String playerName, final int chanel ) {
-		return playerName + ".mute." + ChanelRegister.getByIndex(chanel).getInnerName();
+		return playerName.toLowerCase(Locale.US) + ".mute." + ChanelRegister.getByIndex(chanel).getInnerName();
 	}
 
 	@Override
