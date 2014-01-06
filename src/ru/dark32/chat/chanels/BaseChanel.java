@@ -127,7 +127,6 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public String format(final Player player, String msg ) {
-		System.out.println(Main.SCenable);
 		if (Main.SCenable) {
 		//	msg = SimpleClanHook.formatComplete(msg, player);
 		}
