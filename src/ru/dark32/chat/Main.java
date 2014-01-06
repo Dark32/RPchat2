@@ -9,11 +9,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
+/*
 import com.p000ison.dev.simpleclans2.api.SCCore;
 import com.p000ison.dev.simpleclans2.api.clan.ClanManager;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayerManager;
-
+*/
 public class Main extends JavaPlugin {
 
 	public static final Logger		LOG				= Logger.getLogger("Minecraft");
@@ -21,7 +21,7 @@ public class Main extends JavaPlugin {
 	private static IMute			muteStorage;
 	private static IDeaf			deafStorage;
 	private static IIgnore			ignorStorage;
-	public static final String		VERSION			= "RPchat v 2.0.7w (2u)";
+	public static final String		VERSION			= "RPchat v 2.0.7w (2u1t)";
 	public static final String		VERSION_NAME	= "Primal steak birch";
 	public static FileConfiguration	config;
 	public static File				storageFile;
@@ -31,10 +31,10 @@ public class Main extends JavaPlugin {
 	public static File				localeConfigFile;
 	public static YamlConfiguration	localeConfig;
 	// выключить в релизе
-	public static final boolean		DEBUG_MODE		= !true;
+	public static final boolean		DEBUG_MODE		= true;
 	public static final String		BASE_PERM		= "mcnw";
 
-	private static SCCore			core;
+	//private static SCCore			core;
 	public static boolean			SCenable		= false;
 
 	@Override
@@ -71,10 +71,10 @@ public class Main extends JavaPlugin {
 		} else {
 			getLogger().warning("[RPChat] " + locale + ".yml not found");
 		}
-		if (hookSimpleClans()) {
-			Bukkit.getConsoleSender().sendMessage("[RPChat] Simple clans was hooked");
-			SCenable = true;
-		}
+		//if (hookSimpleClans()) {
+		//	Bukkit.getConsoleSender().sendMessage("[RPChat] Simple clans was hooked");
+		//	SCenable = true;
+		//}
 		Util.init(this);
 		ValueStorage.init();
 		ChanelRegister.init();
@@ -115,7 +115,7 @@ public class Main extends JavaPlugin {
 	public static IIgnore getIgnoreStorage() {
 		return ignorStorage;
 	}
-
+/*
 	private boolean hookSimpleClans() {
 		try {
 			for (Plugin plugin : getServer().getPluginManager().getPlugins()) {
@@ -138,6 +138,5 @@ public class Main extends JavaPlugin {
 
 	public static ClanManager getClanManager() {
 		return core.getClanManager();
-	}
-
+*/
 }

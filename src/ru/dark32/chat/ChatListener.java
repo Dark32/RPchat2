@@ -1,5 +1,9 @@
 package ru.dark32.chat;
 
+import java.util.Set;
+import java.util.TreeSet;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -65,12 +69,12 @@ public class ChatListener implements Listener {
 		// чистим список получателей
 		event.getRecipients().clear();
 		// добавляем получателей согласно типу чата
-		event.getRecipients().addAll(chanel.getRecipients(sender));
+		Set recipient = chanel.getRecipients(sender);
 		// отправка пре сообщения
-		chanel.preSend(sender, message, event.getRecipients());
+		chanel.preSend(sender, message, recipient);
 		//добавляем получателей согласно договору о промышленном шпонаже
-		event.getRecipients().addAll(chanel.getSpyRecipients(sender));
-		// System.out.println(event.getRecipients());
+		recipient.addAll(chanel.getSpyRecipients(sender));
+		event.getRecipients().addAll(recipient);
 		// получаем и обрабатываем формат
 		format = chanel.format(sender, chanel.getFormat());
 		// устанавливаем формат

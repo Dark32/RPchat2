@@ -1,15 +1,15 @@
 package ru.dark32.chat;
 
 import org.bukkit.entity.Player;
-
+/*
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;
 import com.p000ison.dev.simpleclans2.api.rank.Rank;
-
+*/
 public class SimpleClanHook {
 	private final static String	clanVariable	= "$SC.clan";
 	private final static String	rankVariable	= "$SC.rank";
-
+/*
 	public static String formatComplete(String format, Player player ) {
 		ClanPlayer clanPlayer = Main.getClanPlayerManager().getClanPlayer(player);
 		if (clanPlayer != null) {
@@ -36,5 +36,5 @@ public class SimpleClanHook {
 			return (clanSender != null && clanTarget != null) ? clanSender.getID() == clanTarget.getID() : false;
 		}
 		return false;
-	}
+	}*/
 }

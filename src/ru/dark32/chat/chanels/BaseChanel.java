@@ -131,8 +131,9 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public String format(final Player player, String msg ) {
+		System.out.println(Main.SCenable);
 		if (Main.SCenable) {
-			msg = SimpleClanHook.formatComplete(msg, player);
+		//	msg = SimpleClanHook.formatComplete(msg, player);
 		}
 		if (msg.contains("$suffix")) {
 			msg = msg.replace("$suffix", PEXHook.getSuffix(player.getName()));
@@ -212,15 +213,17 @@ public class BaseChanel implements IChanel {
 	public Set<Player> getRecipients(final Player sender ) {
 		final Set<Player> recipients = new TreeSet<Player>();
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			/*if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy") && sender != recipient) {
-				DEBUG("debug: spy - " + recipient.getName(), sender);
-				recipients.add(recipient);
-				continue;
-			} else */
-			if (!getClan() || !SimpleClanHook.equalClan(sender, recipient)) {
+			/*
+			 * if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy") &&
+			 * sender != recipient) { DEBUG("debug: spy - " +
+			 * recipient.getName(), sender); recipients.add(recipient);
+			 * continue; } else
+			 */
+			/*if (!getClan() || !SimpleClanHook.equalClan(sender, recipient)) {
 				DEBUG("debug: hasn't in clan - " + recipient.getName(), sender);
 				continue;
-			} else if (isRecipient(sender, recipient)) {
+			} else */
+			if (isRecipient(sender, recipient)) {
 				DEBUG("debug: isn't Recipient - " + recipient.getName(), sender);
 				continue;
 			} else {
@@ -279,7 +282,7 @@ public class BaseChanel implements IChanel {
 				|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
 		final boolean isSelf = (sender == recipient && isListenerMessage() == COUNT_INCLUDE);
 		final boolean isInChanel = isOverAll() || Util.getModeIndex(recipient.getName()) == getIndex();
-		final boolean hasIgnore = Main.getIgnoreStorage().hasIgnore(sender, recipient.getName(), this.getIndex());
+		final boolean hasIgnore = Main.getIgnoreStorage().hasIgnore(recipient.getName(), sender.getName(), this.getIndex());
 		final boolean allCond = isInChanel && !isSelf && isHear && isDeaf && !hasIgnore;
 		DEBUG(recipient.getName() + " isInChanel " + isInChanel + " isn'tSelf " + !isSelf + " isHear " + isHear
 				+ " hasDeaf " + isDeaf + " hasn'tIgnore " + !hasIgnore + " all " + allCond);
@@ -298,7 +301,8 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public String preformatMessage(final Player sender, final String message ) {
-		return Util.randomRoll(message);
+		//return Util.randomRoll(message);
+		return message;
 	}
 
 	@SuppressWarnings("deprecation" )
@@ -355,7 +359,7 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public Set<Player> getSpyRecipients(Player sender ) {
-		final Set<Player> recipients = new TreeSet<Player>();
+		final Set<Player> recipients = new HashSet<Player>();
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy") && sender != recipient) {
 				DEBUG("debug: spy - " + recipient.getName(), sender);

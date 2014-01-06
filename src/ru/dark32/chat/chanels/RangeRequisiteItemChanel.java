@@ -3,6 +3,7 @@
  */
 package ru.dark32.chat.chanels;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -59,7 +60,7 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 
 	@Override
 	public Set<Player> getRecipients(final Player sender ) {
-		final Set<Player> recipients = new TreeSet<Player>();
+		final Set<Player> recipients = new HashSet<Player>();
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			final boolean isWorld = !isWorldChat() || sender.getWorld() == recipient.getWorld();
 			final int dist = getDist(sender.getLocation(), recipient.getLocation());

@@ -8,7 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
+import org.bukkit.plugin.Plugin;
 import ru.dark32.chat.ichanels.IChanel;
 
 public class RPChatCommandExecutor implements CommandExecutor {
@@ -31,6 +31,10 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		if (cmd.getName().equalsIgnoreCase("rpchat")) {
 			if (args.length == 0) {
 				RPChatCommandExecutor.getBase(sender);
+				// for (Plugin plugin :
+				// Bukkit.getServer().getPluginManager().getPlugins()) {
+				// System.out.println(plugin.getClass());
+				// }
 				return true;
 			} else if (args.length == 1) {
 				if (args[0].equalsIgnoreCase("help")) {
@@ -89,7 +93,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 			return true;
 		}
 		if (cmd.getName().equalsIgnoreCase("ignore")) {
-			Main.getDeafStorage().deaf(args, sender);
+			Main.getIgnoreStorage().ignore(args, sender);
 			return true;
 		}
 		if (cmd.getName().equalsIgnoreCase("unignore")) {
@@ -99,8 +103,8 @@ public class RPChatCommandExecutor implements CommandExecutor {
 			String[] _args = new String[3];
 			_args[0] = args[0];
 			_args[1] = args[1];
-			_args[2] = "undeaf";
-			Main.getDeafStorage().deaf(_args, sender);
+			_args[2] = "unignore";
+			Main.getIgnoreStorage().ignore(_args, sender);
 			return true;
 		}
 		if (cmd.getName().equalsIgnoreCase("chatinfo")) {
@@ -123,7 +127,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		}
 		msg.add("&b=============================================");
 		for (final String s : msg) {
-			sender.sendMessage(ChanelRegister.colorUTF8(s,3));
+			sender.sendMessage(ChanelRegister.colorUTF8(s, 3));
 		}
 
 	}
@@ -134,7 +138,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		msg.addAll(ValueStorage.helpHelp);
 		msg.add("&b=============================================");
 		for (final String s : msg) {
-			sender.sendMessage(ChanelRegister.colorUTF8(s,3));
+			sender.sendMessage(ChanelRegister.colorUTF8(s, 3));
 		}
 	}
 
@@ -149,7 +153,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		msg.addAll(ValueStorage.helpBase);
 		msg.add("&b=============================================");
 		for (final String s : msg) {
-			player.sendMessage(ChanelRegister.colorUTF8(s,3));
+			player.sendMessage(ChanelRegister.colorUTF8(s, 3));
 		}
 	}
 
@@ -158,19 +162,19 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		Player player = Bukkit.getPlayer(name);
 		final List<String> msg = new ArrayList<String>();
 		msg.add("&b=============================================");
-		msg.add("&bINFO: "+name);
-		msg.add("Channel: "+chanel.getName()+"  "+chanel.getPrefix());
-		if (player!=null){
-			msg.add("Name "+player.getName());
-			msg.add("Display Name "+player.getDisplayName());
-			msg.add("Entity Id "+player.getEntityId());
-			msg.add("Ticks Lived "+player.getTicksLived());
-			msg.add("Anonym ID "+ Integer.toHexString(player.getTicksLived() + player.getEntityId()));
+		msg.add("&bINFO: " + name);
+		msg.add("Channel: " + chanel.getName() + "  " + chanel.getPrefix());
+		if (player != null) {
+			msg.add("Name " + player.getName());
+			msg.add("Display Name " + player.getDisplayName());
+			msg.add("Entity Id " + player.getEntityId());
+			msg.add("Ticks Lived " + player.getTicksLived());
+			msg.add("Anonym ID " + Integer.toHexString(player.getTicksLived() + player.getEntityId()));
 		}
 		msg.add("&b=============================================");
 		for (final String s : msg) {
-			sender.sendMessage(ChanelRegister.colorUTF8(s,3));
+			sender.sendMessage(ChanelRegister.colorUTF8(s, 3));
 		}
-		
+
 	}
 }

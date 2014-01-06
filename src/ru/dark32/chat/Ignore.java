@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -47,18 +48,20 @@ public class Ignore implements IIgnore {
 	}
 
 	private String getPlayerDeafString(final String playerName, final String targetName, final int chanel ) {
-		return playerName.toLowerCase(Locale.US) + ".ignore." + ChanelRegister.getByIndex(chanel).getInnerName() + "." + targetName;
+		return playerName.toLowerCase(Locale.US) + ".ignore." + targetName + "."
+				+ ChanelRegister.getByIndex(chanel).getInnerName();
 	}
 
 	@Override
-	public boolean hasIgnore(CommandSender sender, String target, int chanel ) {
-		return Main.storage.getBoolean(getPlayerDeafString(sender.getName(), target, chanel));
+	public boolean hasIgnore(String sender, String target, int chanel ) {
+		return !hasntIgnorable(target) && Main.storage.getBoolean(getPlayerDeafString(sender, target, chanel));
 	}
 
 	@Override
 	public void caseIgnore(CommandSender sender, String target, int chanel, String reason ) {
 		if (hasntIgnorable(target)) {
 			sender.sendMessage(cantIgnorable.replace("$name", sender.getName()).replace("$ignore", target));
+			return;
 		}
 
 		for (int i = 0; i < chaneles; i++) {
@@ -74,9 +77,9 @@ public class Ignore implements IIgnore {
 
 	private void help(final CommandSender sender ) {
 		final List<String> msg = new ArrayList<String>();
-		msg.addAll(ValueStorage.deafHelp);
+		msg.addAll(ValueStorage.ignoreHelp);
 		for (final String string : msg) {
-			sender.sendMessage(ChanelRegister.colorUTF8(string,3));
+			sender.sendMessage(ChanelRegister.colorUTF8(string, 3));
 		}
 	}
 
@@ -128,10 +131,6 @@ public class Ignore implements IIgnore {
 					return;
 				}
 				final String target = args[0];
-				if (hasntIgnorable(target)) {
-					sender.sendMessage(canTIgnoreunIgnorable);
-					return;
-				}
 				caseUnIgnore(sender, target, chanel);
 				return;
 
@@ -151,18 +150,20 @@ public class Ignore implements IIgnore {
 
 	@Override
 	public void seeTarget(CommandSender sender, String target ) {
-		final ConfigurationSection cs = Main.storage.getConfigurationSection(sender.getName() + ".ignore");
+		final ConfigurationSection cs = Main.storage.getConfigurationSection(target + ".ignore");
 		if (cs == null) {
 			return;
 		}
+		Bukkit.getConsoleSender().sendMessage(target);
 		final Set<String> list = cs.getKeys(false);
 		for (final String ignoreName : list) {
+			Bukkit.getConsoleSender().sendMessage(ignoreName);
 			for (int i = 0; i < chaneles; i++) {
 				final String reason = Main.storage
 						.getString(getPlayerDeafString(target, ignoreName, i) + "-reason", "");
-				final boolean isIgnore = this.hasIgnore(sender, target, i);
+				final boolean isIgnore = this.hasIgnore(target, ignoreName, i);
 				if (isIgnore) {
-					sender.sendMessage(message.replace("$name", ignoreName)
+					sender.sendMessage(message.replace("$name", target).replace("$ignore", ignoreName)
 							.replace("$channel", ChanelRegister.getByIndex(i).getName()).replace("$reason", reason));
 				}
 			}
@@ -192,7 +193,7 @@ public class Ignore implements IIgnore {
 	public void caseUnIgnore(CommandSender sender, String target, int chanel ) {
 		for (int i = 0; i < chaneles; i++) {
 			if (chanel == i || chanel == -1) {
-				Main.storage.set(getPlayerDeafString(sender.getName(), target, i), true);
+				Main.storage.set(getPlayerDeafString(sender.getName(), target, i), false);
 				Main.storage.set(getPlayerDeafString(sender.getName(), target, i) + "-reason", "");
 			}
 		}

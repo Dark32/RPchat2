@@ -3,7 +3,7 @@ package ru.dark32.chat;
 import org.bukkit.command.CommandSender;
 
 public interface IIgnore {
-	boolean hasIgnore(CommandSender sender, String target, int chanel );
+	boolean hasIgnore(String sender, String target, int chanel );
 
 	void caseIgnore(CommandSender sender, String target, int chanel, String reason );
 

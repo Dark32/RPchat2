@@ -1,4 +1,4 @@
-name: ChatRP
+name: RPChat
 main:  ru.dark32.chat.Main
 version: 1.0.5
 commands:
