@@ -69,7 +69,7 @@ public class ChatListener implements Listener {
 		// чистим список получателей
 		event.getRecipients().clear();
 		// добавляем получателей согласно типу чата
-		Set recipient = chanel.getRecipients(sender);
+		Set<Player> recipient = chanel.getRecipients(sender);
 		// отправка пре сообщения
 		chanel.preSend(sender, message, recipient);
 		//добавляем получателей согласно договору о промышленном шпонаже
