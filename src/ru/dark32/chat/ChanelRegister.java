@@ -13,8 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import ru.dark32.chat.ichanels.ETypeChanel;
 import ru.dark32.chat.ichanels.IChanel;
 import ru.dark32.chat.ichanels.IItemChanel;
-import ru.tehkode.permissions.PermissionUser;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 /**
  * @author Andrew

@@ -2,11 +2,8 @@ package ru.dark32.chat.chanels;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,7 +16,6 @@ import org.bukkit.entity.Player;
 import ru.dark32.chat.ChanelRegister;
 import ru.dark32.chat.Main;
 import ru.dark32.chat.PEXHook;
-import ru.dark32.chat.SimpleClanHook;
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ichanels.ETypeChanel;
 import ru.dark32.chat.ichanels.IChanel;
@@ -211,7 +207,7 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public Set<Player> getRecipients(final Player sender ) {
-		final Set<Player> recipients = new TreeSet<Player>();
+		final Set<Player> recipients = new HashSet<Player>();
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			/*
 			 * if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy") &&

@@ -1,6 +1,4 @@
 package ru.dark32.chat;
-
-import org.bukkit.entity.Player;
 /*
 import com.p000ison.dev.simpleclans2.api.clan.Clan;
 import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayer;

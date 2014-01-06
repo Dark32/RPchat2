@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 /*
@@ -31,7 +30,7 @@ public class Main extends JavaPlugin {
 	public static File				localeConfigFile;
 	public static YamlConfiguration	localeConfig;
 	// выключить в релизе
-	public static final boolean		DEBUG_MODE		= true;
+	public static final boolean		DEBUG_MODE		= !true;
 	public static final String		BASE_PERM		= "mcnw";
 
 	//private static SCCore			core;

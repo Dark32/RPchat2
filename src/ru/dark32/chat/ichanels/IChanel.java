@@ -1,6 +1,5 @@
 package ru.dark32.chat.ichanels;
 
-import java.util.List;
 import java.util.Set;
 
 import org.bukkit.Instrument;
