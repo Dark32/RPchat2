@@ -177,7 +177,7 @@ public class BaseChanel implements IChanel {
 				return listenerMessage.replace("$n", String.valueOf(count));
 			}
 		} else {
-			if (listenerMessage.length() > 0) {
+			if (noListenerMessage.length() > 0) {
 				return noListenerMessage;
 			}
 		}
