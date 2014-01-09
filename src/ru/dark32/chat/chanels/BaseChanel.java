@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import ru.dark32.chat.ChanelRegister;
 import ru.dark32.chat.Main;
 import ru.dark32.chat.PEXHook;
+import ru.dark32.chat.SimpleClanHook;
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ichanels.ETypeChanel;
 import ru.dark32.chat.ichanels.IChanel;
@@ -45,6 +46,7 @@ public class BaseChanel implements IChanel {
 	final private boolean		tabes;
 	private ETypeChanel			type;
 	private boolean				clanOnly;
+	private boolean				allyOnly;
 
 	public BaseChanel(String par_name ){
 		final String path_enable = "Chat." + par_name + ".enable";
@@ -78,6 +80,7 @@ public class BaseChanel implements IChanel {
 		this.noListenerMessage = ChanelRegister.colorUTF8(Main.chatConfig.getString(path_noListenerMessage, ""), 3);
 		this.listenerMessageEnable = Main.chatConfig.getInt(path_isListenerMessage, 0);
 		this.needPerm = Main.chatConfig.getBoolean(path_needPerm, false);
+
 		// PIMK -->
 		String note = Main.chatConfig.getString(path_pimk_note, "1F#");
 		int octava = note.length() > 0 ? note.charAt(0) : 1;
@@ -96,7 +99,9 @@ public class BaseChanel implements IChanel {
 		this.pimkNote = new Note(octava, tone, sharped);
 		this.colorize = Main.chatConfig.getString(path_pimk_colorize, "@");
 		this.overAll = Main.chatConfig.getBoolean(path_overAll, true);
-		this.clanOnly = Main.chatConfig.getBoolean(path_clan, true);
+		String clanly = Main.chatConfig.getString(path_clan, "none");
+		this.clanOnly = clanly.equalsIgnoreCase("clan");
+		this.allyOnly = clanly.equalsIgnoreCase("ally");
 	}
 
 	@Override
@@ -128,7 +133,7 @@ public class BaseChanel implements IChanel {
 	@Override
 	public String format(final Player player, String msg ) {
 		if (Main.SCenable) {
-		//	msg = SimpleClanHook.formatComplete(msg, player);
+			// msg = SimpleClanHook.formatComplete(msg, player);
 		}
 		if (msg.contains("$suffix")) {
 			msg = msg.replace("$suffix", PEXHook.getSuffix(player.getName()));
@@ -209,15 +214,10 @@ public class BaseChanel implements IChanel {
 		final Set<Player> recipients = new HashSet<Player>();
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			/*
-			 * if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy") &&
-			 * sender != recipient) { DEBUG("debug: spy - " +
-			 * recipient.getName(), sender); recipients.add(recipient);
+			 * if (!getClan() || !SimpleClanHook.equalClan(sender, recipient)) {
+			 * DEBUG("debug: hasn't in clan - " + recipient.getName(), sender);
 			 * continue; } else
 			 */
-			/*if (!getClan() || !SimpleClanHook.equalClan(sender, recipient)) {
-				DEBUG("debug: hasn't in clan - " + recipient.getName(), sender);
-				continue;
-			} else */
 			if (isRecipient(sender, recipient)) {
 				DEBUG("debug: isn't Recipient - " + recipient.getName(), sender);
 				continue;
@@ -268,7 +268,8 @@ public class BaseChanel implements IChanel {
 	 * @param sender
 	 * @param recipient
 	 * @return Глухота, Слышит, Сам, В канале , Игнорируем<br>
-	 *         !isInChanel || isSelf || !isHear || isDeaf || hasIgnore
+	 *         !isInChanel || isSelf || !isHear || isDeaf || hasIgnore || isClan
+	 *         || isAlly
 	 */
 	protected boolean isRecipient(final Player sender, final Player recipient ) {
 		final boolean isDeaf = !Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
@@ -277,10 +278,15 @@ public class BaseChanel implements IChanel {
 				|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
 		final boolean isSelf = (sender == recipient && isListenerMessage() == COUNT_INCLUDE);
 		final boolean isInChanel = isOverAll() || Util.getModeIndex(recipient.getName()) == getIndex();
-		final boolean hasIgnore = Main.getIgnoreStorage().hasIgnore(recipient.getName(), sender.getName(), this.getIndex());
-		final boolean allCond = isInChanel && !isSelf && isHear && isDeaf && !hasIgnore;
-		DEBUG(recipient.getName() + " isInChanel " + isInChanel + " isn'tSelf " + !isSelf + " isHear " + isHear
-				+ " hasDeaf " + isDeaf + " hasn'tIgnore " + !hasIgnore + " all " + allCond);
+		final boolean hasIgnore = Main.getIgnoreStorage().hasIgnore(recipient.getName(), sender.getName(),
+				this.getIndex());
+		final boolean isClan = !this.isClan() || SimpleClanHook.equalClan(sender, recipient);
+		final boolean isAlly = !this.isAlly() || SimpleClanHook.equalAlly(sender, recipient);
+		final boolean allCond = isInChanel && !isSelf && isHear && isDeaf && !hasIgnore && isClan && isAlly;
+		DEBUG(recipient.getName());
+		DEBUG("isInChanel " + isInChanel + " isn'tSelf " + !isSelf + " isHear " + isHear);
+		DEBUG("hasDeaf " + isDeaf + " hasn'tIgnore " + !hasIgnore + " all " + allCond);
+		DEBUG("isClan" + isClan + " isAlly" + isAlly);
 		return !allCond;
 	}
 
@@ -296,7 +302,7 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public String preformatMessage(final Player sender, final String message ) {
-		//return Util.randomRoll(message);
+		// return Util.randomRoll(message);
 		return message;
 	}
 
@@ -348,7 +354,7 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public boolean getClan() {
+	public boolean isClan() {
 		return clanOnly && Main.SCenable;
 	}
 
@@ -363,5 +369,10 @@ public class BaseChanel implements IChanel {
 			}
 		}
 		return recipients;
+	}
+
+	@Override
+	public boolean isAlly() {
+		return allyOnly && Main.SCenable;
 	}
 }

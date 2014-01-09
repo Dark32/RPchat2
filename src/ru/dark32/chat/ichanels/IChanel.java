@@ -180,7 +180,7 @@ public interface IChanel {
 	/**
 	 * @return клановый ли чат
 	 */
-	boolean getClan();
+	boolean isClan();
 
 	/**
 	 * @param sender
@@ -189,4 +189,8 @@ public interface IChanel {
 	 */
 	Set<Player> getSpyRecipients(Player sender );
 
+	/**
+	 * @return союзный ли чат
+	 */
+	boolean isAlly();
 }

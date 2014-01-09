@@ -3,20 +3,21 @@ package ru.dark32.chat;
 import java.io.File;
 import java.util.logging.Logger;
 
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-/*
-import com.p000ison.dev.simpleclans2.api.SCCore;
-import com.p000ison.dev.simpleclans2.api.clan.ClanManager;
-import com.p000ison.dev.simpleclans2.api.clanplayer.ClanPlayerManager;
-*/
+
 public class Main extends JavaPlugin {
 
 	public static final Logger		LOG				= Logger.getLogger("Minecraft");
 	public PluginManager			pluginManager;
+
 	private static IMute			muteStorage;
 	private static IDeaf			deafStorage;
 	private static IIgnore			ignorStorage;
@@ -33,7 +34,7 @@ public class Main extends JavaPlugin {
 	public static final boolean		DEBUG_MODE		= !true;
 	public static final String		BASE_PERM		= "mcnw";
 
-	//private static SCCore			core;
+	//private static SimpleClans		core;
 	public static boolean			SCenable		= false;
 
 	@Override
@@ -70,10 +71,10 @@ public class Main extends JavaPlugin {
 		} else {
 			getLogger().warning("[RPChat] " + locale + ".yml not found");
 		}
-		//if (hookSimpleClans()) {
-		//	Bukkit.getConsoleSender().sendMessage("[RPChat] Simple clans was hooked");
-		//	SCenable = true;
-		//}
+		if (hookSimpleClans()) {
+			Bukkit.getConsoleSender().sendMessage("[RPChat] Simple clans was hooked");
+			SCenable = true;
+		}
 		Util.init(this);
 		ValueStorage.init();
 		ChanelRegister.init();
@@ -114,12 +115,12 @@ public class Main extends JavaPlugin {
 	public static IIgnore getIgnoreStorage() {
 		return ignorStorage;
 	}
-/*
+
 	private boolean hookSimpleClans() {
 		try {
 			for (Plugin plugin : getServer().getPluginManager().getPlugins()) {
-				if (plugin instanceof SCCore) {
-					core = (SCCore) plugin;
+				if (plugin instanceof SimpleClans) {
+					//core = (SimpleClans) plugin;
 					return true;
 				}
 			}
@@ -131,11 +132,12 @@ public class Main extends JavaPlugin {
 		return false;
 	}
 
-	public static ClanPlayerManager getClanPlayerManager() {
-		return core.getClanPlayerManager();
+	/*
+	 * public static ClanPlayerManager getClanPlayerManager() { return
+	 * core.getClanPlayerManager(); }
+	 */
+	public static ClanManager getClanManager() {
+		return SimpleClans.getInstance().getClanManager();
 	}
 
-	public static ClanManager getClanManager() {
-		return core.getClanManager();
-*/
 }
