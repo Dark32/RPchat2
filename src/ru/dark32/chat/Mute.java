@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -164,12 +166,10 @@ public class Mute implements IMute {
 				return;
 			}
 			int time = 0;
-			try {
-				time = Integer.parseInt(args[2]);
-			}
-			catch (Exception e) {
+			// try {
+			time = timeParse(args[2]);
+			if (time == 0) {
 				sender.sendMessage(timeNotNum + args[2]);
-				return;
 			}
 			if (time < 5 && !hasUnMute) {
 				sender.sendMessage(canTUnmute);
@@ -180,6 +180,53 @@ public class Mute implements IMute {
 			final int chanel = ChanelRegister.getIndexBySign(args[1].charAt(0));
 			caseMute(sender, nick, chanel, time, reason);
 		}
+
+	}
+
+	final static int	secunde		= 1;
+	final static int	minute		= secunde * 60;
+	final static int	hour		= minute * 60;
+	final static int	day			= hour * 24;
+	final static int	time_inf	= day * 1000;
+	static Pattern		timeParser	= Pattern.compile("(\\d*[dhms]|inf)");
+
+	public static int timeParse(String string ) {
+		int time = 0;
+		Matcher matches = timeParser.matcher(string);
+		while (matches.find()) {
+			if (!matches.group(0).equalsIgnoreCase("inf")) {
+				String time_1 = matches.group(0).substring(0, matches.group(0).length() - 1);
+				char time_2 = matches.group(0).toLowerCase(Locale.US).charAt(matches.group(0).length() - 1);
+				int tmp_time = Integer.parseInt(time_1);
+				switch (time_2) {
+					case 's': {
+						tmp_time *= secunde;
+						break;
+					}
+					case 'm': {
+						tmp_time *= minute;
+						break;
+					}
+					case 'h': {
+						tmp_time *= hour;
+						break;
+					}
+					case 'd': {
+						tmp_time *= day;
+						break;
+					}
+					default: {
+						tmp_time = 0;
+						System.err.println("[rpChat2][ERROR] undef time sign " + time_2);
+					}
+				}
+				time += tmp_time;
+			} else {
+				time = time_inf;
+			}
+
+		}
+		return time;
 
 	}
 
@@ -235,7 +282,7 @@ public class Mute implements IMute {
 		final List<String> msg = new ArrayList<String>();
 		msg.addAll(ValueStorage.muteHelp);
 		for (final String s : msg) {
-			sender.sendMessage(ChanelRegister.colorUTF8(s,3));
+			sender.sendMessage(ChanelRegister.colorUTF8(s, 3));
 		}
 	}
 
