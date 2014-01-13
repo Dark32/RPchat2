@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -301,13 +303,43 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public String preformatMessage(final Player sender, final String message ) {
+	public String preformatMessage(final Player sender, String message ) {
 		// return Util.randomRoll(message);
-		return colorChatMessage(sender, message);
+		message = colorChatMessage(sender, message);
+		message = suffixLatter(message);
+		return message;
+	}
+
+	static Pattern	suffixParser	= Pattern.compile("\\$\\((.+?)\\|(.+?)\\|(.+?)\\|(\\d+?)\\)");
+
+	public static String suffixLatter(String message ) {
+		Matcher matches = suffixParser.matcher(message);
+		while (matches.find()) {
+			//System.out.println(matches.group(1));
+			//System.out.println(matches.group(2));
+			//System.out.println(matches.group(3));
+			// System.out.println(matches.group(4));
+			int num = Integer.valueOf(matches.group(4));
+			String suf = "";
+			int val = num % 100;
+			if (val > 10 && val < 20) {
+				suf = matches.group(3);
+			} else {
+				val = num % 10;
+				if (val == 1) {
+					suf = matches.group(1);
+				} else if (val > 1 && val < 5) {
+					suf = matches.group(2);
+				} else {
+					suf = matches.group(3);
+				}
+			}
+			message = message.replaceAll("\\$\\((.+?)\\|(.+?)\\|(.+?)\\|(\\d+?)\\)", suf);
+		}
+		return message;
 	}
 
 	public String colorChatMessage(final Player sender, String message ) {
-
 		if (message.contains("&")) {
 			for (ChatColor value : ChatColor.values()) {
 				char color = value.getChar();
