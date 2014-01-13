@@ -93,7 +93,7 @@ public class Mute implements IMute {
 		final String _chanelName = (chanel >= 0 && chanel < chaneles ? ChanelRegister.getByIndex(chanel).getName()
 				: "a");
 		if (time > 5) {
-			sender.sendMessage(BaseChanel.suffixLatter(muteMessage.replace("$name", name)
+			sender.sendMessage(Util.suffixLatter(muteMessage.replace("$name", name)
 					.replace("$channel", _chanelName).replace("$time", String.valueOf(time)).replace("$reason", reason)));
 		} else {
 			System.out.println(name);
@@ -169,7 +169,7 @@ public class Mute implements IMute {
 			}
 			int time = 0;
 			// try {
-			time = timeParse(args[2]);
+			time = Util.timeParse(args[2]);
 			if (time == 0) {
 				sender.sendMessage(timeNotNum + args[2]);
 			}
@@ -185,52 +185,7 @@ public class Mute implements IMute {
 
 	}
 
-	final static int	secunde		= 1;
-	final static int	minute		= secunde * 60;
-	final static int	hour		= minute * 60;
-	final static int	day			= hour * 24;
-	final static int	time_inf	= day * 1000;
-	static Pattern		timeParser	= Pattern.compile("(\\d*[dhms]|inf)");
-
-	public static int timeParse(String string ) {
-		int time = 0;
-		Matcher matches = timeParser.matcher(string);
-		while (matches.find()) {
-			if (!matches.group(0).equalsIgnoreCase("inf")) {
-				String time_1 = matches.group(0).substring(0, matches.group(0).length() - 1);
-				char time_2 = matches.group(0).toLowerCase(Locale.US).charAt(matches.group(0).length() - 1);
-				int tmp_time = Integer.parseInt(time_1);
-				switch (time_2) {
-					case 's': {
-						tmp_time *= secunde;
-						break;
-					}
-					case 'm': {
-						tmp_time *= minute;
-						break;
-					}
-					case 'h': {
-						tmp_time *= hour;
-						break;
-					}
-					case 'd': {
-						tmp_time *= day;
-						break;
-					}
-					default: {
-						tmp_time = 0;
-						System.err.println("[rpChat2][ERROR] undef time sign " + time_2);
-					}
-				}
-				time += tmp_time;
-			} else {
-				time = time_inf;
-			}
-
-		}
-		return time;
-
-	}
+	
 
 	@Override
 	public void save() {
@@ -313,7 +268,7 @@ public class Mute implements IMute {
 			final long time = getTimeMute(name, i);
 			final String reason = Main.storage.getString(getPlayerMuteString(name, i) + "-reason");
 			if (time > -1) {
-				sender.sendMessage(BaseChanel.suffixLatter(muteSee.replace("$name", name)
+				sender.sendMessage(Util.suffixLatter(muteSee.replace("$name", name)
 						.replace("$channel", ChanelRegister.getByIndex(i).getInnerName()).replace("$reason", reason)
 						.replace("$time", String.valueOf(time))));
 			}

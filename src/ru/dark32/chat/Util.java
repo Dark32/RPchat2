@@ -170,8 +170,6 @@ public class Util {
 								break;
 							default:
 								Bukkit.getConsoleSender().sendMessage("Malformed \\uxxxx encoding.");
-								// throw new
-								// IllegalArgumentException("Malformed \\uxxxx encoding.");
 						}
 					}
 					out[outLen++] = (char) value;
@@ -187,5 +185,88 @@ public class Util {
 			}
 		}
 		return new String(out, 0, outLen);
+	}
+
+	final private static String		suffixParsePatern	= "\\$\\((.+?)\\|(.+?)\\|(.+?)\\|(\\d+?)\\)";
+	final private static Pattern	suffixParser		= Pattern.compile(suffixParsePatern);
+
+	public static String suffixLatter(String message ) {
+		Matcher matches = suffixParser.matcher(message);
+		while (matches.find()) {
+			int num = Integer.valueOf(matches.group(4));
+			String suf = "";
+			int val = num % 100;
+			if (val > 10 && val < 20) {
+				suf = matches.group(3);
+			} else {
+				val = num % 10;
+				if (val == 1) {
+					suf = matches.group(1);
+				} else if (val > 1 && val < 5) {
+					suf = matches.group(2);
+				} else {
+					suf = matches.group(3);
+				}
+			}
+			message = message.replaceAll(suffixParsePatern, suf);
+		}
+		return message;
+	}
+
+	final static int				secunde		= 1;
+	final static int				minute		= secunde * 60;
+	final static int				hour		= minute * 60;
+	final static int				day			= hour * 24;
+	final static int				time_inf	= day * 1000;
+	final private static Pattern	timeParser	= Pattern.compile("(\\d+?[dhms]|inf)");
+
+	public static int timeParse(String string ) {
+		int time = 0;
+		Matcher matches = timeParser.matcher(string);
+		while (matches.find()) {
+			final String rawTime = matches.group(0).toLowerCase(Locale.US);
+			if (!rawTime.equalsIgnoreCase("inf")) {
+				char timeMultiple = rawTime.charAt(rawTime.length() - 1);
+				int tmp_time = Integer.parseInt(rawTime.substring(0, rawTime.length() - 1));
+				switch (timeMultiple) {
+					case 's': {
+						tmp_time *= secunde;
+						break;
+					}
+					case 'm': {
+						tmp_time *= minute;
+						break;
+					}
+					case 'h': {
+						tmp_time *= hour;
+						break;
+					}
+					case 'd': {
+						tmp_time *= day;
+						break;
+					}
+					default: {
+						tmp_time = 0;
+						System.err.println("[rpChat2][ERROR] undef time sign " + timeMultiple);
+					}
+				}
+				time += tmp_time;
+			} else {
+				time = time_inf;
+			}
+
+		}
+		return time;
+
+	}
+
+	final public static void DEBUG(Object message, CommandSender sender ) {
+		if (Main.DEBUG_MODE) {
+			sender.sendMessage(message.toString());
+		}
+	}
+
+	final public static void DEBUG(Object message ) {
+		DEBUG(message, Bukkit.getConsoleSender());
 	}
 }

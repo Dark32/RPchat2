@@ -10,7 +10,7 @@ import ru.dark32.chat.Main;
 import ru.dark32.chat.ichanels.IBroadChanel;
 
 public class BroadChanel extends BaseChanel implements IBroadChanel {
-	private List<String>	paterns;
+	final private List<String>	paterns;
 
 	public BroadChanel(String name ){
 		super(name);
@@ -19,12 +19,12 @@ public class BroadChanel extends BaseChanel implements IBroadChanel {
 	}
 
 	@Override
-	public List<String> getPatterns() {
+	final public List<String> getPatterns() {
 		return paterns;
 	}
 
 	@Override
-	public String preformatMessage(final Player sender, final String message ) {
+	final public String preformatMessage(final Player sender, final String message ) {
 		Bukkit.getConsoleSender().sendMessage("BROAD: " + sender.getName() + ":" + message);
 		return ChanelRegister.colorUTF8(message,3);
 	}

@@ -15,11 +15,11 @@ import ru.dark32.chat.ichanels.IItemChanel;
  */
 public class ItemChanel extends BaseChanel implements IItemChanel {
 
-	private int			itemAmount;
-	private int			itemId;
-	private Material	itemMaterial;
-	private int			itemSubId;
-	private boolean		requestPprefix;
+	final private int			itemAmount;
+	final private int			itemId;
+	final private Material	itemMaterial;
+	final private int			itemSubId;
+	final private boolean		requestPprefix;
 
 	public ItemChanel(String name ){
 		super(name);
@@ -59,8 +59,8 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 		if (item == null) {
 			return false;
 		}
-		DEBUG("debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - " + item.getType());
-		DEBUG("debug need " + itemId + ":" + itemSubId + " - " + itemMaterial);
+		Util.DEBUG("debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - " + item.getType());
+		Util.DEBUG("debug need " + itemId + ":" + itemSubId + " - " + itemMaterial);
 		final boolean isItem = item.getDurability() == this.itemSubId
 				&& item.getAmount() >= this.itemAmount
 				&& ((ValueStorage.experemental && item.getType() == this.itemMaterial) || item.getTypeId() == this.itemId);
@@ -68,34 +68,34 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 	}
 
 	@Override
-	public int getItemAmount() {
+	final public int getItemAmount() {
 		return itemAmount;
 	}
 
 	@Override
 	@Deprecated
-	public int getItemId() {
+	final public int getItemId() {
 		return this.itemId;
 	}
 
 	@Override
-	public Material getItemMaterial() {
+	final public Material getItemMaterial() {
 		return itemMaterial;
 	}
 
 	@Override
-	public int getItemSubId() {
+	final public int getItemSubId() {
 		return this.itemSubId;
 	}
 
 	@Override
-	public boolean isRequestPprefix() {
+	final public boolean isRequestPprefix() {
 		return requestPprefix;
 	}
 
 	@SuppressWarnings("deprecation" )
 	@Override
-	public void loseItem(final Player player ) {
+	final public void loseItem(final Player player ) {
 		final ItemStack inHand = player.getItemInHand();
 		if (this.itemAmount == 0) {
 			return;

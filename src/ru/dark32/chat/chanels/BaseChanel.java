@@ -25,9 +25,9 @@ import ru.dark32.chat.ichanels.IChanel;
 
 public class BaseChanel implements IChanel {
 	final private String		colorize;
-	protected final int			COUNT_EXCLUDE	= 1;
-	protected final int			COUNT_INCLUDE	= -1;
-	protected final int			COUNT_OFF		= 0;
+	final protected int			COUNT_EXCLUDE	= 1;
+	final protected int			COUNT_INCLUDE	= -1;
+	final protected int			COUNT_OFF		= 0;
 	final private boolean		enable;
 	final private String		formatString;
 	final private int			index;
@@ -47,8 +47,8 @@ public class BaseChanel implements IChanel {
 	final private char			sign;
 	final private boolean		tabes;
 	private ETypeChanel			type;
-	private boolean				clanOnly;
-	private boolean				allyOnly;
+	final private boolean		clanOnly;
+	final private boolean		allyOnly;
 
 	public BaseChanel(String par_name ){
 		final String path_enable = "Chat." + par_name + ".enable";
@@ -111,16 +111,18 @@ public class BaseChanel implements IChanel {
 		return true;
 	}
 
-	void DEBUG(String message ) {
-		if (Main.DEBUG_MODE) {
-			DEBUG(message, Bukkit.getConsoleSender());
+	final private String colorChatMessage(final Player sender, String message ) {
+		if (message.contains("&")) {
+			for (ChatColor value : ChatColor.values()) {
+				char color = value.getChar();
+				if (Util.hasPermission(sender, Main.BASE_PERM + ".color." + color)
+						|| Util.hasPermission(sender, Main.BASE_PERM + "." + this.getInnerName() + ".color." + color)) {
+					message = message.replaceAll("&" + value.getChar(), "§" + value.getChar());
+					break;
+				}
+			}
 		}
-	}
-
-	void DEBUG(String message, CommandSender sender ) {
-		if (Main.DEBUG_MODE) {
-			sender.sendMessage(message);
-		}
+		return message;
 	}
 
 	private String findMatch(String name, String[] message ) {
@@ -158,22 +160,22 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public String getColorize() {
+	final public String getColorize() {
 		return colorize;
 	}
 
 	@Override
-	public String getFormat() {
+	final public String getFormat() {
 		return this.formatString;
 	}
 
 	@Override
-	public int getIndex() {
+	final public int getIndex() {
 		return this.index;
 	}
 
 	@Override
-	public String getInnerName() {
+	final public String getInnerName() {
 		return innerName;
 	}
 
@@ -181,7 +183,7 @@ public class BaseChanel implements IChanel {
 	public String getListenerMessage(int count ) {
 		if (count > 0) {
 			if (listenerMessage.length() > 0 && listenerMessage.contains("$n")) {
-				return suffixLatter(listenerMessage.replace("$n", String.valueOf(count)));
+				return Util.suffixLatter(listenerMessage.replace("$n", String.valueOf(count)));
 			}
 		} else {
 			if (noListenerMessage.length() > 0) {
@@ -192,22 +194,22 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public String getName() {
+	final public String getName() {
 		return this.name;
 	}
 
 	@Override
-	public Instrument getPimkInstrument() {
+	final public Instrument getPimkInstrument() {
 		return pimkInstrument;
 	}
 
 	@Override
-	public Note getPimkNote() {
+	final public Note getPimkNote() {
 		return pimkNote;
 	}
 
 	@Override
-	public char getPrefix() {
+	final public char getPrefix() {
 		return this.prefix;
 	}
 
@@ -221,7 +223,7 @@ public class BaseChanel implements IChanel {
 			 * continue; } else
 			 */
 			if (isRecipient(sender, recipient)) {
-				DEBUG("debug: isn't Recipient - " + recipient.getName(), sender);
+				Util.DEBUG("debug: isn't Recipient - " + recipient.getName(), sender);
 				continue;
 			} else {
 				recipients.add(recipient);
@@ -231,37 +233,60 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public char getSign() {
+	final public char getSign() {
 		return this.sign;
 	}
 
 	@Override
-	public ETypeChanel getType() {
+	public Set<Player> getSpyRecipients(Player sender ) {
+		final Set<Player> recipients = new HashSet<Player>();
+		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
+			if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy") && sender != recipient) {
+				Util.DEBUG("debug: spy - " + recipient.getName(), sender);
+				recipients.add(recipient);
+				continue;
+			}
+		}
+		return recipients;
+	}
+
+	@Override
+	final public ETypeChanel getType() {
 		return this.type;
 	}
 
 	@Override
-	public boolean isEnable() {
+	final public boolean isAlly() {
+		return allyOnly && Main.SCenable;
+	}
+
+	@Override
+	final public boolean isClan() {
+		return clanOnly && Main.SCenable;
+	}
+
+	@Override
+	final public boolean isEnable() {
 		return enable;
 	}
 
 	@Override
-	public int isListenerMessage() {
+	final public int isListenerMessage() {
 		return listenerMessageEnable;
 	}
 
 	@Override
-	public boolean isNeedPerm() {
+	final public boolean isNeedPerm() {
 		return needPerm;
 	}
 
 	@Override
-	public boolean isOverAll() {
+	final public boolean isOverAll() {
 		return overAll;
 	}
 
 	@Override
-	public boolean isPimk() {
+	final public boolean isPimk() {
 		return pimkEnable;
 	}
 
@@ -273,7 +298,7 @@ public class BaseChanel implements IChanel {
 	 *         !isInChanel || isSelf || !isHear || isDeaf || hasIgnore || isClan
 	 *         || isAlly
 	 */
-	protected boolean isRecipient(final Player sender, final Player recipient ) {
+	final protected boolean isRecipient(final Player sender, final Player recipient ) {
 		final boolean isDeaf = !Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
 		final boolean isHear = !isNeedPerm()
 				|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
@@ -285,20 +310,20 @@ public class BaseChanel implements IChanel {
 		final boolean isClan = !this.isClan() || SimpleClanHook.equalClan(sender, recipient);
 		final boolean isAlly = !this.isAlly() || SimpleClanHook.equalAlly(sender, recipient);
 		final boolean allCond = isInChanel && !isSelf && isHear && isDeaf && !hasIgnore && isClan && isAlly;
-		DEBUG(recipient.getName());
-		DEBUG("isInChanel " + isInChanel + " isn'tSelf " + !isSelf + " isHear " + isHear);
-		DEBUG("hasDeaf " + isDeaf + " hasn'tIgnore " + !hasIgnore + " all " + allCond);
-		DEBUG("isClan" + isClan + " isAlly" + isAlly);
+		Util.DEBUG(recipient.getName());
+		Util.DEBUG("isInChanel " + isInChanel + " isn'tSelf " + !isSelf + " isHear " + isHear);
+		Util.DEBUG("hasDeaf " + isDeaf + " hasn'tIgnore " + !hasIgnore + " all " + allCond);
+		Util.DEBUG("isClan" + isClan + " isAlly" + isAlly);
 		return !allCond;
 	}
 
 	@Override
-	public boolean isTabes() {
+	final public boolean isTabes() {
 		return tabes;
 	}
 
 	@Override
-	public boolean isWorldChat() {
+	final public boolean isWorldChat() {
 		return this.isWorld;
 	}
 
@@ -306,50 +331,7 @@ public class BaseChanel implements IChanel {
 	public String preformatMessage(final Player sender, String message ) {
 		// return Util.randomRoll(message);
 		message = colorChatMessage(sender, message);
-		message = suffixLatter(message);
-		return message;
-	}
-
-	static Pattern	suffixParser	= Pattern.compile("\\$\\((.+?)\\|(.+?)\\|(.+?)\\|(\\d+?)\\)");
-
-	public static String suffixLatter(String message ) {
-		Matcher matches = suffixParser.matcher(message);
-		while (matches.find()) {
-			//System.out.println(matches.group(1));
-			//System.out.println(matches.group(2));
-			//System.out.println(matches.group(3));
-			// System.out.println(matches.group(4));
-			int num = Integer.valueOf(matches.group(4));
-			String suf = "";
-			int val = num % 100;
-			if (val > 10 && val < 20) {
-				suf = matches.group(3);
-			} else {
-				val = num % 10;
-				if (val == 1) {
-					suf = matches.group(1);
-				} else if (val > 1 && val < 5) {
-					suf = matches.group(2);
-				} else {
-					suf = matches.group(3);
-				}
-			}
-			message = message.replaceAll("\\$\\((.+?)\\|(.+?)\\|(.+?)\\|(\\d+?)\\)", suf);
-		}
-		return message;
-	}
-
-	public String colorChatMessage(final Player sender, String message ) {
-		if (message.contains("&")) {
-			for (ChatColor value : ChatColor.values()) {
-				char color = value.getChar();
-				if (Util.hasPermission(sender, Main.BASE_PERM + ".color." + color)
-						|| Util.hasPermission(sender, Main.BASE_PERM + "." + this.getInnerName() + ".color." + color)) {
-					message = message.replaceAll("&" + value.getChar(), "§" + value.getChar());
-					break;
-				}
-			}
-		}
+		message = Util.suffixLatter(message);
 		return message;
 	}
 
@@ -389,7 +371,7 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public void setType(final ETypeChanel type ) {
+	final public void setType(final ETypeChanel type ) {
 		this.type = type;
 
 	}
@@ -398,28 +380,5 @@ public class BaseChanel implements IChanel {
 	public String toString() {
 		return super.toString() + ", index =>" + this.index + ", isWorld =>" + this.isWorld + ", name =>" + this.name
 				+ ", prefix =>" + this.prefix + ", sign =>" + this.sign + ", type =>" + this.type;
-	}
-
-	@Override
-	public boolean isClan() {
-		return clanOnly && Main.SCenable;
-	}
-
-	@Override
-	public Set<Player> getSpyRecipients(Player sender ) {
-		final Set<Player> recipients = new HashSet<Player>();
-		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy") && sender != recipient) {
-				DEBUG("debug: spy - " + recipient.getName(), sender);
-				recipients.add(recipient);
-				continue;
-			}
-		}
-		return recipients;
-	}
-
-	@Override
-	public boolean isAlly() {
-		return allyOnly && Main.SCenable;
 	}
 }

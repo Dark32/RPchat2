@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ru.dark32.chat.chanels;
 
 import java.util.HashSet;
@@ -19,7 +16,7 @@ import ru.dark32.chat.ichanels.IRangeChanel;
  */
 public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 
-	private int	range;
+	final private int	range;
 
 	public RangeItemChanel(String name ){
 		super(name);
@@ -27,7 +24,7 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 		this.range = Main.chatConfig.getInt(path_range);
 	}
 
-	protected int getDist(final Location sender, final Location target ) {
+	final protected int getDist(final Location sender, final Location target ) {
 		int distX = (int) (sender.getX() - target.getX());
 		distX *= distX;
 		int distY = (int) (sender.getY() - target.getY());
@@ -39,7 +36,7 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 	}
 
 	@Override
-	public int getRange() {
+	final public int getRange() {
 		return this.range;
 	}
 
@@ -50,24 +47,24 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 			final boolean isWorld = isWorldChat() && sender.getWorld() == recipient.getWorld();
 			final int dist = getDist(sender.getLocation(), recipient.getLocation());
 			final boolean isRange = (this.getRange() < 0) || (dist < this.getRange());
-			DEBUG("debug: " + recipient.getName() + " | " + dist + "/" + this.range * this.range + "|" + isWorld,
+			Util.DEBUG("debug: " + recipient.getName() + " | " + dist + "/" + this.range * this.range + "|" + isWorld,
 					sender);
 			if (isRecipient(sender, recipient)) {
-				DEBUG("debug: isn't Recipient - " + recipient.getName(), sender);
+				Util.DEBUG("debug: isn't Recipient - " + recipient.getName(), sender);
 				continue;
 			} else if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy")) {
-				DEBUG("debug: spy - " + recipient.getName(), sender);
+				Util.DEBUG("debug: spy - " + recipient.getName(), sender);
 				recipients.add(recipient);
 			} else if (isRange) {
 				if (isWorld) {
-					DEBUG("debug: in world - " + recipient.getName(), sender);
+					Util.DEBUG("debug: in world - " + recipient.getName(), sender);
 					recipients.add(recipient);
 				} else {
-					DEBUG("debug: out of world - " + recipient.getName(), sender);
+					Util.DEBUG("debug: out of world - " + recipient.getName(), sender);
 					continue;
 				}
 			} else {
-				DEBUG("debug: out of range - " + recipient.getName(), sender);
+				Util.DEBUG("debug: out of range - " + recipient.getName(), sender);
 				continue;
 			}
 		}

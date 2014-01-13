@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ru.dark32.chat.chanels;
 
 import java.util.HashSet;
@@ -21,10 +18,10 @@ import ru.dark32.chat.ichanels.IRangeRequisiteItemChanel;
  * 
  */
 public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeRequisiteItemChanel {
-	private int			requisiteItemAmount;
-	private int			requisiteItemId;
-	private Material	requisiteItemMaterial;
-	private int			requisiteItemSubId;
+	final private int			requisiteItemAmount;
+	final private int			requisiteItemId;
+	final private Material	requisiteItemMaterial;
+	final private int			requisiteItemSubId;
 
 	@SuppressWarnings("deprecation" )
 	public RangeRequisiteItemChanel(String name ){
@@ -46,8 +43,8 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 		if (item == null) {
 			return false;
 		}
-		DEBUG("debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - " + item.getType());
-		DEBUG("debug need " + requisiteItemId + ":" + requisiteItemSubId + " - " + requisiteItemMaterial);
+		Util.DEBUG("debug inhand " + item.getTypeId() + ":" + item.getDurability() + " - " + item.getType());
+		Util.DEBUG("debug need " + requisiteItemId + ":" + requisiteItemSubId + " - " + requisiteItemMaterial);
 		final boolean isItem = item.getDurability() == this.requisiteItemSubId
 				&& item.getAmount() >= this.requisiteItemAmount
 				&& ((ValueStorage.experemental && item.getType() == this.requisiteItemMaterial) || item.getTypeId() == this.requisiteItemId);
@@ -64,24 +61,24 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 			final boolean isTransceiver = Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName()
 					+ ".no_item")
 					|| recipient == sender || hasItemInInvetery(recipient);
-			DEBUG("debug: " + recipient.getName() + " | " + dist + "/" + this.getRange() * this.getRange() + "|"
+			Util.DEBUG("debug: " + recipient.getName() + " | " + dist + "/" + this.getRange() * this.getRange() + "|"
 					+ isWorld, sender);
 			if (isRecipient(sender, recipient)) {
-				DEBUG("debug: isn't Recipient - " + recipient.getName(), sender);
+				Util.DEBUG("debug: isn't Recipient - " + recipient.getName(), sender);
 				continue;
 			} else if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy")) {
-				DEBUG("debug: spy - " + recipient.getName(), sender);
+				Util.DEBUG("debug: spy - " + recipient.getName(), sender);
 				recipients.add(recipient);
 			} else if (isRange && isTransceiver) {
 				if (isWorld) {
-					DEBUG("debug: in world - " + recipient.getName(), sender);
+					Util.DEBUG("debug: in world - " + recipient.getName(), sender);
 					recipients.add(recipient);
 				} else {
-					DEBUG("debug: out of world - " + recipient.getName(), sender);
+					Util.DEBUG("debug: out of world - " + recipient.getName(), sender);
 					continue;
 				}
 			} else {
-				DEBUG("debug: out of range - " + recipient.getName(), sender);
+				Util.DEBUG("debug: out of range - " + recipient.getName(), sender);
 				continue;
 			}
 		}
@@ -89,23 +86,23 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 	}
 
 	@Override
-	public int getRequiseteItemAmount() {
+	final public int getRequiseteItemAmount() {
 		return this.requisiteItemAmount;
 	}
 
 	@Deprecated
 	@Override
-	public int getRequiseteItemId() {
+	final public int getRequiseteItemId() {
 		return requisiteItemId;
 	}
 
 	@Override
-	public Material getRequiseteItemMaterial() {
+	final public Material getRequiseteItemMaterial() {
 		return requisiteItemMaterial;
 	}
 
 	@Override
-	public int getRequiseteItemSubId() {
+	final public int getRequiseteItemSubId() {
 		return requisiteItemSubId;
 	}
 

@@ -20,10 +20,10 @@ import ru.dark32.chat.ichanels.IPersonalMessagesChanel;
  */
 public class PersonalMessageChanel extends BaseChanel implements IPersonalMessagesChanel {
 
-	private String	formatToSting;
-	private String	formatSpyString;
-	private String	formatFromString;
-	private int		pmSearchNickMode;
+	final private String	formatToSting;
+	final private String	formatSpyString;
+	final private String	formatFromString;
+	final private int		pmSearchNickMode;
 
 	public PersonalMessageChanel(String name ){
 		super(name);
@@ -42,33 +42,33 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	 * @return the pmSearchNickMode
 	 */
 	@Override
-	public int getPmSearchNickMode() {
+	final public int getPmSearchNickMode() {
 		return pmSearchNickMode;
 	}
 
 	@Override
-	public boolean hasNameTarget(final String raw ) {
+	final public boolean hasNameTarget(final String raw ) {
 		return raw.length() > 1;
 	}
 
 	@Override
-	public String getNameTarget(final String raw ) {
+	final public String getNameTarget(final String raw ) {
 		final int _ind = raw.indexOf(' ');
 		return raw.substring(1, (_ind == -1) ? raw.length() : _ind);
 	}
 
 	@Override
-	public int hasMessage(final String raw ) {
+	final public int hasMessage(final String raw ) {
 		return raw.indexOf(' ');
 	}
 
 	@Override
-	public String getMessage(final String raw, final int _ind ) {
+	final public String getMessage(final String raw, final int _ind ) {
 		return _ind != -1 ? raw.substring(_ind + 1, raw.length()) : "";
 	}
 
 	@Override
-	public Player getTargetByName(final String name ) {
+	final public Player getTargetByName(final String name ) {
 		switch (pmSearchNickMode) {
 			case -1:
 				return Bukkit.getServer().getPlayerExact(name);
@@ -82,7 +82,7 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	}
 
 	@Override
-	public boolean hasTarget(final Player target ) {
+	final public boolean hasTarget(final Player target ) {
 		return target != null;
 	}
 
@@ -113,13 +113,13 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	}
 
 	@Override
-	public void responseSendMessage(final Player sender, final String msg ) {
+	final public void responseSendMessage(final Player sender, final String msg ) {
 		sender.sendMessage(msg);
 
 	}
 
 	@Override
-	public void sendSpyMessage(final Player sender, final Player target, final String msg ) {
+	final public void sendSpyMessage(final Player sender, final Player target, final String msg ) {
 		Bukkit.getConsoleSender().sendMessage(msg);
 
 	}
@@ -140,18 +140,18 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	}
 
 	@Override
-	public String formatTo(final Player sender, final Player target, final String msg ) {
+	final public String formatTo(final Player sender, final Player target, final String msg ) {
 		return format(sender, formatToSting).replace("%2$s", msg).replace("%1$s", sender.getName());
 	}
 
 	@Override
-	public String formatFrom(final Player sender, final Player target, final String msg ) {
+	final public String formatFrom(final Player sender, final Player target, final String msg ) {
 		return format(sender, formatFromString).replace("$r", target.getName()).replace("%2$s", msg)
 				.replace("%1$s", sender.getName());
 	}
 
 	@Override
-	public String formatSpy(final Player sender, final Player target, final String msg ) {
+	final public String formatSpy(final Player sender, final Player target, final String msg ) {
 		return format(sender, formatSpyString).replace("%1$s", sender.getName()).replace("$r", target.getName())
 				.replace("%2$s", msg);
 	}
@@ -163,7 +163,7 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 
 	}
 	@Override
-	public Set<Player> getSpyRecipients(Player sender ) {
+	final public Set<Player> getSpyRecipients(Player sender ) {
 		return null;
 	}
 }
