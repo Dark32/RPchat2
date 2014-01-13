@@ -1,11 +1,13 @@
 package ru.dark32.chat;
 
 import java.util.Set;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import ru.dark32.chat.chanels.BaseChanel;
 import ru.dark32.chat.ichanels.IChanel;
 
 /**
@@ -69,7 +71,7 @@ public class ChatListener implements Listener {
 		Set<Player> recipient = chanel.getRecipients(sender);
 		// отправка пре сообщения
 		chanel.preSend(sender, message, recipient);
-		//добавляем получателей согласно договору о промышленном шпонаже
+		// добавляем получателей согласно договору о промышленном шпонаже
 		recipient.addAll(chanel.getSpyRecipients(sender));
 		event.getRecipients().addAll(recipient);
 		// получаем и обрабатываем формат
@@ -82,8 +84,8 @@ public class ChatListener implements Listener {
 
 	private Boolean hasMute(final Player player, final int indexChanel ) {
 		if (Main.getBanStorage().isMuted(player.getName(), indexChanel)) {
-			player.sendMessage(ValueStorage.muteMessage.replace("$1",
-					String.valueOf(Main.getBanStorage().getTimeMute(player.getName(), indexChanel))));
+			player.sendMessage(BaseChanel.suffixLatter(ValueStorage.muteMessage.replace("$1",
+					String.valueOf(Main.getBanStorage().getTimeMute(player.getName(), indexChanel)))));
 
 			return true;
 		}

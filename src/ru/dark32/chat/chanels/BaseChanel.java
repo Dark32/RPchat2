@@ -181,7 +181,7 @@ public class BaseChanel implements IChanel {
 	public String getListenerMessage(int count ) {
 		if (count > 0) {
 			if (listenerMessage.length() > 0 && listenerMessage.contains("$n")) {
-				return listenerMessage.replace("$n", String.valueOf(count));
+				return suffixLatter(listenerMessage.replace("$n", String.valueOf(count)));
 			}
 		} else {
 			if (noListenerMessage.length() > 0) {

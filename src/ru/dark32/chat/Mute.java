@@ -18,6 +18,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
+import ru.dark32.chat.chanels.BaseChanel;
+
 public class Mute implements IMute {
 	private final SimpleDateFormat	SDF			= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	final private int				chaneles	= ChanelRegister.getChanels();
@@ -91,8 +93,8 @@ public class Mute implements IMute {
 		final String _chanelName = (chanel >= 0 && chanel < chaneles ? ChanelRegister.getByIndex(chanel).getName()
 				: "a");
 		if (time > 5) {
-			sender.sendMessage(muteMessage.replace("$name", name).replace("$channel", _chanelName)
-					.replace("$time", String.valueOf(time)).replace("$reason", reason));
+			sender.sendMessage(BaseChanel.suffixLatter(muteMessage.replace("$name", name)
+					.replace("$channel", _chanelName).replace("$time", String.valueOf(time)).replace("$reason", reason)));
 		} else {
 			System.out.println(name);
 			sender.sendMessage(unmuteMessage.replace("$name", name).replace("$channel", _chanelName));
@@ -311,9 +313,9 @@ public class Mute implements IMute {
 			final long time = getTimeMute(name, i);
 			final String reason = Main.storage.getString(getPlayerMuteString(name, i) + "-reason");
 			if (time > -1) {
-				sender.sendMessage(muteSee.replace("$name", name)
+				sender.sendMessage(BaseChanel.suffixLatter(muteSee.replace("$name", name)
 						.replace("$channel", ChanelRegister.getByIndex(i).getInnerName()).replace("$reason", reason)
-						.replace("$time", String.valueOf(time)));
+						.replace("$time", String.valueOf(time))));
 			}
 		}
 
