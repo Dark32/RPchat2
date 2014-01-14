@@ -53,7 +53,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 			String[] _args = new String[3];
 			_args[0] = args.length > 0 ? args[0] : "empty";
 			_args[1] = args.length > 1 ? args[1] : "a";
-			_args[2] = "1";
+			_args[2] = "1s";
 			Main.getBanStorage().mute(_args, sender);
 			return true;
 		}
