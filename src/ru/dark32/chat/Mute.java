@@ -93,9 +93,20 @@ public class Mute implements IMute {
 		final String _chanelName = (chanel >= 0 && chanel < chaneles ? ChanelRegister.getByIndex(chanel).getName()
 				: "a");
 		if (time > 5) {
-			sender.sendMessage(Util.suffixLatter(muteMessage.replace("$name", name)
-					.replace("$channel", _chanelName).replace("$time", String.valueOf(time)).replace("$reason", reason)));
-		} else {
+			String msg = muteSee;
+			if (msg.contains("$name")) {
+				msg = msg.replace("$name", name);
+			}
+			if (msg.contains("$channel")) {
+				msg = msg.replace("$channel", ChanelRegister.getByIndex(chanel).getName());
+			}
+			if (msg.contains("$reason")) {
+				msg = msg.replace("$reason", reason);
+			}
+			msg = unParseTime(msg, time);
+			msg = Util.suffixLatter(msg);
+			sender.sendMessage(msg);
+			} else {
 			System.out.println(name);
 			sender.sendMessage(unmuteMessage.replace("$name", name).replace("$channel", _chanelName));
 		}
@@ -185,8 +196,6 @@ public class Mute implements IMute {
 
 	}
 
-	
-
 	@Override
 	public void save() {
 		Set<String> list;
@@ -268,11 +277,44 @@ public class Mute implements IMute {
 			final long time = getTimeMute(name, i);
 			final String reason = Main.storage.getString(getPlayerMuteString(name, i) + "-reason");
 			if (time > -1) {
-				sender.sendMessage(Util.suffixLatter(muteSee.replace("$name", name)
-						.replace("$channel", ChanelRegister.getByIndex(i).getInnerName()).replace("$reason", reason)
-						.replace("$time", String.valueOf(time))));
+				String msg = muteSee;
+				if (msg.contains("$name")) {
+					msg = msg.replace("$name", name);
+				}
+				if (msg.contains("$channel")) {
+					msg = msg.replace("$channel", ChanelRegister.getByIndex(i).getName());
+				}
+				if (msg.contains("$reason")) {
+					msg = msg.replace("$reason", reason);
+				}
+				msg = unParseTime(msg, time);
+				msg = Util.suffixLatter(msg);
+				sender.sendMessage(msg);
 			}
 		}
 
+	}
+
+	public static String unParseTime(String msg, long time ) {
+		if (msg.contains("$time")) {
+			msg = msg.replace("$time", String.valueOf(time));
+		}
+		if (msg.contains("$data.day")) {
+			long day = time / Util.day;
+			msg = msg.replace("$data.day", Long.toString(day));
+		}
+		if (msg.contains("$data.hour")) {
+			long hour = (time % Util.day) / Util.hour;
+			msg = msg.replace("$data.hour", Long.toString(hour));
+		}
+		if (msg.contains("$data.minute")) {
+			long minute = (time % Util.hour) / Util.minute;
+			msg = msg.replace("$data.minute", Long.toString(minute));
+		}
+		if (msg.contains("$data.second")) {
+			long second = (time % Util.minute) / Util.secunde;
+			msg = msg.replace("$data.second", Long.toString(second));
+		}
+		return msg;
 	}
 }

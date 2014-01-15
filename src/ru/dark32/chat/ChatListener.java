@@ -84,9 +84,11 @@ public class ChatListener implements Listener {
 
 	private Boolean hasMute(final Player player, final int indexChanel ) {
 		if (Main.getBanStorage().isMuted(player.getName(), indexChanel)) {
-			player.sendMessage(Util.suffixLatter(ValueStorage.muteMessage.replace("$1",
-					String.valueOf(Main.getBanStorage().getTimeMute(player.getName(), indexChanel)))));
-
+			String msg = ValueStorage.muteMessage;
+			long time = Main.getBanStorage().getTimeMute(player.getName(), indexChanel);
+			msg = Mute.unParseTime(msg, time);
+			msg = Util.suffixLatter(msg);
+			player.sendMessage(msg);
 			return true;
 		}
 		return false;
