@@ -12,6 +12,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class Util {
@@ -213,11 +214,11 @@ public class Util {
 		return message;
 	}
 
-	final static int				secunde		= 1;
-	final static int				minute		= secunde * 60;
-	final static int				hour		= minute * 60;
-	final static int				day			= hour * 24;
-	final static int				time_inf	= day * 1000;
+	final public static int			secunde		= 1;
+	final public static int			minute		= secunde * 60;
+	final public static int			hour		= minute * 60;
+	final public static int			day			= hour * 24;
+	final public static int			time_inf	= day * 1000;
 	final private static Pattern	timeParser	= Pattern.compile("(\\d+?[dhms]|inf)");
 
 	public static int timeParse(String string ) {
@@ -268,5 +269,22 @@ public class Util {
 
 	final public static void DEBUG(Object message ) {
 		DEBUG(message, Bukkit.getConsoleSender());
+	}
+
+	public static boolean hasGroup(String sender, String groupName ) {
+		if (usePEX) {
+			return false;
+		}
+		PermissionGroup[] groups = PermissionsEx.getUser(sender).getGroups();
+		for (PermissionGroup group : groups) {
+			if (groupName.equalsIgnoreCase(group.getName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean hasGroup(Player sender, String groupName ) {
+		return hasGroup(sender.getName(), groupName);
 	}
 }
