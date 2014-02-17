@@ -6,9 +6,33 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class JoinListener implements Listener {
+
+	public JoinListener(){
+
+	}
+
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent event ) {
-		// event.setJoinMessage("");
+		String joinMessage = Main.localeConfig.getString(
+				"String.join." + Main.getPermissionsHandler().getGroup(event.getPlayer()), "&e$name join the game");
+		if (joinMessage.contains("$suffix")) {
+			joinMessage = joinMessage.replace("$suffix", Main.getPermissionsHandler().getSuffix(event.getPlayer()));
+		}
+		if (joinMessage.contains("$prefix")) {
+			joinMessage = joinMessage.replace("$prefix", Main.getPermissionsHandler().getPrefix(event.getPlayer()));
+		}
+		if (joinMessage.contains("$p")) {
+			joinMessage = joinMessage.replace("$p", "%1$s");
+		}
+		if (joinMessage.contains("$msg")) {
+			joinMessage = joinMessage.replace("$msg", "%2$s");
+		}
+		if (joinMessage.contains("$id")) {
+			String iden = Integer.toHexString(event.getPlayer().getTicksLived() + event.getPlayer().getEntityId());
+
+			joinMessage = joinMessage.replace("$id", iden);
+		}
+		event.setJoinMessage(joinMessage);
 		if (ValueStorage.motd) {
 			final Player player = event.getPlayer();
 			for (final String line : ValueStorage.joinmsg) {

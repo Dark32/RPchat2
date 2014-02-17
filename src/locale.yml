@@ -54,6 +54,14 @@ String:
    - "Это тестовое сообщение,"
    - "вы можете изменить его в"
    - "файле конфигурации RPChat."
+   join:
+        default: "&e$name join the game"
+        admin: "&eAdmin $name join the game"
+        vip: "&eDon $name join the game"
+   left:
+        default: "&e$name left the game"
+        admin: "&eAdmin $name left the game"
+        vip: "&eDon $name left the game"
   chance:
      luck: "(удачно)"
      unluck: "(неудачно)"
