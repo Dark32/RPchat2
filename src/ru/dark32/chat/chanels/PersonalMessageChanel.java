@@ -129,9 +129,10 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 		final Set<Player> recipients = new HashSet<Player>();
 		final String noSpy = Main.BASE_PERM + "." + this.getInnerName() + ".nospy";
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			if (!(Util.hasPermission(recipient, noSpy) || Util.hasPermission(sender, noSpy))
-					&& Util.hasPermission(recipient, Main.BASE_PERM + "." + this.getInnerName() + ".pmspy")
-					&& !recipient.equals(sender)) {
+			if (!(Main.getPermissionsHandler().hasPermission(recipient, noSpy) || Main.getPermissionsHandler()
+					.hasPermission(sender, noSpy))
+					&& Main.getPermissionsHandler().hasPermission(recipient,
+							Main.BASE_PERM + "." + this.getInnerName() + ".pmspy") && !recipient.equals(sender)) {
 				recipients.add(recipient);
 				sender.sendMessage(recipient.getName());
 			}
@@ -162,6 +163,7 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 		this.sendMessage(sender, message);
 
 	}
+
 	@Override
 	final public Set<Player> getSpyRecipients(Player sender ) {
 		return null;

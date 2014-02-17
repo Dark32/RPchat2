@@ -17,15 +17,15 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class Util {
 	public static Map<String, Integer>	modes2;
-	static boolean						usePB;
-	public static boolean				usePEX;
+	// static boolean usePB;
+	// public static boolean usePEX;
 	private static String				luck;
 	private static String				unluck;
 	private static int					chance;
 
 	public static int getModeIndex(final String name ) {
 		if (!modes2.containsKey(name)) {
-			return ChanelRegister.defaultChanel;
+			return ChanelRegister.getDefaultChanel(Bukkit.getPlayer(name));
 		} else {
 			return modes2.get(name);
 		}
@@ -52,25 +52,6 @@ public class Util {
 			}
 		}
 		return found;
-	}
-
-	public static boolean hasPermission(final CommandSender player, final String permission ) {
-		if (!(player instanceof Player)) {
-			return true;
-		} else if (usePEX) {
-			return PermissionsEx.getUser((Player) player).has(permission);
-		} else if (usePB) {
-			return player.hasPermission(permission);
-		} else {
-			return player.isOp();
-		}
-	}
-
-	public static boolean hasPermission(final String player, final String permission ) {
-		if (usePEX) {
-			return PermissionsEx.getUser(player).has(permission);
-		}
-		return false;
 	}
 
 	public static void init(final Main main ) {
@@ -271,20 +252,12 @@ public class Util {
 		DEBUG(message, Bukkit.getConsoleSender());
 	}
 
-	public static boolean hasGroup(String sender, String groupName ) {
-		if (usePEX) {
-			return false;
-		}
-		PermissionGroup[] groups = PermissionsEx.getUser(sender).getGroups();
-		for (PermissionGroup group : groups) {
-			if (groupName.equalsIgnoreCase(group.getName())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static boolean hasGroup(Player sender, String groupName ) {
-		return hasGroup(sender.getName(), groupName);
-	}
+	/*
+	 * public static boolean hasGroup(String sender, String groupName ) { if
+	 * (usePEX) { return false; } PermissionGroup[] groups =
+	 * PermissionsEx.getUser(sender).getGroups(); for (PermissionGroup group :
+	 * groups) { if (groupName.equalsIgnoreCase(group.getName())) { return true;
+	 * } } return false; } public static boolean hasGroup(Player sender, String
+	 * groupName ) { return hasGroup(sender.getName(), groupName); }
+	 */
 }

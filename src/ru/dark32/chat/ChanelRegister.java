@@ -46,6 +46,15 @@ public class ChanelRegister {
 		}
 	}
 
+	public static int getDefaultChanel(Player player ) {
+		for (IChanel chat : listChat) {
+			if (chat.isDefaultForGrop(Main.getPermissionsHandler().getGroup(player))) {
+				return chat.getIndex();
+			}
+		}
+		return defaultChanel;
+	}
+
 	private static IChanel registrChanel(final ETypeChanel type, final String name ) {
 		final IChanel chanel = type.setChanel(name);
 		chanel.setType(type);
@@ -92,8 +101,9 @@ public class ChanelRegister {
 	public static int getIndexByPrefix(final Player sender, final char preffix ) {
 		for (final IChanel chanel : listChat) {
 			if ((chanel.getPrefix() == preffix)
-					&& (!chanel.isNeedPerm() || Util.hasPermission(sender, "mcnw.spy") || Util.hasPermission(sender,
-							Main.BASE_PERM + "." + chanel.getInnerName() + ".say"))) {
+					&& (!chanel.isNeedPerm() || Main.getPermissionsHandler().hasPermission(sender, "mcnw.spy") || Main
+							.getPermissionsHandler().hasPermission(sender,
+									Main.BASE_PERM + "." + chanel.getInnerName() + ".say"))) {
 				return chanel.getIndex();
 			}
 		}
@@ -111,7 +121,7 @@ public class ChanelRegister {
 	 */
 	public static String colorUTF8(String string, final int flag ) {
 		if ((flag & 0x01) == 0x01) {
-			string =  ChatColor.translateAlternateColorCodes('&', string);
+			string = ChatColor.translateAlternateColorCodes('&', string);
 		}
 		if ((flag & 0x02) == 0x02) {
 			string = Util.parseUTF8(string);

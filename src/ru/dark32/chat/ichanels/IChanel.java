@@ -177,6 +177,7 @@ public interface IChanel {
 	 *            none - не канал
 	 */
 	void setType(ETypeChanel type );
+
 	/**
 	 * @return клановый ли чат
 	 */
@@ -193,4 +194,13 @@ public interface IChanel {
 	 * @return союзный ли чат
 	 */
 	boolean isAlly();
+
+	/**
+	 * По умочанию ли канал для группы
+	 * 
+	 * @param group
+	 *            - имя группы
+	 * @return -по умолчанию ли
+	 */
+	boolean isDefaultForGrop(String group );
 }

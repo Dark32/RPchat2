@@ -55,14 +55,14 @@ public class Deaf implements IDeaf {
 
 	@Override
 	public void deaf(final String[] args, final CommandSender sender ) {
-		final boolean hasHelp = Util.hasPermission(sender, Main.BASE_PERM + ".deaf.help");
-		final boolean hasSee = Util.hasPermission(sender, Main.BASE_PERM + ".deaf.see");
-		final boolean hasAll = Util.hasPermission(sender, Main.BASE_PERM + ".deaf.all");
-		final boolean hasSeeSelf = Util.hasPermission(sender, Main.BASE_PERM + ".deaf.see.self") || hasSee;
-		final boolean hasDeaf = Util.hasPermission(sender, Main.BASE_PERM + ".deaf.deaf");
-		final boolean hasDeafSelf = Util.hasPermission(sender, Main.BASE_PERM + ".deaf.deaf.self") || hasDeaf;
-		final boolean hasUnDeaf = Util.hasPermission(sender, Main.BASE_PERM + ".deaf.undeaf");
-		final boolean hasUnDeafSelf = Util.hasPermission(sender, Main.BASE_PERM + ".deaf.undeaf.self") || hasUnDeaf;
+		final boolean hasHelp = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".deaf.help");
+		final boolean hasSee = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".deaf.see");
+		final boolean hasAll = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".deaf.all");
+		final boolean hasSeeSelf = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".deaf.see.self") || hasSee;
+		final boolean hasDeaf = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".deaf.deaf");
+		final boolean hasDeafSelf = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".deaf.deaf.self") || hasDeaf;
+		final boolean hasUnDeaf = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".deaf.undeaf");
+		final boolean hasUnDeafSelf = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".deaf.undeaf.self") || hasUnDeaf;
 		final String target = args.length > 0 ? args[0] : sender.getName();
 		final boolean isSelf = sender.getName().equalsIgnoreCase(target);
 		if (args.length == 0) {

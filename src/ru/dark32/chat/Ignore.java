@@ -85,12 +85,12 @@ public class Ignore implements IIgnore {
 
 	@Override
 	public void ignore(final String[] args, CommandSender sender ) {
-		final boolean hasHelp = Util.hasPermission(sender, Main.BASE_PERM + ".ignore.help");
-		final boolean hasSee = Util.hasPermission(sender, Main.BASE_PERM + ".ignore.see");
-		final boolean hasAll = Util.hasPermission(sender, Main.BASE_PERM + ".ignore.all");
-		final boolean hasSeeSelf = Util.hasPermission(sender, Main.BASE_PERM + ".ignore.see.self") || hasSee;
-		final boolean hasIgnore = Util.hasPermission(sender, Main.BASE_PERM + ".ignore.ignore");
-		final boolean hasUnIgnore = Util.hasPermission(sender, Main.BASE_PERM + ".ignore.unignore");
+		final boolean hasHelp = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".ignore.help");
+		final boolean hasSee = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".ignore.see");
+		final boolean hasAll = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".ignore.all");
+		final boolean hasSeeSelf = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".ignore.see.self") || hasSee;
+		final boolean hasIgnore = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".ignore.ignore");
+		final boolean hasUnIgnore = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".ignore.unignore");
 		if (args.length == 0) {
 			if (!hasHelp) {
 				sender.sendMessage(canTHelp);
@@ -205,7 +205,7 @@ public class Ignore implements IIgnore {
 
 	@Override
 	public boolean hasntIgnorable(String target ) {
-		return Util.hasPermission(target, Main.BASE_PERM + ".ignore.non");
+		return Main.getPermissionsHandler().hasPermission(target, Main.BASE_PERM + ".ignore.non");
 	}
 
 }

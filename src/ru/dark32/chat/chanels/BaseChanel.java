@@ -4,20 +4,16 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Instrument;
 import org.bukkit.Note;
 import org.bukkit.Sound;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import ru.dark32.chat.ChanelRegister;
 import ru.dark32.chat.Main;
-import ru.dark32.chat.PEXHook;
 import ru.dark32.chat.SimpleClanHook;
 import ru.dark32.chat.Util;
 import ru.dark32.chat.ichanels.ETypeChanel;
@@ -68,6 +64,7 @@ public class BaseChanel implements IChanel {
 		final String path_pimk_colorize = "Chat." + par_name + ".pimk.colorize";
 		final String path_overAll = "Chat." + par_name + ".overAll";
 		final String path_clan = "Chat." + par_name + ".clan";
+	//	final String groups_path = "Chat." + par_name + ".groups";
 
 		this.index = ChanelRegister.getNextIndex();
 		this.innerName = par_name.toLowerCase(Locale.US);
@@ -82,7 +79,6 @@ public class BaseChanel implements IChanel {
 		this.noListenerMessage = ChanelRegister.colorUTF8(Main.chatConfig.getString(path_noListenerMessage, ""), 3);
 		this.listenerMessageEnable = Main.chatConfig.getInt(path_isListenerMessage, 0);
 		this.needPerm = Main.chatConfig.getBoolean(path_needPerm, false);
-
 		// PIMK -->
 		String note = Main.chatConfig.getString(path_pimk_note, "1F#");
 		int octava = note.length() > 0 ? note.charAt(0) : 1;
@@ -105,6 +101,10 @@ public class BaseChanel implements IChanel {
 		this.clanOnly = clanly.equalsIgnoreCase("clan");
 		this.allyOnly = clanly.equalsIgnoreCase("ally");
 	}
+	@Override
+	public boolean isDefaultForGrop(String group) {		
+		return Main.chatConfig.getBoolean( "Chat." + innerName + ".groups.default",false);
+	}
 
 	@Override
 	public boolean canSend(final Player sender, final String message ) {
@@ -115,8 +115,9 @@ public class BaseChanel implements IChanel {
 		if (message.contains("&")) {
 			for (ChatColor value : ChatColor.values()) {
 				char color = value.getChar();
-				if (Util.hasPermission(sender, Main.BASE_PERM + ".color." + color)
-						|| Util.hasPermission(sender, Main.BASE_PERM + "." + this.getInnerName() + ".color." + color)) {
+				if (Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".color." + color)
+						|| Main.getPermissionsHandler().hasPermission(sender,
+								Main.BASE_PERM + "." + this.getInnerName() + ".color." + color)) {
 					message = message.replaceAll("&" + value.getChar(), "§" + value.getChar());
 					break;
 				}
@@ -140,10 +141,10 @@ public class BaseChanel implements IChanel {
 			// msg = SimpleClanHook.formatComplete(msg, player);
 		}
 		if (msg.contains("$suffix")) {
-			msg = msg.replace("$suffix", PEXHook.getSuffix(player.getName()));
+			msg = msg.replace("$suffix", Main.getPermissionsHandler().getSuffix(player));
 		}
 		if (msg.contains("$prefix")) {
-			msg = msg.replace("$prefix", PEXHook.getPreffix(player.getName()));
+			msg = msg.replace("$prefix", Main.getPermissionsHandler().getPrefix(player));
 		}
 		if (msg.contains("$p")) {
 			msg = msg.replace("$p", "%1$s");
@@ -241,7 +242,7 @@ public class BaseChanel implements IChanel {
 	public Set<Player> getSpyRecipients(Player sender ) {
 		final Set<Player> recipients = new HashSet<Player>();
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
-			if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy") && sender != recipient) {
+			if (Main.getPermissionsHandler().hasPermission(recipient, Main.BASE_PERM + ".spy") && sender != recipient) {
 				Util.DEBUG("debug: spy - " + recipient.getName(), sender);
 				recipients.add(recipient);
 				continue;
@@ -301,8 +302,10 @@ public class BaseChanel implements IChanel {
 	final protected boolean isRecipient(final Player sender, final Player recipient ) {
 		final boolean isDeaf = !Main.getDeafStorage().isDeaf(recipient.getName(), getIndex());
 		final boolean isHear = !isNeedPerm()
-				|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
-				|| Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".hear");
+				|| Main.getPermissionsHandler()
+						.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName() + ".say")
+				|| Main.getPermissionsHandler().hasPermission(recipient,
+						Main.BASE_PERM + "." + getInnerName() + ".hear");
 		final boolean isSelf = (sender == recipient && isListenerMessage() == COUNT_INCLUDE);
 		final boolean isInChanel = isOverAll() || Util.getModeIndex(recipient.getName()) == getIndex();
 		final boolean hasIgnore = Main.getIgnoreStorage().hasIgnore(recipient.getName(), sender.getName(),

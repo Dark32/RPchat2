@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 import ru.dark32.chat.ichanels.IChanel;
 
 public class RPChatCommandExecutor implements CommandExecutor {
@@ -107,7 +108,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 			return true;
 		}
 		if (cmd.getName().equalsIgnoreCase("chatinfo")) {
-			if (args.length != 1 || Util.hasPermission(sender, Main.BASE_PERM + "chatinfo")) {
+			if (args.length != 1 || Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + "chatinfo")) {
 				return false;
 			}
 			chatInfo(sender, args[0]);

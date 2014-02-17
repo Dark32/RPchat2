@@ -52,7 +52,7 @@ public class RangeItemChanel extends ItemChanel implements IRangeChanel {
 			if (isRecipient(sender, recipient)) {
 				Util.DEBUG("debug: isn't Recipient - " + recipient.getName(), sender);
 				continue;
-			} else if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy")) {
+			} else if (Main.getPermissionsHandler().hasPermission(recipient, Main.BASE_PERM + ".spy")) {
 				Util.DEBUG("debug: spy - " + recipient.getName(), sender);
 				recipients.add(recipient);
 			} else if (isRange) {

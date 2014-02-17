@@ -106,7 +106,7 @@ public class Mute implements IMute {
 			msg = unParseTime(msg, time);
 			msg = Util.suffixLatter(msg);
 			sender.sendMessage(msg);
-			} else {
+		} else {
 			System.out.println(name);
 			sender.sendMessage(unmuteMessage.replace("$name", name).replace("$channel", _chanelName));
 		}
@@ -116,12 +116,13 @@ public class Mute implements IMute {
 
 	@Override
 	public void mute(final String[] args, final CommandSender sender ) {
-		final boolean hasHelp = Util.hasPermission(sender, Main.BASE_PERM + ".mute.help");
-		final boolean hasSee = Util.hasPermission(sender, Main.BASE_PERM + ".mute.see");
-		final boolean hasAll = Util.hasPermission(sender, Main.BASE_PERM + ".mute.all");
-		final boolean hasSeeSelf = Util.hasPermission(sender, Main.BASE_PERM + ".mute.see.self") || hasSee;
-		final boolean hasMute = Util.hasPermission(sender, Main.BASE_PERM + ".mute.mute");
-		final boolean hasUnMute = Util.hasPermission(sender, Main.BASE_PERM + ".mute.unmute");
+		final boolean hasHelp = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".mute.help");
+		final boolean hasSee = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".mute.see");
+		final boolean hasAll = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".mute.all");
+		final boolean hasSeeSelf = Main.getPermissionsHandler()
+				.hasPermission(sender, Main.BASE_PERM + ".mute.see.self") || hasSee;
+		final boolean hasMute = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".mute.mute");
+		final boolean hasUnMute = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".mute.unmute");
 		if (args.length == 0) {
 			if (!hasHelp) {
 				sender.sendMessage(canTHelp);

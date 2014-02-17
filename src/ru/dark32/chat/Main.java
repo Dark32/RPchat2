@@ -13,40 +13,42 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import ru.dark32.perm.PermissionsHandler;
+
 public class Main extends JavaPlugin {
 
-	public static final Logger		LOG				= Logger.getLogger("Minecraft");
-	public PluginManager			pluginManager;
+	public static final Logger			LOG				= Logger.getLogger("Minecraft");
+	public PluginManager				pluginManager;
 
-	private static IMute			muteStorage;
-	private static IDeaf			deafStorage;
-	private static IIgnore			ignorStorage;
-	public static final String		VERSION			= "RPchat v 2.0.7w (2u1t)";
-	public static final String		VERSION_NAME	= "Primal steak birch";
-	public static FileConfiguration	config;
-	public static File				storageFile;
-	public static YamlConfiguration	storage;
-	public static File				chatConfigFile;
-	public static YamlConfiguration	chatConfig;
-	public static File				localeConfigFile;
-	public static YamlConfiguration	localeConfig;
+	private static IMute				muteStorage;
+	private static IDeaf				deafStorage;
+	private static IIgnore				ignorStorage;
+	public static final String			VERSION			= "RPchat v 2.0.7w (2u1t)";
+	public static final String			VERSION_NAME	= "Primal steak birch";
+	public static FileConfiguration		config;
+	public static File					storageFile;
+	public static YamlConfiguration		storage;
+	public static File					chatConfigFile;
+	public static YamlConfiguration		chatConfig;
+	public static File					localeConfigFile;
+	public static YamlConfiguration		localeConfig;
+	private static PermissionsHandler	permissionsHandler;
 	// выключить в релизе
-	public static final boolean		DEBUG_MODE		= !true;
-	public static final String		BASE_PERM		= "mcnw";
+	public static final boolean			DEBUG_MODE		= !true;
+	public static final String			BASE_PERM		= "mcnw";
 
-	//private static SimpleClans		core;
-	public static boolean			SCenable		= false;
+	// private static SimpleClans core;
+	public static boolean				SCenable		= false;
 
 	@Override
 	public void onEnable() {
 		pluginManager = Bukkit.getPluginManager();
-		if (pluginManager.getPlugin("PermissionsEx") != null) {
-			Util.usePEX = true;
-		} else if (pluginManager.getPlugin("PermissionsBukkit") != null) {
-			Util.usePB = true;
-		} else {
-			getLogger().warning("[RPChat] Permissions plugins not found!");
-		}
+		/**
+		 * if (pluginManager.getPlugin("PermissionsEx") != null) { Util.usePEX =
+		 * true; } else if (pluginManager.getPlugin("PermissionsBukkit") !=
+		 * null) { Util.usePB = true; } else {
+		 * getLogger().warning("[RPChat] Permissions plugins not found!"); }
+		 **/
 		config = this.getConfig();
 
 		Main.storageFile = new File(getDataFolder(), "storage.yml");
@@ -78,6 +80,7 @@ public class Main extends JavaPlugin {
 		Util.init(this);
 		ValueStorage.init();
 		ChanelRegister.init();
+		permissionsHandler = new PermissionsHandler(this);
 
 		getServer().getPluginManager().registerEvents(new TabListener(), this);
 		getServer().getPluginManager().registerEvents(new JoinListener(), this);
@@ -120,7 +123,7 @@ public class Main extends JavaPlugin {
 		try {
 			for (Plugin plugin : getServer().getPluginManager().getPlugins()) {
 				if (plugin instanceof SimpleClans) {
-					//core = (SimpleClans) plugin;
+					// core = (SimpleClans) plugin;
 					return true;
 				}
 			}
@@ -138,6 +141,10 @@ public class Main extends JavaPlugin {
 	 */
 	public static ClanManager getClanManager() {
 		return SimpleClans.getInstance().getClanManager();
+	}
+
+	public static PermissionsHandler getPermissionsHandler() {
+		return permissionsHandler;
 	}
 
 }

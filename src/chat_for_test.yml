@@ -77,6 +77,13 @@ Chat:
      instrument: PIANO
      colorize: "&c@"
      note: 1F#
+    groups:
+         admin:
+             default:true
+         moderator:
+             default:true
+         VIP:
+              default:true
   World:
     type: item
     enable: true

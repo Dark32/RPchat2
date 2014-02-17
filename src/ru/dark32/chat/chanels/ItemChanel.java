@@ -38,7 +38,7 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 
 	@Override
 	public boolean canSend(final Player sender, final String message ) {
-		if (!Util.hasPermission(sender, Main.BASE_PERM + "." + this.getInnerName() + ".no_item")) {
+		if (!Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + "." + this.getInnerName() + ".no_item")) {
 			// если вещь в руках совпала
 			if (((IItemChanel) this).equalItem(sender.getItemInHand())) {
 				// теряем 1 вещь

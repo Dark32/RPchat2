@@ -34,6 +34,7 @@
  pimk.colorize | `"@"` | выделение ника
  overAll | `true` | виден ли канал всегда или только когда в нём
  clan | `none` | none - обычный , clan - внутриклановый , ally - союзный (не проверен)
+ groups.<group_name_in_lower_case>.default | false | выставить иной канал по умолчанию для группы
 
 
 # RANGE:

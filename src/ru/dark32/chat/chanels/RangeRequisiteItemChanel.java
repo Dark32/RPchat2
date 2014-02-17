@@ -18,10 +18,10 @@ import ru.dark32.chat.ichanels.IRangeRequisiteItemChanel;
  * 
  */
 public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeRequisiteItemChanel {
-	final private int			requisiteItemAmount;
-	final private int			requisiteItemId;
+	final private int		requisiteItemAmount;
+	final private int		requisiteItemId;
 	final private Material	requisiteItemMaterial;
-	final private int			requisiteItemSubId;
+	final private int		requisiteItemSubId;
 
 	@SuppressWarnings("deprecation" )
 	public RangeRequisiteItemChanel(String name ){
@@ -58,15 +58,15 @@ public class RangeRequisiteItemChanel extends RangeItemChanel implements IRangeR
 			final boolean isWorld = !isWorldChat() || sender.getWorld() == recipient.getWorld();
 			final int dist = getDist(sender.getLocation(), recipient.getLocation());
 			final boolean isRange = (this.getRange() == 0) || (dist < this.getRange());
-			final boolean isTransceiver = Util.hasPermission(recipient, Main.BASE_PERM + "." + getInnerName()
-					+ ".no_item")
+			final boolean isTransceiver = Main.getPermissionsHandler().hasPermission(recipient,
+					Main.BASE_PERM + "." + getInnerName() + ".no_item")
 					|| recipient == sender || hasItemInInvetery(recipient);
 			Util.DEBUG("debug: " + recipient.getName() + " | " + dist + "/" + this.getRange() * this.getRange() + "|"
 					+ isWorld, sender);
 			if (isRecipient(sender, recipient)) {
 				Util.DEBUG("debug: isn't Recipient - " + recipient.getName(), sender);
 				continue;
-			} else if (Util.hasPermission(recipient, Main.BASE_PERM + ".spy")) {
+			} else if (Main.getPermissionsHandler().hasPermission(recipient, Main.BASE_PERM + ".spy")) {
 				Util.DEBUG("debug: spy - " + recipient.getName(), sender);
 				recipients.add(recipient);
 			} else if (isRange && isTransceiver) {

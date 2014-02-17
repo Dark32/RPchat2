@@ -11,9 +11,11 @@ public class JoinListener implements Listener {
 		// event.setJoinMessage("");
 		if (ValueStorage.motd) {
 			final Player player = event.getPlayer();
-			for (final String s : ValueStorage.joinmsg) {
-				player.sendMessage(ChanelRegister.colorUTF8(s.replace("$suffix", PEXHook.getSuffix(player.getName()))
-						.replace("$prefix", PEXHook.getPreffix(player.getName())).replace("$p", player.getName()), 3));
+			for (final String line : ValueStorage.joinmsg) {
+				player.sendMessage(ChanelRegister.colorUTF8(
+						line.replace("$suffix", Main.getPermissionsHandler().getSuffix(player))
+								.replace("$prefix", Main.getPermissionsHandler().getPrefix(player))
+								.replace("$p", player.getName()), 3));
 
 			}
 		}
