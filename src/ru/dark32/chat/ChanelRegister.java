@@ -24,7 +24,7 @@ public class ChanelRegister {
 	 */
 	private static int			index	= 0;
 	public static List<IChanel>	listChat;
-	public static int			defaultChanel;
+	private static int			defaultChanel;
 
 	public static void init() {
 		listChat = new ArrayList<IChanel>();

@@ -203,4 +203,13 @@ public interface IChanel {
 	 * @return -по умолчанию ли
 	 */
 	boolean isDefaultForGrop(String group );
+
+	/**
+	 * Получить время охлаждения для группы
+	 * 
+	 * @param player
+	 *            - игрок
+	 * @return - время
+	 */
+	int getCoolDown(Player player );
 }

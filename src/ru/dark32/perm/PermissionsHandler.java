@@ -18,7 +18,21 @@ public class PermissionsHandler implements IPermission {
 
 	public PermissionsHandler(final Plugin plugin ){
 		this.plugin = plugin;
-		checkPermissions();
+		final PluginManager pluginManager = plugin.getServer().getPluginManager();
+
+		final Plugin permExPlugin = pluginManager.getPlugin("PermissionsEx");
+		if (permExPlugin != null && permExPlugin.isEnabled()) {
+			if (!(handler instanceof PermissionsExHandler)) {
+				LOGGER.log(Level.INFO, "rpChat2: Using PermissionsEx based permissions.");
+				handler = new PermissionsExHandler();
+			}
+			return;
+		} else {
+			if (!(handler instanceof SuperpermsHandler)) {
+				LOGGER.log(Level.INFO, "rpChat2: Using superperms based permissions.");
+				handler = new SuperpermsHandler();
+			}
+		}
 	}
 
 	@Override
@@ -69,24 +83,6 @@ public class PermissionsHandler implements IPermission {
 			suffix = "";
 		}
 		return suffix;
-	}
-
-	public void checkPermissions() {
-		final PluginManager pluginManager = plugin.getServer().getPluginManager();
-
-		final Plugin permExPlugin = pluginManager.getPlugin("PermissionsEx");
-		if (permExPlugin != null && permExPlugin.isEnabled()) {
-			if (!(handler instanceof PermissionsExHandler)) {
-				LOGGER.log(Level.INFO, "rpChat2: Using PermissionsEx based permissions.");
-				handler = new PermissionsExHandler();
-			}
-			return;
-		} else {
-			if (!(handler instanceof SuperpermsHandler)) {
-				LOGGER.log(Level.INFO, "rpChat2: Using superperms based permissions.");
-				handler = new SuperpermsHandler();
-			}
-		}
 	}
 
 	public String getName() {

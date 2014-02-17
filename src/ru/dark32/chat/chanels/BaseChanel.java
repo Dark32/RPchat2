@@ -1,5 +1,6 @@
 package ru.dark32.chat.chanels;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
@@ -20,33 +21,36 @@ import ru.dark32.chat.ichanels.ETypeChanel;
 import ru.dark32.chat.ichanels.IChanel;
 
 public class BaseChanel implements IChanel {
-	final private String		colorize;
-	final protected int			COUNT_EXCLUDE	= 1;
-	final protected int			COUNT_INCLUDE	= -1;
-	final protected int			COUNT_OFF		= 0;
-	final private boolean		enable;
-	final private String		formatString;
-	final private int			index;
-	final private String		innerName;
-	final private boolean		isWorld;
-	final private String		listenerMessage;
-	final private int			listenerMessageEnable;
-	final private String		name;
-	final private boolean		needPerm;
-	final private String		noListenerMessage;
-	final private boolean		overAll;
-	final private boolean		pimkEnable;
-	final private Instrument	pimkInstrument;
+	final private String				colorize;
+	final protected int					COUNT_EXCLUDE	= 1;
+	final protected int					COUNT_INCLUDE	= -1;
+	final protected int					COUNT_OFF		= 0;
+	final private boolean				enable;
+	final private String				formatString;
+	final private int					index;
+	final private String				innerName;
+	final private boolean				isWorld;
+	final private String				listenerMessage;
+	final private int					listenerMessageEnable;
+	final private String				name;
+	final private boolean				needPerm;
+	final private String				noListenerMessage;
+	final private boolean				overAll;
+	final private boolean				pimkEnable;
+	final private Instrument			pimkInstrument;
 
-	final private Note			pimkNote;
-	final private char			prefix;
-	final private char			sign;
-	final private boolean		tabes;
-	private ETypeChanel			type;
-	final private boolean		clanOnly;
-	final private boolean		allyOnly;
+	final private Note					pimkNote;
+	final private char					prefix;
+	final private char					sign;
+	final private boolean				tabes;
+	private ETypeChanel					type;
+	final private boolean				clanOnly;
+	final private boolean				allyOnly;
+	final private int					defaultCoolDown;
+	final private HashMap<String, Long>	cooldown		= new HashMap<String, Long>();
+	final private String				cooldownText;
 
-	public BaseChanel(String par_name ){
+	public BaseChanel(final String par_name ){
 		final String path_enable = "Chat." + par_name + ".enable";
 		final String path_name = "Chat." + par_name + ".name";
 		final String path_world = "Chat." + par_name + ".world";
@@ -64,7 +68,8 @@ public class BaseChanel implements IChanel {
 		final String path_pimk_colorize = "Chat." + par_name + ".pimk.colorize";
 		final String path_overAll = "Chat." + par_name + ".overAll";
 		final String path_clan = "Chat." + par_name + ".clan";
-	//	final String groups_path = "Chat." + par_name + ".groups";
+		final String path_cooldown = "Chat." + par_name + ".cooldown";
+		final String path_cooldown_text = "cooldown.text";
 
 		this.index = ChanelRegister.getNextIndex();
 		this.innerName = par_name.toLowerCase(Locale.US);
@@ -79,6 +84,10 @@ public class BaseChanel implements IChanel {
 		this.noListenerMessage = ChanelRegister.colorUTF8(Main.chatConfig.getString(path_noListenerMessage, ""), 3);
 		this.listenerMessageEnable = Main.chatConfig.getInt(path_isListenerMessage, 0);
 		this.needPerm = Main.chatConfig.getBoolean(path_needPerm, false);
+		this.defaultCoolDown = Main.chatConfig.getInt(path_cooldown, 0);
+		this.cooldownText = ChanelRegister.colorUTF8(
+				Main.localeConfig.getString(path_cooldown_text, path_cooldown_text), 3);
+
 		// PIMK -->
 		String note = Main.chatConfig.getString(path_pimk_note, "1F#");
 		int octava = note.length() > 0 ? note.charAt(0) : 1;
@@ -101,14 +110,40 @@ public class BaseChanel implements IChanel {
 		this.clanOnly = clanly.equalsIgnoreCase("clan");
 		this.allyOnly = clanly.equalsIgnoreCase("ally");
 	}
+
 	@Override
-	public boolean isDefaultForGrop(String group) {		
-		return Main.chatConfig.getBoolean( "Chat." + innerName + ".groups.default",false);
+	public boolean isDefaultForGrop(String group ) {
+		return Main.chatConfig.getBoolean("Chat." + innerName + ".groups." + group + ".default", false);
+	}
+
+	@Override
+	public int getCoolDown(Player player ) {
+		final String group = Main.getPermissionsHandler().getGroup(player);
+		return Main.chatConfig.getInt("Chat." + innerName + ".groups." + group + ".cooldown", this.defaultCoolDown);
+
+	}
+
+	private void setCoolDownForPlayer(Player player ) {
+		this.cooldown.put(player.getName(), System.currentTimeMillis() / 1000 + getCoolDown(player));
+	}
+
+	private long getCoolDownForPlayer(Player player ) {
+		return this.cooldown.get(player.getName()) - System.currentTimeMillis() / 1000;
 	}
 
 	@Override
 	public boolean canSend(final Player sender, final String message ) {
-		return true;
+		if (getCoolDown(sender) <= 0) {
+			return true;
+		}
+		long timeLeft = getCoolDownForPlayer(sender);
+		if (timeLeft > 0) {
+			sender.sendMessage(Util.suffixLatter(cooldownText.replace("$time", Long.toString(timeLeft))));
+			return true;
+		} else {
+			setCoolDownForPlayer(sender);
+			return false;
+		}
 	}
 
 	final private String colorChatMessage(final Player sender, String message ) {

@@ -8,8 +8,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ru.dark32.chat.chanels.BaseChanel;
-
 public class UtilSuffixLatterTest {
 
 	@BeforeClass

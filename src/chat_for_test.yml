@@ -77,13 +77,17 @@ Chat:
      instrument: PIANO
      colorize: "&c@"
      note: 1F#
+     cooldown: 20
     groups:
          admin:
              default:true
+             cooldown: 1
          moderator:
              default:true
+             cooldown: 2
          VIP:
               default:true
+             cooldown: 5
   World:
     type: item
     enable: true
