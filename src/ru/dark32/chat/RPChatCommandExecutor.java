@@ -121,10 +121,10 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		final List<String> msg = new ArrayList<String>();
 		msg.add("&b=============================================");
 		msg.addAll(ValueStorage.helpChannel);
-		for (final IChanel chanel : ChanelRegister.listChat) {
-			msg.add("&b" + chanel.getName() + " || " + chanel.getInnerName() + " || " + chanel.getSign() + " || "
-					+ chanel.getPrefix() + " || " + chanel.getType().toString());
-		}
+//		for (final IChanel chanel : ChanelRegister.listChat) {
+//			msg.add("&b" + chanel.getName() + " || " + chanel.getInnerName() + " || " + chanel.getSign() + " || "
+//					+ chanel.getPrefix() + " || " + chanel.getType().toString());
+//		}
 		msg.add("&b=============================================");
 		for (final String s : msg) {
 			sender.sendMessage(ChanelRegister.colorUTF8(s, 3));

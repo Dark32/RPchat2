@@ -15,11 +15,11 @@ import ru.dark32.chat.ichanels.IItemChanel;
  */
 public class ItemChanel extends BaseChanel implements IItemChanel {
 
-	final private int			itemAmount;
-	final private int			itemId;
+	final private int		itemAmount;
+	final private int		itemId;
 	final private Material	itemMaterial;
-	final private int			itemSubId;
-	final private boolean		requestPprefix;
+	final private int		itemSubId;
+	final private boolean	requestPprefix;
 
 	public ItemChanel(String name ){
 		super(name);
@@ -38,7 +38,8 @@ public class ItemChanel extends BaseChanel implements IItemChanel {
 
 	@Override
 	public boolean canSend(final Player sender, final String message ) {
-		if (!Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + "." + this.getInnerName() + ".no_item")) {
+		if (!Main.getPermissionsHandler()
+				.hasPermission(sender, Main.BASE_PERM + "." + this.getInnerName() + ".no_item")) {
 			// если вещь в руках совпала
 			if (((IItemChanel) this).equalItem(sender.getItemInHand())) {
 				// теряем 1 вещь
