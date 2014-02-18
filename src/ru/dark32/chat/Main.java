@@ -3,6 +3,7 @@ package ru.dark32.chat;
 import java.io.File;
 import java.util.logging.Logger;
 
+import net.milkbowl.vault.economy.Economy;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 
@@ -11,6 +12,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import ru.dark32.perm.PermissionsHandler;
@@ -19,6 +21,7 @@ public class Main extends JavaPlugin {
 
 	public static final Logger			LOG				= Logger.getLogger("Minecraft");
 	public PluginManager				pluginManager;
+	public static boolean				economyHook;
 
 	private static IMute				muteStorage;
 	private static IDeaf				deafStorage;
@@ -39,16 +42,11 @@ public class Main extends JavaPlugin {
 
 	// private static SimpleClans core;
 	public static boolean				SCenable		= false;
+	public static Economy				economy			= null;
 
 	@Override
 	public void onEnable() {
 		pluginManager = Bukkit.getPluginManager();
-		/**
-		 * if (pluginManager.getPlugin("PermissionsEx") != null) { Util.usePEX =
-		 * true; } else if (pluginManager.getPlugin("PermissionsBukkit") !=
-		 * null) { Util.usePB = true; } else {
-		 * getLogger().warning("[RPChat] Permissions plugins not found!"); }
-		 **/
 		config = this.getConfig();
 
 		Main.storageFile = new File(getDataFolder(), "storage.yml");
@@ -77,6 +75,11 @@ public class Main extends JavaPlugin {
 			Bukkit.getConsoleSender().sendMessage("[RPChat] Simple clans was hooked");
 			SCenable = true;
 		}
+		if (setupEconomy()) {
+			Bukkit.getConsoleSender().sendMessage("[RPChat] Vault Economy was hooked");
+			economyHook = true;
+		}
+		
 		Util.init(this);
 		ValueStorage.init();
 		ChanelRegister.init();
@@ -105,7 +108,6 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		muteStorage.save();
-		// deafStorage.saveDeaf();
 	}
 
 	public static IMute getBanStorage() {
@@ -136,10 +138,6 @@ public class Main extends JavaPlugin {
 		return false;
 	}
 
-	/*
-	 * public static ClanPlayerManager getClanPlayerManager() { return
-	 * core.getClanPlayerManager(); }
-	 */
 	public static ClanManager getClanManager() {
 		return SimpleClans.getInstance().getClanManager();
 	}
@@ -148,4 +146,13 @@ public class Main extends JavaPlugin {
 		return permissionsHandler;
 	}
 
+	private boolean setupEconomy() {
+		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(
+				net.milkbowl.vault.economy.Economy.class);
+		if (economyProvider != null) {
+			economy = economyProvider.getProvider();
+		}
+
+		return (economy != null);
+	}
 }
