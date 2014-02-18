@@ -103,6 +103,7 @@ public class Main extends JavaPlugin {
 		getCommand("unignore").setExecutor(executer);
 		getCommand("chatinfo").setExecutor(executer);
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
+		getServer().getPluginManager().registerEvents(new CommandPreprocessListener(), this);
 	}
 
 	@Override
