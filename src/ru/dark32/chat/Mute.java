@@ -38,6 +38,7 @@ public class Mute implements IMute {
 	final private String			subCMDErr;
 	final private String			dataError;
 	final private String			muteSee;
+	final private boolean			showMuteForAll;
 
 	public Mute(){
 		needName = getLoc("mute.needName");
@@ -55,6 +56,7 @@ public class Mute implements IMute {
 		subCMDErr = getLoc("mute.subCMDErr");
 		dataError = getLoc("mute.dataError");
 		muteSee = getLoc("mute.muteSee");
+		showMuteForAll = Main.config.getBoolean("showMuteForAll", false);
 	}
 
 	private String getLoc(final String key ) {
@@ -105,7 +107,11 @@ public class Mute implements IMute {
 			}
 			msg = unParseTime(msg, time);
 			msg = Util.suffixLatter(msg);
-			sender.sendMessage(msg);
+			if (showMuteForAll) {
+				Bukkit.getServer().broadcastMessage(msg);
+			} else {
+				sender.sendMessage(msg);
+			}
 		} else {
 			System.out.println(name);
 			sender.sendMessage(unmuteMessage.replace("$name", name).replace("$channel", _chanelName));
@@ -180,7 +186,6 @@ public class Mute implements IMute {
 				return;
 			}
 			int time = 0;
-			// try {
 			time = Util.timeParse(args[2]);
 			if (time == 0) {
 				sender.sendMessage(timeNotNum + args[2]);
