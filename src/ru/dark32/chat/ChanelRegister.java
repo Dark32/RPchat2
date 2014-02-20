@@ -25,6 +25,7 @@ public class ChanelRegister {
 	private static int			index	= 0;
 	public static List<IChanel>	listChat;
 	private static int			defaultChanel;
+	public static boolean		switchByPrefix;
 
 	public static void init() {
 		listChat = new ArrayList<IChanel>();
@@ -44,6 +45,7 @@ public class ChanelRegister {
 			}
 			listChat.add(ChanelRegister.registrChanel(ETypeChanel.get(chanelType), name));
 		}
+		switchByPrefix = Main.config.getBoolean("switchByPrefix", false);
 	}
 
 	public static int getDefaultChanel(Player player ) {

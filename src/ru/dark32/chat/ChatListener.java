@@ -43,6 +43,11 @@ public class ChatListener implements Listener {
 				// убираем префикс
 				message = message.substring(1).trim();
 			}
+		} else {
+			if (ChanelRegister.switchByPrefix && prefixChanel != -1 && Util.setChatMode(sender.getName(), prefixChanel)) {
+				event.setCancelled(true);
+				return;
+			}
 		}
 		// получаем канал
 		final IChanel chanel = ChanelRegister.getByIndex(indexChanel);

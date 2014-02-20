@@ -4,3 +4,4 @@ chat: chat
 chance: 50
 motd: true
 showMuteForAll: true
+switchByPrefix: false
