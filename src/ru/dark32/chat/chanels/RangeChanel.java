@@ -37,12 +37,11 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 			final boolean isWorld = !isWorldChat() || sender.getWorld() == recipient.getWorld();
 			final int dist = getDist(sender.getLocation(), recipient.getLocation());
 			final boolean isRange = dist < this.getRange();
-			Util.DEBUG("debug: " + recipient.getName() + " | " + dist + "/" + this.range + "|" + isWorld,
-					sender);
+			Util.DEBUG("debug: " + recipient.getName() + " | " + dist + "/" + this.range + "|" + isWorld, sender);
 			if (isRecipient(sender, recipient)) {
 				Util.DEBUG("debug: isn't Recipient - " + recipient.getName(), sender);
 				continue;
-			} else  if (isRange) {
+			} else if (isRange) {
 				Util.DEBUG("debug: in range - " + recipient.getName(), sender);
 				if (isWorld) {
 					Util.DEBUG("debug: in world - " + recipient.getName(), sender);
@@ -66,7 +65,7 @@ public class RangeChanel extends BaseChanel implements IRangeChanel {
 		distY *= distY;
 		int distZ = (int) (sender.getZ() - target.getZ());
 		distZ *= distZ;
-		return (int)Math.sqrt( distX + distY + distZ);
+		return (int) Math.sqrt(distX + distY + distZ);
 
 	}
 

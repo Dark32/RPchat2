@@ -58,11 +58,16 @@ public class Deaf implements IDeaf {
 		final boolean hasHelp = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".deaf.help");
 		final boolean hasSee = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".deaf.see");
 		final boolean hasAll = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".deaf.all");
-		final boolean hasSeeSelf = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".deaf.see.self") || hasSee;
+		final boolean hasSeeSelf = Main.getPermissionsHandler()
+				.hasPermission(sender, Main.BASE_PERM + ".deaf.see.self") || hasSee;
 		final boolean hasDeaf = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".deaf.deaf");
-		final boolean hasDeafSelf = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".deaf.deaf.self") || hasDeaf;
+		final boolean hasDeafSelf = Main.getPermissionsHandler().hasPermission(sender,
+				Main.BASE_PERM + ".deaf.deaf.self")
+				|| hasDeaf;
 		final boolean hasUnDeaf = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".deaf.undeaf");
-		final boolean hasUnDeafSelf = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".deaf.undeaf.self") || hasUnDeaf;
+		final boolean hasUnDeafSelf = Main.getPermissionsHandler().hasPermission(sender,
+				Main.BASE_PERM + ".deaf.undeaf.self")
+				|| hasUnDeaf;
 		final String target = args.length > 0 ? args[0] : sender.getName();
 		final boolean isSelf = sender.getName().equalsIgnoreCase(target);
 		if (args.length == 0) {
@@ -171,7 +176,7 @@ public class Deaf implements IDeaf {
 		final List<String> msg = new ArrayList<String>();
 		msg.addAll(ValueStorage.deafHelp);
 		for (final String string : msg) {
-			sender.sendMessage(ChanelRegister.colorUTF8(string,3));
+			sender.sendMessage(ChanelRegister.colorUTF8(string, 3));
 		}
 
 	}

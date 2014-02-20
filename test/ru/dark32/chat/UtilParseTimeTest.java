@@ -1,7 +1,6 @@
 package ru.dark32.chat;
 
-import static org.junit.Assert.*;
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -43,6 +42,6 @@ public class UtilParseTimeTest {
 		assertEquals(Util.day + Util.hour + Util.minute + 1, Util.timeParse("1d1h1m1s"));
 		assertEquals(Util.time_inf, Util.timeParse("inf"));
 		assertEquals(0, Util.timeParse("hahahaha"));
-		assertEquals(4*Util.hour, Util.timeParse("1h1h1h1h1"));
+		assertEquals(4 * Util.hour, Util.timeParse("1h1h1h1h1"));
 	}
 }

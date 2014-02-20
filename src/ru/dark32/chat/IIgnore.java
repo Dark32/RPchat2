@@ -7,7 +7,7 @@ public interface IIgnore {
 
 	void caseIgnore(CommandSender sender, String target, int chanel, String reason );
 
-	void ignore(final String[] args,CommandSender sender);
+	void ignore(final String[] args, CommandSender sender );
 
 	void seeTarget(CommandSender sender, String target );
 
@@ -16,6 +16,6 @@ public interface IIgnore {
 	void seeAll(CommandSender sender );
 
 	void caseUnIgnore(CommandSender sender, String target, int chanel );
-	
-	boolean hasntIgnorable(String sender);
+
+	boolean hasntIgnorable(String sender );
 }

@@ -65,10 +65,10 @@ public class ChanceChanel extends RangeChanel implements IChanceChanel {
 			message = getFormatRoll().replace("$1", String.valueOf(iRoll)).replace("$2", String.valueOf(iChance));
 
 		} else {
-			message = ChanelRegister.colorUTF8("&5" + message,3);
+			message = ChanelRegister.colorUTF8("&5" + message, 3);
 			final int chance = rand.nextInt(100);
 			message = ChanelRegister.colorUTF8(
-					getFormatLuck().replace("$1", (chance > getChance()) ? getLuck() : getUnLuck()),3).replace("$msg",
+					getFormatLuck().replace("$1", (chance > getChance()) ? getLuck() : getUnLuck()), 3).replace("$msg",
 					message);
 		}
 		return message;

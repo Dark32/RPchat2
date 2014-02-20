@@ -79,7 +79,7 @@ public class Main extends JavaPlugin {
 			Bukkit.getConsoleSender().sendMessage("[RPChat] Vault Economy was hooked");
 			economyHook = true;
 		}
-		
+
 		Util.init(this);
 		ValueStorage.init();
 		ChanelRegister.init();

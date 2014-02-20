@@ -1,7 +1,5 @@
 package ru.dark32.chat;
 
-import static org.junit.Assert.*;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -47,6 +45,6 @@ public class UtilSuffixLatterTest {
 		System.out.println(Util.suffixLatter("$(1|2|over 9000|109)-109"));
 		System.out.println(Util.suffixLatter("$(1|2|over 9000|111)-111"));
 		System.out.println(Util.suffixLatter("$(1|2|over 9000|no_parse)-not"));
-		}
+	}
 
 }

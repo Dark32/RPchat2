@@ -7,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import ru.dark32.chat.chanels.BaseChanel;
 import ru.dark32.chat.ichanels.IChanel;
 
 /**
@@ -53,7 +52,9 @@ public class ChatListener implements Listener {
 			return;
 		}
 		// есть ли права говорить в этот чат
-		if (chanel.isNeedPerm() && !Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + "." + chanel.getInnerName() + ".say")) {
+		if (chanel.isNeedPerm()
+				&& !Main.getPermissionsHandler().hasPermission(sender,
+						Main.BASE_PERM + "." + chanel.getInnerName() + ".say")) {
 			sender.sendMessage(ValueStorage.noPerm.replace("$1", chanel.getName()));
 			event.setCancelled(true);
 			return;

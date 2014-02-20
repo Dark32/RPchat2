@@ -27,7 +27,7 @@ public class RandomRollUtilTest {
 					+ " пошёл дальше и снова *упал* и не *встал*, а может *не встал"));
 			System.out.println(Util.randomRoll("Он подошёл к обрыву, *упал* и *встал*, пошёл дальше "));
 			System.out.println(Util.randomRoll("Он подошёл к обрыву, *упал* и *встал*, пошёл*"));
-			
+
 		};
 	}
 }

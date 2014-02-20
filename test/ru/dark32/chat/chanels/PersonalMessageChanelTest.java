@@ -3,27 +3,30 @@
  */
 package ru.dark32.chat.chanels;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * @author Andrew
- *
+ * 
  */
 public class PersonalMessageChanelTest {
-	PersonalMessageChanel chanel = new PersonalMessageChanel("PM");
+	PersonalMessageChanel	chanel	= new PersonalMessageChanel("PM");
+
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		
+
 	}
 
 	/**
-	 * Test method for {@link ru.dark32.chat.chanels.PersonalMessageChanel#hasNameTarget(java.lang.String)}.
+	 * Test method for
+	 * {@link ru.dark32.chat.chanels.PersonalMessageChanel#hasNameTarget(java.lang.String)}
+	 * .
 	 */
 	@Test
 	public void testHasNameTarget() {
@@ -34,7 +37,9 @@ public class PersonalMessageChanelTest {
 	}
 
 	/**
-	 * Test method for {@link ru.dark32.chat.chanels.PersonalMessageChanel#getNameTarget(java.lang.String)}.
+	 * Test method for
+	 * {@link ru.dark32.chat.chanels.PersonalMessageChanel#getNameTarget(java.lang.String)}
+	 * .
 	 */
 	@Test
 	public void testGetNameTarget() {
@@ -43,7 +48,9 @@ public class PersonalMessageChanelTest {
 	}
 
 	/**
-	 * Test method for {@link ru.dark32.chat.chanels.PersonalMessageChanel#hasMessage(java.lang.String)}.
+	 * Test method for
+	 * {@link ru.dark32.chat.chanels.PersonalMessageChanel#hasMessage(java.lang.String)}
+	 * .
 	 */
 	@Test
 	public void testHasMessage() {
@@ -55,15 +62,17 @@ public class PersonalMessageChanelTest {
 	}
 
 	/**
-	 * Test method for {@link ru.dark32.chat.chanels.PersonalMessageChanel#getMessage(java.lang.String, int)}.
+	 * Test method for
+	 * {@link ru.dark32.chat.chanels.PersonalMessageChanel#getMessage(java.lang.String, int)}
+	 * .
 	 */
 	@Test
 	public void testGetMessage() {
-		assertEquals("", chanel.getMessage("",-1));
-		assertEquals("", chanel.getMessage("@",-1));
-		assertEquals("", chanel.getMessage("@dark32",-1));
-		assertEquals("test message", chanel.getMessage("@dark32 test message",7));
-		assertEquals("test message", chanel.getMessage("@dark test message",5));
+		assertEquals("", chanel.getMessage("", -1));
+		assertEquals("", chanel.getMessage("@", -1));
+		assertEquals("", chanel.getMessage("@dark32", -1));
+		assertEquals("test message", chanel.getMessage("@dark32 test message", 7));
+		assertEquals("test message", chanel.getMessage("@dark test message", 5));
 	}
 
 }

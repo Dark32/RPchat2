@@ -6,43 +6,34 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
-public class NullPermissionsHandler implements IPermission
-{
+public class NullPermissionsHandler implements IPermission {
 	@Override
-	public String getGroup(final Player base)
-	{
+	public String getGroup(final Player base ) {
 		return null;
 	}
 
 	@Override
-	public List<String> getGroups(final Player base)
-	{
+	public List<String> getGroups(final Player base ) {
 		return Collections.emptyList();
 	}
 
-	
 	@Override
-	public boolean inGroup(final Player base, final String group)
-	{
+	public boolean inGroup(final Player base, final String group ) {
 		return false;
 	}
 
 	@Override
-	public boolean hasPermission(final CommandSender base, final String node)
-	{
+	public boolean hasPermission(final CommandSender base, final String node ) {
 		return false;
 	}
 
 	@Override
-	public String getPrefix(final Player base)
-	{
+	public String getPrefix(final Player base ) {
 		return null;
 	}
 
 	@Override
-	public String getSuffix(final Player base)
-	{
+	public String getSuffix(final Player base ) {
 		return null;
 	}
 

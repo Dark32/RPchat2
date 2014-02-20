@@ -3,8 +3,8 @@
  */
 package ru.dark32.chat.chanels;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

@@ -88,9 +88,12 @@ public class Ignore implements IIgnore {
 		final boolean hasHelp = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".ignore.help");
 		final boolean hasSee = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".ignore.see");
 		final boolean hasAll = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".ignore.all");
-		final boolean hasSeeSelf = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".ignore.see.self") || hasSee;
+		final boolean hasSeeSelf = Main.getPermissionsHandler().hasPermission(sender,
+				Main.BASE_PERM + ".ignore.see.self")
+				|| hasSee;
 		final boolean hasIgnore = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".ignore.ignore");
-		final boolean hasUnIgnore = Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".ignore.unignore");
+		final boolean hasUnIgnore = Main.getPermissionsHandler().hasPermission(sender,
+				Main.BASE_PERM + ".ignore.unignore");
 		if (args.length == 0) {
 			if (!hasHelp) {
 				sender.sendMessage(canTHelp);

@@ -12,9 +12,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import ru.tehkode.permissions.PermissionGroup;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
-
 public class Util {
 	public static Map<String, Integer>	modes2;
 	// static boolean usePB;

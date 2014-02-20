@@ -39,6 +39,7 @@ public interface IPermission {
 	 * @return
 	 */
 	boolean hasPermission(CommandSender base, String node );
+
 	boolean hasPermission(String base, String node );
 
 	/***
