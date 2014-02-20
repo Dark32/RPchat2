@@ -31,10 +31,6 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		if (cmd.getName().equalsIgnoreCase("rpchat")) {
 			if (args.length == 0) {
 				RPChatCommandExecutor.getBase(sender);
-				// for (Plugin plugin :
-				// Bukkit.getServer().getPluginManager().getPlugins()) {
-				// System.out.println(plugin.getClass());
-				// }
 				return true;
 			} else if (args.length == 1) {
 				if (args[0].equalsIgnoreCase("help")) {
@@ -78,8 +74,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 				if (args[0].length() == 1) {
 					final char sign = args[0].charAt(0);
 					final int _ind = ChanelRegister.getIndexBySign(sign);
-					if (_ind != -1) {
-						Util.setChatMode(sender.getName(), _ind);
+					if (_ind != -1 && Util.setChatMode(sender.getName(), _ind)) {
 						sender.sendMessage(chanelswitch.replace("$1", ChanelRegister.getByIndex(_ind).getName()));
 					} else {
 						sender.sendMessage(chanenotfound);

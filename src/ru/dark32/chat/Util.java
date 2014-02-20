@@ -12,6 +12,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import ru.dark32.chat.ichanels.IChanel;
+
 public class Util {
 	public static Map<String, Integer>	modes2;
 	// static boolean usePB;
@@ -80,11 +82,21 @@ public class Util {
 		return true;
 	}
 
-	public static void setChatMode(String player, int cm ) {
-		if (modes2.containsKey(player)) {
-			modes2.remove(player);
+	public static boolean setChatMode(String player, int cm ) {
+		final IChanel chanel = ChanelRegister.getByIndex(cm);
+		final boolean hasPermission = Main.getPermissionsHandler().hasPermission(player, "mcnw.spy")
+				|| Main.getPermissionsHandler().hasPermission(player,
+						Main.BASE_PERM + "." + chanel.getInnerName() + ".say");
+		if ((!chanel.isNeedPerm() || hasPermission)) {
+			if (modes2.containsKey(player)) {
+				modes2.remove(player);
+			}
+			modes2.put(player, cm);
+			return true;
+		} else {
+			return false;
 		}
-		modes2.put(player, cm);
+
 	}
 
 	final private static Pattern	rollPatern	= Pattern.compile("\\*(.+?)\\*");
