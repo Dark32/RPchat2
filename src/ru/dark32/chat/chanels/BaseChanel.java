@@ -83,7 +83,7 @@ public class BaseChanel implements IChanel {
 		this.enable = Main.chatConfig.getBoolean(path_enable, false);
 		this.name = Main.chatConfig.getString(path_name, path_name);
 		this.isWorld = Main.chatConfig.getBoolean(path_world, false);
-		this.prefix = Main.chatConfig.getString(path_prefix, path_prefix).charAt(0);
+		this.prefix = Main.chatConfig.getString(path_prefix, "\u0000").charAt(0);
 		this.sign = Main.chatConfig.getString(path_sign, path_sign).charAt(0);
 		this.formatString = ChanelRegister.colorUTF8(Main.chatConfig.getString(path_format, path_format), 3);
 		this.tabes = Main.chatConfig.getBoolean(path_tab, true);

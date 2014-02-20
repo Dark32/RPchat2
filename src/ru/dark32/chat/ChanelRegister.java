@@ -100,7 +100,8 @@ public class ChanelRegister {
 
 	public static int getIndexByPrefix(final Player sender, final char preffix ) {
 		for (final IChanel chanel : listChat) {
-			if ((chanel.getPrefix() == preffix)
+			if (chanel.getPrefix() != '\u0000'
+					&& (chanel.getPrefix() == preffix)
 					&& (!chanel.isNeedPerm() || Main.getPermissionsHandler().hasPermission(sender, "mcnw.spy") || Main
 							.getPermissionsHandler().hasPermission(sender,
 									Main.BASE_PERM + "." + chanel.getInnerName() + ".say"))) {
