@@ -212,4 +212,15 @@ public interface IChanel {
 	 * @return - время
 	 */
 	int getCoolDown(Player player );
+
+	/**
+	 * Получить стоимость отправки сообщения
+	 * 
+	 * @param player
+	 *            - отправитель
+	 * @param msg
+	 *            - Сообщение
+	 * @return цена
+	 */
+	double getCostMessage(Player player, String msg );
 }

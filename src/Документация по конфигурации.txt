@@ -36,7 +36,9 @@
  clan | `none` | none - обычный , clan - внутриклановый , ally - союзный (не проверен)
  groups.<group_name_in_lower_case>.default | false | выставить иной канал по умолчанию для группы
  groups.<group_name_in_lower_case>.cooldown | 0xffff | охлаждение для групп
-cooldown | 0 | охлаждение по умолчанию
+ cooldown | 0 | охлаждение по умолчанию
+ cost.base | 0.0 | Базовая цена
+ cost.per | 0.0 | Цена за символ
 
 
 # RANGE:

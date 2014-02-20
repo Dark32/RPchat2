@@ -88,6 +88,10 @@ Chat:
          VIP:
               default:true
              cooldown: 5
+     cost:
+        base: 10.0
+        per: 1.0
+        needmoremoney: "&cНе достаточно средств, нужно $total. Цена сообщения $base и по $per за каждый символ."
   World:
     type: item
     enable: true

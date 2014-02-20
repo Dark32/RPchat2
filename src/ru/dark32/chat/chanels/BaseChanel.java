@@ -17,6 +17,7 @@ import ru.dark32.chat.ChanelRegister;
 import ru.dark32.chat.Main;
 import ru.dark32.chat.SimpleClanHook;
 import ru.dark32.chat.Util;
+import ru.dark32.chat.VaultEconomyHook;
 import ru.dark32.chat.ichanels.ETypeChanel;
 import ru.dark32.chat.ichanels.IChanel;
 
@@ -49,6 +50,9 @@ public class BaseChanel implements IChanel {
 	final private int					defaultCoolDown;
 	final private HashMap<String, Long>	cooldown		= new HashMap<String, Long>();
 	final private String				cooldownText;
+	final private double				baseCost;
+	private double						costPerSymbol;
+	private String						needmoremoney;
 
 	public BaseChanel(final String par_name ){
 		final String path_enable = "Chat." + par_name + ".enable";
@@ -70,6 +74,9 @@ public class BaseChanel implements IChanel {
 		final String path_clan = "Chat." + par_name + ".clan";
 		final String path_cooldown = "Chat." + par_name + ".cooldown";
 		final String path_cooldown_text = "cooldown.text";
+		final String path_base_cost = "Chat." + par_name + ".cost.base";
+		final String path_cost_per_symbol = "Chat." + par_name + ".cost.per";
+		final String path_needmoremoney = "Chat." + par_name + ".cost.needmoremoney";
 
 		this.index = ChanelRegister.getNextIndex();
 		this.innerName = par_name.toLowerCase(Locale.US);
@@ -109,6 +116,10 @@ public class BaseChanel implements IChanel {
 		String clanly = Main.chatConfig.getString(path_clan, "none");
 		this.clanOnly = clanly.equalsIgnoreCase("clan");
 		this.allyOnly = clanly.equalsIgnoreCase("ally");
+		this.baseCost = Main.chatConfig.getDouble(path_base_cost, 0.0d);
+		this.costPerSymbol = Main.chatConfig.getDouble(path_cost_per_symbol, 0.0d);
+		this.needmoremoney = ChanelRegister.colorUTF8(
+				Main.chatConfig.getString(path_needmoremoney, path_needmoremoney), 3);
 	}
 
 	@Override
@@ -133,15 +144,38 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	public boolean canSend(final Player sender, final String message ) {
-		if (getCoolDown(sender) <= 0) {
+		return testCoolDown(sender, message) && testCost(sender, message);
+	}
+
+	final private boolean testCost(Player sender, String message ) {
+		if (!Main.economyHook) {
 			return true;
 		}
-		long timeLeft = getCoolDownForPlayer(sender);
-		if (timeLeft > 0) {
-			sender.sendMessage(Util.suffixLatter(cooldownText.replace("$time", Long.toString(timeLeft))));
+		final double cost = getCostMessage(sender, message);
+		if (VaultEconomyHook.hasBalance(sender, cost)) {
+			VaultEconomyHook.cost(sender, cost);
 			return true;
 		} else {
-			setCoolDownForPlayer(sender);
+			sender.sendMessage(needmoremoney.replace("$total", Double.toString(cost))
+					.replace("$base", Double.toString(this.baseCost))
+					.replace("$per", Double.toString(this.costPerSymbol)));
+			return false;
+
+		}
+
+	}
+
+	final private boolean testCoolDown(final Player sender, final String message ) {
+		if (getCoolDown(sender) > 0) {
+			long timeLeft = getCoolDownForPlayer(sender);
+			if (timeLeft > 0) {
+				sender.sendMessage(Util.suffixLatter(cooldownText.replace("$time", Long.toString(timeLeft))));
+				return false;
+			} else {
+				setCoolDownForPlayer(sender);
+				return true;
+			}
+		} else {
 			return false;
 		}
 	}
@@ -418,5 +452,14 @@ public class BaseChanel implements IChanel {
 	public String toString() {
 		return super.toString() + ", index =>" + this.index + ", isWorld =>" + this.isWorld + ", name =>" + this.name
 				+ ", prefix =>" + this.prefix + ", sign =>" + this.sign + ", type =>" + this.type;
+	}
+
+	@Override
+	public double getCostMessage(final Player player, final String msg ) {
+		final int l = msg.length();
+		final boolean free = (Main.getPermissionsHandler().hasPermission(player, Main.BASE_PERM + ".economy.bypass") || Main
+				.getPermissionsHandler().hasPermission(player,
+						Main.BASE_PERM + "." + this.getInnerName() + ".economy.bypass"));
+		return free ? 0 : this.baseCost + this.costPerSymbol * l;
 	}
 }
