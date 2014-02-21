@@ -72,6 +72,8 @@ Chat:
     sign: g
     requestPrefix: false
     needPerm: true
+    switchcmd: "/global "
+    sendcmd: "/g "
     pimk:
      enable: true
      instrument: PIANO

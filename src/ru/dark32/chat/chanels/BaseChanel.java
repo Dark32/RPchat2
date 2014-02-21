@@ -51,8 +51,10 @@ public class BaseChanel implements IChanel {
 	final private HashMap<String, Long>	cooldown		= new HashMap<String, Long>();
 	final private String				cooldownText;
 	final private double				baseCost;
-	private double						costPerSymbol;
-	private String						needmoremoney;
+	final private double				costPerSymbol;
+	final private String				needmoremoney;
+	final private String				cmdSwitch;
+	final private String				cmdSend;
 
 	public BaseChanel(final String par_name ){
 		final String path_enable = "Chat." + par_name + ".enable";
@@ -77,6 +79,8 @@ public class BaseChanel implements IChanel {
 		final String path_base_cost = "Chat." + par_name + ".cost.base";
 		final String path_cost_per_symbol = "Chat." + par_name + ".cost.per";
 		final String path_needmoremoney = "Chat." + par_name + ".cost.needmoremoney";
+		final String path_switch_cmd = "Chat." + par_name + ".switchcmd";
+		final String path_send_cmd = "Chat." + par_name + ".sendcmd";
 
 		this.index = ChanelRegister.getNextIndex();
 		this.innerName = par_name.toLowerCase(Locale.US);
@@ -120,6 +124,9 @@ public class BaseChanel implements IChanel {
 		this.costPerSymbol = Main.chatConfig.getDouble(path_cost_per_symbol, 0.0d);
 		this.needmoremoney = ChanelRegister.colorUTF8(
 				Main.chatConfig.getString(path_needmoremoney, path_needmoremoney), 3);
+		this.cmdSwitch = Main.chatConfig.getString(path_switch_cmd, "");
+		this.cmdSend = Main.chatConfig.getString(path_send_cmd, "");
+
 	}
 
 	@Override
@@ -461,5 +468,14 @@ public class BaseChanel implements IChanel {
 				.getPermissionsHandler().hasPermission(player,
 						Main.BASE_PERM + "." + this.getInnerName() + ".economy.bypass"));
 		return free ? 0 : this.baseCost + this.costPerSymbol * l;
+	}
+	@Override
+	public String getCmdSwitch() {
+		return cmdSwitch;
+	}
+
+	@Override
+	public String getCmdSend() {
+		return cmdSend;
 	}
 }

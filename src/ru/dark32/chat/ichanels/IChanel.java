@@ -223,4 +223,18 @@ public interface IChanel {
 	 * @return цена
 	 */
 	double getCostMessage(Player player, String msg );
+
+	/**
+	 * Пользовательская команда переключения канала
+	 * 
+	 * @return команда
+	 */
+	String getCmdSwitch();
+
+	/**
+	 * Пользовательская команда отправки сообщения
+	 * 
+	 * @return команда
+	 */
+	String getCmdSend();
 }
