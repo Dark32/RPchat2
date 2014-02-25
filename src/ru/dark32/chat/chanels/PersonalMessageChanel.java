@@ -146,15 +146,31 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 	}
 
 	@Override
-	final public String formatFrom(final Player sender, final Player target, final String msg ) {
-		return format(sender, formatFromString).replace("$r", target.getName()).replace("%2$s", msg)
-				.replace("%1$s", sender.getName());
+	final public String formatFrom(final Player sender, final Player target, String msg ) {
+		if (msg.contains("$rsuffix")) {
+			msg = msg.replace("$rsuffix", Main.getPermissionsHandler().getSuffix(target));
+		}
+		if (msg.contains("$rprefix")) {
+			msg = msg.replace("$rprefix", Main.getPermissionsHandler().getPrefix(target));
+		}
+		if (msg.contains("$r")) {
+			msg = msg.replace("$r", target.getName());
+		}
+		return format(sender, formatFromString).replace("%2$s", msg).replace("%1$s", sender.getName());
 	}
 
 	@Override
-	final public String formatSpy(final Player sender, final Player target, final String msg ) {
-		return format(sender, formatSpyString).replace("%1$s", sender.getName()).replace("$r", target.getName())
-				.replace("%2$s", msg);
+	final public String formatSpy(final Player sender, final Player target, String msg ) {
+		if (msg.contains("$rsuffix")) {
+			msg = msg.replace("$rsuffix", Main.getPermissionsHandler().getSuffix(target));
+		}
+		if (msg.contains("$rprefix")) {
+			msg = msg.replace("$rprefix", Main.getPermissionsHandler().getPrefix(target));
+		}
+		if (msg.contains("$r")) {
+			msg = msg.replace("$r", target.getName());
+		}
+		return format(sender, formatSpyString).replace("%1$s", sender.getName()).replace("%2$s", msg);
 	}
 
 	@Override
