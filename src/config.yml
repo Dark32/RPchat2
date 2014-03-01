@@ -1,6 +1,6 @@
 experemental: false
 locale: locale
-chat: chat
+chat: chat_for_test
 chance: 50
 motd: true
 showMuteForAll: true

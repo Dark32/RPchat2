@@ -54,11 +54,11 @@ String:
    - "Это тестовое сообщение,"
    - "вы можете изменить его в"
    - "файле конфигурации RPChat."
-   join:
+  join:
         default: "&e$name join the game"
         admin: "&eAdmin $name join the game"
         vip: "&eDon $name join the game"
-   left:
+  left:
         default: "&e$name left the game"
         admin: "&eAdmin $name left the game"
         vip: "&eDon $name left the game"
@@ -95,7 +95,7 @@ mute:
    - "&b/unmute <никнейм> [тэг] &6- снятие приглушения."
    - "&6Укажите время меньше 5 для принудительного снятия приглушения."
   needName: "&7$Вы должны указать никнейм игрока!"
-  muteMessage: "&7$$name приглушен в $channel на $time $(секунду|секунды|секунд|$time) или $data.day $(день|дня|дней|$data.day) $data.hour $(час|часа|часов|$data.hour) $data.minute $(минута|минуты|минут|$data.minute) $data.second $(секунду|секунды|секунд|$data.second) ($reason)."
+  muteMessage: "&7$$name приглушен в $channel на $time $(секунда|секунды|секунд|$time) или $data.day $(день|дня|дней|$data.day) $data.hour $(час|часа|часов|$data.hour) $data.minute $(минута|минуты|минут|$data.minute) $data.second $(секунду|секунды|секунд|$data.second) ($reason)."
   # /23 Требуются отдельные строки для перманентного приглушения и отключения чата.
   # /32 Пока не реализованно, выставлять овер 100500 секунд для пермомента
   unmuteMessage: "&7$name вновь может общаться в $channel."
@@ -110,7 +110,7 @@ mute:
   timeNotNum: "&7$Время должно быть указано в виде целого числа: "
   subCMDErr: "&7$Ошибка форматирования #2 [see|all]"
   dataError: "&7$Что-то не так с форматом времени: "
-  muteSee: "&7$$name приглушен в $channel. Осталось $time $(секунду|секунды|секунд|$time) или $data.day $(день|дня|дней|$data.day) $data.hour $(час|часа|часов|$data.hour) $data.minute $(минута|минуты|минут|$data.minute) $data.second $(секунду|секунды|секунд|$data.second). Причина: $reason."
+  muteSee: "&7$$name приглушен в $channel. Осталось $time $(секунда|секунды|секунд|$time) или $data.day $(день|дня|дней|$data.day) $data.hour $(час|часа|часов|$data.hour) $data.minute $(минута|минуты|минут|$data.minute) $data.second $(секунда|секунды|секунд|$data.second). Причина: $reason."
 deaf:
   canTHelp: "&7$У вас недостаточно прав для просмотра этого раздела справки." 
   canTSeeSelf: "&7$Недостаточно прав для просмотра этой информации." 

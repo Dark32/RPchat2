@@ -83,7 +83,7 @@ public class BaseChanel implements IChanel {
 		final String path_send_cmd = "Chat." + par_name + ".sendcmd";
 
 		this.index = ChanelRegister.getNextIndex();
-		this.innerName = par_name.toLowerCase(Locale.US);
+		this.innerName = par_name/*.toLowerCase(Locale.US)*/;
 		this.enable = Main.chatConfig.getBoolean(path_enable, false);
 		this.name = Main.chatConfig.getString(path_name, path_name);
 		this.isWorld = Main.chatConfig.getBoolean(path_world, false);
@@ -115,7 +115,7 @@ public class BaseChanel implements IChanel {
 		this.pimkEnable = Main.chatConfig.getBoolean(path_pimk_enable, false);
 		this.pimkInstrument = Instrument.valueOf(Main.chatConfig.getString(path_pimk_instrument, "PIANO"));
 		this.pimkNote = new Note(octava, tone, sharped);
-		this.colorize = Main.chatConfig.getString(path_pimk_colorize, "@");
+		this.colorize = ChanelRegister.colorUTF8(Main.chatConfig.getString(path_pimk_colorize, "@"), 3);
 		this.overAll = Main.chatConfig.getBoolean(path_overAll, true);
 		String clanly = Main.chatConfig.getString(path_clan, "none");
 		this.clanOnly = clanly.equalsIgnoreCase("clan");
@@ -137,8 +137,10 @@ public class BaseChanel implements IChanel {
 	@Override
 	public int getCoolDown(Player player ) {
 		final String group = Main.getPermissionsHandler().getGroup(player);
-		return Main.chatConfig.getInt("Chat." + innerName + ".groups." + group + ".cooldown", this.defaultCoolDown);
-
+		System.out.println("Chat." + innerName + ".groups." + group + ".cooldown");
+		int time = Main.chatConfig.getInt("Chat." + innerName + ".groups." + group + ".cooldown", this.defaultCoolDown);
+		System.out.println(time);
+		return time;
 	}
 
 	private void setCoolDownForPlayer(Player player ) {
@@ -146,7 +148,11 @@ public class BaseChanel implements IChanel {
 	}
 
 	private long getCoolDownForPlayer(Player player ) {
-		return this.cooldown.get(player.getName()) - System.currentTimeMillis() / 1000;
+		if (this.cooldown.containsKey(player.getName())) {
+			return this.cooldown.get(player.getName()) - System.currentTimeMillis() / 1000;
+		} else {
+			return -1;
+		}
 	}
 
 	@Override
@@ -183,7 +189,7 @@ public class BaseChanel implements IChanel {
 				return true;
 			}
 		} else {
-			return false;
+			return true;
 		}
 	}
 
@@ -253,7 +259,7 @@ public class BaseChanel implements IChanel {
 
 	@Override
 	final public String getInnerName() {
-		return innerName;
+		return innerName.toLowerCase(Locale.US);
 	}
 
 	@Override
@@ -429,11 +435,13 @@ public class BaseChanel implements IChanel {
 				if (match != null) {
 					player.playSound(player.getLocation(), Sound.valueOf("NOTE_" + getPimkInstrument()), 3f,
 							getPimkNote().getId());
-					sender.sendMessage(getListenerMessage(recipient.size())
-							+ format(sender, getFormat()).replace("%2$s", message.replace(match, name))
-									.replace("%1$s", sender.getName())
-									.replace(match, getColorize() + match + ChatColor.getLastColors(message)));
-					iterator.remove();
+					// player.sendMessage(format(sender,
+					// getFormat()).replace("%2$s", message.replace(match,
+					// name))
+					// .replace("%1$s", sender.getName())
+					// .replace(match, getColorize() + match +
+					// ChatColor.getLastColors(message)));
+					// iterator.remove();
 				}
 			}
 		}
@@ -469,6 +477,7 @@ public class BaseChanel implements IChanel {
 						Main.BASE_PERM + "." + this.getInnerName() + ".economy.bypass"));
 		return free ? 0 : this.baseCost + this.costPerSymbol * l;
 	}
+
 	@Override
 	public String getCmdSwitch() {
 		return cmdSwitch;

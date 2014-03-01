@@ -5,10 +5,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class LeftListener implements Listener {
 
-	public LeftListener(){
-
-	}
-
 	public void onLeft(final PlayerQuitEvent event ) {
 		String quitMessage = Main.localeConfig.getString(
 				"String.left." + Main.getPermissionsHandler().getGroup(event.getPlayer()), "&e$name left the game");
@@ -28,7 +24,7 @@ public class LeftListener implements Listener {
 			String iden = Integer.toHexString(event.getPlayer().getTicksLived() + event.getPlayer().getEntityId());
 			quitMessage = quitMessage.replace("$id", iden);
 		}
-		event.setQuitMessage(quitMessage);
+		event.setQuitMessage(ChanelRegister.colorUTF8(quitMessage, 3));
 
 	}
 }

@@ -96,7 +96,7 @@ public class Mute implements IMute {
 				msg = msg.replace("$name", name);
 			}
 			if (msg.contains("$channel")) {
-				msg = msg.replace("$channel", ChanelRegister.getByIndex(chanel).getName());
+				msg = msg.replace("$channel",  chanel == -1 ? "all": ChanelRegister.getByIndex(chanel).getName());
 			}
 			if (msg.contains("$reason")) {
 				msg = msg.replace("$reason", reason);
@@ -109,7 +109,6 @@ public class Mute implements IMute {
 				sender.sendMessage(msg);
 			}
 		} else {
-			System.out.println(name);
 			sender.sendMessage(unmuteMessage.replace("$name", name).replace("$channel", _chanelName));
 		}
 		save();

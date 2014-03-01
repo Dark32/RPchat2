@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import ru.dark32.chat.ChanelRegister;
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
@@ -56,7 +57,7 @@ public class PermissionsExHandler extends SuperpermsHandler {
 		if (user == null) {
 			return null;
 		}
-		return user.getPrefix(base.getWorld().getName());
+		return ChanelRegister.colorUTF8(user.getPrefix(base.getWorld().getName()),3);
 	}
 
 	@Override
@@ -66,6 +67,6 @@ public class PermissionsExHandler extends SuperpermsHandler {
 			return null;
 		}
 
-		return user.getSuffix(base.getWorld().getName());
+		return ChanelRegister.colorUTF8(user.getSuffix(base.getWorld().getName()),3);
 	}
 }

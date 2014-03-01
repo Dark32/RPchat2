@@ -26,8 +26,8 @@ public class Main extends JavaPlugin {
 	private static IMute				muteStorage;
 	private static IDeaf				deafStorage;
 	private static IIgnore				ignorStorage;
-	public static final String			VERSION			= "RPchat v 2.0.7w (2u1t)";
-	public static final String			VERSION_NAME	= "Primal steak birch";
+	public static final String			VERSION			= "RPchat v 2.2.0h (xu1t)";
+	public static final String			VERSION_NAME	= "Green as the pink rhino";
 	public static FileConfiguration		config;
 	public static File					storageFile;
 	public static YamlConfiguration		storage;
@@ -75,10 +75,10 @@ public class Main extends JavaPlugin {
 			Bukkit.getConsoleSender().sendMessage("[RPChat] Simple clans was hooked");
 			SCenable = true;
 		}
-		if (setupEconomy()) {
-			Bukkit.getConsoleSender().sendMessage("[RPChat] Vault Economy was hooked");
-			economyHook = true;
-		}
+		//if (setupEconomy()) {
+		//	Bukkit.getConsoleSender().sendMessage("[RPChat] Vault Economy was hooked");
+		//	economyHook = true;
+		//}
 
 		Util.init(this);
 		ValueStorage.init();

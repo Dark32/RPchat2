@@ -1,6 +1,6 @@
-name: RPChat
+name: rpChat
 main:  ru.dark32.chat.Main
-version: 1.0.5
+version: 2.2.0
 commands:
    rpchat:
      description: 'Help'

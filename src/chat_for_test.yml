@@ -79,18 +79,18 @@ Chat:
      instrument: PIANO
      colorize: "&c@"
      note: 1F#
-     cooldown: 20
+    cooldown: 20
     groups:
          admin:
-             default:true
+             default: true
              cooldown: 1
          moderator:
-             default:true
+             default: true
              cooldown: 2
          VIP:
-              default:true
+             default: true
              cooldown: 5
-     cost:
+    cost:
         base: 10.0
         per: 1.0
         needmoremoney: "&cНе достаточно средств, нужно $total. Цена сообщения $base и по $per за каждый символ."
@@ -165,6 +165,11 @@ Chat:
     # 1 - отдельно
     isListenerMessage: 1
     needPerm: false
+    pimk:
+     enable: true
+     instrument: PIANO
+     colorize: "&c@"
+     note: 1F#
   Whisper:
     type: range
     enable: true

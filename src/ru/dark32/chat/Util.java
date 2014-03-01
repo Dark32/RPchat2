@@ -183,6 +183,7 @@ public class Util {
 
 	public static String suffixLatter(String message ) {
 		Matcher matches = suffixParser.matcher(message);
+		int index = 0;
 		while (matches.find()) {
 			int num = Integer.valueOf(matches.group(4));
 			String suf = "";
@@ -199,7 +200,7 @@ public class Util {
 					suf = matches.group(3);
 				}
 			}
-			message = message.replaceAll(suffixParsePatern, suf);
+			message = message.replaceFirst(suffixParsePatern, suf);
 		}
 		return message;
 	}
@@ -218,7 +219,8 @@ public class Util {
 			final String rawTime = matches.group(0).toLowerCase(Locale.US);
 			if (!rawTime.equalsIgnoreCase("inf")) {
 				char timeMultiple = rawTime.charAt(rawTime.length() - 1);
-				int tmp_time = Integer.parseInt(rawTime.substring(0, rawTime.length() - 1));
+				String _time = rawTime.substring(0, rawTime.length() - 1);
+				int tmp_time = _time.length() > 5 ? 99999 : Integer.parseInt(_time);
 				switch (timeMultiple) {
 					case 's': {
 						tmp_time *= secunde;

@@ -15,6 +15,9 @@ public class JoinListener implements Listener {
 	public void onJoin(final PlayerJoinEvent event ) {
 		String joinMessage = Main.localeConfig.getString(
 				"String.join." + Main.getPermissionsHandler().getGroup(event.getPlayer()), "&e$name join the game");
+		if (joinMessage.contains("$name")) {
+			joinMessage = joinMessage.replace("$name", event.getPlayer().getName());
+		}
 		if (joinMessage.contains("$suffix")) {
 			joinMessage = joinMessage.replace("$suffix", Main.getPermissionsHandler().getSuffix(event.getPlayer()));
 		}
@@ -32,7 +35,7 @@ public class JoinListener implements Listener {
 
 			joinMessage = joinMessage.replace("$id", iden);
 		}
-		event.setJoinMessage(joinMessage);
+		event.setJoinMessage(ChanelRegister.colorUTF8(joinMessage,3));
 		if (ValueStorage.motd) {
 			final Player player = event.getPlayer();
 			for (final String line : ValueStorage.joinmsg) {
