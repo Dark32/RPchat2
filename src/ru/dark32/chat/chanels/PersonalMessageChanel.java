@@ -182,6 +182,6 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 
 	@Override
 	final public Set<Player> getSpyRecipients(Player sender ) {
-		return null;
+		return new HashSet<Player>();
 	}
 }
