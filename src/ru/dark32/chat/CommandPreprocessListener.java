@@ -29,6 +29,7 @@ public class CommandPreprocessListener implements Listener {
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			recipients.add(recipient);
 		}
+		player.chat(msg);
 	//	AsyncPlayerChatEvent event2 = new AsyncPlayerChatEvent(true, player,
 	//			StringUtils.join(args, " ", 1, args.length), recipients);
 	//	Bukkit.getServer().getPluginManager().callEvent(event2);
