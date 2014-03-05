@@ -22,10 +22,19 @@ import ru.dark32.chat.ichanels.ETypeChanel;
 import ru.dark32.chat.ichanels.IChanel;
 
 public class BaseChanel implements IChanel {
+	final private boolean				allyOnly;
+	final private double				baseCost;
+	final private boolean				clanOnly;
+	final private String				cmdSend;
+	final private String				cmdSwitch;
 	final private String				colorize;
+	final private HashMap<String, Long>	cooldown		= new HashMap<String, Long>();
+	final private String				cooldownText;
+	final private double				costPerSymbol;
 	final protected int					COUNT_EXCLUDE	= 1;
 	final protected int					COUNT_INCLUDE	= -1;
 	final protected int					COUNT_OFF		= 0;
+	final private int					defaultCoolDown;
 	final private boolean				enable;
 	final private String				formatString;
 	final private int					index;
@@ -34,27 +43,17 @@ public class BaseChanel implements IChanel {
 	final private String				listenerMessage;
 	final private int					listenerMessageEnable;
 	final private String				name;
+	final private String				needmoremoney;
 	final private boolean				needPerm;
 	final private String				noListenerMessage;
 	final private boolean				overAll;
 	final private boolean				pimkEnable;
 	final private Instrument			pimkInstrument;
-
 	final private Note					pimkNote;
 	final private char					prefix;
 	final private char					sign;
 	final private boolean				tabes;
 	private ETypeChanel					type;
-	final private boolean				clanOnly;
-	final private boolean				allyOnly;
-	final private int					defaultCoolDown;
-	final private HashMap<String, Long>	cooldown		= new HashMap<String, Long>();
-	final private String				cooldownText;
-	final private double				baseCost;
-	final private double				costPerSymbol;
-	final private String				needmoremoney;
-	final private String				cmdSwitch;
-	final private String				cmdSend;
 
 	public BaseChanel(final String par_name ){
 		final String path_enable = "Chat." + par_name + ".enable";
@@ -83,7 +82,7 @@ public class BaseChanel implements IChanel {
 		final String path_send_cmd = "Chat." + par_name + ".sendcmd";
 
 		this.index = ChanelRegister.getNextIndex();
-		this.innerName = par_name/*.toLowerCase(Locale.US)*/;
+		this.innerName = par_name/* .toLowerCase(Locale.US) */;
 		this.enable = Main.chatConfig.getBoolean(path_enable, false);
 		this.name = Main.chatConfig.getString(path_name, path_name);
 		this.isWorld = Main.chatConfig.getBoolean(path_world, false);
@@ -130,67 +129,8 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
-	public boolean isDefaultForGrop(String group ) {
-		return Main.chatConfig.getBoolean("Chat." + innerName + ".groups." + group + ".default", false);
-	}
-
-	@Override
-	public int getCoolDown(Player player ) {
-		final String group = Main.getPermissionsHandler().getGroup(player);
-		System.out.println("Chat." + innerName + ".groups." + group + ".cooldown");
-		int time = Main.chatConfig.getInt("Chat." + innerName + ".groups." + group + ".cooldown", this.defaultCoolDown);
-		System.out.println(time);
-		return time;
-	}
-
-	private void setCoolDownForPlayer(Player player ) {
-		this.cooldown.put(player.getName(), System.currentTimeMillis() / 1000 + getCoolDown(player));
-	}
-
-	private long getCoolDownForPlayer(Player player ) {
-		if (this.cooldown.containsKey(player.getName())) {
-			return this.cooldown.get(player.getName()) - System.currentTimeMillis() / 1000;
-		} else {
-			return -1;
-		}
-	}
-
-	@Override
 	public boolean canSend(final Player sender, final String message ) {
 		return testCoolDown(sender, message) && testCost(sender, message);
-	}
-
-	final private boolean testCost(Player sender, String message ) {
-		if (!Main.economyHook) {
-			return true;
-		}
-		final double cost = getCostMessage(sender, message);
-		if (VaultEconomyHook.hasBalance(sender, cost)) {
-			VaultEconomyHook.cost(sender, cost);
-			return true;
-		} else {
-			sender.sendMessage(needmoremoney.replace("$total", Double.toString(cost))
-					.replace("$base", Double.toString(this.baseCost))
-					.replace("$per", Double.toString(this.costPerSymbol)));
-			return false;
-
-		}
-
-	}
-
-	final private boolean testCoolDown(final Player sender, final String message ) {
-		if (getCoolDown(sender) > 0) {
-			long timeLeft = getCoolDownForPlayer(sender);
-			if (timeLeft > 0) {
-				sender.sendMessage(Util.suffixLatter(cooldownText.replace("$time", Long.toString(timeLeft))));
-				return false;
-			} else {
-				setCoolDownForPlayer(sender);
-				return true;
-			}
-		} else {
-			return true;
-		}
 	}
 
 	final private String colorChatMessage(final Player sender, String message ) {
@@ -220,7 +160,7 @@ public class BaseChanel implements IChanel {
 	@Override
 	public String format(final Player player, String msg ) {
 		if (Main.SCenable) {
-			// msg = SimpleClanHook.formatComplete(msg, player);
+			msg = SimpleClanHook.formatComplete(msg, player);
 		}
 		if (msg.contains("$suffix")) {
 			msg = msg.replace("$suffix", Main.getPermissionsHandler().getSuffix(player));
@@ -243,8 +183,44 @@ public class BaseChanel implements IChanel {
 	}
 
 	@Override
+	public String getCmdSend() {
+		return cmdSend;
+	}
+
+	@Override
+	public String getCmdSwitch() {
+		return cmdSwitch;
+	}
+
+	@Override
 	final public String getColorize() {
 		return colorize;
+	}
+
+	@Override
+	public int getCoolDown(Player player ) {
+		final String group = Main.getPermissionsHandler().getGroup(player);
+		System.out.println("Chat." + innerName + ".groups." + group + ".cooldown");
+		int time = Main.chatConfig.getInt("Chat." + innerName + ".groups." + group + ".cooldown", this.defaultCoolDown);
+		System.out.println(time);
+		return time;
+	}
+
+	private long getCoolDownForPlayer(Player player ) {
+		if (this.cooldown.containsKey(player.getName())) {
+			return this.cooldown.get(player.getName()) - System.currentTimeMillis() / 1000;
+		} else {
+			return -1;
+		}
+	}
+
+	@Override
+	public double getCostMessage(final Player player, final String msg ) {
+		final int l = msg.length();
+		final boolean free = (Main.getPermissionsHandler().hasPermission(player, Main.BASE_PERM + ".economy.bypass") || Main
+				.getPermissionsHandler().hasPermission(player,
+						Main.BASE_PERM + "." + this.getInnerName() + ".economy.bypass"));
+		return free ? 0 : this.baseCost + this.costPerSymbol * l;
 	}
 
 	@Override
@@ -346,6 +322,11 @@ public class BaseChanel implements IChanel {
 	@Override
 	final public boolean isClan() {
 		return clanOnly && Main.SCenable;
+	}
+
+	@Override
+	public boolean isDefaultForGrop(String group ) {
+		return Main.chatConfig.getBoolean("Chat." + innerName + ".groups." + group + ".default", false);
 	}
 
 	@Override
@@ -457,9 +438,46 @@ public class BaseChanel implements IChanel {
 		}
 	}
 
+	private void setCoolDownForPlayer(Player player ) {
+		this.cooldown.put(player.getName(), System.currentTimeMillis() / 1000 + getCoolDown(player));
+	}
+
 	@Override
 	final public void setType(final ETypeChanel type ) {
 		this.type = type;
+
+	}
+
+	final private boolean testCoolDown(final Player sender, final String message ) {
+		if (getCoolDown(sender) > 0) {
+			long timeLeft = getCoolDownForPlayer(sender);
+			if (timeLeft > 0) {
+				sender.sendMessage(Util.suffixLatter(cooldownText.replace("$time", Long.toString(timeLeft))));
+				return false;
+			} else {
+				setCoolDownForPlayer(sender);
+				return true;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	final private boolean testCost(Player sender, String message ) {
+		if (!Main.economyHook) {
+			return true;
+		}
+		final double cost = getCostMessage(sender, message);
+		if (VaultEconomyHook.hasBalance(sender, cost)) {
+			VaultEconomyHook.cost(sender, cost);
+			return true;
+		} else {
+			sender.sendMessage(needmoremoney.replace("$total", Double.toString(cost))
+					.replace("$base", Double.toString(this.baseCost))
+					.replace("$per", Double.toString(this.costPerSymbol)));
+			return false;
+
+		}
 
 	}
 
@@ -467,24 +485,5 @@ public class BaseChanel implements IChanel {
 	public String toString() {
 		return super.toString() + ", index =>" + this.index + ", isWorld =>" + this.isWorld + ", name =>" + this.name
 				+ ", prefix =>" + this.prefix + ", sign =>" + this.sign + ", type =>" + this.type;
-	}
-
-	@Override
-	public double getCostMessage(final Player player, final String msg ) {
-		final int l = msg.length();
-		final boolean free = (Main.getPermissionsHandler().hasPermission(player, Main.BASE_PERM + ".economy.bypass") || Main
-				.getPermissionsHandler().hasPermission(player,
-						Main.BASE_PERM + "." + this.getInnerName() + ".economy.bypass"));
-		return free ? 0 : this.baseCost + this.costPerSymbol * l;
-	}
-
-	@Override
-	public String getCmdSwitch() {
-		return cmdSwitch;
-	}
-
-	@Override
-	public String getCmdSend() {
-		return cmdSend;
 	}
 }

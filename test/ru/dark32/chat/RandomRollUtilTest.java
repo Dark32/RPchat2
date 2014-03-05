@@ -22,12 +22,12 @@ public class RandomRollUtilTest {
 
 	@Test
 	public final void testRandomRoll() {
-		for (int i = 0; i < 5; i++) {
+	/*	for (int i = 0; i < 5; i++) {
 			System.out.println(Util.randomRoll("Он подошёл к обрыву, *упал* и *встал*,"
 					+ " пошёл дальше и снова *упал* и не *встал*, а может *не встал"));
 			System.out.println(Util.randomRoll("Он подошёл к обрыву, *упал* и *встал*, пошёл дальше "));
 			System.out.println(Util.randomRoll("Он подошёл к обрыву, *упал* и *встал*, пошёл*"));
 
-		};
+		}*/
 	}
 }

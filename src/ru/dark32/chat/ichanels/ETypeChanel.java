@@ -76,9 +76,5 @@ public enum ETypeChanel {
 		ETypeChanel result = ETypeChanel.valueOf(type.toUpperCase(Locale.US));
 		return result != null ? result : NONE;
 	}
-
-	/**
-	 * 
-	 */
 	public abstract IChanel setChanel(final String name );
 }
