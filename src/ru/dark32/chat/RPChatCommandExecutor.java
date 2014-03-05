@@ -29,10 +29,10 @@ public class RPChatCommandExecutor implements CommandExecutor {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args ) {
 		if (cmd.getName().equalsIgnoreCase("rpchat")) {
-			if (args.length == 0) {
+			if (args.length == 0 || args.length > 1) {
 				RPChatCommandExecutor.getBase(sender);
 				return true;
-			} else if (args.length == 1) {
+			} else /*if (args.length == 1) */{
 				if (args[0].equalsIgnoreCase("help")) {
 					getHelp(sender);
 				}
@@ -112,11 +112,6 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		final List<String> msg = new ArrayList<String>();
 		msg.add("&b=============================================");
 		msg.addAll(ValueStorage.helpChannel);
-		// for (final IChanel chanel : ChanelRegister.listChat) {
-		// msg.add("&b" + chanel.getName() + " || " + chanel.getInnerName() +
-		// " || " + chanel.getSign() + " || "
-		// + chanel.getPrefix() + " || " + chanel.getType().toString());
-		// }
 		msg.add("&b=============================================");
 		for (final String s : msg) {
 			sender.sendMessage(ChanelRegister.colorUTF8(s, 3));

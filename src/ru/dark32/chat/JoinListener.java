@@ -7,10 +7,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class JoinListener implements Listener {
 
-	public JoinListener(){
-
-	}
-
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent event ) {
 		String joinMessage = Main.localeConfig.getString(

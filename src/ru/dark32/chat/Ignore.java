@@ -20,12 +20,10 @@ public class Ignore implements IIgnore {
 	private String		canTHelp;
 	private String		canTSeeSelf;
 	private String		canTSeeAll;
-	private String		signMoreOne;
 	private String		canTSeeTarget;
 	private String		canTUnIgnoreTarget;
 	private String		canTIgnore;
 	private String		noReason;
-	private String		canTIgnoreunIgnorable;
 
 	public Ignore(){
 		canTHelp = getLoc("ignore.canTHelp");
@@ -36,11 +34,9 @@ public class Ignore implements IIgnore {
 		canTSeeAll = getLoc("ignore.canTSeeAll");
 		canTSeeSelf = getLoc("ignore.canTSeeSelf");
 		canTIgnore = getLoc("ignore.canTIgnore");
-		signMoreOne = getLoc("ignore.signMoreOne");
 		canTSeeTarget = getLoc("ignore.canTSeeTarget");
 		canTUnIgnoreTarget = getLoc("ignore.canTUnIgnoreTarget");
 		noReason = getLoc("ignore.noReason");
-		canTIgnoreunIgnorable = getLoc("ignore.canTIgnoreunIgnorable");
 	}
 
 	private String getLoc(final String key ) {
@@ -63,7 +59,6 @@ public class Ignore implements IIgnore {
 			sender.sendMessage(cantIgnorable.replace("$name", sender.getName()).replace("$ignore", target));
 			return;
 		}
-
 		for (int i = 0; i < chaneles; i++) {
 			if (chanel == i || chanel == -1) {
 				Main.storage.set(getPlayerDeafString(sender.getName(), target, i), true);
@@ -160,8 +155,7 @@ public class Ignore implements IIgnore {
 			for (int i = 0; i < chaneles; i++) {
 				final String reason = Main.storage
 						.getString(getPlayerDeafString(target, ignoreName, i) + "-reason", "");
-				final boolean isIgnore = this.hasIgnore(target, ignoreName, i);
-				if (isIgnore) {
+				if (this.hasIgnore(target, ignoreName, i)) {
 					sender.sendMessage(message.replace("$name", target).replace("$ignore", ignoreName)
 							.replace("$channel", ChanelRegister.getByIndex(i).getName()).replace("$reason", reason));
 				}

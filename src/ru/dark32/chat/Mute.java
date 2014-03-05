@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -176,9 +178,9 @@ public class Mute implements IMute {
 				sender.sendMessage(canTMute);
 				return;
 			}
-			final int chanel = ChanelRegister.getIndexBySignOrByInnerName(sender,  args[1]);
+			final int chanel = ChanelRegister.getIndexBySignOrByInnerName(sender, args[1]);
 			int time = 0;
-			time = Util.timeParse(args[2]);
+			time = timeParse(args[2]);
 			if (time == 0) {
 				sender.sendMessage(timeNotNum + args[2]);
 			}
@@ -292,26 +294,73 @@ public class Mute implements IMute {
 
 	}
 
+	final private static int		secunde		= 1;
+	final private static int		minute		= secunde * 60;
+	final private static int		hour		= minute * 60;
+	final private static int		day			= hour * 24;
+	final private static int		time_inf	= day * 1000;
+	final private static Pattern	timeParser	= Pattern.compile("(\\d+?[dhms]|inf)");
+
+	public static int timeParse(String string ) {
+		int time = 0;
+		Matcher matches = timeParser.matcher(string);
+		while (matches.find()) {
+			final String rawTime = matches.group(0).toLowerCase(Locale.US);
+			if (!rawTime.equalsIgnoreCase("inf")) {
+				char timeMultiple = rawTime.charAt(rawTime.length() - 1);
+				String _time = rawTime.substring(0, rawTime.length() - 1);
+				int tmp_time = _time.length() > 5 ? 99999 : Integer.parseInt(_time);
+				switch (timeMultiple) {
+					case 's': {
+						tmp_time *= secunde;
+						break;
+					}
+					case 'm': {
+						tmp_time *= minute;
+						break;
+					}
+					case 'h': {
+						tmp_time *= hour;
+						break;
+					}
+					case 'd': {
+						tmp_time *= day;
+						break;
+					}
+					default: {
+						tmp_time = 0;
+						System.err.println("[rpChat2][ERROR] undef time sign " + timeMultiple);
+					}
+				}
+				time += tmp_time;
+			} else {
+				time = time_inf;
+			}
+		}
+		return time;
+	}
+
 	public static String unParseTime(String msg, long time ) {
 		if (msg.contains("$time")) {
 			msg = msg.replace("$time", String.valueOf(time));
 		}
 		if (msg.contains("$data.day")) {
-			long day = time / Util.day;
-			msg = msg.replace("$data.day", Long.toString(day));
+			long _day = time / day;
+			msg = msg.replace("$data.day", Long.toString(_day));
 		}
 		if (msg.contains("$data.hour")) {
-			long hour = (time % Util.day) / Util.hour;
-			msg = msg.replace("$data.hour", Long.toString(hour));
+			long _hour = (time % day) / hour;
+			msg = msg.replace("$data.hour", Long.toString(_hour));
 		}
 		if (msg.contains("$data.minute")) {
-			long minute = (time % Util.hour) / Util.minute;
-			msg = msg.replace("$data.minute", Long.toString(minute));
+			long _minute = (time % hour) / minute;
+			msg = msg.replace("$data.minute", Long.toString(_minute));
 		}
 		if (msg.contains("$data.second")) {
-			long second = (time % Util.minute) / Util.secunde;
-			msg = msg.replace("$data.second", Long.toString(second));
+			long _second = (time % minute) / secunde;
+			msg = msg.replace("$data.second", Long.toString(_second));
 		}
 		return msg;
 	}
+
 }

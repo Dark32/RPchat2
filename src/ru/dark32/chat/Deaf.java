@@ -159,8 +159,7 @@ public class Deaf implements IDeaf {
 	public void seeTarget(final CommandSender sender, final String name ) {
 		for (int i = 0; i < chaneles; i++) {
 			final String reason = Main.storage.getString(getPlayerDeafString(name, i) + "-reason", "");
-			final boolean isDeaf = this.isDeaf(name, i);
-			if (isDeaf) {
+			if (this.isDeaf(name, i)) {
 				sender.sendMessage(deafMessage.replace("$name", name)
 						.replace("$channel", ChanelRegister.getByIndex(i).getName()).replace("$reason", reason));
 			}
@@ -188,7 +187,7 @@ public class Deaf implements IDeaf {
 		sender.sendMessage(deafMessage2
 				.replace("$name", name)
 				.replace("$channel",
-						(chanel >= 0 && chanel < this.chaneles ? ChanelRegister.getByIndex(chanel).getName() : "a"))
+						(chanel >= 0 && chanel < this.chaneles ? ChanelRegister.getByIndex(chanel).getName() : "all"))
 				.replace("$reason", reason));
 
 		save();
@@ -203,7 +202,7 @@ public class Deaf implements IDeaf {
 			}
 		}
 		sender.sendMessage(undeafMessage.replace("$name", name).replace("$channel",
-				(chanel >= 0 && chanel < chaneles ? ChanelRegister.getByIndex(chanel).getName() : "a"))
+				(chanel >= 0 && chanel < chaneles ? ChanelRegister.getByIndex(chanel).getName() : "all"))
 
 		);
 	}

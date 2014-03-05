@@ -88,7 +88,7 @@ public class Main extends JavaPlugin {
 
 		getServer().getPluginManager().registerEvents(new TabListener(), this);
 		getServer().getPluginManager().registerEvents(new JoinListener(), this);
-		getServer().getPluginManager().registerEvents(new LeftListener(), this);
+		getServer().getPluginManager().registerEvents(new QuitListener(), this);
 		Main.muteStorage = new Mute();
 		Main.deafStorage = new Deaf();
 		Main.ignorStorage = new Ignore();

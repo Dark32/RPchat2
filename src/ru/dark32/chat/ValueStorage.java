@@ -1,7 +1,9 @@
 package ru.dark32.chat;
 
 import java.util.List;
-
+/*
+ * Это вообще нужно упразднить.
+ */
 public class ValueStorage {
 	public static String		nei;
 	public static String		noPerm;

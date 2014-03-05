@@ -3,7 +3,7 @@ package ru.dark32.chat;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class LeftListener implements Listener {
+public class QuitListener implements Listener {
 
 	public void onLeft(final PlayerQuitEvent event ) {
 		String quitMessage = Main.localeConfig.getString(

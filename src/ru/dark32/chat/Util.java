@@ -15,18 +15,16 @@ import org.bukkit.entity.Player;
 import ru.dark32.chat.ichanels.IChanel;
 
 public class Util {
-	public static Map<String, Integer>	modes2;
-	// static boolean usePB;
-	// public static boolean usePEX;
+	public static Map<String, Integer>	modes;
 	private static String				luck;
 	private static String				unluck;
 	private static int					chance;
 
 	public static int getModeIndex(final String name ) {
-		if (!modes2.containsKey(name)) {
+		if (!modes.containsKey(name)) {
 			return ChanelRegister.getDefaultChanel(Bukkit.getPlayer(name));
 		} else {
-			return modes2.get(name);
+			return modes.get(name);
 		}
 	}
 
@@ -54,14 +52,14 @@ public class Util {
 	}
 
 	public static void init(final Main main ) {
-		modes2 = new HashMap<String, Integer>();
+		modes = new HashMap<String, Integer>();
 		luck = ChanelRegister.colorUTF8(Main.localeConfig.getString("String.chance.luck", "(luck)"), 3);
 		unluck = ChanelRegister.colorUTF8(Main.localeConfig.getString("String.chance.unluck", "(unluck)"), 3);
 		chance = Main.config.getInt("chance", 50);
 	}
 
 	public static boolean isInteger(final String string ) {
-		if (string == null || string.length() == 0) {
+		if (string == null || string.isEmpty()) {
 			return false;
 		}
 		int i = 0;
@@ -88,17 +86,20 @@ public class Util {
 				|| Main.getPermissionsHandler().hasPermission(player,
 						Main.BASE_PERM + "." + chanel.getInnerName() + ".say");
 		if ((!chanel.isNeedPerm() || hasPermission)) {
-			if (modes2.containsKey(player)) {
-				modes2.remove(player);
+			if (modes.containsKey(player)) {
+				modes.remove(player);
 			}
-			modes2.put(player, cm);
+			modes.put(player, cm);
 			return true;
 		} else {
 			return false;
 		}
 
 	}
-
+/*
+ * Не используется
+ */
+	/*	 
 	final private static Pattern	rollPatern	= Pattern.compile("\\*(.+?)\\*");
 	final private static Random		rand		= new Random();
 
@@ -111,6 +112,7 @@ public class Util {
 		message = message.replaceAll("\\*(.+?)\\Z", "$1 " + (rand.nextInt(100) > chance ? luck : unluck));
 		return message;
 	}
+	*/
 
 	public static String parseUTF8(String instr ) {
 		char[] in = instr.toCharArray();
@@ -183,7 +185,6 @@ public class Util {
 
 	public static String suffixLatter(String message ) {
 		Matcher matches = suffixParser.matcher(message);
-		int index = 0;
 		while (matches.find()) {
 			int num = Integer.valueOf(matches.group(4));
 			String suf = "";
@@ -205,53 +206,7 @@ public class Util {
 		return message;
 	}
 
-	final public static int			secunde		= 1;
-	final public static int			minute		= secunde * 60;
-	final public static int			hour		= minute * 60;
-	final public static int			day			= hour * 24;
-	final public static int			time_inf	= day * 1000;
-	final private static Pattern	timeParser	= Pattern.compile("(\\d+?[dhms]|inf)");
-
-	public static int timeParse(String string ) {
-		int time = 0;
-		Matcher matches = timeParser.matcher(string);
-		while (matches.find()) {
-			final String rawTime = matches.group(0).toLowerCase(Locale.US);
-			if (!rawTime.equalsIgnoreCase("inf")) {
-				char timeMultiple = rawTime.charAt(rawTime.length() - 1);
-				String _time = rawTime.substring(0, rawTime.length() - 1);
-				int tmp_time = _time.length() > 5 ? 99999 : Integer.parseInt(_time);
-				switch (timeMultiple) {
-					case 's': {
-						tmp_time *= secunde;
-						break;
-					}
-					case 'm': {
-						tmp_time *= minute;
-						break;
-					}
-					case 'h': {
-						tmp_time *= hour;
-						break;
-					}
-					case 'd': {
-						tmp_time *= day;
-						break;
-					}
-					default: {
-						tmp_time = 0;
-						System.err.println("[rpChat2][ERROR] undef time sign " + timeMultiple);
-					}
-				}
-				time += tmp_time;
-			} else {
-				time = time_inf;
-			}
-
-		}
-		return time;
-
-	}
+	
 
 	final public static void DEBUG(Object message, CommandSender sender ) {
 		if (Main.DEBUG_MODE) {

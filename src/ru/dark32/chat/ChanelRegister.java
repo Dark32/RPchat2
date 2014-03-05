@@ -32,7 +32,7 @@ public class ChanelRegister {
 		listChat = new ArrayList<IChanel>();
 		final ConfigurationSection chtatList = Main.chatConfig.getConfigurationSection("Chat");
 		if (chtatList == null) {
-			Bukkit.getConsoleSender().sendMessage("Ошибка. Каналы чата не найдены в конфиге");
+			Bukkit.getConsoleSender().sendMessage("Error. Chanel not found");
 			return;
 		}
 		final Set<String> list = chtatList.getKeys(false);
@@ -41,7 +41,7 @@ public class ChanelRegister {
 			final String _enable = "Chat." + name + ".enable";
 			final String chanelType = Main.chatConfig.getString(_type, _type);
 			final boolean chanelEnable = Main.chatConfig.getBoolean(_enable, false);
-			if (chanelType.equals("none") || !chanelEnable) {
+			if (!chanelEnable || chanelType.equals("none")) {
 				continue;
 			}
 			listChat.add(ChanelRegister.registrChanel(ETypeChanel.get(chanelType), name));
@@ -71,7 +71,7 @@ public class ChanelRegister {
 		return index++;
 	}
 
-	public static int getIndex() {
+	public static int getCurrectIndex() {
 		return index;
 	}
 
@@ -90,6 +90,7 @@ public class ChanelRegister {
 		}
 		return -1;
 	}
+
 	public static int getIndexByInnerName(final String sign ) {
 		for (final IChanel chanel : listChat) {
 			if (chanel.getInnerName().equalsIgnoreCase(sign)) {
@@ -98,15 +99,13 @@ public class ChanelRegister {
 		}
 		return -1;
 	}
-	
-	public static int getIndexBySignOrByInnerName(final CommandSender sender, final String par2){
-		if (par2.length() != 1) {
-			return ChanelRegister.getIndexByInnerName(par2);
-		} else {
-			return  ChanelRegister.getIndexBySign(par2.charAt(0));
-		}
+
+	public static int getIndexBySignOrByInnerName(final CommandSender sender, final String par2 ) {
+		return par2.length() > 0 ? par2.length() == 1 ? ChanelRegister.getIndexBySign(par2.charAt(0)) : ChanelRegister
+				.getIndexByInnerName(par2) : -1;
+
 	}
-	
+
 	public static int getIndexByItem(final ItemStack item ) {
 		for (final IChanel chanel : listChat) {
 			if ((chanel.getType() == ETypeChanel.ITEM || chanel.getType() == ETypeChanel.RANGE_ITEM || chanel.getType() == ETypeChanel.REQUISITE)
