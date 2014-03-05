@@ -96,7 +96,7 @@ public class Mute implements IMute {
 				msg = msg.replace("$name", name);
 			}
 			if (msg.contains("$channel")) {
-				msg = msg.replace("$channel",  chanel == -1 ? "all": ChanelRegister.getByIndex(chanel).getName());
+				msg = msg.replace("$channel", chanel == -1 ? "all" : ChanelRegister.getByIndex(chanel).getName());
 			}
 			if (msg.contains("$reason")) {
 				msg = msg.replace("$reason", reason);
@@ -176,9 +176,14 @@ public class Mute implements IMute {
 				sender.sendMessage(canTMute);
 				return;
 			}
-			if (args[1].length() != 1) {
-				sender.sendMessage(signMoreOne.replace("$sign", args[1]));
+			final String _sign = args[1];
+			final int chanel;
+			if (_sign.length() != 1) {
+				sender.sendMessage(signMoreOne.replace("$sign", _sign));
+				chanel = ChanelRegister.getIndexByInnerName(_sign);;
 				return;
+			} else {
+				chanel = ChanelRegister.getIndexBySign(_sign.charAt(0));
 			}
 			int time = 0;
 			time = Util.timeParse(args[2]);
@@ -191,7 +196,6 @@ public class Mute implements IMute {
 			}
 			final String reason = args.length >= 3 ? StringUtils.join(args, " ", 3, args.length) : noReason;
 			final String nick = args[0];
-			final int chanel = ChanelRegister.getIndexBySign(args[1].charAt(0));
 			caseMute(sender, nick, chanel, time, reason);
 		}
 

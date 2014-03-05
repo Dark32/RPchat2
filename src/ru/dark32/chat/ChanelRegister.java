@@ -89,7 +89,14 @@ public class ChanelRegister {
 		}
 		return -1;
 	}
-
+	public static int getIndexByInnerName(final String sign ) {
+		for (final IChanel chanel : listChat) {
+			if (chanel.getInnerName().equalsIgnoreCase(sign)) {
+				return chanel.getIndex();
+			}
+		}
+		return -1;
+	}
 	public static int getIndexByItem(final ItemStack item ) {
 		for (final IChanel chanel : listChat) {
 			if ((chanel.getType() == ETypeChanel.ITEM || chanel.getType() == ETypeChanel.RANGE_ITEM || chanel.getType() == ETypeChanel.REQUISITE)

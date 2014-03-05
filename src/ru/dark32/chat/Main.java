@@ -3,6 +3,7 @@ package ru.dark32.chat;
 import java.io.File;
 import java.util.logging.Logger;
 
+import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.Economy;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
@@ -75,10 +76,10 @@ public class Main extends JavaPlugin {
 			Bukkit.getConsoleSender().sendMessage("[RPChat] Simple clans was hooked");
 			SCenable = true;
 		}
-		//if (setupEconomy()) {
-		//	Bukkit.getConsoleSender().sendMessage("[RPChat] Vault Economy was hooked");
-		//	economyHook = true;
-		//}
+		 if (setupEconomy()) {
+		 Bukkit.getConsoleSender().sendMessage("[RPChat] Vault Economy was hooked");
+		 economyHook = true;
+		 }
 
 		Util.init(this);
 		ValueStorage.init();
@@ -148,12 +149,22 @@ public class Main extends JavaPlugin {
 	}
 
 	private boolean setupEconomy() {
-		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(
-				net.milkbowl.vault.economy.Economy.class);
-		if (economyProvider != null) {
-			economy = economyProvider.getProvider();
+		try {
+			for (Plugin plugin : getServer().getPluginManager().getPlugins()) {
+				if (plugin instanceof Vault) {
+					RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager()
+							.getRegistration(net.milkbowl.vault.economy.Economy.class);
+					if (economyProvider != null) {
+						economy = economyProvider.getProvider();
+					}
+					return (economy != null);
+				}
+			}
 		}
+		catch (NoClassDefFoundError e) {
+			return false;
+		}
+		return false;
 
-		return (economy != null);
 	}
 }
