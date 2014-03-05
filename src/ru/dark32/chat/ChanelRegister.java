@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -97,6 +98,15 @@ public class ChanelRegister {
 		}
 		return -1;
 	}
+	
+	public static int getIndexBySignOrByInnerName(final CommandSender sender, final String par2){
+		if (par2.length() != 1) {
+			return ChanelRegister.getIndexByInnerName(par2);
+		} else {
+			return  ChanelRegister.getIndexBySign(par2.charAt(0));
+		}
+	}
+	
 	public static int getIndexByItem(final ItemStack item ) {
 		for (final IChanel chanel : listChat) {
 			if ((chanel.getType() == ETypeChanel.ITEM || chanel.getType() == ETypeChanel.RANGE_ITEM || chanel.getType() == ETypeChanel.REQUISITE)

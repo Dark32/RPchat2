@@ -176,15 +176,7 @@ public class Mute implements IMute {
 				sender.sendMessage(canTMute);
 				return;
 			}
-			final String _sign = args[1];
-			final int chanel;
-			if (_sign.length() != 1) {
-				sender.sendMessage(signMoreOne.replace("$sign", _sign));
-				chanel = ChanelRegister.getIndexByInnerName(_sign);;
-				return;
-			} else {
-				chanel = ChanelRegister.getIndexBySign(_sign.charAt(0));
-			}
+			final int chanel = ChanelRegister.getIndexBySignOrByInnerName(sender,  args[1]);
 			int time = 0;
 			time = Util.timeParse(args[2]);
 			if (time == 0) {

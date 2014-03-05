@@ -71,17 +71,13 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		}
 		if (cmd.getName().equalsIgnoreCase("sw")) {
 			if (args.length == 1) {
-				if (args[0].length() == 1) {
-					final char sign = args[0].charAt(0);
-					final int _ind = ChanelRegister.getIndexBySign(sign);
-					if (_ind != -1 && Util.setChatMode(sender.getName(), _ind)) {
-						sender.sendMessage(chanelswitch.replace("$1", ChanelRegister.getByIndex(_ind).getName()));
-					} else {
-						sender.sendMessage(chanenotfound);
-					}
+				final int chanel = ChanelRegister.getIndexBySignOrByInnerName(sender, args[0]);
+				if (chanel != -1 && Util.setChatMode(sender.getName(), chanel)) {
+					sender.sendMessage(chanelswitch.replace("$1", ChanelRegister.getByIndex(chanel).getName()));
 				} else {
-					sender.sendMessage(chanesignmore1);
+					sender.sendMessage(chanenotfound);
 				}
+
 			} else {
 				getChannel(sender);
 			}
@@ -159,7 +155,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		final List<String> msg = new ArrayList<String>();
 		msg.add("&b=============================================");
 		msg.add("&bINFO: " + name);
-		msg.add("Channel: " + chanel.getName() + "  " + chanel.getPrefix());
+		msg.add("Channel: " + chanel.getName() + " origin: " + chanel.getInnerName() + " prefix: " + chanel.getPrefix());
 		if (player != null) {
 			msg.add("Name " + player.getName());
 			msg.add("Display Name " + player.getDisplayName());

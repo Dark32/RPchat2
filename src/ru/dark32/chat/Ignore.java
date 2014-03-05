@@ -123,11 +123,7 @@ public class Ignore implements IIgnore {
 				seeTarget(sender, target);
 			}
 		} else if (args.length > 1) {
-			if (args[1].length() != 1) {
-				sender.sendMessage(signMoreOne.replace("$sign", args[0]));
-				return;
-			}
-			final int chanel = ChanelRegister.getIndexBySign(args[1].charAt(0));
+			final int chanel = ChanelRegister.getIndexBySignOrByInnerName(sender, args[1]);
 			if (args.length > 2 && args[2].equals("unignore")) {
 				if (!hasUnIgnore) {
 					sender.sendMessage(canTUnIgnoreTarget);
