@@ -27,7 +27,7 @@ public class Main extends JavaPlugin {
 	private static IMute				muteStorage;
 	private static IDeaf				deafStorage;
 	private static IIgnore				ignorStorage;
-	public static final String			VERSION			= "RPchat v 2.2.0h (xu1t)";
+	public static final String			VERSION			= "RPchat v 2.2.1h (545f67a079)";
 	public static final String			VERSION_NAME	= "Green as the pink rhino";
 	public static FileConfiguration		config;
 	public static File					storageFile;
