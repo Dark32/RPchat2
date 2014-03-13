@@ -82,9 +82,8 @@ public class Util {
 
 	public static boolean setChatMode(String player, int cm ) {
 		final IChanel chanel = ChanelRegister.getByIndex(cm);
-		final boolean hasPermission = Main.getPermissionsHandler().hasPermission(player, "mcnw.spy")
-				|| Main.getPermissionsHandler().hasPermission(player,
-						Main.BASE_PERM + "." + chanel.getInnerName() + ".say");
+		final boolean hasPermission = Main.getPermissionsHandler().hasPermission(player,
+				Main.BASE_PERM + "." + chanel.getInnerName() + ".say");
 		if ((!chanel.isNeedPerm() || hasPermission)) {
 			if (modes.containsKey(player)) {
 				modes.remove(player);
@@ -96,23 +95,19 @@ public class Util {
 		}
 
 	}
-/*
- * Не используется
- */
-	/*	 
-	final private static Pattern	rollPatern	= Pattern.compile("\\*(.+?)\\*");
-	final private static Random		rand		= new Random();
 
-	public static String randomRoll(String message ) {
-		Matcher mt = rollPatern.matcher(message);
-		ChatColor.getLastColors(message);
-		while (mt.find()) {
-			message = message.replaceFirst("\\*(.+?)\\*", "$1 " + (rand.nextInt(100) > chance ? luck : unluck));
-		}
-		message = message.replaceAll("\\*(.+?)\\Z", "$1 " + (rand.nextInt(100) > chance ? luck : unluck));
-		return message;
-	}
-	*/
+	/*
+	 * Не используется
+	 */
+	/*
+	 * final private static Pattern rollPatern = Pattern.compile("\\*(.+?)\\*");
+	 * final private static Random rand = new Random(); public static String
+	 * randomRoll(String message ) { Matcher mt = rollPatern.matcher(message);
+	 * ChatColor.getLastColors(message); while (mt.find()) { message =
+	 * message.replaceFirst("\\*(.+?)\\*", "$1 " + (rand.nextInt(100) > chance ?
+	 * luck : unluck)); } message = message.replaceAll("\\*(.+?)\\Z", "$1 " +
+	 * (rand.nextInt(100) > chance ? luck : unluck)); return message; }
+	 */
 
 	public static String parseUTF8(String instr ) {
 		char[] in = instr.toCharArray();
@@ -205,8 +200,6 @@ public class Util {
 		}
 		return message;
 	}
-
-	
 
 	final public static void DEBUG(Object message, CommandSender sender ) {
 		if (Main.DEBUG_MODE) {

@@ -91,9 +91,9 @@ public class ChanelRegister {
 		return -1;
 	}
 
-	public static int getIndexByInnerName(final String sign ) {
+	public static int getIndexByInnerName(final String innerName ) {
 		for (final IChanel chanel : listChat) {
-			if (chanel.getInnerName().equalsIgnoreCase(sign)) {
+			if (chanel.getInnerName().equalsIgnoreCase(innerName)) {
 				return chanel.getIndex();
 			}
 		}
@@ -101,8 +101,15 @@ public class ChanelRegister {
 	}
 
 	public static int getIndexBySignOrByInnerName(final CommandSender sender, final String par2 ) {
-		return par2.length() > 0 ? par2.length() == 1 ? ChanelRegister.getIndexBySign(par2.charAt(0)) : ChanelRegister
-				.getIndexByInnerName(par2) : -1;
+		if (par2.length() > 0) {
+			if (par2.length() == 1) {
+				return ChanelRegister.getIndexBySign(par2.charAt(0));
+			} else {
+				return ChanelRegister.getIndexByInnerName(par2);
+			}
+		} else {
+			return -1;
+		}
 
 	}
 
@@ -120,9 +127,8 @@ public class ChanelRegister {
 		for (final IChanel chanel : listChat) {
 			if (chanel.getPrefix() != '\u0000'
 					&& (chanel.getPrefix() == preffix)
-					&& (!chanel.isNeedPerm() || Main.getPermissionsHandler().hasPermission(sender, "mcnw.spy") || Main
-							.getPermissionsHandler().hasPermission(sender,
-									Main.BASE_PERM + "." + chanel.getInnerName() + ".say"))) {
+					&& (!chanel.isNeedPerm() || Main.getPermissionsHandler().hasPermission(sender,
+							Main.BASE_PERM + "." + chanel.getInnerName() + ".say"))) {
 				return chanel.getIndex();
 			}
 		}
