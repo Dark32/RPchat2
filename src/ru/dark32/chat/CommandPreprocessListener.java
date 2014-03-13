@@ -20,7 +20,7 @@ public class CommandPreprocessListener implements Listener {
 	}
 
 	@EventHandler
-	public void tabComplete(final PlayerCommandPreprocessEvent event ) {
+	public void commandPreprocess(final PlayerCommandPreprocessEvent event ) {
 		final Player player = event.getPlayer();
 		final String[] args = event.getMessage().split(" ");
 		final String msg = event.getMessage();
@@ -29,7 +29,7 @@ public class CommandPreprocessListener implements Listener {
 		for (final Player recipient : Bukkit.getServer().getOnlinePlayers()) {
 			recipients.add(recipient);
 		}
-		player.chat(msg);
+
 	//	AsyncPlayerChatEvent event2 = new AsyncPlayerChatEvent(true, player,
 	//			StringUtils.join(args, " ", 1, args.length), recipients);
 	//	Bukkit.getServer().getPluginManager().callEvent(event2);
@@ -44,10 +44,11 @@ public class CommandPreprocessListener implements Listener {
 				if ((!chanel.isNeedPerm() || Main.getPermissionsHandler().hasPermission(player, "mcnw.spy") || Main
 						.getPermissionsHandler().hasPermission(player,
 								Main.BASE_PERM + "." + chanel.getInnerName() + ".say"))) {
-					AsyncPlayerChatEvent event3 = new AsyncPlayerChatEvent(true, player, msg.replaceFirst(
-							chanel.getCmdSend(), Character.toString(chanel.getPrefix())), recipients);
-					Bukkit.getServer().getPluginManager().callEvent(event3);
-					event.setCancelled(true);
+				//	AsyncPlayerChatEvent event3 = new AsyncPlayerChatEvent(true, player, msg.replaceFirst(
+				//			chanel.getCmdSend(), Character.toString(chanel.getPrefix())), recipients);
+				//	Bukkit.getServer().getPluginManager().callEvent(event3);
+				//	event.setCancelled(true);
+					player.chat(msg);
 				}
 			}
 		}
