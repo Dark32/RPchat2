@@ -152,12 +152,13 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		msg.add("&bINFO: " + name);
 		msg.add("Channel: " + chanel.getName() + " origin: " + chanel.getInnerName() + " prefix: " + chanel.getPrefix());
 		if (player != null) {
-			msg.add("Name " + player.getName());
+			msg.add("Name         " + player.getName());
 			msg.add("Display Name " + player.getDisplayName());
-			msg.add("Entity Id " + player.getEntityId());
-			msg.add("Ticks Lived " + player.getTicksLived());
-			msg.add("Anonym ID " + Integer.toHexString(player.getTicksLived() + player.getEntityId()));
-		}
+			msg.add("Entity Id    " + player.getEntityId());
+			msg.add("Ticks Lived  " + player.getTicksLived());
+			msg.add("Anonym ID    " + Integer.toHexString(player.getTicksLived() + player.getEntityId()));
+			msg.add("Group        " + Main.getPermissionsHandler().getGroup(player));
+			}
 		msg.add("&b=============================================");
 		for (final String s : msg) {
 			sender.sendMessage(ChanelRegister.colorUTF8(s, 3));

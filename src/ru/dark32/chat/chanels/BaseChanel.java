@@ -200,9 +200,8 @@ public class BaseChanel implements IChanel {
 	@Override
 	public int getCoolDown(Player player ) {
 		final String group = Main.getPermissionsHandler().getGroup(player);
-		System.out.println("Chat." + innerName + ".groups." + group + ".cooldown");
-		int time = Main.chatConfig.getInt("Chat." + innerName + ".groups." + group + ".cooldown", this.defaultCoolDown);
-		System.out.println(time);
+		final String path_cooldown = "Chat." + innerName + ".groups." + group + ".cooldown";
+		int time = Main.chatConfig.getInt(path_cooldown, this.defaultCoolDown);
 		return time;
 	}
 
