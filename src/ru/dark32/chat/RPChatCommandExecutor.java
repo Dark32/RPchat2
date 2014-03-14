@@ -12,18 +12,16 @@ import org.bukkit.entity.Player;
 import ru.dark32.chat.ichanels.IChanel;
 
 public class RPChatCommandExecutor implements CommandExecutor {
-	private String	chanelswitch;
-	private String	chanenotfound;
-	private String	chanesignmore1;
+	final private String	chanelswitch;
+	final private String	chanenotfound;
+	final private boolean	showAllChanel;
 
 	public RPChatCommandExecutor(){
 		chanelswitch = ChanelRegister.colorUTF8(Main.localeConfig.getString("help.changechanel", "help.changechanel"),
 				3);
 		chanenotfound = ChanelRegister.colorUTF8(
 				Main.localeConfig.getString("help.chanenotfound", "help.chanenotfound"), 3);
-		chanesignmore1 = ChanelRegister.colorUTF8(
-				Main.localeConfig.getString("help.chanesignmore1", "help.chanesignmore1"), 3);
-
+		showAllChanel = Main.config.getBoolean("showAllChanel", false);
 	}
 
 	@Override
@@ -32,7 +30,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 			if (args.length == 0 || args.length > 1) {
 				RPChatCommandExecutor.getBase(sender);
 				return true;
-			} else /*if (args.length == 1) */{
+			} else {
 				if (args[0].equalsIgnoreCase("help")) {
 					getHelp(sender);
 				}
@@ -112,6 +110,12 @@ public class RPChatCommandExecutor implements CommandExecutor {
 		final List<String> msg = new ArrayList<String>();
 		msg.add("&b=============================================");
 		msg.addAll(ValueStorage.helpChannel);
+		if (this.showAllChanel) {
+			for (final IChanel chanel : ChanelRegister.listChat) {
+				msg.add("&b" + chanel.getName() + " || " + chanel.getInnerName() + " || " + chanel.getSign() + " || "
+						+ chanel.getPrefix() + " || " + chanel.getType().toString());
+			}
+		}
 		msg.add("&b=============================================");
 		for (final String s : msg) {
 			sender.sendMessage(ChanelRegister.colorUTF8(s, 3));
@@ -158,7 +162,7 @@ public class RPChatCommandExecutor implements CommandExecutor {
 			msg.add("Ticks Lived  " + player.getTicksLived());
 			msg.add("Anonym ID    " + Integer.toHexString(player.getTicksLived() + player.getEntityId()));
 			msg.add("Group        " + Main.getPermissionsHandler().getGroup(player));
-			}
+		}
 		msg.add("&b=============================================");
 		for (final String s : msg) {
 			sender.sendMessage(ChanelRegister.colorUTF8(s, 3));
