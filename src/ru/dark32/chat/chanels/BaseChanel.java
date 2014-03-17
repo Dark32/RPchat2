@@ -134,18 +134,7 @@ public class BaseChanel implements IChanel {
 	}
 
 	final private String colorChatMessage(final Player sender, String message ) {
-		if (message.contains("&")) {
-			for (ChatColor value : ChatColor.values()) {
-				char color = value.getChar();
-				if (Main.getPermissionsHandler().hasPermission(sender, Main.BASE_PERM + ".color." + color)
-						|| Main.getPermissionsHandler().hasPermission(sender,
-								Main.BASE_PERM + "." + this.getInnerName() + ".color." + color)) {
-					message = message.replaceAll("&" + value.getChar(), "§" + value.getChar());
-					break;
-				}
-			}
-		}
-		return message;
+		return Util.coloreChat(sender, message, getInnerName());
 	}
 
 	private String findMatch(String name, String[] message ) {

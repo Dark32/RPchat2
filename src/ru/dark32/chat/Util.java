@@ -1,6 +1,8 @@
 package ru.dark32.chat;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
@@ -13,6 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import ru.dark32.chat.ichanels.IChanel;
+import ru.dark32.perm.PermissionsHandler;
 
 public class Util {
 	public static Map<String, Integer>	modes;
@@ -211,12 +214,35 @@ public class Util {
 		DEBUG(message, Bukkit.getConsoleSender());
 	}
 
-	/*
-	 * public static boolean hasGroup(String sender, String groupName ) { if
-	 * (usePEX) { return false; } PermissionGroup[] groups =
-	 * PermissionsEx.getUser(sender).getGroups(); for (PermissionGroup group :
-	 * groups) { if (groupName.equalsIgnoreCase(group.getName())) { return true;
-	 * } } return false; } public static boolean hasGroup(Player sender, String
-	 * groupName ) { return hasGroup(sender.getName(), groupName); }
-	 */
+	public static String translateColorCodes(char altColorChar, String textToTranslate, char color ) {
+		char[] b = textToTranslate.toCharArray();
+		for (int i = 0; i < b.length - 1; i++) {
+			if (b[i] == altColorChar && b[i + 1] == color) {
+				b[i] = ChatColor.COLOR_CHAR;
+				b[i + 1] = Character.toLowerCase(b[i + 1]);
+			}
+		}
+		return new String(b);
+	}
+
+	final static List<Character>	colors	= new ArrayList<Character>();
+	static {
+		for (ChatColor chatColor : ChatColor.values()) {
+			colors.add(chatColor.getChar());
+		}
+	}
+
+	final public static String coloreChat(Player player, String message, String innerName ) {
+		for (char color : colors) {
+			boolean perm_color = Main.getPermissionsHandler().hasPermission(player, Main.BASE_PERM + ".color." + color)
+					|| Main.getPermissionsHandler().hasPermission(player,
+							Main.BASE_PERM + "." + innerName + ".color." + color);
+			if (message.contains("&" + color)) {
+				if (perm_color) {
+					message = translateColorCodes('&', message, color);
+				}
+			}
+		}
+		return message;
+	}
 }
