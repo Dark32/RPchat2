@@ -6,15 +6,20 @@ import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.logging.*;
 
-public class LogAgent {
-	private Logger					logger;
-	private static final Formatter	FORMATTER	= new LogFormatter();
+import org.bukkit.entity.Player;
 
-	private static class LogFormatter extends Formatter {
+import ru.dark32.chat.ichanels.IChanel;
+
+public class LogAgent {
+	final private Logger			logger;
+	private static final Formatter	FORMATTER	= new LogFormatter();
+	final static String default_path = "./plugin/rpChat/log/";
+	
+	final private static class LogFormatter extends Formatter {
 		private final SimpleDateFormat	SDF	= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
 
 		@Override
-		public String format(LogRecord record ) {
+		public String format(final LogRecord record ) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(SDF.format(record.getMillis())).append("[").append(record.getLevel().getName()).append("] ")
 					.append(record.getMessage()).append("\n");
@@ -30,11 +35,16 @@ public class LogAgent {
 		}
 	}
 
-	public LogAgent(String logName, File logFile ){
+	File	logFile;
+	public LogAgent(final String logName ){
+		this(logName, default_path);
+	}
+	public LogAgent(final String logName, final String path ){
+		logFile = new File(path + logName+".log");
 		logger = Logger.getLogger(logName);
 		logger.setUseParentHandlers(false);
 		try {
-			FileHandler fHandler = new FileHandler(logFile.getAbsolutePath(), true);
+			final FileHandler fHandler = new FileHandler(logFile.getAbsolutePath(), true);
 			fHandler.setFormatter(FORMATTER);
 			logger.addHandler(fHandler);
 		}
@@ -49,18 +59,19 @@ public class LogAgent {
 	 * @param message
 	 *            сообщение
 	 */
-	public void post(String message ) {
-		logger.log(Level.FINE, message);
+	public void post(final String message ) {
+		logger.log(Level.INFO, message);
 	}
 
 	/**
-	 * Информационное сообщение
+	 * Записываем обычное сообщение
 	 * 
 	 * @param message
 	 *            сообщение
 	 */
-	public void info(String message ) {
-		logger.log(Level.INFO, message);
+	public void postChat(final IChanel chanel, final Player player, final String message ) {
+		String _message = chanel.format(player, message).replace("%1$s", player.getName()).replace("%2$s", message);
+		logger.log(Level.INFO, _message);
 	}
 
 	/**
@@ -69,7 +80,7 @@ public class LogAgent {
 	 * @param message
 	 *            сообщение
 	 */
-	public void warning(String message ) {
+	public void warning(final String message ) {
 		logger.log(Level.WARNING, message);
 	}
 

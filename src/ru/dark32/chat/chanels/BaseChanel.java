@@ -20,6 +20,7 @@ import ru.dark32.chat.Util;
 import ru.dark32.chat.VaultEconomyHook;
 import ru.dark32.chat.ichanels.ETypeChanel;
 import ru.dark32.chat.ichanels.IChanel;
+import ru.dark32.chat.logger.LogAgent;
 
 public class BaseChanel implements IChanel {
 	final private boolean				allyOnly;
@@ -54,8 +55,9 @@ public class BaseChanel implements IChanel {
 	final private char					sign;
 	final private boolean				tabes;
 	private ETypeChanel					type;
-
+	protected final LogAgent logger ; 
 	public BaseChanel(final String par_name ){
+		
 		final String path_enable = "Chat." + par_name + ".enable";
 		final String path_name = "Chat." + par_name + ".name";
 		final String path_world = "Chat." + par_name + ".world";
@@ -125,7 +127,7 @@ public class BaseChanel implements IChanel {
 				Main.chatConfig.getString(path_needmoremoney, path_needmoremoney), 3);
 		this.cmdSwitch = Main.chatConfig.getString(path_switch_cmd, "");
 		this.cmdSend = Main.chatConfig.getString(path_send_cmd, "");
-
+		this.logger = new LogAgent(this.getInnerName());
 	}
 
 	@Override
@@ -392,6 +394,7 @@ public class BaseChanel implements IChanel {
 	@SuppressWarnings("deprecation" )
 	@Override
 	public void preSend(final Player sender, final String message, final Set<Player> recipient ) {
+		logger.postChat(this, sender, message);
 		// pimk
 		if (isPimk()) {
 			// FIX TO DO IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

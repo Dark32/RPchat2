@@ -175,6 +175,7 @@ public class PersonalMessageChanel extends BaseChanel implements IPersonalMessag
 
 	@Override
 	public void preSend(final Player sender, final String message, final Set<Player> recipient ) {
+		logger.postChat(this, sender, message);
 		// отправляем сообщение цели
 		this.sendMessage(sender, message);
 

@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
  * @author Andrew Базовый интерфейс канала
  */
 public interface IChanel {
-
 	/**
 	 * можно ли отправить
 	 * 

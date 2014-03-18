@@ -11,10 +11,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class LogAgentTest {
-	static LogAgent log;
+	private static LogAgent	log;
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		 log = new LogAgent("log.txt",new File("log.txt"));
+		log = new LogAgent("log.txt", "./");
 	}
 
 	@AfterClass
@@ -28,7 +28,8 @@ public class LogAgentTest {
 
 	@Test
 	public final void test() {
-		log.info("test1");
+		log.warning("test warn");
+		log.post("test post");
 	}
 
 }
